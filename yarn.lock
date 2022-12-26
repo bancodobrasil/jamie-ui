@@ -1294,7 +1294,7 @@
   dependencies:
     "@babel/runtime" "^7.20.6"
 
-"@mui/lab@^5.0.0-alpha.81":
+"@mui/lab@^5.0.0-alpha.112":
   version "5.0.0-alpha.114"
   resolved "https://registry.yarnpkg.com/@mui/lab/-/lab-5.0.0-alpha.114.tgz#af4a1893a66bd1b99e8c4f15e51e8db51c094826"
   integrity sha512-tChDoLaJ3qcYk37GIwBL1KrCiW0gpmEY//D5z5nHWnO/mzx3axjRJZpBOBeGEvhuoO/Y3QzMz4rhTvqbGNkW0w==
@@ -1308,7 +1308,7 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/material@^5.7.0":
+"@mui/material@^5.11.0":
   version "5.11.2"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.11.2.tgz#8f0ce18d2cf9da9276f6f19b40a681225098ea09"
   integrity sha512-PeraRDsghnDLzejorfe9ps1syxlB8UrGs+UKwg9GGlndv5Tghm+9nwuibrP2TCDC14mlryF+u2WlAOYaPPMwGA==
