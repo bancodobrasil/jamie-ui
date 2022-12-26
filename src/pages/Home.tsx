@@ -117,20 +117,28 @@ export default function Home() {
             modified: EnumModified.UPDATING,
           });
         } else {
-          const children = node.children.map(child => {
+          let children = node.children.map(child => {
             if (child.id === editingNode.id) {
               // child is editing node
               console.log('child is editing node', child);
-              if (editingNode.modified === EnumModified.DELETING) {
-                // editing node is deleting
-                console.log('editing node is deleting');
-                // set child as deleting
-                return { ...child, modified: EnumModified.DELETING };
+              if (child.order === editingNode.order) {
+                // child is in same position
+                console.log('child is in same position');
+                if (editingNode.modified === EnumModified.DELETING) {
+                  // editing node is deleting
+                  console.log('editing node is deleting');
+                  // set child as deleting
+                  return { ...child, modified: EnumModified.DELETING };
+                }
+                // editing node is updating
+                console.log('editing node is updating');
+                // set child as updating
+                return { ...child, modified: EnumModified.UPDATING };
               }
-              // editing node is updating
-              console.log('editing node is updating');
-              // set child as updating
-              return { ...child, modified: EnumModified.UPDATING };
+              // child is in different position
+              console.log('child is in different position');
+              // set child as updating and set order as editing node order
+              return { ...child, modified: EnumModified.UPDATING, order: editingNode.order };
             }
             if (child.order >= editingNode.order) {
               // child is after editing node
@@ -148,6 +156,7 @@ export default function Home() {
             // add editing node to parent children
             children.splice(editingNode.order - 1, 0, editingNode);
           }
+          children = children.sort((a, b) => a.order - b.order);
           // set parent as updating
           nodesPreview.push({ ...node, children, modified: EnumModified.UPDATING });
         }
@@ -279,6 +288,7 @@ export default function Home() {
             sx={{
               '& .MuiTreeItem-content .MuiTreeItem-label': {
                 color,
+                fontWeight,
               },
             }}
           />
@@ -459,12 +469,10 @@ export default function Home() {
               value={editingNode.order}
               onChange={e => {
                 const parent = findNodeById(nodes, editingNode.parent);
-                console.log('parent', parent);
                 const order = Math.min(
                   Math.max(Number(e.target.value), 1),
                   parent.children?.length ? parent.children.length + 1 : 1,
                 );
-                console.log('order', order);
                 if (order === editingNode.order) return;
                 setEditingNode({
                   ...editingNode,
@@ -499,6 +507,87 @@ export default function Home() {
           </Box>
         );
       case EnumActionScreen.UPDATE:
+        return (
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 700,
+                fontSize: '2rem',
+                lineHeight: '2rem',
+                letterSpacing: '0.18px',
+                textAlign: 'center',
+                width: '100%',
+              }}
+            >
+              Editar
+            </Typography>
+            <TextField
+              type="text"
+              label="Parente"
+              value={findNodeById(nodes, editingNode.parent).label}
+              sx={{
+                width: '100%',
+                mt: '2rem',
+              }}
+              contentEditable={false}
+            />
+            <TextField
+              type="text"
+              label="Nome"
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.label}
+              onChange={e => setEditingNode({ ...editingNode, label: e.target.value })}
+              placeholder="Digite o nome do item de menu..."
+              sx={{
+                mt: '2rem',
+                width: '100%',
+              }}
+            />
+            <TextField
+              type="number"
+              label="Ordem"
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.order}
+              onChange={e => {
+                const parent = findNodeById(nodes, editingNode.parent);
+                const order = Math.min(
+                  Math.max(Number(e.target.value), 1),
+                  parent.children?.length ? parent.children.length : 1,
+                );
+                if (order === editingNode.order) return;
+                setEditingNode({
+                  ...editingNode,
+                  order,
+                });
+              }}
+              placeholder="Digite a ordem do item de menu..."
+              sx={{
+                mt: '2rem',
+                width: '6rem',
+              }}
+            />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: '100%',
+              }}
+            >
+              <Button variant="contained" color="success" sx={{ mt: '2rem', mr: '1rem' }}>
+                Salvar
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ mt: '2rem' }}
+                onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              >
+                Descartar
+              </Button>
+            </Box>
+          </Box>
+        );
       case EnumActionScreen.DELETE:
       default:
         return null;
