@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "jsx": "react",
+    "target": "ES6",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

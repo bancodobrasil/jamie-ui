@@ -1,0 +1,44 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": ["airbnb", "prettier", "eslint:recommended", "react-app", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
+    "globals": {
+      "Atomics": "readonly",
+      "SharedArrayBuffer": "readonly",
+      "__DEV__": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": ["react", "prettier", "react-hooks", "@typescript-eslint"],
+    "rules": {
+      "no-shadow": 0,
+      "consistent-return": 0,
+      "import/extensions": 0,
+      "import/no-unresolved": "error",
+      "prettier/prettier": "error",
+      "react/jsx-filename-extension": ["warn", { "extensions": [".jsx", ".js", ".tsx", ".ts"] }],
+      "react/no-array-index-key": 0,
+      "react/jsx-props-no-spreading": 0,
+      "react/require-default-props": 0,
+      "react/function-component-definition": 0,
+      "import/prefer-default-export": "off",
+      "no-param-reassign": "off",
+      "no-plusplus": 0,
+      "react/prop-types": "off",
+      "no-console": ["error", { "allow": ["tron", "error"] }]
+    },
+    "settings": {
+      "import/resolver": {
+        "typescript": {}
+      }
+    }
+  }
+  

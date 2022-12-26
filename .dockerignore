@@ -1,0 +1,7 @@
+node_modules
+docker-compose.yml
+build.sh
+.git
+.gitignore
+tests/
+*.txt

@@ -1,0 +1,4 @@
+*.svg
+dist
+webpack.config.js
+node_modules
