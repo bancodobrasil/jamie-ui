@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, SxProps, TypographyVariant } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { AppBreadcrumbs, AppBreadcrumbsProps } from '../AppBreadcrumbs';
 
 export const ErrorFallback = ({
@@ -11,7 +12,9 @@ export const ErrorFallback = ({
   variant?: TypographyVariant;
   sx?: SxProps;
 }): JSX.Element => {
-  message = message || 'Ocorreu um erro ao carregar a página.';
+  const { t } = useTranslation();
+
+  message = message || t('common.error.default');
 
   return (
     <Box
@@ -45,7 +48,9 @@ export const ErrorFallbackWithBreadcrumbs = ({
   sx?: SxProps;
   appBreadcrumbsProps: AppBreadcrumbsProps;
 }): JSX.Element => {
-  message = message || 'Ocorreu um erro ao carregar a página.';
+  const { t } = useTranslation();
+
+  message = message || t('common.error.default');
 
   return (
     <Box
