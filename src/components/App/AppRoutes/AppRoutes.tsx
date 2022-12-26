@@ -3,33 +3,35 @@ import { Box } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { NotificationProvider } from '../../../contexts/NotificationContext';
 import Home from '../../../pages/Home';
+import { Nav } from '../../Nav';
 
 export const AppRoutes = () => (
-  <Box
-    sx={{
-      flex: 1,
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      backgroundColor: '#FFFFFF',
-    }}
-  >
+  <Router>
     <Box
       sx={{
-        width: '100%',
         flex: 1,
-        boxSizing: 'border-box',
-        paddingLeft: '32px',
-        paddingRight: '32px',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: '#FFFFFF',
       }}
     >
-      <Router>
+      <Nav />
+      <Box
+        sx={{
+          width: '100%',
+          flex: 1,
+          boxSizing: 'border-box',
+          paddingLeft: '32px',
+          paddingRight: '32px',
+        }}
+      >
         <NotificationProvider>
           <Routes>
             <Route index element={<Home />} />
           </Routes>
         </NotificationProvider>
-      </Router>
+      </Box>
     </Box>
-  </Box>
+  </Router>
 );
