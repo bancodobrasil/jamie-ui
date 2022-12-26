@@ -1,5 +1,5 @@
 import { TreeItem, TreeItemProps, TreeView } from '@mui/lab';
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -203,16 +203,35 @@ export default function Home() {
             >
               Adicionar
             </Typography>
-            <TextField
-              type="text"
-              label="Parente"
-              value={findNodeById(nodes, editingNode.parent)?.label || 'Raíz'}
+            <Box
               sx={{
                 mt: '2rem',
-                width: '500px',
+                maxWidth: '500px',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
               }}
-              disabled
-            />
+            >
+              <TextField
+                type="text"
+                label="Parente"
+                value={findNodeById(nodes, editingNode.parent)?.label || 'Raíz'}
+                sx={{
+                  width: '100%',
+                }}
+                contentEditable={false}
+              />
+              <Button
+                variant="outlined"
+                color="primary"
+                sx={{ ml: '0.5rem' }}
+                disabled={nodes.length === 0}
+                onClick={() => setEditingNode({ ...editingNode, parent: selected })}
+              >
+                Selecionar Parente
+              </Button>
+            </Box>
+
             <TextField
               type="text"
               label="Nome"
@@ -233,7 +252,7 @@ export default function Home() {
       default:
         return null;
     }
-  }, [operationScreen, editingNode, nodes, findNodeById]);
+  }, [operationScreen, editingNode, nodes, findNodeById, selected]);
 
   return (
     <Box
@@ -295,7 +314,6 @@ export default function Home() {
             <TreeView
               defaultExpandIcon={<ExpandMoreIcon />}
               defaultCollapseIcon={<ExpandLessIcon />}
-              defaultExpanded={['0']}
               expanded={expanded}
               selected={selected}
               onNodeToggle={handleToggle}
