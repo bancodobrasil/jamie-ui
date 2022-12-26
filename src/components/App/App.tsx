@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import '../../i18n';
 import theme from '../../theme';
 import './AppStyles.css';
 import { AppRoutes } from './AppRoutes';

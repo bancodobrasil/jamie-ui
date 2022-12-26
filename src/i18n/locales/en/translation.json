@@ -1,0 +1,89 @@
+{
+  "application": {
+    "title": "Jamie"
+  },
+  "language": {
+    "title": "Language"
+  },
+  "common": {
+    "loading": "Loading",
+    "loadingField": "Loading {{field}}",
+    "totalOf": "Total of {{field}}",
+    "error": {
+      "default": "An error occurred while loading the page.",
+      "service": {
+        "getAll": "Failed to load {{resource}}.",
+        "get": "Failed to load {{resource}}."
+      }
+    },
+    "the_male_one": "The {{field}}",
+    "the_female_one": "The {{field}}",
+    "the_male_other": "The {{field}}",
+    "the_female_other": "The {{field}}"
+  },
+  "buttons": {
+    "cancel": "Cancel",
+    "search": "Search",
+    "forward": "Forward",
+    "back": "Back"
+  },
+  "form": {
+    "optional": "{{field}} (optional)",
+    "validation": {
+      "min": "{{field}} must be at least {{min}} characters long.",
+      "max": "{{field}} must have a maximum of {{max}} characters."
+    },
+    "helperText": {
+      "charactersLeft": "{{count}} characters left"
+    },
+    "placeholders": {
+      "setOneOrMore": "Set one or more {{field}}",
+      "set_male": "Set a {{field}}",
+      "set_female": "Set a {{field}}"
+    },
+    "label": {
+      "file": "{{field}} file",
+      "search": "Search"
+    }
+  },
+  "filter": {
+    "title": "Filters",
+    "by": "Filter by {{field}}",
+    "all": "All"
+  },
+  "notification": {
+    "error": {
+      "APIError": {
+        "title": "Error (status code: {{statusCode}})",
+        "message": "There was a problem with the request."
+      },
+      "UnhandledError": {
+        "title": "Unknown error",
+        "message": "An unexpected problem has occurred."
+      }
+    },
+    "createSuccess_male": "{{resource}} created successfully",
+    "createSuccess_female": "{{resource}} created successfully",
+    "deleteSuccess_male": "{{resource}} deleted successfully",
+    "deleteSuccess_female": "{{resource}} deleted successfully",
+    "editSuccess_male": "{{resource}} edited successfully",
+    "editSuccess_female": "{{resource}} edited successfully"
+  },
+  "error": {
+    "common": {
+      "button": {
+        "reload": "Reload {{resource}}"
+      }
+    },
+    "unauthorized": {
+      "title": "Oops! You do not have permission to access Jamie",
+      "description": "To get the permission, ask your manager to give this access ;)",
+      "button": "Back to login"
+    },
+    "failedToLoadResource": {
+      "title": "Oops! We were unable to load {{resource}}",
+      "description": "Try signing in later",
+      "button": "Reload page"
+    }
+  }
+}

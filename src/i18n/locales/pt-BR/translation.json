@@ -1,0 +1,89 @@
+{
+  "application": {
+    "title": "Jamie"
+  },
+  "language": {
+    "title": "Linguagem"
+  },
+  "common": {
+    "loading": "Carregando",
+    "loadingField": "Carregando {{field}}",
+    "totalOf": "Total de {{field}}",
+    "error": {
+      "default": "Ocorreu um erro ao carregar a página.",
+      "service": {
+        "getAll": "Falha ao carregar {{resource}}.",
+        "get": "Falha ao carregar {{resource}}."
+      }
+    },
+    "the_male_one": "O {{field}}",
+    "the_female_one": "A {{field}}",
+    "the_male_other": "Os {{field}}",
+    "the_female_other": "As {{field}}"
+  },
+  "buttons": {
+    "cancel": "Cancelar",
+    "search": "Buscar",
+    "forward": "Avançar",
+    "back": "Voltar"
+  },
+  "form": {
+    "optional": "{{field}} (opcional)",
+    "validation": {
+      "min": "{{field}} deve ter no mínimo {{min}} caracteres.",
+      "max": "{{field}} deve ter no máximo {{max}} caracteres."
+    },
+    "helperText": {
+      "charactersLeft": "{{count}} caracteres restantes"
+    },
+    "placeholders": {
+      "setOneOrMore": "Defina um(a) ou mais {{field}}",
+      "set_male": "Defina um {{field}}",
+      "set_female": "Defina uma {{field}}"
+    },
+    "label": {
+      "file": "Arquivo de {{field}}",
+      "search": "Buscar"
+    }
+  },
+  "filter": {
+    "title": "Filtros",
+    "by": "Filtrar por {{field}}",
+    "all": "Todos"
+  },
+  "notification": {
+    "error": {
+      "APIError": {
+        "title": "Erro (status code: {{statusCode}})",
+        "message": "Ocorreu um problema na requisição."
+      },
+      "UnhandledError": {
+        "title": "Erro desconhecido",
+        "message": "Ocorreu um problema inesperado."
+      }
+    },
+    "createSuccess_male": "{{resource}} criado com sucesso",
+    "createSuccess_female": "{{resource}} criada com sucesso",
+    "deleteSuccess_male": "{{resource}} deletado com sucesso",
+    "deleteSuccess_female": "{{resource}} deletada com sucesso",
+    "editSuccess_male": "{{resource}} editado com sucesso",
+    "editSuccess_female": "{{resource}} editada com sucesso"
+  },
+  "error": {
+    "common": {
+      "button": {
+        "reload": "Recarregar {{resource}}"
+      }
+    },
+    "unauthorized": {
+      "title": "Ops! Você não tem permissão para acessar o Jamie",
+      "description": "Para conseguir a permissão, peça para seu gerente dar esse acesso ;)",
+      "button": "Voltar para o login"
+    },
+    "failedToLoadResource": {
+      "title": "Oops! Não conseguimos carregar {{resource}}",
+      "description": "Tente entrar mais tarde",
+      "button": "Recarregar a página"
+    }
+  }
+}
