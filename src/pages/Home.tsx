@@ -8,6 +8,7 @@ import WidgetsIcon from '@mui/icons-material/Widgets';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useTranslation } from 'react-i18next';
 
 enum EnumModified {
   INSERTING,
@@ -36,6 +37,8 @@ enum EnumActionScreen {
 }
 
 export default function Home() {
+  const { t } = useTranslation();
+
   const [expanded, setExpanded] = useState<string[]>(['0']);
   const [selected, setSelected] = useState<string>('0');
 
@@ -63,11 +66,11 @@ export default function Home() {
 
   const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
 
-  useEffect(() => {
-    setNodes([
+  const initialNodes: INode[] = useMemo(
+    () => [
       {
         id: '0',
-        label: 'Raíz',
+        label: t('menu.preview.root'),
         order: 1,
         children: [
           {
@@ -83,8 +86,13 @@ export default function Home() {
           { id: '2', label: 'Saldo', order: 2, parent: '0' },
         ],
       },
-    ]);
-  }, []);
+    ],
+    [t],
+  );
+
+  useEffect(() => {
+    setNodes(initialNodes);
+  }, [initialNodes]);
 
   const findNodeById = useCallback((nodes: INode[], id: string): INode | undefined => {
     const node = nodes.find(node => node.id === id);
@@ -269,9 +277,11 @@ export default function Home() {
         case EnumActionScreen.INSERT:
           original = {
             id: '-1',
-            label: `Novo Item ${
-              selectedNode.children?.length ? selectedNode.children.length + 1 : nodes.length + 1
-            }`,
+            label: t('menu.preview.newItem', {
+              order: selectedNode.children?.length
+                ? selectedNode.children.length + 1
+                : nodes.length + 1,
+            }),
             order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
             modified: EnumModified.INSERTING,
             parent: selectedNode.id,
@@ -306,7 +316,7 @@ export default function Home() {
       }
       setOperationScreen(action);
     },
-    [findNodeById, nodes, selected, emptyEditingNode],
+    [findNodeById, nodes, selected, emptyEditingNode, t],
   );
 
   const renderNodes = useCallback(
@@ -381,7 +391,7 @@ export default function Home() {
                 mb: '1rem',
               }}
             >
-              Ações
+              {t('menu.preview.actions.title')}
             </Typography>
             <Box
               sx={{
@@ -410,7 +420,7 @@ export default function Home() {
                     ml: '0.5rem',
                   }}
                 >
-                  Inserir
+                  {t('buttons.insert')}
                 </Typography>
               </Button>
               <Button
@@ -432,7 +442,7 @@ export default function Home() {
                     ml: '0.5rem',
                   }}
                 >
-                  Editar
+                  {t('buttons.edit')}
                 </Typography>
               </Button>
               <Button
@@ -454,7 +464,7 @@ export default function Home() {
                     ml: '0.5rem',
                   }}
                 >
-                  Deletar
+                  {t('buttons.delete')}
                 </Typography>
               </Button>
             </Box>
@@ -474,7 +484,7 @@ export default function Home() {
                 width: '100%',
               }}
             >
-              Inserir
+              {t('menu.preview.actions.insert')}
             </Typography>
             <Box
               sx={{
@@ -486,7 +496,7 @@ export default function Home() {
             >
               <TextField
                 type="text"
-                label="Parente"
+                label={t('menu.preview.parent')}
                 value={findNodeById(nodes, editingNode.parent).label}
                 sx={{
                   width: '100%',
@@ -505,20 +515,20 @@ export default function Home() {
                     ...editingNode,
                     parent: selected,
                     order,
-                    label: `Novo Item ${order}`,
+                    label: t('menu.preview.newItem', { order }),
                   });
                 }}
               >
-                Selecionar Parente
+                {t('menu.preview.buttons.selectParent')}
               </Button>
             </Box>
             <TextField
               type="text"
-              label="Nome"
+              label={t('menu.preview.inputs.name.label')}
               InputLabelProps={{ shrink: true }}
               value={editingNode.label}
               onChange={e => setEditingNode({ ...editingNode, label: e.target.value })}
-              placeholder="Digite o nome do item de menu..."
+              placeholder={t('menu.preview.inputs.name.placeholder')}
               sx={{
                 mt: '2rem',
                 width: '100%',
@@ -526,7 +536,7 @@ export default function Home() {
             />
             <TextField
               type="number"
-              label="Ordem"
+              label={t('menu.preview.inputs.order.label')}
               InputLabelProps={{ shrink: true }}
               value={editingNode.order}
               onChange={e => {
@@ -541,7 +551,6 @@ export default function Home() {
                   order,
                 });
               }}
-              placeholder="Digite a ordem do item de menu..."
               sx={{
                 mt: '2rem',
                 width: '6rem',
@@ -555,7 +564,7 @@ export default function Home() {
               }}
             >
               <Button variant="contained" color="success" sx={{ mt: '2rem', mr: '1rem' }}>
-                Salvar
+                {t('buttons.save')}
               </Button>
               <Button
                 variant="contained"
@@ -563,7 +572,7 @@ export default function Home() {
                 sx={{ mt: '2rem' }}
                 onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
               >
-                Descartar
+                {t('buttons.discard')}
               </Button>
             </Box>
           </Box>
@@ -582,11 +591,11 @@ export default function Home() {
                 width: '100%',
               }}
             >
-              Editar
+              {t('menu.preview.actions.edit')}
             </Typography>
             <TextField
               type="text"
-              label="Parente"
+              label={t('menu.preview.parent')}
               value={findNodeById(nodes, editingNode.parent).label}
               sx={{
                 width: '100%',
@@ -596,11 +605,11 @@ export default function Home() {
             />
             <TextField
               type="text"
-              label="Nome"
+              label={t('menu.preview.inputs.name.label')}
               InputLabelProps={{ shrink: true }}
               value={editingNode.label}
               onChange={e => setEditingNode({ ...editingNode, label: e.target.value })}
-              placeholder="Digite o nome do item de menu..."
+              placeholder={t('menu.preview.inputs.name.placeholder')}
               sx={{
                 mt: '2rem',
                 width: '100%',
@@ -608,7 +617,7 @@ export default function Home() {
             />
             <TextField
               type="number"
-              label="Ordem"
+              label={t('menu.preview.inputs.order.label')}
               InputLabelProps={{ shrink: true }}
               value={editingNode.order}
               onChange={e => {
@@ -623,7 +632,6 @@ export default function Home() {
                   order,
                 });
               }}
-              placeholder="Digite a ordem do item de menu..."
               sx={{
                 mt: '2rem',
                 width: '6rem',
@@ -637,7 +645,7 @@ export default function Home() {
               }}
             >
               <Button variant="contained" color="success" sx={{ mt: '2rem', mr: '1rem' }}>
-                Salvar
+                {t('buttons.save')}
               </Button>
               <Button
                 variant="contained"
@@ -645,7 +653,7 @@ export default function Home() {
                 sx={{ mt: '2rem' }}
                 onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
               >
-                Descartar
+                {t('buttons.discard')}
               </Button>
             </Box>
           </Box>
@@ -664,11 +672,11 @@ export default function Home() {
                 width: '100%',
               }}
             >
-              Deletar
+              {t('menu.preview.actions.delete')}
             </Typography>
             <TextField
               type="text"
-              label="Parente"
+              label={t('menu.preview.parent')}
               value={findNodeById(nodes, editingNode.parent).label}
               sx={{
                 width: '100%',
@@ -678,10 +686,10 @@ export default function Home() {
             />
             <TextField
               type="text"
-              label="Nome"
+              label={t('menu.preview.inputs.name.label')}
               InputLabelProps={{ shrink: true }}
               value={editingNode.label}
-              placeholder="Digite o nome do item de menu..."
+              placeholder={t('menu.preview.inputs.name.placeholder')}
               contentEditable={false}
               sx={{
                 mt: '2rem',
@@ -696,7 +704,7 @@ export default function Home() {
               }}
             >
               <Button variant="contained" color="success" sx={{ mt: '2rem', mr: '1rem' }}>
-                Salvar
+                {t('buttons.save')}
               </Button>
               <Button
                 variant="contained"
@@ -704,7 +712,7 @@ export default function Home() {
                 sx={{ mt: '2rem' }}
                 onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
               >
-                Descartar
+                {t('buttons.discard')}
               </Button>
             </Box>
           </Box>
@@ -736,7 +744,7 @@ export default function Home() {
           mt: '1rem',
         }}
       >
-        Menu
+        {t('menu.title')}
       </Typography>
       <Box
         sx={{
@@ -777,7 +785,7 @@ export default function Home() {
                 pb: '5px',
               }}
             >
-              Raíz
+              {t('menu.preview.root')}
             </Typography>
           </Box>
           <Box sx={{ width: '100%', height: '100%', border: '1px solid black', p: '1rem' }}>

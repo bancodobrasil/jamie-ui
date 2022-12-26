@@ -25,7 +25,12 @@
     "cancel": "Cancelar",
     "search": "Buscar",
     "forward": "Avançar",
-    "back": "Voltar"
+    "back": "Voltar",
+    "insert": "Inserir",
+    "edit": "Editar",
+    "delete": "Deletar",
+    "save": "Salvar",
+    "discard": "Descartar"
   },
   "form": {
     "optional": "{{field}} (opcional)",
@@ -84,6 +89,32 @@
       "title": "Oops! Não conseguimos carregar {{resource}}",
       "description": "Tente entrar mais tarde",
       "button": "Recarregar a página"
+    }
+  },
+  "menu": {
+    "title": "Menu",
+    "preview": {
+      "root": "Raíz",
+      "actions": {
+        "title": "Ações",
+        "insert": "Inserir",
+        "edit": "Editar",
+        "delete": "Deletar"
+      },
+      "parent": "Item Pai",
+      "newItem": "Novo Item {{order}}",
+      "inputs": {
+        "name": {
+          "label": "Nome",
+          "placeholder": "Digite o nome do item de menu..."
+        },
+        "order": {
+          "label": "Ordem"
+        }
+      },
+      "buttons": {
+        "selectParent": "Selecionar Item Pai"
+      }
     }
   }
 }

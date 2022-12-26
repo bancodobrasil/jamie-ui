@@ -25,7 +25,12 @@
     "cancel": "Cancel",
     "search": "Search",
     "forward": "Forward",
-    "back": "Back"
+    "back": "Back",
+    "insert": "Insert",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "discard": "Discard"
   },
   "form": {
     "optional": "{{field}} (optional)",
@@ -84,6 +89,32 @@
       "title": "Oops! We were unable to load {{resource}}",
       "description": "Try signing in later",
       "button": "Reload page"
+    }
+  },
+  "menu": {
+    "title": "Menu",
+    "preview": {
+      "root": "Root",
+      "actions": {
+        "title": "Actions",
+        "insert": "Insert",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "parent": "Parent",
+      "newItem": "New Item {{order}}",
+      "inputs": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter the menu item's name..."
+        },
+        "order": {
+          "label": "Order"
+        }
+      },
+      "buttons": {
+        "selectParent": "Select Parent"
+      }
     }
   }
 }
