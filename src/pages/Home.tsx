@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 import { TreeItem, TreeItemProps, TreeView } from '@mui/lab';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import WidgetsIcon from '@mui/icons-material/Widgets';
@@ -30,8 +31,8 @@ enum EnumActionScreen {
 }
 
 export default function Home() {
-  const [expanded, setExpanded] = useState<string[]>([]);
-  const [selected, setSelected] = useState<string>('');
+  const [expanded, setExpanded] = useState<string[]>(['0']);
+  const [selected, setSelected] = useState<string>('0');
 
   const [operationScreen, setOperationScreen] = useState<EnumActionScreen>(
     EnumActionScreen.SELECTING_ACTION,
@@ -45,10 +46,30 @@ export default function Home() {
     order: 0,
   });
 
-  const findNodeById = useCallback((nodes: INode[], id?: string): INode | undefined => {
-    if (!id) {
-      return undefined;
-    }
+  useEffect(() => {
+    setNodes([
+      {
+        id: '0',
+        label: 'Raíz',
+        order: 1,
+        children: [
+          {
+            id: '1',
+            label: 'Transferir',
+            order: 1,
+            children: [
+              { id: '1.1', label: 'TED', order: 1, parent: '1' },
+              { id: '1.2', label: 'DOC', order: 2, parent: '1' },
+            ],
+            parent: '0',
+          },
+          { id: '2', label: 'Saldo', order: 2, parent: '0' },
+        ],
+      },
+    ]);
+  }, []);
+
+  const findNodeById = useCallback((nodes: INode[], id: string): INode | undefined => {
     const node = nodes.find(node => node.id === id);
     if (node) return node;
     for (let i = 0; i < nodes.length; i++) {
@@ -61,49 +82,76 @@ export default function Home() {
   }, []);
 
   const preview = useCallback(
-    (nodes: INode[], editingNode: INode): { nodes: INode[]; hasChange: boolean } => {
-      if (nodes.length === 0) return { nodes: [editingNode], hasChange: true };
+    (nodes: INode[], editingNode: INode): { nodes: INode[]; changeId: string } => {
+      if (!editingNode.id) return { nodes, changeId: '' };
+      if (nodes[0].id === '0' && nodes[0].children?.length === 0)
+        return { nodes: [{ ...nodes[0], children: [editingNode] }], changeId: '0' };
+      console.log('editing node', editingNode);
       const nodesPreview: INode[] = [];
-      let hasChange = false;
+      let changeId = '';
       nodes.forEach(node => {
+        console.log('current node', node.label, node);
         if (editingNode.id === node.id) {
           // current node is the editing node
-          // set current node as deleting
-          nodesPreview.push({ ...node, modified: EnumModified.DELETING, children: [] });
+          console.log('current node is the editing node');
           if (editingNode.order === node.order) {
             // current node order is equal to editing node order
+            console.log('current node order is equal to editing node order');
             // add editing node with that order
             nodesPreview.push(editingNode);
+          } else if (editingNode.order < node.order) {
+            // current node order is greater than editing node order
+            console.log('current node order is different to editing node order');
+            // set current node as deleting
+            nodesPreview.push({ ...node, modified: EnumModified.DELETING, children: [] });
           }
+          changeId = editingNode.id;
           return;
         }
         if (editingNode.parent !== node.parent) {
           // current node has different parent as editing node
+          console.log('current node has different parent as editing node');
           if (node.children?.length > 0) {
             // current node has children
+            console.log('current node has children');
             // call the function recursively to get the preview of the children
-            const { nodes: childrenPreview, hasChange: childrenHasChange } = preview(
-              node.children,
+            const { nodes: childrenPreview, changeId: childrenChangeId } = preview(
+              [...node.children],
               editingNode,
             );
+            let { modified } = node;
+            if (
+              childrenPreview.find(
+                child => child.id === childrenChangeId || child.id === editingNode.id,
+              )
+            ) {
+              // the children preview has the editing node
+              console.log('the children preview has the editing node');
+              // set current node as updating
+              changeId = childrenChangeId;
+              modified = childrenChangeId ? EnumModified.UPDATING : modified;
+            }
+
             nodesPreview.push({
               ...node,
               children: childrenPreview,
-              modified: childrenHasChange ? EnumModified.UPDATING : undefined,
+              modified,
             });
-            hasChange = childrenHasChange || hasChange;
           } else {
-            nodesPreview.push(node);
+            nodesPreview.push({ ...node });
           }
           return;
         }
         // current node has same parent as editing node
+        console.log('current node has same parent as editing node');
         if (node.order < editingNode.order) {
           // current node order is less than editing node order
+          console.log('current node order is less than editing node order');
           // add current node to preview
-          nodesPreview.push(node);
+          nodesPreview.push({ ...node });
         } else if (node.order === editingNode.order) {
           // current node order is equal to editing node order
+          console.log('current node order is equal to editing node order');
           // deleting operation was already handled
           // add editing node with current node order
           nodesPreview.push(editingNode);
@@ -113,9 +161,10 @@ export default function Home() {
             order: node.order + 1,
             modified: EnumModified.UPDATING,
           });
-          hasChange = true;
+          changeId = node.id;
         } else {
           // current node order is greater than editing node order
+          console.log('current node order is greater than editing node order');
           // if deleting, decrease the order of the current node
           let operation = -1;
           if (
@@ -123,6 +172,7 @@ export default function Home() {
             editingNode.modified === EnumModified.UPDATING
           ) {
             // creating or updating
+            console.log('creating or updating');
             // increase the order of the current node
             operation = 1;
           }
@@ -131,12 +181,31 @@ export default function Home() {
             order: node.order + operation,
             modified: EnumModified.UPDATING,
           });
-          hasChange = true;
+          changeId = node.id;
         }
       });
-      return { nodes: nodesPreview, hasChange };
+      if (!changeId) {
+        // there is no change
+        console.log('there is no change');
+        const parent = findNodeById(nodesPreview, editingNode.parent);
+        if (parent) {
+          // editing node has parent
+          console.log('editing node has parent', parent);
+          // add editing node to parent children
+          const children = parent.children || [];
+          if (!children.find(child => child.id === editingNode.id)) {
+            // editing node is not in parent children
+            console.log('editing node is not in parent children', children);
+            parent.children = [...children, editingNode];
+            parent.modified = EnumModified.UPDATING;
+            changeId = editingNode.id;
+          }
+        }
+      }
+      console.log('nodes preview', nodesPreview, changeId);
+      return { nodes: nodesPreview, changeId };
     },
-    [],
+    [findNodeById],
   );
 
   const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
@@ -161,12 +230,15 @@ export default function Home() {
           break;
         case EnumActionScreen.INSERT:
           setEditingNode({
-            id: '0',
-            label: '',
-            order: 1,
+            id: '-1',
+            label: `Novo Item ${
+              selectedNode.children?.length ? selectedNode.children.length + 1 : nodes.length + 1
+            }`,
+            order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
             modified: EnumModified.INSERTING,
-            parent: selectedNode?.id || undefined,
+            parent: selectedNode.id,
           });
+          setSelected('-1');
           break;
         case EnumActionScreen.UPDATE:
           if (!selectedNode) {
@@ -177,6 +249,7 @@ export default function Home() {
             ...selectedNode,
             modified: EnumModified.INSERTING,
           });
+          setSelected(selectedNode.id);
           break;
         case EnumActionScreen.DELETE:
           if (!selectedNode) {
@@ -216,7 +289,7 @@ export default function Home() {
               nodeId={node.id}
               label={node.label}
               sx={{
-                '& .MuiTreeItem-content .MuiTreeItem-label': {
+                '& > .MuiTreeItem-content  > .MuiTreeItem-label': {
                   color,
                 },
               }}
@@ -241,7 +314,7 @@ export default function Home() {
     [],
   );
 
-  const renderOperationScreen = useCallback(() => {
+  const renderOperationScreen = () => {
     switch (operationScreen) {
       case EnumActionScreen.SELECTING_ACTION:
         return (
@@ -369,7 +442,7 @@ export default function Home() {
               <TextField
                 type="text"
                 label="Parente"
-                value={findNodeById(nodes, editingNode.parent)?.label || 'Raíz'}
+                value={findNodeById(nodes, editingNode.parent).label}
                 sx={{
                   width: '100%',
                 }}
@@ -380,7 +453,7 @@ export default function Home() {
                 color="primary"
                 sx={{ ml: '0.5rem' }}
                 disabled={nodes.length === 0}
-                onClick={() => setEditingNode({ ...editingNode, parent: selected })}
+                onClick={() => setEditingNode({ ...editingNode, parent: selected, order: 1 })}
               >
                 Selecionar Parente
               </Button>
@@ -402,20 +475,20 @@ export default function Home() {
               label="Ordem"
               InputLabelProps={{ shrink: true }}
               value={editingNode.order}
-              onChange={e =>
+              onChange={e => {
+                const parent = findNodeById(nodes, editingNode.parent);
+                console.log('parent', parent);
+                const order = Math.min(
+                  Math.max(Number(e.target.value), 1),
+                  parent.children?.length ? parent.children.length + 1 : 1,
+                );
+                console.log('order', order);
+                if (order === editingNode.order) return;
                 setEditingNode({
                   ...editingNode,
-                  order: Math.min(
-                    Math.max(
-                      Number(e.target.value),
-                      findNodeById(nodes, editingNode.parent)?.children?.length ||
-                        nodes.length ||
-                        1,
-                    ),
-                    1,
-                  ),
-                })
-              }
+                  order,
+                });
+              }}
               placeholder="Digite a ordem do item de menu..."
               sx={{
                 mt: '2rem',
@@ -448,7 +521,7 @@ export default function Home() {
       default:
         return null;
     }
-  }, [operationScreen, editingNode, nodes, findNodeById, selected, handleActionChange]);
+  };
 
   return (
     <Box
@@ -520,6 +593,7 @@ export default function Home() {
             <TreeView
               defaultExpandIcon={<ExpandMoreIcon />}
               defaultCollapseIcon={<ExpandLessIcon />}
+              defaultExpanded={['0']}
               expanded={expanded}
               selected={selected}
               onNodeToggle={handleToggle}
