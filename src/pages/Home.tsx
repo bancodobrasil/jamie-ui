@@ -344,9 +344,7 @@ export default function Home() {
         );
       case EnumActionScreen.INSERT:
         return (
-          <Box
-            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
-          >
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <Typography
               variant="h3"
               sx={{
@@ -354,6 +352,8 @@ export default function Home() {
                 fontSize: '2rem',
                 lineHeight: '2rem',
                 letterSpacing: '0.18px',
+                textAlign: 'center',
+                width: '100%',
               }}
             >
               Inserir
@@ -385,7 +385,6 @@ export default function Home() {
                 Selecionar Parente
               </Button>
             </Box>
-
             <TextField
               type="text"
               label="Nome"
@@ -396,6 +395,31 @@ export default function Home() {
               sx={{
                 mt: '2rem',
                 width: '100%',
+              }}
+            />
+            <TextField
+              type="number"
+              label="Ordem"
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.order}
+              onChange={e =>
+                setEditingNode({
+                  ...editingNode,
+                  order: Math.min(
+                    Math.max(
+                      Number(e.target.value),
+                      findNodeById(nodes, editingNode.parent)?.children?.length ||
+                        nodes.length ||
+                        1,
+                    ),
+                    1,
+                  ),
+                })
+              }
+              placeholder="Digite a ordem do item de menu..."
+              sx={{
+                mt: '2rem',
+                width: '6rem',
               }}
             />
             <Box
