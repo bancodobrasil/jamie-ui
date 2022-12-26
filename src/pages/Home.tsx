@@ -105,6 +105,14 @@ export default function Home() {
     console.log('nodes', nodes);
     console.log('editing node', editingNode);
     const nodesPreview: INode[] = [];
+    const deleteChildren = (node: INode): INode[] | undefined => {
+      if (!node.children) return undefined;
+      return node.children.map(child => {
+        const children = deleteChildren(child);
+        if (children) return { ...child, children, modified: EnumModified.DELETING };
+        return { ...child, modified: EnumModified.DELETING };
+      });
+    };
     nodes.forEach(node => {
       console.log('current node', node);
       if (node.id === editingNode.id) {
@@ -119,7 +127,11 @@ export default function Home() {
           // editing node is deleting
           console.log('editing node is deleting');
           // set current node as deleting
-          nodesPreview.push({ ...node, modified: EnumModified.DELETING });
+          nodesPreview.push({
+            ...node,
+            modified: EnumModified.DELETING,
+            children: deleteChildren(node),
+          });
         }
       } else if (node.id === editingNode.parent) {
         // current node is parent of editing node
@@ -145,7 +157,11 @@ export default function Home() {
                   // editing node is deleting
                   console.log('editing node is deleting');
                   // set child as deleting
-                  return { ...child, modified: EnumModified.DELETING };
+                  return {
+                    ...child,
+                    modified: EnumModified.DELETING,
+                    children: deleteChildren(child),
+                  };
                 }
                 // editing node is updating
                 console.log('editing node is updating');
