@@ -259,8 +259,8 @@ export default function Home() {
           setSelected('-1');
           break;
         case EnumActionScreen.UPDATE:
-          if (!selectedNode) {
-            setSelected('');
+          if (!selectedNode || selectedNode.id === '0') {
+            !selectedNode && setSelected('');
             return;
           }
           setEditingNode({
@@ -271,8 +271,8 @@ export default function Home() {
           setSelected(selectedNode.id);
           break;
         case EnumActionScreen.DELETE:
-          if (!selectedNode) {
-            setSelected('');
+          if (!selectedNode || selectedNode.id === '0') {
+            !selectedNode && setSelected('');
             return;
           }
           setEditingNode({
