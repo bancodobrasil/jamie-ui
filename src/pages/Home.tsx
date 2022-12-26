@@ -143,8 +143,11 @@ export default function Home() {
             if (child.order >= editingNode.order) {
               // child is after editing node
               console.log('child is after editing node', child);
-              // set child order + 1 and set as updating
-              return { ...child, order: child.order + 1, modified: EnumModified.UPDATING };
+              // set child order based on deleting or inserting
+              const order =
+                editingNode.modified === EnumModified.DELETING ? child.order - 1 : child.order + 1;
+              // set child as updating
+              return { ...child, order, modified: EnumModified.UPDATING };
             }
             // child is before editing node
             console.log('child is before editing node', child);
@@ -589,6 +592,52 @@ export default function Home() {
           </Box>
         );
       case EnumActionScreen.DELETE:
+        return (
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 700,
+                fontSize: '2rem',
+                lineHeight: '2rem',
+                letterSpacing: '0.18px',
+                textAlign: 'center',
+                width: '100%',
+              }}
+            >
+              Deletar
+            </Typography>
+            <TextField
+              type="text"
+              label="Parente"
+              value={findNodeById(nodes, editingNode.parent).label}
+              sx={{
+                width: '100%',
+                mt: '2rem',
+              }}
+              contentEditable={false}
+            />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: '100%',
+              }}
+            >
+              <Button variant="contained" color="success" sx={{ mt: '2rem', mr: '1rem' }}>
+                Salvar
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ mt: '2rem' }}
+                onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              >
+                Descartar
+              </Button>
+            </Box>
+          </Box>
+        );
       default:
         return null;
     }
