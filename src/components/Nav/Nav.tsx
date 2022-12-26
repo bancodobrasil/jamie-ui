@@ -53,7 +53,7 @@ export const Nav = () => {
     >
       <Box>
         <Link to="/">
-          <Typography variant="h6" component="h6">
+          <Typography variant="h6" component="h6" sx={{ fontSize: '1.5rem' }}>
             Jamie
           </Typography>
         </Link>
