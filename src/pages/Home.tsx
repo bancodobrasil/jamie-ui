@@ -166,12 +166,17 @@ export default function Home() {
                 // editing node is updating
                 console.log('editing node is updating');
                 // set child as updating
-                return { ...child, modified: EnumModified.UPDATING };
+                return { ...child, modified: EnumModified.UPDATING, label: editingNode.label };
               }
               // child is in different position
               console.log('child is in different position');
               // set child as updating and set order as editing node order
-              return { ...child, modified: EnumModified.UPDATING, order: editingNode.order };
+              return {
+                ...child,
+                modified: EnumModified.UPDATING,
+                order: editingNode.order,
+                label: editingNode.label,
+              };
             }
             if (child.order === editingNode.order) {
               // child is in same position as editing node
@@ -670,6 +675,18 @@ export default function Home() {
                 mt: '2rem',
               }}
               contentEditable={false}
+            />
+            <TextField
+              type="text"
+              label="Nome"
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.label}
+              placeholder="Digite o nome do item de menu..."
+              contentEditable={false}
+              sx={{
+                mt: '2rem',
+                width: '100%',
+              }}
             />
             <Box
               sx={{
