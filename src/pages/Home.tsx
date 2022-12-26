@@ -426,7 +426,16 @@ export default function Home() {
                 color="primary"
                 sx={{ ml: '0.5rem' }}
                 disabled={nodes.length === 0}
-                onClick={() => setEditingNode({ ...editingNode, parent: selected, order: 1 })}
+                onClick={() => {
+                  const parent = findNodeById(nodes, selected);
+                  const order = parent.children ? parent.children.length + 1 : 1;
+                  setEditingNode({
+                    ...editingNode,
+                    parent: selected,
+                    order,
+                    label: `Novo Item ${order}`,
+                  });
+                }}
               >
                 Selecionar Parente
               </Button>
