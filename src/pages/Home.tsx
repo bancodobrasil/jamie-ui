@@ -4,9 +4,12 @@ import React, { useCallback, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import WidgetsIcon from '@mui/icons-material/Widgets';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 enum EnumModified {
-  CREATING,
+  INSERTING,
   UPDATING,
   DELETING,
 }
@@ -19,28 +22,27 @@ interface INode extends Omit<TreeItemProps, 'nodeId' | 'children'> {
   modified?: EnumModified;
 }
 
-enum EnumOperationScreen {
-  CREATE,
+enum EnumActionScreen {
+  SELECTING_ACTION,
+  INSERT,
   UPDATE,
   DELETE,
-  SAVE,
 }
 
 export default function Home() {
   const [expanded, setExpanded] = useState<string[]>([]);
   const [selected, setSelected] = useState<string>('');
 
-  const [operationScreen, setOperationScreen] = useState<EnumOperationScreen>(
-    EnumOperationScreen.CREATE,
+  const [operationScreen, setOperationScreen] = useState<EnumActionScreen>(
+    EnumActionScreen.SELECTING_ACTION,
   );
 
   const [nodes, setNodes] = useState<INode[]>([]);
 
   const [editingNode, setEditingNode] = useState<INode>({
-    id: '0',
+    id: '',
     label: '',
     order: 0,
-    modified: EnumModified.CREATING,
   });
 
   const findNodeById = useCallback((nodes: INode[], id?: string): INode | undefined => {
@@ -66,8 +68,13 @@ export default function Home() {
       nodes.forEach(node => {
         if (editingNode.id === node.id) {
           // current node is the editing node
-          // add the editing node to preview with modified = EnumModified.DELETING
-          nodesPreview.push({ ...node, modified: EnumModified.DELETING });
+          // set current node as deleting
+          nodesPreview.push({ ...node, modified: EnumModified.DELETING, children: [] });
+          if (editingNode.order === node.order) {
+            // current node order is equal to editing node order
+            // add editing node with that order
+            nodesPreview.push(editingNode);
+          }
           return;
         }
         if (editingNode.parent !== node.parent) {
@@ -112,7 +119,7 @@ export default function Home() {
           // if deleting, decrease the order of the current node
           let operation = -1;
           if (
-            editingNode.modified === EnumModified.CREATING ||
+            editingNode.modified === EnumModified.INSERTING ||
             editingNode.modified === EnumModified.UPDATING
           ) {
             // creating or updating
@@ -140,16 +147,63 @@ export default function Home() {
     setSelected(nodeId);
   };
 
+  const handleActionChange = useCallback(
+    (action: EnumActionScreen) => {
+      const selectedNode = findNodeById(nodes, selected);
+
+      switch (action) {
+        case EnumActionScreen.SELECTING_ACTION:
+          setEditingNode({
+            id: '',
+            label: '',
+            order: 0,
+          });
+          break;
+        case EnumActionScreen.INSERT:
+          setEditingNode({
+            id: '0',
+            label: '',
+            order: 1,
+            modified: EnumModified.INSERTING,
+            parent: selectedNode?.id || undefined,
+          });
+          break;
+        case EnumActionScreen.UPDATE:
+          if (!selectedNode) {
+            setSelected('');
+            return;
+          }
+          setEditingNode({
+            ...selectedNode,
+            modified: EnumModified.INSERTING,
+          });
+          break;
+        case EnumActionScreen.DELETE:
+          if (!selectedNode) {
+            setSelected('');
+            return;
+          }
+          setEditingNode({
+            ...selectedNode,
+            modified: EnumModified.DELETING,
+          });
+          break;
+      }
+      setOperationScreen(action);
+    },
+    [findNodeById, nodes, selected],
+  );
+
   const renderNodes = useCallback(
     (nodes: INode[]) =>
       nodes.map(node => {
         let color = 'black';
         switch (node.modified) {
-          case EnumModified.CREATING:
+          case EnumModified.INSERTING:
             color = 'green';
             break;
           case EnumModified.UPDATING:
-            color = 'yellow';
+            color = 'orange';
             break;
           case EnumModified.DELETING:
             color = 'red';
@@ -189,9 +243,110 @@ export default function Home() {
 
   const renderOperationScreen = useCallback(() => {
     switch (operationScreen) {
-      case EnumOperationScreen.CREATE:
+      case EnumActionScreen.SELECTING_ACTION:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 700,
+                fontSize: '2rem',
+                lineHeight: '2rem',
+                letterSpacing: '0.18px',
+                mb: '1rem',
+              }}
+            >
+              Ações
+            </Typography>
+            <Box
+              sx={{
+                my: '2rem',
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
+              <Button
+                sx={{ color: 'green' }}
+                variant="outlined"
+                color="success"
+                onClick={() => handleActionChange(EnumActionScreen.INSERT)}
+              >
+                <AddIcon />
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: '0.75rem',
+                    lineHeight: '0.75rem',
+                    letterSpacing: '0.18px',
+                    color: 'green',
+                    ml: '0.5rem',
+                  }}
+                >
+                  Inserir
+                </Typography>
+              </Button>
+              <Button
+                sx={{ color: 'orange' }}
+                variant="outlined"
+                color="warning"
+                disabled={!selected}
+                onClick={() => handleActionChange(EnumActionScreen.UPDATE)}
+              >
+                <EditIcon />
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: '0.75rem',
+                    lineHeight: '0.75rem',
+                    letterSpacing: '0.18px',
+                    color: selected ? 'orange' : 'grey',
+                    ml: '0.5rem',
+                  }}
+                >
+                  Editar
+                </Typography>
+              </Button>
+              <Button
+                sx={{ color: 'red' }}
+                variant="outlined"
+                color="error"
+                disabled={!selected}
+                onClick={() => handleActionChange(EnumActionScreen.DELETE)}
+              >
+                <DeleteIcon />
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: '0.75rem',
+                    lineHeight: '0.75rem',
+                    letterSpacing: '0.18px',
+                    color: selected ? 'red' : 'grey',
+                    ml: '0.5rem',
+                  }}
+                >
+                  Deletar
+                </Typography>
+              </Button>
+            </Box>
+          </Box>
+        );
+      case EnumActionScreen.INSERT:
+        return (
+          <Box
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
+          >
             <Typography
               variant="h3"
               sx={{
@@ -201,12 +356,11 @@ export default function Home() {
                 letterSpacing: '0.18px',
               }}
             >
-              Adicionar
+              Inserir
             </Typography>
             <Box
               sx={{
                 mt: '2rem',
-                maxWidth: '500px',
                 width: '100%',
                 display: 'flex',
                 alignItems: 'center',
@@ -241,18 +395,36 @@ export default function Home() {
               placeholder="Digite o nome do item de menu..."
               sx={{
                 mt: '2rem',
-                width: '500px',
+                width: '100%',
               }}
             />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: '100%',
+              }}
+            >
+              <Button variant="contained" color="success" sx={{ mt: '2rem', mr: '1rem' }}>
+                Salvar
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ mt: '2rem' }}
+                onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              >
+                Descartar
+              </Button>
+            </Box>
           </Box>
         );
-      case EnumOperationScreen.UPDATE:
-      case EnumOperationScreen.DELETE:
-      case EnumOperationScreen.SAVE:
+      case EnumActionScreen.UPDATE:
+      case EnumActionScreen.DELETE:
       default:
         return null;
     }
-  }, [operationScreen, editingNode, nodes, findNodeById, selected]);
+  }, [operationScreen, editingNode, nodes, findNodeById, selected, handleActionChange]);
 
   return (
     <Box
@@ -276,7 +448,7 @@ export default function Home() {
           mt: '1rem',
         }}
       >
-        Home
+        Menu
       </Typography>
       <Box
         sx={{
@@ -291,10 +463,20 @@ export default function Home() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'center',
             height: '100%',
+            width: '100%',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: '2rem' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: '2rem',
+              width: '100%',
+            }}
+          >
             <WidgetsIcon />
             <Typography
               variant="h2"
@@ -310,7 +492,7 @@ export default function Home() {
               Raíz
             </Typography>
           </Box>
-          <Box sx={{ width: '500px', height: '100%', border: '1px solid black', p: '1rem' }}>
+          <Box sx={{ width: '100%', height: '100%', border: '1px solid black', p: '1rem' }}>
             <TreeView
               defaultExpandIcon={<ExpandMoreIcon />}
               defaultCollapseIcon={<ExpandLessIcon />}
