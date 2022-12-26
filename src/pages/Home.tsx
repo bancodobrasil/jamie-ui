@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { TreeItem, TreeItemProps, TreeView } from '@mui/lab';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import WidgetsIcon from '@mui/icons-material/Widgets';
@@ -23,6 +23,11 @@ interface INode extends Omit<TreeItemProps, 'nodeId' | 'children'> {
   modified?: EnumModified;
 }
 
+interface IEditingNode extends INode {
+  modified: EnumModified;
+  original: INode;
+}
+
 enum EnumActionScreen {
   SELECTING_ACTION,
   INSERT,
@@ -40,11 +45,23 @@ export default function Home() {
 
   const [nodes, setNodes] = useState<INode[]>([]);
 
-  const [editingNode, setEditingNode] = useState<INode>({
-    id: '',
-    label: '',
-    order: 0,
-  });
+  const emptyEditingNode: IEditingNode = useMemo(
+    () => ({
+      id: '',
+      label: '',
+      order: 0,
+      modified: EnumModified.INSERTING,
+      original: {
+        id: '',
+        label: '',
+        order: 0,
+        modified: EnumModified.INSERTING,
+      },
+    }),
+    [],
+  );
+
+  const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
 
   useEffect(() => {
     setNodes([
@@ -81,7 +98,7 @@ export default function Home() {
     return undefined;
   }, []);
 
-  const preview = useCallback((nodes: INode[], editingNode: INode): INode[] => {
+  const preview = useCallback((nodes: INode[], editingNode: IEditingNode): INode[] => {
     if (!editingNode.id) return nodes;
     if (nodes[0].id === '0' && nodes[0].children?.length === 0)
       return [{ ...nodes[0], children: [editingNode] }];
@@ -140,14 +157,35 @@ export default function Home() {
               // set child as updating and set order as editing node order
               return { ...child, modified: EnumModified.UPDATING, order: editingNode.order };
             }
-            if (child.order >= editingNode.order) {
+            if (child.order === editingNode.order) {
+              // child is in same position as editing node
+              console.log('child is in same position as editing node', child);
+              // set order based on existing node order diff (moving up or down)
+              const diff = editingNode.order - editingNode.original.order;
+              let order = diff >= 0 ? child.order - 1 : child.order + 1;
+              if (editingNode.modified === EnumModified.DELETING) {
+                // editing node is deleting
+                console.log('editing node is deleting');
+                // decrease order
+                order = child.order - 1;
+              }
+              // set child as updating and decrease order
+              return { ...child, modified: EnumModified.UPDATING, order };
+            }
+            if (child.order > editingNode.order) {
               // child is after editing node
               console.log('child is after editing node', child);
-              // set child order based on deleting or inserting
-              const order =
-                editingNode.modified === EnumModified.DELETING ? child.order - 1 : child.order + 1;
+              // set child order and modified based on deleting or inserting
+              const modified =
+                editingNode.modified === EnumModified.UPDATING ? undefined : EnumModified.UPDATING;
+              let { order } = child;
+              if (editingNode.modified === EnumModified.DELETING) {
+                order = child.order - 1;
+              } else if (editingNode.modified === EnumModified.INSERTING) {
+                order = child.order + 1;
+              }
               // set child as updating
-              return { ...child, order, modified: EnumModified.UPDATING };
+              return { ...child, order, modified };
             }
             // child is before editing node
             console.log('child is before editing node', child);
@@ -202,17 +240,13 @@ export default function Home() {
   const handleActionChange = useCallback(
     (action: EnumActionScreen) => {
       const selectedNode = findNodeById(nodes, selected);
-
+      let original;
       switch (action) {
         case EnumActionScreen.SELECTING_ACTION:
-          setEditingNode({
-            id: '',
-            label: '',
-            order: 0,
-          });
+          setEditingNode(emptyEditingNode);
           break;
         case EnumActionScreen.INSERT:
-          setEditingNode({
+          original = {
             id: '-1',
             label: `Novo Item ${
               selectedNode.children?.length ? selectedNode.children.length + 1 : nodes.length + 1
@@ -220,7 +254,8 @@ export default function Home() {
             order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
             modified: EnumModified.INSERTING,
             parent: selectedNode.id,
-          });
+          };
+          setEditingNode({ ...original, original });
           setSelected('-1');
           break;
         case EnumActionScreen.UPDATE:
@@ -231,6 +266,7 @@ export default function Home() {
           setEditingNode({
             ...selectedNode,
             modified: EnumModified.UPDATING,
+            original: selectedNode,
           });
           setSelected(selectedNode.id);
           break;
@@ -242,12 +278,14 @@ export default function Home() {
           setEditingNode({
             ...selectedNode,
             modified: EnumModified.DELETING,
+            original: selectedNode,
           });
+          setSelected(selectedNode.id);
           break;
       }
       setOperationScreen(action);
     },
-    [findNodeById, nodes, selected],
+    [findNodeById, nodes, selected, emptyEditingNode],
   );
 
   const renderNodes = useCallback(
