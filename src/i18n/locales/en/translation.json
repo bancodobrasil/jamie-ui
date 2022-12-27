@@ -26,6 +26,8 @@
     "search": "Search",
     "forward": "Forward",
     "back": "Back",
+    "create": "Create",
+    "new": "New",
     "insert": "Insert",
     "edit": "Edit",
     "delete": "Delete",
@@ -92,7 +94,14 @@
     }
   },
   "menu": {
-    "title": "Menu",
+    "title_one": "Menu",
+    "title_other": "Menus",
+    "of": "Menu's $t(menu.fields.{{field}})",
+    "fields": {
+      "name": "Name",
+      "items": "Items",
+      "meta": "Meta"
+    },
     "preview": {
       "root": "Root",
       "actions": {
@@ -115,6 +124,9 @@
       "buttons": {
         "selectParent": "Select Parent"
       }
+    },
+    "list": {
+      "title": "Menus"
     }
   }
 }

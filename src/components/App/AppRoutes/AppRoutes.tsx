@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { NotificationProvider } from '../../../contexts/NotificationContext';
-import Home from '../../../pages/Home';
 import { Nav } from '../../Nav';
+import { ListMenu } from '../../../pages/Menu/List';
 
 export const AppRoutes = () => (
   <Router>
@@ -28,7 +28,10 @@ export const AppRoutes = () => (
       >
         <NotificationProvider>
           <Routes>
-            <Route index element={<Home />} />
+            <Route index element={<Navigate to="/menus" replace />} />
+            <Route path="menus">
+              <Route index element={<ListMenu />} />
+            </Route>
           </Routes>
         </NotificationProvider>
       </Box>

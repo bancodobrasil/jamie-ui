@@ -26,6 +26,8 @@
     "search": "Buscar",
     "forward": "Avançar",
     "back": "Voltar",
+    "create": "Criar",
+    "new": "Novo",
     "insert": "Inserir",
     "edit": "Editar",
     "delete": "Deletar",
@@ -92,7 +94,14 @@
     }
   },
   "menu": {
-    "title": "Menu",
+    "title_one": "Menu",
+    "title_other": "Menus",
+    "of": "$t(menu.fields.{{field}}) do Menu",
+    "fields": {
+      "name": "Nome",
+      "items": "Itens",
+      "meta": "Meta"
+    },
     "preview": {
       "root": "Raíz",
       "actions": {
@@ -115,6 +124,9 @@
       "buttons": {
         "selectParent": "Selecionar Item Pai"
       }
+    },
+    "list": {
+      "title": "Menus"
     }
   }
 }

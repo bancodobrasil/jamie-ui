@@ -42,7 +42,6 @@ const DefaultErrorPage = ({
         justifyContent: 'center',
         alignItems: 'center',
         height: '100%',
-        pb: '77px',
         width: '50%',
         mx: 'auto',
       },
