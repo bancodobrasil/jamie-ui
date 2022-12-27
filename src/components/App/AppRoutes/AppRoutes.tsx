@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { NotificationProvider } from '../../../contexts/NotificationContext';
 import { Nav } from '../../Nav';
 import { ListMenu } from '../../../pages/Menu/List';
+import { ItemsPreview } from '../../../pages/Menu/Items';
 
 export const AppRoutes = () => (
   <Router>
@@ -31,6 +32,9 @@ export const AppRoutes = () => (
             <Route index element={<Navigate to="/menus" replace />} />
             <Route path="menus">
               <Route index element={<ListMenu />} />
+              <Route path=":id">
+                <Route path="items" element={<ItemsPreview />} />
+              </Route>
             </Route>
           </Routes>
         </NotificationProvider>

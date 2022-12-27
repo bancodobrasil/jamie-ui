@@ -36,7 +36,7 @@ enum EnumActionScreen {
   DELETE,
 }
 
-export default function Home() {
+export const ItemsPreview = () => {
   const { t } = useTranslation();
 
   const [expanded, setExpanded] = useState<string[]>(['0']);
@@ -744,7 +744,7 @@ export default function Home() {
           mt: '1rem',
         }}
       >
-        {t('menu.title')}
+        {t('menu.title', { count: 1 })}
       </Typography>
       <Box
         sx={{
@@ -810,4 +810,4 @@ export default function Home() {
       </Box>
     </Box>
   );
-}
+};

@@ -50,7 +50,7 @@ const PageWrapper = ({ resource, t }: Props) => {
           const onArrowIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
             e.preventDefault();
-            navigate(params.id.toString());
+            navigate(`${params.id.toString()}/items`);
           };
 
           return (
@@ -90,7 +90,7 @@ const PageWrapper = ({ resource, t }: Props) => {
 
   const onSelectionModelChangeHandler = (selectionModel: GridSelectionModel) => {
     if (selectionModel.length > 0) {
-      navigate(selectionModel[0].toString());
+      navigate(`${selectionModel[0].toString()}/items`);
     }
   };
 
