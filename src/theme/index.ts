@@ -57,7 +57,7 @@ const localizedTheme = language => {
   return [];
 };
 
-const theme = () =>
+const theme = language =>
   createTheme(
     {
       palette,
@@ -191,7 +191,7 @@ const theme = () =>
         },
       },
     },
-    ...localizedTheme('pt-BR'),
+    ...localizedTheme(language),
   );
 
 export default theme;
