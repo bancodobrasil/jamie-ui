@@ -11,6 +11,7 @@ import ErrorBoundary from '../../../components/ErrorBoundary';
 import Loading from '../../../components/Loading';
 import { IMenu, IPaginatedResponse } from '../../../types';
 import { WrapPromise } from '../../../utils/suspense/WrapPromise';
+import './List.style.css';
 
 const MENU_LIST_DEFAULT_PAGE_SIZE = 10;
 
@@ -36,12 +37,14 @@ const PageWrapper = ({ resource, t }: Props) => {
       {
         field: 'name',
         headerName: t('menu.of', { field: 'name' }),
+        disableColumnMenu: true,
         minWidth: 300,
         flex: 1,
       },
       {
         field: '',
         headerName: '',
+        headerClassName: 'MuiDataGrid-headerHidden',
         sortable: false,
         filterable: false,
         disableColumnMenu: true,
