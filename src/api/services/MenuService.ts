@@ -5,8 +5,12 @@ interface GetListMenuPayload {
   page: number;
   limit: number;
 }
-
 type GetListMenuResponse = IPaginatedResponse<IMenu>;
+
+interface CreateMenuPayload {
+  name: string;
+}
+type CreateMenuResponse = IMenu;
 
 export default class MenuService {
   static getListMenu(payload: GetListMenuPayload): WrapPromise<GetListMenuResponse> {
@@ -42,7 +46,7 @@ export default class MenuService {
     // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
     const promise = new Promise<GetListMenuResponse>((resolve, reject) => {
       setTimeout(() => {
-        // reject(new Error('Failed to fetch RuleSheet'));
+        // reject(new Error('Failed to fetch Menu'));
         resolve({
           data: [
             {
@@ -59,6 +63,20 @@ export default class MenuService {
           limit: 10,
           hasNextPage: false,
           hasPreviousPage: false,
+        });
+      }, 2000);
+    });
+    const response = await promise;
+    return response;
+  }
+
+  static async createMenu(payload: CreateMenuPayload): Promise<CreateMenuResponse> {
+    const promise = new Promise<CreateMenuResponse>((resolve, reject) => {
+      setTimeout(() => {
+        // reject(new Error('Failed to create Menu'));
+        resolve({
+          id: 1,
+          name: 'Menu Mobile',
         });
       }, 2000);
     });
