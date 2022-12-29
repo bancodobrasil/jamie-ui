@@ -133,6 +133,17 @@
       "placeholders": {
         "name": "Enter the menu's name..."
       }
+    },
+    "show": {
+      "actions": {
+        "title": "Actions",
+        "edit": "Edit Menu",
+        "editItems": "Edit Items",
+        "delete": "Delete"
+      },
+      "messages": {
+        "confirmDelete": "Are you sure you want to delete this menu?"
+      }
     }
   }
 }

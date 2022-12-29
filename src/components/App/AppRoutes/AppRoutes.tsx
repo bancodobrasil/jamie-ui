@@ -6,6 +6,7 @@ import { Nav } from '../../Nav';
 import { ListMenu } from '../../../pages/Menu/List';
 import { ItemsPreview } from '../../../pages/Menu/Items';
 import { CreateMenu } from '../../../pages/Menu/Create';
+import { ShowMenu } from '../../../pages/Menu/Show';
 
 export const AppRoutes = () => (
   <Router>
@@ -34,6 +35,7 @@ export const AppRoutes = () => (
             <Route path="menus">
               <Route index element={<ListMenu />} />
               <Route path=":id">
+                <Route index element={<ShowMenu />} />
                 <Route path="items" element={<ItemsPreview />} />
               </Route>
               <Route path="create" element={<CreateMenu />} />
