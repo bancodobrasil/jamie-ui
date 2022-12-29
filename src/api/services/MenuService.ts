@@ -17,6 +17,11 @@ interface CreateMenuPayload {
 }
 type CreateMenuResponse = IMenu;
 
+interface DeleteMenuPayload {
+  id: number;
+}
+type DeleteMenuResponse = void;
+
 export default class MenuService {
   static getListMenu(payload: GetListMenuPayload): WrapPromise<GetListMenuResponse> {
     // TODO: Implement the API request
@@ -98,6 +103,17 @@ export default class MenuService {
           id: 1,
           name: 'Menu Mobile',
         });
+      }, 2000);
+    });
+    const response = await promise;
+    return response;
+  }
+
+  static async deleteMenu(payload: DeleteMenuPayload): Promise<DeleteMenuResponse> {
+    const promise = new Promise<DeleteMenuResponse>((resolve, reject) => {
+      setTimeout(() => {
+        // reject(new Error('Failed to create Menu'));
+        resolve();
       }, 2000);
     });
     const response = await promise;
