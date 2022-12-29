@@ -127,6 +127,12 @@
     },
     "list": {
       "title": "Menus"
+    },
+    "create": {
+      "title": "Criar Menu",
+      "placeholders": {
+        "name": "Digite o nome do menu..."
+      }
     }
   }
 }

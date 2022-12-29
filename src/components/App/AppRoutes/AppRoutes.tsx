@@ -5,6 +5,7 @@ import { NotificationProvider } from '../../../contexts/NotificationContext';
 import { Nav } from '../../Nav';
 import { ListMenu } from '../../../pages/Menu/List';
 import { ItemsPreview } from '../../../pages/Menu/Items';
+import { CreateMenu } from '../../../pages/Menu/Create';
 
 export const AppRoutes = () => (
   <Router>
@@ -35,6 +36,7 @@ export const AppRoutes = () => (
               <Route path=":id">
                 <Route path="items" element={<ItemsPreview />} />
               </Route>
+              <Route path="create" element={<CreateMenu />} />
             </Route>
           </Routes>
         </NotificationProvider>
