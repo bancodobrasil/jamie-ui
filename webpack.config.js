@@ -12,10 +12,12 @@ const config = {
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   devServer: {
     host: 'localhost',
     port: 3000,
+    historyApiFallback: true,
   },
   plugins: [
     new webpack.DefinePlugin({
