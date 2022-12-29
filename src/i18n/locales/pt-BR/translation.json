@@ -134,6 +134,12 @@
         "name": "Digite o nome do menu..."
       }
     },
+    "edit": {
+      "title": "Editar Menu",
+      "placeholders": {
+        "name": "Digite o nome do menu..."
+      }
+    },
     "show": {
       "actions": {
         "title": "Ações",

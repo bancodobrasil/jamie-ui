@@ -134,6 +134,12 @@
         "name": "Enter the menu's name..."
       }
     },
+    "edit": {
+      "title": "Edit Menu",
+      "placeholders": {
+        "name": "Enter the menu's name..."
+      }
+    },
     "show": {
       "actions": {
         "title": "Actions",

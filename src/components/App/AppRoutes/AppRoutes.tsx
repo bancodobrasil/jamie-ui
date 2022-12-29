@@ -7,6 +7,7 @@ import { ListMenu } from '../../../pages/Menu/List';
 import { ItemsPreview } from '../../../pages/Menu/Items';
 import { CreateMenu } from '../../../pages/Menu/Create';
 import { ShowMenu } from '../../../pages/Menu/Show';
+import { EditMenu } from '../../../pages/Menu/Edit';
 
 export const AppRoutes = () => (
   <Router>
@@ -37,6 +38,7 @@ export const AppRoutes = () => (
               <Route path=":id">
                 <Route index element={<ShowMenu />} />
                 <Route path="items" element={<ItemsPreview />} />
+                <Route path="edit" element={<EditMenu />} />
               </Route>
               <Route path="create" element={<CreateMenu />} />
             </Route>
