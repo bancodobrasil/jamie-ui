@@ -7,6 +7,11 @@ interface GetListMenuPayload {
 }
 type GetListMenuResponse = IPaginatedResponse<IMenu>;
 
+interface GetMenuPayload {
+  id: number;
+}
+type GetMenuResponse = IMenu;
+
 interface CreateMenuPayload {
   name: string;
 }
@@ -68,6 +73,21 @@ export default class MenuService {
     });
     const response = await promise;
     return response;
+  }
+
+  static getMenu(payload: GetMenuPayload): WrapPromise<GetMenuResponse> {
+    // TODO: Implement the API request
+    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
+    const promise = new Promise<GetMenuResponse>((resolve, reject) => {
+      setTimeout(() => {
+        // reject(new Error('Failed to fetch RuleSheet'));
+        resolve({
+          id: 1,
+          name: 'Menu Mobile',
+        });
+      }, 2000);
+    });
+    return wrapPromise(promise);
   }
 
   static async createMenu(payload: CreateMenuPayload): Promise<CreateMenuResponse> {
