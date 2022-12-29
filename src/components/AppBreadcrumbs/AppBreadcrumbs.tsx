@@ -70,6 +70,7 @@ export const AppBreadcrumbs = ({ items, onBack }: AppBreadcrumbsProps): JSX.Elem
         position: 'relative',
         left: '-5px',
         top: '-5px',
+        mt: '2rem',
       }}
     >
       <IconButton onClick={onBack || onBackClickHandler} size="small">

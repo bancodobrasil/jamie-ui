@@ -3,6 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import MenuService from '../../../api/services/MenuService';
+import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import {
   ActionTypes,
   NotificationContext,
@@ -78,6 +79,13 @@ export const CreateMenu = () => {
 
   return (
     <Box>
+      <AppBreadcrumbs
+        items={[
+          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+          { label: t('menu.create.title') },
+        ]}
+        onBack={onBackClickHandler}
+      />
       <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
         {t('menu.create.title')}
       </Typography>
