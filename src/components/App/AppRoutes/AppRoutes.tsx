@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useKeycloak } from '@react-keycloak/web';
 import { NotificationProvider } from '../../../contexts/NotificationContext';
 import { Nav } from '../../Nav';
 import { ListMenu } from '../../../pages/Menu/List';
@@ -8,43 +9,58 @@ import { ItemsPreview } from '../../../pages/Menu/Items';
 import { CreateMenu } from '../../../pages/Menu/Create';
 import { ShowMenu } from '../../../pages/Menu/Show';
 import { EditMenu } from '../../../pages/Menu/Edit';
+import Loading from '../../Loading';
+import { ProtectedRoute } from '.';
 
-export const AppRoutes = () => (
-  <Router>
-    <Box
-      sx={{
-        flex: 1,
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: '#FFFFFF',
-      }}
-    >
-      <Nav />
+export const AppRoutes = () => {
+  const { initialized } = useKeycloak();
+
+  const renderRoutes = () => {
+    if (!initialized) {
+      return <Loading />;
+    }
+    return (
+      <NotificationProvider>
+        <Routes>
+          <Route index element={<Navigate to="/menus" replace />} />
+          <Route path="menus" element={<ProtectedRoute />}>
+            <Route index element={<ListMenu />} />
+            <Route path=":id">
+              <Route index element={<ShowMenu />} />
+              <Route path="items" element={<ItemsPreview />} />
+              <Route path="edit" element={<EditMenu />} />
+            </Route>
+            <Route path="create" element={<CreateMenu />} />
+          </Route>
+        </Routes>
+      </NotificationProvider>
+    );
+  };
+
+  return (
+    <Router>
       <Box
         sx={{
-          width: '100%',
           flex: 1,
-          boxSizing: 'border-box',
-          paddingLeft: '32px',
-          paddingRight: '32px',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#FFFFFF',
         }}
       >
-        <NotificationProvider>
-          <Routes>
-            <Route index element={<Navigate to="/menus" replace />} />
-            <Route path="menus">
-              <Route index element={<ListMenu />} />
-              <Route path=":id">
-                <Route index element={<ShowMenu />} />
-                <Route path="items" element={<ItemsPreview />} />
-                <Route path="edit" element={<EditMenu />} />
-              </Route>
-              <Route path="create" element={<CreateMenu />} />
-            </Route>
-          </Routes>
-        </NotificationProvider>
+        <Nav />
+        <Box
+          sx={{
+            width: '100%',
+            flex: 1,
+            boxSizing: 'border-box',
+            paddingLeft: '32px',
+            paddingRight: '32px',
+          }}
+        >
+          {renderRoutes()}
+        </Box>
       </Box>
-    </Box>
-  </Router>
-);
+    </Router>
+  );
+};
