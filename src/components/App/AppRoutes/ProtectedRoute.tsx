@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ children }: Props): JSX.Element => {
   const location = useLocation();
 
   if (!keycloak?.authenticated)
-    keycloak?.login({ redirectUri: `http://localhost:3000/${location.pathname}` });
+    keycloak?.login({ redirectUri: `${process.env.JAMIE_UI_BASE_URL}${location.pathname}` });
 
   if (children) return children;
 
