@@ -1,7 +1,9 @@
 import React, { Suspense } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { useTranslation } from 'react-i18next';
+import keycloak from '../../keycloak';
 import '../../i18n';
 import '../../styles/global.css';
 import theme from '../../theme';
@@ -21,9 +23,11 @@ const Pages = () => {
 };
 
 const App = () => (
-  <Suspense fallback={<Loading />}>
-    <Pages />
-  </Suspense>
+  <ReactKeycloakProvider authClient={keycloak}>
+    <Suspense fallback={<Loading />}>
+      <Pages />
+    </Suspense>
+  </ReactKeycloakProvider>
 );
 
 export default App;
