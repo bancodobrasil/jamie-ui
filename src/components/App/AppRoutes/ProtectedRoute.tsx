@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import { useKeycloak } from '@react-keycloak/web';
 
@@ -10,7 +10,10 @@ interface Props {
 export const ProtectedRoute = ({ children }: Props): JSX.Element => {
   const { keycloak } = useKeycloak();
 
-  if (!keycloak?.authenticated) return <Navigate to="/login" />;
+  const location = useLocation();
+
+  if (!keycloak?.authenticated)
+    keycloak?.login({ redirectUri: `http://localhost:3000/${location.pathname}` });
 
   if (children) return children;
 
