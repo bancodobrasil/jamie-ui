@@ -17,6 +17,8 @@ import { IMenuMetaWithErrors, MenuMetaType } from '../../../types';
 
 const NAME_MIN_LENGTH = 3;
 const NAME_MAX_LENGTH = 30;
+const META_NAME_MIN_LENGTH = 3;
+const META_NAME_MAX_LENGTH = 30;
 
 const Form = styled('form')({
   flex: 1,
@@ -69,13 +71,46 @@ export const MenuForm = ({
       return;
     }
 
+    let metaHasError = false;
+
+    meta.forEach((m, i) => {
+      let metaNameError = '';
+      if (m.name.length < META_NAME_MIN_LENGTH) {
+        metaNameError = t('form.validation.min', {
+          field: t('menu.fields.meta.of', { field: 'name' }),
+          min: META_NAME_MIN_LENGTH,
+        });
+      } else if (m.name.length > META_NAME_MAX_LENGTH) {
+        metaNameError = t('form.validation.max', {
+          field: t('menu.fields.meta.of', { field: 'name' }),
+          max: META_NAME_MAX_LENGTH,
+        });
+      }
+      meta.slice(0, i).forEach((m2, j) => {
+        if (i !== j && m.name === m2.name) {
+          metaNameError = t('form.validation.uniqueIndex', {
+            field: t('menu.fields.meta.of', { field: 'name' }),
+            index: j + 1,
+          });
+        }
+      });
+      if (metaNameError) {
+        const updatedMeta = [...meta];
+        updatedMeta[i].errors.name = metaNameError;
+        setMeta(updatedMeta);
+        metaHasError = true;
+      }
+    });
+    if (metaHasError) return;
+
     setLoadingSubmit(true);
     onSubmit();
   };
 
   const renderMeta = () =>
     meta.map((m, i) => (
-      <Box key={i} sx={{ display: 'flex', mt: '2rem' }} className="space-x-2">
+      <Box key={i} sx={{ display: 'flex' }} className="space-x-2">
+        <span className="text-lg mt-[0.75rem]">{i + 1}.</span>
         <TextField
           id={`meta[${i}].name`}
           label={t('menu.fields.meta.of', { field: 'name' })}
@@ -101,8 +136,9 @@ export const MenuForm = ({
           error={!!meta[i].errors.name}
           helperText={meta[i].errors.name}
           sx={{ width: '16rem' }}
+          className="bg-white"
         />
-        <FormControl sx={{ width: '16rem' }}>
+        <FormControl sx={{ width: '16rem' }} className="bg-white">
           <InputLabel id={`meta[${i}].type-label`}>
             {t('menu.fields.meta.of', { field: 'type.title_one' })}
           </InputLabel>
@@ -177,7 +213,7 @@ export const MenuForm = ({
         helperText={nameError}
         sx={{ width: '16rem' }}
       />
-      {renderMeta()}
+      {meta.length > 0 && <div className="mt-8 space-y-4">{renderMeta()}</div>}
       <Box sx={{ mt: '2rem' }}>
         <Button
           variant="contained"

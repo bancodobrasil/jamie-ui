@@ -38,7 +38,9 @@
     "optional": "{{field}} (optional)",
     "validation": {
       "min": "{{field}} must be at least {{min}} characters long.",
-      "max": "{{field}} must have a maximum of {{max}} characters."
+      "max": "{{field}} must have a maximum of {{max}} characters.",
+      "unique": "{{field}} must be unique.",
+      "uniqueIndex": "{{field}} is already in use at index {{index}}."
     },
     "helperText": {
       "charactersLeft": "{{count}} characters left"
