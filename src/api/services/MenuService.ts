@@ -1,4 +1,4 @@
-import { IPaginatedResponse, IMenu, IMenuMeta } from '../../types';
+import { IPaginatedResponse, IMenu, IMenuMeta, MenuMetaType } from '../../types';
 import wrapPromise, { WrapPromise } from '../../utils/suspense/WrapPromise';
 
 interface GetListMenuPayload {
@@ -104,7 +104,28 @@ export default class MenuService {
         resolve({
           id: 1,
           name: 'Menu Mobile',
-          meta: [],
+          meta: [
+            {
+              name: 'Responsável',
+              type: MenuMetaType.TEXT,
+              required: true,
+            },
+            {
+              name: 'Código interno',
+              type: MenuMetaType.NUMBER,
+              required: true,
+            },
+            {
+              name: 'Precisa de autenticação?',
+              type: MenuMetaType.BOOLEAN,
+              required: true,
+            },
+            {
+              name: 'Data de expiração',
+              type: MenuMetaType.DATE,
+              required: false,
+            },
+          ],
           items: [],
         });
       }, 2000);

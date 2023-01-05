@@ -61,6 +61,26 @@ const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) =
     }
   };
 
+  const renderMeta = () =>
+    menu.meta.map((meta, i) => (
+      <Box
+        key={i}
+        sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+        className="space-y-1"
+      >
+        <Typography variant="h4" component="h4">
+          {i + 1}. {meta.name}
+        </Typography>
+        <Typography variant="body1" component="p">
+          {t('menu.fields.meta.type.title', { count: 1 })}:{' '}
+          <b>{t(`menu.fields.meta.type.${meta.type}`)}</b>
+        </Typography>
+        <Typography variant="body1" component="p">
+          {t('common.required')}? <b>{meta.required ? t('common.yes') : t('common.no')}</b>
+        </Typography>
+      </Box>
+    ));
+
   return (
     <Box>
       <AppBreadcrumbs
@@ -70,6 +90,17 @@ const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) =
       <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
         {menu.name}
       </Typography>
+      <Divider />
+      <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
+        {t('menu.fields.meta.title', { count: 2 })}
+      </Typography>
+      <Box sx={{ mb: '1rem' }} className="space-y-4">
+        {menu.meta.length > 0 ? (
+          renderMeta()
+        ) : (
+          <p className="text-gray-500">{t('common.noData')}</p>
+        )}
+      </Box>
       <Divider />
       <Box sx={{ display: 'flex', my: '1rem' }}>
         <Button

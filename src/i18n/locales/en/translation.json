@@ -6,6 +6,8 @@
     "title": "Language"
   },
   "common": {
+    "yes": "Yes",
+    "no": "No",
     "loading": "Loading",
     "loadingField": "Loading {{field}}",
     "totalOf": "Total of {{field}}",
@@ -19,7 +21,10 @@
     "the_male_one": "The {{field}}",
     "the_female_one": "The {{field}}",
     "the_male_other": "The {{field}}",
-    "the_female_other": "The {{field}}"
+    "the_female_other": "The {{field}}",
+    "noData": "No data.",
+    "required": "Required",
+    "optional": "Optional"
   },
   "buttons": {
     "cancel": "Cancel",

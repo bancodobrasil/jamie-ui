@@ -6,6 +6,8 @@
     "title": "Linguagem"
   },
   "common": {
+    "yes": "Sim",
+    "no": "Não",
     "loading": "Carregando",
     "loadingField": "Carregando {{field}}",
     "totalOf": "Total de {{field}}",
@@ -19,7 +21,10 @@
     "the_male_one": "O {{field}}",
     "the_female_one": "A {{field}}",
     "the_male_other": "Os {{field}}",
-    "the_female_other": "As {{field}}"
+    "the_female_other": "As {{field}}",
+    "noData": "Nenhum dado encontrado.",
+    "required": "Obrigatório",
+    "optional": "Opcional"
   },
   "buttons": {
     "cancel": "Cancelar",
@@ -103,8 +108,8 @@
       "name": "Nome",
       "items": "Itens",
       "meta": {
-        "title_one": "Metadados",
-        "title_other": "Metadado",
+        "title_one": "Metadado",
+        "title_other": "Metadados",
         "of": "$t(menu.fields.meta.{{field}}) do Metadado",
         "add": "Adicionar Metadado",
         "name": "Nome",
