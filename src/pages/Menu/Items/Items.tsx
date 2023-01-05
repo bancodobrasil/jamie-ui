@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { TreeItem, TreeItemProps, TreeView } from '@mui/lab';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useCallback, useMemo, useState } from 'react';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -62,27 +62,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
     EnumActionScreen.SELECTING_ACTION,
   );
 
-  const [nodes, setNodes] = useState<INode[]>([]);
-
-  const emptyEditingNode: IEditingNode = useMemo(
-    () => ({
-      id: '',
-      label: '',
-      order: 0,
-      modified: EnumModified.INSERTING,
-      original: {
-        id: '',
-        label: '',
-        order: 0,
-        modified: EnumModified.INSERTING,
-      },
-    }),
-    [],
-  );
-
-  const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
-
-  const initialNodes: INode[] = useMemo(() => {
+  const nodes = useMemo<INode[]>(() => {
     const getChildren = (parent: IMenuItem): INode[] => {
       if (!parent.children) return [];
       const children = parent.children.map(child => ({
@@ -109,11 +89,25 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
         children: root,
       },
     ];
-  }, [t, menu]);
+  }, [menu, t]);
 
-  useEffect(() => {
-    setNodes(initialNodes);
-  }, [initialNodes]);
+  const emptyEditingNode: IEditingNode = useMemo(
+    () => ({
+      id: '',
+      label: '',
+      order: 0,
+      modified: EnumModified.INSERTING,
+      original: {
+        id: '',
+        label: '',
+        order: 0,
+        modified: EnumModified.INSERTING,
+      },
+    }),
+    [],
+  );
+
+  const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
 
   const findNodeById = useCallback((nodes: INode[], id: string): INode | undefined => {
     const node = nodes.find(node => node.id === id);
