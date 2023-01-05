@@ -126,7 +126,102 @@ export default class MenuService {
               required: false,
             },
           ],
-          items: [],
+          items: [
+            {
+              id: '1',
+              label: 'Transferir',
+              order: 1,
+              meta: [
+                {
+                  name: 'Responsável',
+                  value: 'João',
+                },
+                {
+                  name: 'Código interno',
+                  value: 123,
+                },
+                {
+                  name: 'Precisa de autenticação?',
+                  value: true,
+                },
+                {
+                  name: 'Data de expiração',
+                  value: null,
+                },
+              ],
+              children: [
+                {
+                  id: '1.1',
+                  label: 'TED',
+                  order: 1,
+                  meta: [
+                    {
+                      name: 'Responsável',
+                      value: 'João',
+                    },
+                    {
+                      name: 'Código interno',
+                      value: 123,
+                    },
+                    {
+                      name: 'Precisa de autenticação?',
+                      value: true,
+                    },
+                    {
+                      name: 'Data de expiração',
+                      value: null,
+                    },
+                  ],
+                },
+                {
+                  id: '1.2',
+                  label: 'DOC',
+                  order: 2,
+                  meta: [
+                    {
+                      name: 'Responsável',
+                      value: 'João',
+                    },
+                    {
+                      name: 'Código interno',
+                      value: 123,
+                    },
+                    {
+                      name: 'Precisa de autenticação?',
+                      value: true,
+                    },
+                    {
+                      name: 'Data de expiração',
+                      value: null,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: '2',
+              label: 'Saldo',
+              order: 2,
+              meta: [
+                {
+                  name: 'Responsável',
+                  value: 'João',
+                },
+                {
+                  name: 'Código interno',
+                  value: 123,
+                },
+                {
+                  name: 'Precisa de autenticação?',
+                  value: true,
+                },
+                {
+                  name: 'Data de expiração',
+                  value: null,
+                },
+              ],
+            },
+          ],
         });
       }, 2000);
     });

@@ -125,6 +125,7 @@
       }
     },
     "preview": {
+      "title": "Editar Itens",
       "root": "Raíz",
       "actions": {
         "title": "Ações",

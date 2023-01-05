@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import { TreeItem, TreeItemProps, TreeView } from '@mui/lab';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import WidgetsIcon from '@mui/icons-material/Widgets';
@@ -9,6 +10,13 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import ErrorBoundary, { ErrorFallbackWithBreadcrumbs } from '../../../components/ErrorBoundary';
+import Loading from '../../../components/Loading';
+import MenuService from '../../../api/services/MenuService';
+import { WrapPromise } from '../../../utils/suspense/WrapPromise';
+import { IMenu, IMenuItem } from '../../../types';
+import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 
 enum EnumModified {
   INSERTING,
@@ -36,8 +44,16 @@ enum EnumActionScreen {
   DELETE,
 }
 
-export const ItemsPreview = () => {
-  const { t } = useTranslation();
+interface Props {
+  id: string;
+  resource: WrapPromise<IMenu>;
+  onBackClickHandler: () => void;
+  t: TFunction;
+  navigate: NavigateFunction;
+}
+
+export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) => {
+  const menu = resource.read();
 
   const [expanded, setExpanded] = useState<string[]>(['0']);
   const [selected, setSelected] = useState<string>('0');
@@ -66,29 +82,34 @@ export const ItemsPreview = () => {
 
   const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
 
-  const initialNodes: INode[] = useMemo(
-    () => [
+  const initialNodes: INode[] = useMemo(() => {
+    const getChildren = (parent: IMenuItem): INode[] => {
+      if (!parent.children) return [];
+      const children = parent.children.map(child => ({
+        id: child.id,
+        label: child.label,
+        order: child.order,
+        parent: parent.id,
+        children: getChildren(child),
+      }));
+      return children;
+    };
+    const root: INode[] = menu.items.map(item => ({
+      id: item.id,
+      label: item.label,
+      order: item.order,
+      children: getChildren(item),
+      parent: '0',
+    }));
+    return [
       {
         id: '0',
         label: t('menu.preview.root'),
         order: 1,
-        children: [
-          {
-            id: '1',
-            label: 'Transferir',
-            order: 1,
-            children: [
-              { id: '1.1', label: 'TED', order: 1, parent: '1' },
-              { id: '1.2', label: 'DOC', order: 2, parent: '1' },
-            ],
-            parent: '0',
-          },
-          { id: '2', label: 'Saldo', order: 2, parent: '0' },
-        ],
+        children: root,
       },
-    ],
-    [t],
-  );
+    ];
+  }, [t, menu]);
 
   useEffect(() => {
     setNodes(initialNodes);
@@ -723,91 +744,139 @@ export const ItemsPreview = () => {
   };
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        height: '80vh',
-        paddingTop: '1rem',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Typography
-        variant="h1"
-        sx={{
-          fontWeight: 700,
-          fontSize: '3rem',
-          lineHeight: '3rem',
-          letterSpacing: '0.18px',
-          mb: '2rem',
-          mt: '1rem',
-        }}
-      >
-        {t('menu.title', { count: 1 })}
-      </Typography>
+    <Box>
+      <AppBreadcrumbs
+        items={[
+          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+          { label: menu.name, navigateTo: '../' },
+          { label: t('menu.preview.title') },
+        ]}
+        onBack={onBackClickHandler}
+      />
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
           width: '100%',
-          height: '100%',
-          overflowY: 'auto',
+          height: '80vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
+        <Typography
+          variant="h1"
+          sx={{
+            fontWeight: 700,
+            fontSize: '3rem',
+            lineHeight: '3rem',
+            letterSpacing: '0.18px',
+            mb: '2rem',
+          }}
+        >
+          {menu.name}
+        </Typography>
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            height: '100%',
+            justifyContent: 'center',
             width: '100%',
+            height: '100%',
+            overflowY: 'auto',
           }}
         >
           <Box
             sx={{
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
-              mb: '2rem',
+              height: '100%',
               width: '100%',
             }}
           >
-            <WidgetsIcon />
-            <Typography
-              variant="h2"
+            <Box
               sx={{
-                fontWeight: 700,
-                fontSize: '2rem',
-                lineHeight: '2rem',
-                letterSpacing: '0.18px',
-                ml: '0.5rem',
-                pb: '5px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mb: '2rem',
+                width: '100%',
               }}
             >
-              {t('menu.preview.root')}
-            </Typography>
+              <WidgetsIcon />
+              <Typography
+                variant="h2"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: '2rem',
+                  lineHeight: '2rem',
+                  letterSpacing: '0.18px',
+                  ml: '0.5rem',
+                  pb: '5px',
+                }}
+              >
+                {t('menu.preview.root')}
+              </Typography>
+            </Box>
+            <Box sx={{ width: '100%', height: '100%', border: '1px solid black', p: '1rem' }}>
+              <TreeView
+                defaultExpandIcon={<ExpandMoreIcon />}
+                defaultCollapseIcon={<ExpandLessIcon />}
+                defaultExpanded={['0']}
+                expanded={expanded}
+                selected={selected}
+                onNodeToggle={handleToggle}
+                onNodeSelect={handleSelect}
+              >
+                {renderNodes(preview(nodes, editingNode))}
+              </TreeView>
+            </Box>
           </Box>
-          <Box sx={{ width: '100%', height: '100%', border: '1px solid black', p: '1rem' }}>
-            <TreeView
-              defaultExpandIcon={<ExpandMoreIcon />}
-              defaultCollapseIcon={<ExpandLessIcon />}
-              defaultExpanded={['0']}
-              expanded={expanded}
-              selected={selected}
-              onNodeToggle={handleToggle}
-              onNodeSelect={handleSelect}
-            >
-              {renderNodes(preview(nodes, editingNode))}
-            </TreeView>
-          </Box>
-        </Box>
 
-        <div
-          style={{ width: '1px', height: '100%', border: '1px solid black', margin: '0 50px' }}
-        />
-        {renderOperationScreen()}
+          <div
+            style={{ width: '1px', height: '100%', border: '1px solid black', margin: '0 50px' }}
+          />
+          {renderOperationScreen()}
+        </Box>
       </Box>
     </Box>
+  );
+};
+
+export const ItemsPreview = () => {
+  const { t } = useTranslation();
+
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const resource = MenuService.getMenu({ id: Number(id) });
+
+  const onBackClickHandler = () => {
+    navigate('/');
+  };
+
+  return (
+    <ErrorBoundary
+      fallback={
+        <ErrorFallbackWithBreadcrumbs
+          message={t('common.error.service.get', { resource: t('menu.title', { count: 1 }) })}
+          appBreadcrumbsProps={{
+            items: [
+              { label: t('application.title'), navigateTo: '/' },
+              { label: t('menu.title', { count: 1 }) },
+            ],
+            onBack: onBackClickHandler,
+          }}
+        />
+      }
+    >
+      <Suspense fallback={<Loading />}>
+        <PageWrapper
+          id={id}
+          resource={resource}
+          onBackClickHandler={onBackClickHandler}
+          t={t}
+          navigate={navigate}
+        />
+      </Suspense>
+    </ErrorBoundary>
   );
 };

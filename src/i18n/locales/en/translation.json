@@ -125,6 +125,7 @@
       }
     },
     "preview": {
+      "title": "Edit Items",
       "root": "Root",
       "actions": {
         "title": "Actions",

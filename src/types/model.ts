@@ -8,7 +8,7 @@ export interface IMenu {
 }
 
 export interface IMenuItem {
-  id: number;
+  id: string;
   label: string;
   order: number;
   meta: IMenuItemMeta[];
@@ -49,6 +49,6 @@ export interface IMenuMetaWithErrors extends IMenuMeta {
   errors: IFieldError;
 }
 
-export interface IMenuItemMeta extends IMenuMeta {
+export interface IMenuItemMeta extends Pick<IMenuMeta, 'name'> {
   value: unknown;
 }
