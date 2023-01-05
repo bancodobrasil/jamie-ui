@@ -1,4 +1,4 @@
-import { IPaginatedResponse, IMenu } from '../../types';
+import { IPaginatedResponse, IMenu, IMenuMeta } from '../../types';
 import wrapPromise, { WrapPromise } from '../../utils/suspense/WrapPromise';
 
 interface GetListMenuPayload {
@@ -14,11 +14,13 @@ type GetMenuResponse = IMenu;
 
 interface CreateMenuPayload {
   name: string;
+  meta: IMenuMeta[];
 }
 type CreateMenuResponse = IMenu;
 
 interface UpdateMenuPayload {
   name: string;
+  meta: IMenuMeta[];
 }
 type UpdateMenuResponse = IMenu;
 
@@ -39,10 +41,14 @@ export default class MenuService {
             {
               id: 1,
               name: 'Menu Mobile',
+              meta: [],
+              items: [],
             },
             {
               id: 2,
               name: 'Menu AAPF',
+              meta: [],
+              items: [],
             },
           ],
           total: 2,
@@ -67,10 +73,14 @@ export default class MenuService {
             {
               id: 1,
               name: 'Menu Mobile',
+              meta: [],
+              items: [],
             },
             {
               id: 2,
               name: 'Menu AAPF',
+              meta: [],
+              items: [],
             },
           ],
           total: 2,
@@ -94,6 +104,8 @@ export default class MenuService {
         resolve({
           id: 1,
           name: 'Menu Mobile',
+          meta: [],
+          items: [],
         });
       }, 2000);
     });
@@ -107,6 +119,8 @@ export default class MenuService {
         resolve({
           id: 1,
           name: 'Menu Mobile',
+          meta: [],
+          items: [],
         });
       }, 2000);
     });
@@ -121,6 +135,8 @@ export default class MenuService {
         resolve({
           id: 1,
           name: 'Menu Mobile',
+          meta: [],
+          items: [],
         });
       }, 2000);
     });

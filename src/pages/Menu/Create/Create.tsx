@@ -10,6 +10,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
+import { IMenuMetaWithErrors } from '../../../types';
 
 export const CreateMenu = () => {
   const { t } = useTranslation();
@@ -21,6 +22,8 @@ export const CreateMenu = () => {
   const [name, setName] = React.useState<string>('');
   const [nameError, setNameError] = React.useState<string>('');
 
+  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>([]);
+
   const onBackClickHandler = () => {
     navigate('/');
   };
@@ -29,7 +32,7 @@ export const CreateMenu = () => {
     // TODO: Implement the API request.
     // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
     try {
-      await MenuService.createMenu({ name });
+      await MenuService.createMenu({ name, meta });
       dispatch({
         type: ActionTypes.OPEN_NOTIFICATION,
         message: `${t('notification.createSuccess', {
@@ -61,6 +64,8 @@ export const CreateMenu = () => {
         setName={setName}
         nameError={nameError}
         setNameError={setNameError}
+        meta={meta}
+        setMeta={setMeta}
         onBack={onBackClickHandler}
         onSubmit={onSubmit}
         action="create"

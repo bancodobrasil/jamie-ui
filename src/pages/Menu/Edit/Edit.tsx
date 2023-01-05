@@ -13,7 +13,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import { IMenu } from '../../../types';
+import { IMenu, IMenuMetaWithErrors } from '../../../types';
 import { WrapPromise } from '../../../utils/suspense/WrapPromise';
 
 interface Props {
@@ -32,11 +32,15 @@ const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) =
   const [name, setName] = React.useState<string>(menu.name);
   const [nameError, setNameError] = React.useState<string>('');
 
+  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>(() =>
+    menu.meta.map(m => ({ ...m, errors: {} })),
+  );
+
   const onSubmit = async () => {
     // TODO: Implement the API request.
     // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
     try {
-      await MenuService.updateMenu({ name });
+      await MenuService.updateMenu({ name, meta });
       dispatch({
         type: ActionTypes.OPEN_NOTIFICATION,
         message: `${t('notification.editSuccess', {
@@ -69,6 +73,8 @@ const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) =
         setName={setName}
         nameError={nameError}
         setNameError={setNameError}
+        meta={meta}
+        setMeta={setMeta}
         onBack={onBackClickHandler}
         onSubmit={onSubmit}
         action="edit"

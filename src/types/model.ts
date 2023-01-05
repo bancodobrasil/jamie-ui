@@ -3,15 +3,15 @@ import { IFieldError } from './common';
 export interface IMenu {
   id: number;
   name: string;
-  items?: IMenuItem[];
-  meta?: IMenuMeta[];
+  meta: IMenuMeta[];
+  items: IMenuItem[];
 }
 
 export interface IMenuItem {
   id: number;
   label: string;
   order: number;
-  meta?: IMenuItemMeta[];
+  meta: IMenuItemMeta[];
   children?: IMenuItem[];
   parent?: Omit<IMenuItem, 'children'>;
   menu?: IMenu;
