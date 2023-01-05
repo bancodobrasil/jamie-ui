@@ -100,7 +100,22 @@
     "fields": {
       "name": "Nome",
       "items": "Itens",
-      "meta": "Meta"
+      "meta": {
+        "title_one": "Metadados",
+        "title_other": "Metadado",
+        "of": "$t(menu.fields.meta.{{field}}) do Metadado",
+        "add": "Adicionar Metadado",
+        "name": "Nome",
+        "required": "Obrigatório",
+        "type": {
+          "title_one": "Tipo",
+          "title_other": "Tipos",
+          "text": "Texto",
+          "number": "Número",
+          "boolean": "Booleano",
+          "date": "Data"
+        }
+      }
     },
     "preview": {
       "root": "Raíz",
@@ -131,13 +146,21 @@
     "create": {
       "title": "Criar Menu",
       "placeholders": {
-        "name": "Digite o nome do menu..."
+        "name": "Digite o nome do menu...",
+        "meta": {
+          "name": "Digite o nome do metadado...",
+          "type": "Digite o tipo do metadado..."
+        }
       }
     },
     "edit": {
       "title": "Editar Menu",
       "placeholders": {
-        "name": "Digite o nome do menu..."
+        "name": "Digite o nome do menu...",
+        "meta": {
+          "name": "Digite o nome do metadado...",
+          "type": "Digite o tipo do metadado..."
+        }
       }
     },
     "show": {

@@ -100,7 +100,22 @@
     "fields": {
       "name": "Name",
       "items": "Items",
-      "meta": "Meta"
+      "meta": {
+        "title_one": "Metadata",
+        "title_other": "Metadata",
+        "of": "Metadata's $t(menu.fields.meta.{{field}})",
+        "add": "Add Metadata",
+        "name": "Name",
+        "required": "Required",
+        "type": {
+          "title_one": "Type",
+          "title_other": "Types",
+          "text": "Text",
+          "number": "Number",
+          "boolean": "Boolean",
+          "date": "Date"
+        }
+      }
     },
     "preview": {
       "root": "Root",
@@ -131,13 +146,21 @@
     "create": {
       "title": "Create Menu",
       "placeholders": {
-        "name": "Enter the menu's name..."
+        "name": "Enter the menu's name...",
+        "meta": {
+          "name": "Enter the menu metadata's name...",
+          "type": "Enter the menu metadata's type..."
+        }
       }
     },
     "edit": {
       "title": "Edit Menu",
       "placeholders": {
-        "name": "Enter the menu's name..."
+        "name": "Enter the menu's name...",
+        "meta": {
+          "name": "Enter the menu metadata's name...",
+          "type": "Enter the menu metadata's type..."
+        }
       }
     },
     "show": {

@@ -12,3 +12,7 @@ export interface IPaginatedResponse<T> {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 }
+
+export interface IFieldError {
+  [field: string]: string;
+}
