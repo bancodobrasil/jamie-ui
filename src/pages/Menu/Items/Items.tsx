@@ -356,6 +356,9 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
   const handleActionChange = useCallback(
     (action: EnumActionScreen) => {
       const selectedNode = findNodeById(nodes, selected);
+      if (expanded.indexOf(selectedNode.id) === -1) {
+        setExpanded([...expanded, selectedNode.id]);
+      }
       let original;
       switch (action) {
         case EnumActionScreen.SELECTING_ACTION:
@@ -404,7 +407,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
       }
       setOperationScreen(action);
     },
-    [menu, findNodeById, nodes, selected, t],
+    [menu, findNodeById, nodes, selected, t, expanded],
   );
 
   const renderNodes = useCallback(
