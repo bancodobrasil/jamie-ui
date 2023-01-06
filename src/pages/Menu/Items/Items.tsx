@@ -55,6 +55,23 @@ enum EnumActionScreen {
   DELETE,
 }
 
+const emptyEditingNode: IEditingNode = {
+  id: '',
+  label: '',
+  order: 0,
+  modified: EnumModified.INSERTING,
+  children: [],
+  meta: {},
+  original: {
+    id: '',
+    label: '',
+    order: 0,
+    modified: EnumModified.INSERTING,
+    children: [],
+    meta: {},
+  },
+};
+
 interface Props {
   id: string;
   resource: WrapPromise<IMenu>;
@@ -73,6 +90,8 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
   const [operationScreen, setOperationScreen] = useState<EnumActionScreen>(
     EnumActionScreen.SELECTING_ACTION,
   );
+
+  const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
 
   const nodes = useMemo<INode[]>(() => {
     const getChildren = (parent: IMenuItem): INode[] => {
@@ -105,28 +124,6 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
       },
     ];
   }, [menu, t]);
-
-  const emptyEditingNode: IEditingNode = useMemo(
-    () => ({
-      id: '',
-      label: '',
-      order: 0,
-      modified: EnumModified.INSERTING,
-      children: [],
-      meta: {},
-      original: {
-        id: '',
-        label: '',
-        order: 0,
-        modified: EnumModified.INSERTING,
-        children: [],
-        meta: {},
-      },
-    }),
-    [],
-  );
-
-  const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
 
   const findNodeById = useCallback((nodes: INode[], id: string): INode | undefined => {
     const node = nodes.find(node => node.id === id);
@@ -351,7 +348,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
       }
       setOperationScreen(action);
     },
-    [menu, findNodeById, nodes, selected, emptyEditingNode, t],
+    [menu, findNodeById, nodes, selected, t],
   );
 
   const renderNodes = useCallback(
