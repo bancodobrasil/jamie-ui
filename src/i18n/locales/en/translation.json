@@ -8,6 +8,7 @@
   "common": {
     "yes": "Yes",
     "no": "No",
+    "example": "Example",
     "loading": "Loading",
     "loadingField": "Loading {{field}}",
     "totalOf": "Total of {{field}}",

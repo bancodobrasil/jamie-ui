@@ -22,6 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
 import { i18n, TFunction } from 'i18next';
+import { DateTime } from 'luxon';
 import ErrorBoundary, { ErrorFallbackWithBreadcrumbs } from '../../../components/ErrorBoundary';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
@@ -61,7 +62,8 @@ const Form = styled('form')({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
-  mr: '1rem',
+  paddingRight: '1rem',
+  overflowY: 'auto',
 });
 
 const emptyEditingNode: IEditingNode = {
@@ -537,6 +539,13 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
                     InputLabelProps={{ shrink: true }}
                     required={meta.required}
                     error={!!editingNode.meta[meta.name] && params.error}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
                     sx={{ mt: '1.25rem' }}
                   />
                 )}
@@ -882,7 +891,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
         );
       case EnumActionScreen.DELETE:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', mr: '1rem' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', pr: '1rem' }}>
             <Typography
               variant="h3"
               sx={{

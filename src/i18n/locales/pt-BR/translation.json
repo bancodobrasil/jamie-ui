@@ -8,6 +8,7 @@
   "common": {
     "yes": "Sim",
     "no": "Não",
+    "example": "Exemplo",
     "loading": "Carregando",
     "loadingField": "Carregando {{field}}",
     "totalOf": "Total de {{field}}",
