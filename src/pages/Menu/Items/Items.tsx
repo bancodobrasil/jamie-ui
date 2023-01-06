@@ -10,6 +10,7 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
+  styled,
 } from '@mui/material';
 import React, { Suspense, useCallback, useMemo, useState } from 'react';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
@@ -27,6 +28,7 @@ import MenuService from '../../../api/services/MenuService';
 import { WrapPromise } from '../../../utils/suspense/WrapPromise';
 import { IMenu, IMenuItem, IMenuItemMeta, IMenuMeta, MenuMetaType } from '../../../types';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
+import { MENU_ITEM_VALIDATION } from '../../../constants';
 
 enum EnumModified {
   INSERTING,
@@ -54,6 +56,13 @@ enum EnumActionScreen {
   UPDATE,
   DELETE,
 }
+
+const Form = styled('form')({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  mr: '1rem',
+});
 
 const emptyEditingNode: IEditingNode = {
   id: '',
@@ -91,8 +100,6 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
     EnumActionScreen.SELECTING_ACTION,
   );
 
-  const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
-
   const nodes = useMemo<INode[]>(() => {
     const getChildren = (parent: IMenuItem): INode[] => {
       if (!parent.children) return [];
@@ -124,6 +131,9 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
       },
     ];
   }, [menu, t]);
+
+  const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
+  const [labelError, setLabelError] = useState<string>('');
 
   const findNodeById = useCallback((nodes: INode[], id: string): INode | undefined => {
     const node = nodes.find(node => node.id === id);
@@ -295,6 +305,50 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
 
   const handleSelect = (event: React.SyntheticEvent, nodeId: string) => {
     setSelected(nodeId);
+  };
+
+  const handleInsertSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let tmpLabelError = '';
+    if (editingNode.label.toString().length < MENU_ITEM_VALIDATION.LABEL_MIN_LENGTH) {
+      tmpLabelError = t('form.validation.min', {
+        field: t('menu.fields.name'),
+        min: MENU_ITEM_VALIDATION.LABEL_MIN_LENGTH,
+      });
+    } else if (editingNode.label.toString().length > MENU_ITEM_VALIDATION.LABEL_MAX_LENGTH) {
+      tmpLabelError = t('form.validation.max', {
+        field: t('menu.fields.name'),
+        max: MENU_ITEM_VALIDATION.LABEL_MAX_LENGTH,
+      });
+    }
+    if (tmpLabelError) {
+      setLabelError(tmpLabelError);
+      // return;
+    }
+  };
+
+  const handleUpdateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let tmpLabelError = '';
+    if (editingNode.label.toString().length < MENU_ITEM_VALIDATION.LABEL_MIN_LENGTH) {
+      tmpLabelError = t('form.validation.min', {
+        field: t('menu.fields.name'),
+        min: MENU_ITEM_VALIDATION.LABEL_MIN_LENGTH,
+      });
+    } else if (editingNode.label.toString().length > MENU_ITEM_VALIDATION.LABEL_MAX_LENGTH) {
+      tmpLabelError = t('form.validation.max', {
+        field: t('menu.fields.name'),
+        max: MENU_ITEM_VALIDATION.LABEL_MAX_LENGTH,
+      });
+    }
+    if (tmpLabelError) {
+      setLabelError(tmpLabelError);
+      // return;
+    }
   };
 
   const handleActionChange = useCallback(
@@ -606,7 +660,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
         );
       case EnumActionScreen.INSERT:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', mr: '1rem' }}>
+          <Form onSubmit={handleInsertSubmit}>
             <Typography
               variant="h3"
               sx={{
@@ -661,8 +715,17 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
               label={t('menu.preview.inputs.name.label')}
               InputLabelProps={{ shrink: true }}
               value={editingNode.label}
-              onChange={e => setEditingNode({ ...editingNode, label: e.target.value })}
+              onChange={e => {
+                setLabelError('');
+                setEditingNode({ ...editingNode, label: e.target.value });
+              }}
               placeholder={t('menu.preview.inputs.name.placeholder')}
+              error={!!labelError}
+              helperText={labelError}
+              required
+              inputProps={{
+                maxLength: MENU_ITEM_VALIDATION.LABEL_MAX_LENGTH,
+              }}
               sx={{
                 mt: '2rem',
                 width: '100%',
@@ -700,7 +763,12 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
                 width: '100%',
               }}
             >
-              <Button variant="contained" color="success" sx={{ mt: '2rem', mr: '1rem' }}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ mt: '2rem', mr: '1rem' }}
+                type="submit"
+              >
                 {t('buttons.save')}
               </Button>
               <Button
@@ -712,11 +780,11 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
                 {t('buttons.discard')}
               </Button>
             </Box>
-          </Box>
+          </Form>
         );
       case EnumActionScreen.UPDATE:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', mr: '1rem' }}>
+          <Form onSubmit={handleUpdateSubmit}>
             <Typography
               variant="h3"
               sx={{
@@ -745,8 +813,17 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
               label={t('menu.preview.inputs.name.label')}
               InputLabelProps={{ shrink: true }}
               value={editingNode.label}
-              onChange={e => setEditingNode({ ...editingNode, label: e.target.value })}
+              onChange={e => {
+                setLabelError('');
+                setEditingNode({ ...editingNode, label: e.target.value });
+              }}
               placeholder={t('menu.preview.inputs.name.placeholder')}
+              error={!!labelError}
+              helperText={labelError}
+              required
+              inputProps={{
+                maxLength: MENU_ITEM_VALIDATION.LABEL_MAX_LENGTH,
+              }}
               sx={{
                 mt: '2rem',
                 width: '100%',
@@ -784,7 +861,12 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
                 width: '100%',
               }}
             >
-              <Button variant="contained" color="success" sx={{ mt: '2rem', mr: '1rem' }}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ mt: '2rem', mr: '1rem' }}
+                type="submit"
+              >
                 {t('buttons.save')}
               </Button>
               <Button
@@ -796,7 +878,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
                 {t('buttons.discard')}
               </Button>
             </Box>
-          </Box>
+          </Form>
         );
       case EnumActionScreen.DELETE:
         return (
