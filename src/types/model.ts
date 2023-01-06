@@ -11,7 +11,7 @@ export interface IMenuItem {
   id: string;
   label: string;
   order: number;
-  meta: IMenuItemMeta[];
+  meta: IMenuItemMeta;
   children?: IMenuItem[];
   parent?: Omit<IMenuItem, 'children'>;
   menu?: IMenu;
@@ -49,6 +49,6 @@ export interface IMenuMetaWithErrors extends IMenuMeta {
   errors: IFieldError;
 }
 
-export interface IMenuItemMeta extends Pick<IMenuMeta, 'name'> {
-  value: unknown;
+export interface IMenuItemMeta {
+  [key: string]: unknown;
 }

@@ -121,7 +121,8 @@
           "number": "Número",
           "boolean": "Booleano",
           "date": "Data"
-        }
+        },
+        "value": "Valor"
       }
     },
     "preview": {
@@ -142,6 +143,9 @@
         },
         "order": {
           "label": "Ordem"
+        },
+        "meta": {
+          "placeholder": "Digite o valor do {{meta}}..."
         }
       },
       "buttons": {

@@ -121,7 +121,8 @@
           "number": "Number",
           "boolean": "Boolean",
           "date": "Date"
-        }
+        },
+        "value": "Value"
       }
     },
     "preview": {
@@ -142,6 +143,9 @@
         },
         "order": {
           "label": "Order"
+        },
+        "meta": {
+          "placeholder": "Enter the menu item's {{meta}}..."
         }
       },
       "buttons": {

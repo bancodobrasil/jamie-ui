@@ -1,6 +1,16 @@
 /* eslint-disable no-console */
 import { TreeItem, TreeItemProps, TreeView } from '@mui/lab';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  Box,
+  Button,
+  Divider,
+  TextField,
+  Typography,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import React, { Suspense, useCallback, useMemo, useState } from 'react';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -10,12 +20,12 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
+import { i18n, TFunction } from 'i18next';
 import ErrorBoundary, { ErrorFallbackWithBreadcrumbs } from '../../../components/ErrorBoundary';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
 import { WrapPromise } from '../../../utils/suspense/WrapPromise';
-import { IMenu, IMenuItem } from '../../../types';
+import { IMenu, IMenuItem, IMenuItemMeta, IMenuMeta, MenuMetaType } from '../../../types';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 
 enum EnumModified {
@@ -27,8 +37,9 @@ enum EnumModified {
 interface INode extends Omit<TreeItemProps, 'nodeId' | 'children'> {
   id: string;
   order: number;
+  children: INode[];
+  meta: IMenuItemMeta;
   parent?: string;
-  children?: INode[];
   modified?: EnumModified;
 }
 
@@ -49,10 +60,11 @@ interface Props {
   resource: WrapPromise<IMenu>;
   onBackClickHandler: () => void;
   t: TFunction;
+  i18n: i18n;
   navigate: NavigateFunction;
 }
 
-export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) => {
+export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigate }: Props) => {
   const menu = resource.read();
 
   const [expanded, setExpanded] = useState<string[]>(['0']);
@@ -71,6 +83,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
         order: child.order,
         parent: parent.id,
         children: getChildren(child),
+        meta: child.meta,
       }));
       return children;
     };
@@ -80,6 +93,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
       order: item.order,
       children: getChildren(item),
       parent: '0',
+      meta: item.meta,
     }));
     return [
       {
@@ -87,6 +101,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
         label: t('menu.preview.root'),
         order: 1,
         children: root,
+        meta: {},
       },
     ];
   }, [menu, t]);
@@ -97,11 +112,15 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
       label: '',
       order: 0,
       modified: EnumModified.INSERTING,
+      children: [],
+      meta: {},
       original: {
         id: '',
         label: '',
         order: 0,
         modified: EnumModified.INSERTING,
+        children: [],
+        meta: {},
       },
     }),
     [],
@@ -300,6 +319,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
             order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
             modified: EnumModified.INSERTING,
             parent: selectedNode.id,
+            meta: menu.meta.map(m => ({ [m.name]: '' })),
           };
           setEditingNode({ ...original, original });
           setSelected('-1');
@@ -331,7 +351,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
       }
       setOperationScreen(action);
     },
-    [findNodeById, nodes, selected, emptyEditingNode, t],
+    [menu, findNodeById, nodes, selected, emptyEditingNode, t],
   );
 
   const renderNodes = useCallback(
@@ -384,6 +404,108 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
     [editingNode.id],
   );
 
+  const renderMeta = () => {
+    const renderInput = (meta: IMenuMeta) => {
+      switch (meta.type) {
+        case MenuMetaType.BOOLEAN:
+          return (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editingNode.meta[meta.name] as boolean}
+                  onChange={e => {
+                    setEditingNode({
+                      ...editingNode,
+                      meta: {
+                        ...editingNode.meta,
+                        [meta.name]: e.target.checked,
+                      },
+                    });
+                  }}
+                />
+              }
+              label={meta.name}
+              sx={{ mt: '1.25rem' }}
+            />
+          );
+        case MenuMetaType.NUMBER:
+          return (
+            <TextField
+              type="number"
+              label={meta.name}
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.meta[meta.name]}
+              required={meta.required}
+              onChange={e => {
+                setEditingNode({
+                  ...editingNode,
+                  meta: {
+                    ...editingNode.meta,
+                    [meta.name]: e.target.value,
+                  },
+                });
+              }}
+              placeholder={t('menu.preview.inputs.meta.placeholder', { meta: meta.name })}
+              sx={{ mt: '1.25rem' }}
+            />
+          );
+        case MenuMetaType.TEXT:
+          return (
+            <TextField
+              type="text"
+              label={meta.name}
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.meta[meta.name] || ''}
+              required={meta.required}
+              onChange={e => {
+                const m = { ...editingNode.meta, [meta.name]: e.target.value };
+                setEditingNode({ ...editingNode, meta: m });
+              }}
+              placeholder={t('menu.preview.inputs.meta.placeholder', { meta: meta.name })}
+              sx={{ mt: '1.25rem' }}
+            />
+          );
+        case MenuMetaType.DATE:
+          return (
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DatePicker
+                label={meta.name}
+                value={editingNode.meta[meta.name] || ''}
+                onChange={date => {
+                  setEditingNode({
+                    ...editingNode,
+                    meta: {
+                      ...editingNode.meta,
+                      [meta.name]: date,
+                    },
+                  });
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    required={meta.required}
+                    error={!!editingNode.meta[meta.name] && params.error}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+          );
+      }
+    };
+    return menu.meta.map((meta, i) => (
+      <Box
+        key={i}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {renderInput(meta)}
+      </Box>
+    ));
+  };
   const renderOperationScreen = () => {
     switch (operationScreen) {
       case EnumActionScreen.SELECTING_ACTION:
@@ -487,7 +609,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
         );
       case EnumActionScreen.INSERT:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', mr: '1rem' }}>
             <Typography
               variant="h3"
               sx={{
@@ -571,6 +693,9 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
                 width: '6rem',
               }}
             />
+            <Divider sx={{ mt: '1.5rem' }} />
+            {renderMeta()}
+            {menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
             <Box
               sx={{
                 display: 'flex',
@@ -594,7 +719,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
         );
       case EnumActionScreen.UPDATE:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', mr: '1rem' }}>
             <Typography
               variant="h3"
               sx={{
@@ -652,6 +777,9 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
                 width: '6rem',
               }}
             />
+            <Divider sx={{ mt: '1.5rem' }} />
+            {renderMeta()}
+            {menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
             <Box
               sx={{
                 display: 'flex',
@@ -675,7 +803,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
         );
       case EnumActionScreen.DELETE:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', mr: '1rem' }}>
             <Typography
               variant="h3"
               sx={{
@@ -836,7 +964,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: P
 };
 
 export const ItemsPreview = () => {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -868,6 +996,7 @@ export const ItemsPreview = () => {
           resource={resource}
           onBackClickHandler={onBackClickHandler}
           t={t}
+          i18n={i18n}
           navigate={navigate}
         />
       </Suspense>
