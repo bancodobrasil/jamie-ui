@@ -14,11 +14,7 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { IMenuMetaWithErrors, MenuMetaType } from '../../../types';
-
-const NAME_MIN_LENGTH = 3;
-const NAME_MAX_LENGTH = 30;
-const META_NAME_MIN_LENGTH = 3;
-const META_NAME_MAX_LENGTH = 30;
+import { MENU_VALIDATION } from '../../../constants';
 
 const Form = styled('form')({
   flex: 1,
@@ -58,15 +54,15 @@ export const MenuForm = ({
     e.stopPropagation();
 
     let tmpNameError = '';
-    if (name.length < NAME_MIN_LENGTH) {
+    if (name.length < MENU_VALIDATION.NAME_MIN_LENGTH) {
       tmpNameError = t('form.validation.min', {
         field: t('menu.fields.name'),
-        min: NAME_MIN_LENGTH,
+        min: MENU_VALIDATION.NAME_MIN_LENGTH,
       });
-    } else if (name.length > NAME_MAX_LENGTH) {
+    } else if (name.length > MENU_VALIDATION.NAME_MAX_LENGTH) {
       tmpNameError = t('form.validation.max', {
         field: t('menu.fields.name'),
-        max: NAME_MAX_LENGTH,
+        max: MENU_VALIDATION.NAME_MAX_LENGTH,
       });
     }
     if (tmpNameError) {
@@ -78,15 +74,15 @@ export const MenuForm = ({
 
     meta.forEach((m, i) => {
       let metaNameError = '';
-      if (m.name.length < META_NAME_MIN_LENGTH) {
+      if (m.name.length < MENU_VALIDATION.NAME_MIN_LENGTH) {
         metaNameError = t('form.validation.min', {
           field: t('menu.fields.meta.of', { field: 'name' }),
-          min: META_NAME_MIN_LENGTH,
+          min: MENU_VALIDATION.NAME_MIN_LENGTH,
         });
-      } else if (m.name.length > META_NAME_MAX_LENGTH) {
+      } else if (m.name.length > MENU_VALIDATION.NAME_MAX_LENGTH) {
         metaNameError = t('form.validation.max', {
           field: t('menu.fields.meta.of', { field: 'name' }),
-          max: META_NAME_MAX_LENGTH,
+          max: MENU_VALIDATION.NAME_MAX_LENGTH,
         });
       }
       meta.slice(0, i).forEach((m2, j) => {
@@ -131,7 +127,7 @@ export const MenuForm = ({
             setMeta(updatedMeta);
           }}
           inputProps={{
-            maxLength: NAME_MAX_LENGTH,
+            maxLength: MENU_VALIDATION.META_NAME_MAX_LENGTH,
           }}
           InputLabelProps={{
             shrink: true,
@@ -207,7 +203,7 @@ export const MenuForm = ({
           setName(value);
         }}
         inputProps={{
-          maxLength: NAME_MAX_LENGTH,
+          maxLength: MENU_VALIDATION.NAME_MAX_LENGTH,
         }}
         InputLabelProps={{
           shrink: true,
