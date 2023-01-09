@@ -14,6 +14,8 @@ services:
         - 3307:3306
   keycloak:
       image: quay.io/keycloak/keycloak:latest
+      volumes:
+        - ./keycloak/themes:/opt/keycloak/themes
       environment:
         KC_DB: mysql
         KC_DB_URL_HOST: mysql
