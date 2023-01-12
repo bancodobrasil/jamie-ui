@@ -16,7 +16,7 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
-COPY nginx/default.conf /etc/nginx/conf.d
+COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
 
 COPY nginx/setup-env.sh /docker-entrypoint.d
 RUN chmod +x /docker-entrypoint.d/setup-env.sh

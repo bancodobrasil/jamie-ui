@@ -18,14 +18,19 @@ server {
     return 200 'OK';
   }
 
-  # location /status {
-  #   stub_status;
-  # }
+  location /status {
+    stub_status;
+  }
 
-  # location /metrics {
-  #   proxy_ssl_verify off;
-  #   proxy_pass http://localhost:9113/metrics;
-  # }
+  location /metrics {
+    # This is the internal Docker DNS, cache only for 30s
+    resolver 127.0.0.11 valid=30s;
+
+    set $upstream_nginx_exporter ${NGINX_EXPORTER_HOST};
+
+    proxy_ssl_verify off;
+    proxy_pass http://$upstream_nginx_exporter:9113/metrics;
+  }
 
   location / {
     try_files $uri $uri/ = /index.html;
