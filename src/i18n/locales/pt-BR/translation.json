@@ -101,6 +101,11 @@
       "button": "Recarregar a página"
     }
   },
+  "notFound": {
+    "title": "Oops! Página não encontrada",
+    "description": "A página que você está procurando não existe ou foi removida.",
+    "button": "Voltar para o início"
+  },
   "menu": {
     "title_one": "Menu",
     "title_other": "Menus",

@@ -11,6 +11,7 @@ import { ShowMenu } from '../../../pages/Menu/Show';
 import { EditMenu } from '../../../pages/Menu/Edit';
 import Loading from '../../Loading';
 import { ProtectedRoute } from '.';
+import NotFound from '../../../pages/NotFound';
 
 export const AppRoutes = () => {
   const { initialized } = useKeycloak();
@@ -22,6 +23,7 @@ export const AppRoutes = () => {
     return (
       <NotificationProvider>
         <Routes>
+          <Route path="*" element={<NotFound />} />
           <Route index element={<Navigate to="/menus" replace />} />
           <Route path="menus" element={<ProtectedRoute />}>
             <Route index element={<ListMenu />} />

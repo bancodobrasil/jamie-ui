@@ -101,6 +101,11 @@
       "button": "Reload page"
     }
   },
+  "notFound": {
+    "title": "Oops! Page not found",
+    "description": "The page you are looking for does not exist",
+    "button": "Back to home"
+  },
   "menu": {
     "title_one": "Menu",
     "title_other": "Menus",
