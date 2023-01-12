@@ -1,7 +1,8 @@
 import Keycloak from 'keycloak-js';
+import { JAMIE_KEYCLOAK_BASE_URL } from './constants';
 
 const keycloak = new Keycloak({
-  url: process.env.JAMIE_KEYCLOAK_BASE_URL,
+  url: JAMIE_KEYCLOAK_BASE_URL,
   realm: 'jamie',
   clientId: 'jamie',
 });

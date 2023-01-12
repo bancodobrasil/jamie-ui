@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { JAMIE_API_BASE_URL } from '../constants';
 
 const publicAPI = axios.create({
-  baseURL: process.env.JAMIE_API_BASE_URL,
+  baseURL: JAMIE_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

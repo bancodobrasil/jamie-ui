@@ -12,6 +12,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
+import { JAMIE_UI_BASE_URL } from '../../constants';
 
 export const Nav = () => {
   const { keycloak } = useKeycloak();
@@ -50,7 +51,7 @@ export const Nav = () => {
   };
 
   const onLoginClickHandler = () => {
-    keycloak?.login({ redirectUri: `${process.env.JAMIE_UI_BASE_URL}${location.pathname}` });
+    keycloak?.login({ redirectUri: `${JAMIE_UI_BASE_URL}${location.pathname}` });
   };
 
   const renderLoginButton = () => {
