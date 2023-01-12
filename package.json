@@ -57,7 +57,11 @@
     "prettier-fix": "prettier --write **/*.{tsx,ts,js,jsx,json,css,scss,md,html}",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "up:services": "docker-compose up -d --build",
+    "down:services": "docker-compose down",
+    "up:all": "docker-compose -f docker-compose.all.yml up -d --build",
+    "down:all": "docker-compose -f docker-compose.all.yml down"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",

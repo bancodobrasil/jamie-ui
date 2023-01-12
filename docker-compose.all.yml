@@ -1,0 +1,71 @@
+version: '3.5'
+
+services:
+  mysql:
+    image: mysql:8-debian
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+    ports:
+      - 3307:3306
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    volumes:
+      - ./keycloak/themes:/opt/keycloak/themes
+    environment:
+      KC_DB: mysql
+      KC_DB_URL_HOST: mysql
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KC_DB_URL_PORT: 3306
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    command: start-dev
+
+  nginx:
+    build: .
+    ports:
+      - 80:80
+    environment:
+      JAMIE_UI_BASE_URL: http://localhost
+      JAMIE_KEYCLOAK_BASE_URL: http://localhost:8080
+      JAMIE_API_BASE_URL: https://api.jamie.g6tech.com.br
+      NGINX_EXPORTER_HOST: nginx-exporter
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - grafana-storage:/var/lib/grafana
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  nginx-exporter:
+    restart: always
+    image: nginx/nginx-prometheus-exporter:0.4.2
+    command:
+      - -nginx.scrape-uri
+      - http://nginx/status
+    depends_on:
+      - prometheus
+
+volumes:
+  mysql_data:
+  grafana-storage:

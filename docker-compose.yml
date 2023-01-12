@@ -32,14 +32,5 @@ services:
       - mysql
     command: start-dev
 
-  # site:
-  #   build: .
-  #   ports:
-  #     - 80:80
-  #   environment:
-  #     JAMIE_UI_BASE_URL: http://localhost:80
-  #     JAMIE_KEYCLOAK_BASE_URL: http://localhost:8080
-  #     JAMIE_API_BASE_URL: https://api.jamie.g6tech.com.br
-
 volumes:
   mysql_data:
