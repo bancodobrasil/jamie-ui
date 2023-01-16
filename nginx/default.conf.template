@@ -23,9 +23,7 @@ server {
   }
 
   location /metrics {
-    set $nginx_exporter_resolver ${NGINX_EXPORTER_RESOLVER};
-
-    resolver $nginx_exporter_resolver valid=30s;
+    resolver 8.8.8.8;
 
     set $upstream_nginx_exporter ${NGINX_EXPORTER_URL};
 
