@@ -29,6 +29,11 @@ server {
 
     proxy_ssl_verify off;
     proxy_pass $upstream_nginx_exporter;
+
+    # Basic Auth
+    # jamie_ui:Jamie@2023
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/.htpasswd;
   }
 
   location / {
