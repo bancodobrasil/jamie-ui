@@ -40,7 +40,7 @@ services:
       JAMIE_UI_BASE_URL: http://localhost
       JAMIE_KEYCLOAK_BASE_URL: http://localhost:8080
       JAMIE_API_BASE_URL: https://api.jamie.g6tech.com.br
-      NGINX_EXPORTER_HOST: nginx-exporter
+      NGINX_EXPORTER_URL: http://nginx-exporter:9113/metrics
 
   grafana:
     image: grafana/grafana
