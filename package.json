@@ -64,6 +64,7 @@
     "@types/luxon": "^3.2.0",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",
+    "@types/react-helmet": "^6.1.6",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.19.0",
     "@webpack-cli/generators": "^3.0.1",
