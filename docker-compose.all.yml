@@ -32,16 +32,6 @@ services:
       - mysql
     command: start-dev
 
-  geoip2:
-    image: maxmindinc/geoipupdate
-    volumes:
-      - geoip2:/usr/share/GeoIP
-    environment:
-      GEOIPUPDATE_ACCOUNT_ID: 814392
-      GEOIPUPDATE_LICENSE_KEY: BEVhxSN3HDR2N7uG
-      GEOIPUPDATE_EDITION_IDS: GeoLite2-Country GeoLite2-City
-      GEOIPUPDATE_DESTINATION: /usr/share/GeoIP
-
   nginx:
     build:
       context: .
@@ -49,15 +39,11 @@ services:
         NGINX_EXPORTER_RESOLVER: 127.0.0.11 valid=30s
     ports:
       - 80:80
-    volumes:
-      - geoip2:/usr/share/GeoIP
     environment:
       JAMIE_UI_BASE_URL: http://localhost
       JAMIE_KEYCLOAK_BASE_URL: http://localhost:8080
       JAMIE_API_BASE_URL: https://api.jamie.g6tech.com.br
       NGINX_EXPORTER_URL: http://nginx-exporter:9113/metrics
-    depends_on:
-      - geoip2
 
   grafana:
     image: grafana/grafana

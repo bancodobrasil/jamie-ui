@@ -13,8 +13,6 @@ server {
   index index.html;
   root /usr/share/nginx/html;
 
-  access_log /var/log/nginx/json-access.log json_analytics;
-
   location ~ /(health/(live|ready))$ {
     add_header Content-Type text/plain;
     return 200 'OK';
