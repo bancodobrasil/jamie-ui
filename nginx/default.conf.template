@@ -13,6 +13,8 @@ server {
   index index.html;
   root /usr/share/nginx/html;
 
+  access_log /var/log/nginx/json-access.log json_analytics;
+
   location ~ /(health/(live|ready))$ {
     add_header Content-Type text/plain;
     return 200 'OK';
@@ -25,7 +27,7 @@ server {
   }
 
   location /metrics {
-    resolver 8.8.8.8;
+    resolver ${NGINX_EXPORTER_RESOLVER};
 
     set $upstream_nginx_exporter ${NGINX_EXPORTER_URL};
 
