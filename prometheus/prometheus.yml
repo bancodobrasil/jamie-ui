@@ -8,6 +8,9 @@ scrape_configs:
       - targets: ["prometheus:9090"]
   - job_name: 'nginx_status'
     scrape_interval: 5s
+    basic_auth:
+      username: jamie_ui
+      password: Jamie@2023
     metrics_path: '/metrics'
     static_configs:
       - targets: ['nginx:80']
