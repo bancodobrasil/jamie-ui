@@ -1,9 +1,7 @@
 import React from 'react';
-import { Box } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 import { NotificationProvider } from '../../../contexts/NotificationContext';
-import { Nav } from '../../Nav';
 import { ListMenu } from '../../../pages/Menu/List';
 import { ItemsPreview } from '../../../pages/Menu/Items';
 import { CreateMenu } from '../../../pages/Menu/Create';
@@ -12,6 +10,7 @@ import { EditMenu } from '../../../pages/Menu/Edit';
 import Loading from '../../Loading';
 import { ProtectedRoute } from '.';
 import NotFound from '../../../pages/NotFound';
+import Layout from '../../Layout';
 
 export const AppRoutes = () => {
   const { initialized } = useKeycloak();
@@ -41,28 +40,7 @@ export const AppRoutes = () => {
 
   return (
     <Router>
-      <Box
-        sx={{
-          flex: 1,
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          backgroundColor: '#FFFFFF',
-        }}
-      >
-        <Nav />
-        <Box
-          sx={{
-            width: '100%',
-            flex: 1,
-            boxSizing: 'border-box',
-            paddingLeft: '32px',
-            paddingRight: '32px',
-          }}
-        >
-          {renderRoutes()}
-        </Box>
-      </Box>
+      <Layout>{renderRoutes()}</Layout>
     </Router>
   );
 };
