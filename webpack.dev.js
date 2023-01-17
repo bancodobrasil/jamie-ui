@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const dotenv = require('dotenv');
@@ -6,11 +7,13 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-const config = {
-  entry: './src/index.tsx',
+module.exports = {
+  mode: 'development',
+  entry: {
+    index: './src/index.tsx',
+  },
   output: {
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
   },
@@ -18,6 +21,9 @@ const config = {
     host: 'localhost',
     port: 3000,
     historyApiFallback: true,
+  },
+  optimization: {
+    runtimeChunk: 'single',
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -28,6 +34,10 @@ const config = {
     }),
     new HtmlWebpackPlugin({
       template: 'index.html',
+      inject: true,
+      scriptLoading: 'module',
+      chunks: ['index'],
+      filename: 'index.html',
     }),
   ],
   module: {
@@ -67,15 +77,6 @@ const config = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
   },
-};
-
-module.exports = () => {
-  if (isProduction) {
-    config.mode = 'production';
-  } else {
-    config.mode = 'development';
-  }
-  return config;
 };
