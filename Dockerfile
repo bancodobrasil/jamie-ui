@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile && yarn cache clean
+ARG YARN_TIMEOUT=100000
+
+RUN yarn install --network-timeout ${YARN_TIMEOUT} --frozen-lockfile && yarn cache clean
 
 COPY . .
 
