@@ -37,6 +37,7 @@ services:
       context: .
       args:
         NGINX_EXPORTER_RESOLVER: 127.0.0.11 valid=30s
+        NGINX_SERVER_NAME: nginx
     ports:
       - 80:80
     environment:

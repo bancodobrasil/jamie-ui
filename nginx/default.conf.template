@@ -1,6 +1,6 @@
 server {
   listen       80 default_server;
-  server_name  _;
+  server_name  ${NGINX_SERVER_NAME};
   server_tokens  off;
 
   charset utf-8;
