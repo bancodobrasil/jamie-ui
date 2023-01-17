@@ -1,5 +1,6 @@
 import { Box, Divider, Typography } from '@mui/material';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import MenuService from '../../../api/services/MenuService';
@@ -48,6 +49,9 @@ export const CreateMenu = () => {
 
   return (
     <Box>
+      <Helmet>
+        <title>{t('menu.create.title')}</title>
+      </Helmet>
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },

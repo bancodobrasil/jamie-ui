@@ -5,6 +5,7 @@ import { TFunction } from 'i18next';
 import React, { Suspense, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import MenuService from '../../../api/services/MenuService';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import ErrorBoundary from '../../../components/ErrorBoundary';
@@ -166,27 +167,32 @@ export const ListMenu = () => {
   const resource = MenuService.getListMenu({ page: 1, limit: MENU_LIST_DEFAULT_PAGE_SIZE });
 
   return (
-    <ErrorBoundary
-      fallback={
-        <DefaultErrorPage
-          title={t('error.failedToLoadResource.title', {
-            resource: t('common.the', {
-              context: 'male',
-              count: 2,
-              field: t('menu.title', { count: 2 }),
-            }).toLowerCase(),
-          })}
-          description={t('error.failedToLoadResource.description')}
-          button={{
-            label: t('error.failedToLoadResource.button'),
-            onClick: () => document.location.reload(),
-          }}
-        />
-      }
-    >
-      <Suspense fallback={<Loading />}>
-        <PageWrapper resource={resource} t={t} />
-      </Suspense>
-    </ErrorBoundary>
+    <>
+      <Helmet>
+        <title>{t('menu.list.title')}</title>
+      </Helmet>
+      <ErrorBoundary
+        fallback={
+          <DefaultErrorPage
+            title={t('error.failedToLoadResource.title', {
+              resource: t('common.the', {
+                context: 'male',
+                count: 2,
+                field: t('menu.title', { count: 2 }),
+              }).toLowerCase(),
+            })}
+            description={t('error.failedToLoadResource.description')}
+            button={{
+              label: t('error.failedToLoadResource.button'),
+              onClick: () => document.location.reload(),
+            }}
+          />
+        }
+      >
+        <Suspense fallback={<Loading />}>
+          <PageWrapper resource={resource} t={t} />
+        </Suspense>
+      </ErrorBoundary>
+    </>
   );
 };

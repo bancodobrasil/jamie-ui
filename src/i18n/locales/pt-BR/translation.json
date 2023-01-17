@@ -102,7 +102,7 @@
     }
   },
   "notFound": {
-    "title": "Oops! Página não encontrada",
+    "title": "Página não encontrada",
     "description": "A página que você está procurando não existe ou foi removida.",
     "button": "Voltar para o início"
   },

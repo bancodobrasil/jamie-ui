@@ -33,6 +33,7 @@ module.exports = {
       }),
     }),
     new HtmlWebpackPlugin({
+      title: 'Jamie',
       template: 'index.html',
       inject: true,
       scriptLoading: 'module',

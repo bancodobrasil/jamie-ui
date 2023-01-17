@@ -1,6 +1,7 @@
 import { Box, Divider, Typography } from '@mui/material';
 import { TFunction } from 'i18next';
 import React, { Suspense } from 'react';
+import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import MenuService from '../../../api/services/MenuService';
@@ -96,26 +97,31 @@ export const EditMenu = () => {
   };
 
   return (
-    <ErrorBoundary
-      fallback={
-        <ErrorFallbackWithBreadcrumbs
-          message={t('common.error.service.get', { resource: t('menu.title', { count: 1 }) })}
-          appBreadcrumbsProps={{
-            items: [{ label: t('menu.title'), navigateTo: '/' }, { label: t('menu.edit.title') }],
-            onBack: onBackClickHandler,
-          }}
-        />
-      }
-    >
-      <Suspense fallback={<Loading />}>
-        <PageWrapper
-          id={id}
-          resource={resource}
-          onBackClickHandler={onBackClickHandler}
-          t={t}
-          navigate={navigate}
-        />
-      </Suspense>
-    </ErrorBoundary>
+    <>
+      <Helmet>
+        <title>{t('menu.edit.title')}</title>
+      </Helmet>
+      <ErrorBoundary
+        fallback={
+          <ErrorFallbackWithBreadcrumbs
+            message={t('common.error.service.get', { resource: t('menu.title', { count: 1 }) })}
+            appBreadcrumbsProps={{
+              items: [{ label: t('menu.title'), navigateTo: '/' }, { label: t('menu.edit.title') }],
+              onBack: onBackClickHandler,
+            }}
+          />
+        }
+      >
+        <Suspense fallback={<Loading />}>
+          <PageWrapper
+            id={id}
+            resource={resource}
+            onBackClickHandler={onBackClickHandler}
+            t={t}
+            navigate={navigate}
+          />
+        </Suspense>
+      </ErrorBoundary>
+    </>
   );
 };

@@ -23,6 +23,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
 import { i18n, TFunction } from 'i18next';
 import { DateTime } from 'luxon';
+import { Helmet } from 'react-helmet';
 import ErrorBoundary, { ErrorFallbackWithBreadcrumbs } from '../../../components/ErrorBoundary';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
@@ -1067,30 +1068,35 @@ export const ItemsPreview = () => {
   };
 
   return (
-    <ErrorBoundary
-      fallback={
-        <ErrorFallbackWithBreadcrumbs
-          message={t('common.error.service.get', { resource: t('menu.title', { count: 1 }) })}
-          appBreadcrumbsProps={{
-            items: [
-              { label: t('application.title'), navigateTo: '/' },
-              { label: t('menu.title', { count: 1 }) },
-            ],
-            onBack: onBackClickHandler,
-          }}
-        />
-      }
-    >
-      <Suspense fallback={<Loading />}>
-        <PageWrapper
-          id={id}
-          resource={resource}
-          onBackClickHandler={onBackClickHandler}
-          t={t}
-          i18n={i18n}
-          navigate={navigate}
-        />
-      </Suspense>
-    </ErrorBoundary>
+    <>
+      <Helmet>
+        <title>{t('menu.preview.title')}</title>
+      </Helmet>
+      <ErrorBoundary
+        fallback={
+          <ErrorFallbackWithBreadcrumbs
+            message={t('common.error.service.get', { resource: t('menu.title', { count: 1 }) })}
+            appBreadcrumbsProps={{
+              items: [
+                { label: t('application.title'), navigateTo: '/' },
+                { label: t('menu.title', { count: 1 }) },
+              ],
+              onBack: onBackClickHandler,
+            }}
+          />
+        }
+      >
+        <Suspense fallback={<Loading />}>
+          <PageWrapper
+            id={id}
+            resource={resource}
+            onBackClickHandler={onBackClickHandler}
+            t={t}
+            i18n={i18n}
+            navigate={navigate}
+          />
+        </Suspense>
+      </ErrorBoundary>
+    </>
   );
 };
