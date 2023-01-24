@@ -21,8 +21,10 @@
     "watch": "webpack --watch",
     "up": "docker-compose up -d",
     "down": "docker-compose down",
+    "logs": "docker-compose logs",
     "up:all": "docker-compose -f docker-compose.all.yml up -d --build",
-    "down:all": "docker-compose -f docker-compose.all.yml down"
+    "down:all": "docker-compose -f docker-compose.all.yml down",
+    "logs:all": "docker-compose -f docker-compose.all.yml logs"
   },
   "private": true,
   "dependencies": {
