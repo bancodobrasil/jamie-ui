@@ -1,11 +1,9 @@
-import axios from 'axios';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { JAMIE_API_BASE_URL } from '../constants';
 
-const publicAPI = axios.create({
-  baseURL: JAMIE_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+const client = new ApolloClient({
+  uri: JAMIE_API_BASE_URL,
+  cache: new InMemoryCache(),
 });
 
-export { publicAPI };
+export { client };
