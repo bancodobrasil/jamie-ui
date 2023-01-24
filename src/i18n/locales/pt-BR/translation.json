@@ -25,7 +25,10 @@
     "the_female_other": "As {{field}}",
     "noData": "Nenhum dado encontrado.",
     "required": "Obrigatório",
-    "optional": "Opcional"
+    "optional": "Opcional",
+    "fields": {
+      "id": "ID"
+    }
   },
   "buttons": {
     "cancel": "Cancelar",

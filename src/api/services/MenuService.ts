@@ -1,11 +1,6 @@
-import { IPaginatedResponse, IMenu, IMenuMeta, MenuMetaType } from '../../types';
+import { DocumentNode, gql } from '@apollo/client';
+import { IMenu, IMenuMeta, MenuMetaType } from '../../types';
 import wrapPromise, { WrapPromise } from '../../utils/suspense/WrapPromise';
-
-interface GetListMenuPayload {
-  page: number;
-  limit: number;
-}
-type GetListMenuResponse = IPaginatedResponse<IMenu>;
 
 interface GetMenuPayload {
   id: number;
@@ -30,70 +25,14 @@ interface DeleteMenuPayload {
 type DeleteMenuResponse = void;
 
 export default class MenuService {
-  static getListMenu(payload: GetListMenuPayload): WrapPromise<GetListMenuResponse> {
-    // TODO: Implement the API request
-    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
-    const promise = new Promise<GetListMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to fetch RuleSheet'));
-        resolve({
-          data: [
-            {
-              id: 1,
-              name: 'Menu Mobile',
-              meta: [],
-              items: [],
-            },
-            {
-              id: 2,
-              name: 'Menu AAPF',
-              meta: [],
-              items: [],
-            },
-          ],
-          total: 2,
-          page: 1,
-          limit: 10,
-          hasNextPage: false,
-          hasPreviousPage: false,
-        });
-      }, 2000);
-    });
-    return wrapPromise(promise);
-  }
-
-  static async getListMenuSync(payload: GetListMenuPayload): Promise<GetListMenuResponse> {
-    // TODO: Implement the API request
-    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
-    const promise = new Promise<GetListMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to fetch Menu'));
-        resolve({
-          data: [
-            {
-              id: 1,
-              name: 'Menu Mobile',
-              meta: [],
-              items: [],
-            },
-            {
-              id: 2,
-              name: 'Menu AAPF',
-              meta: [],
-              items: [],
-            },
-          ],
-          total: 2,
-          page: 1,
-          limit: 10,
-          hasNextPage: false,
-          hasPreviousPage: false,
-        });
-      }, 2000);
-    });
-    const response = await promise;
-    return response;
-  }
+  static GET_LIST_MENU: DocumentNode = gql`
+    query GetMenus {
+      menus {
+        id
+        name
+      }
+    }
+  `;
 
   static getMenu(payload: GetMenuPayload): WrapPromise<GetMenuResponse> {
     // TODO: Implement the API request
