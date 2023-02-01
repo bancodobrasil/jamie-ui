@@ -61,7 +61,7 @@ export const ShowMenu = () => {
               context: 'male',
             })}!`,
           });
-          navigate('/', { state: { refetch: true } });
+          navigate('/');
         },
         onError: error => {
           openDefaultErrorNotification(error, dispatch);

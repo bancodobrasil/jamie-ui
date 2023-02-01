@@ -1,8 +1,8 @@
 import { DocumentNode, gql } from '@apollo/client';
 
 export default class MenuService {
-  static GET_LIST_MENU: DocumentNode = gql`
-    query GetMenus(
+  static LIST_MENUS: DocumentNode = gql`
+    query ListMenus(
       $first: Int
       $after: String
       $last: Int

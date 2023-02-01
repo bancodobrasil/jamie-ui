@@ -3,7 +3,7 @@ import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useQuery } from '@apollo/client';
 import MenuService from '../../../api/services/MenuService';
@@ -17,29 +17,29 @@ export const ListMenu = () => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
-  const { state: locationState } = useLocation();
 
   const [pageSize, setPageSize] = useState<number>(MENU_LIST_DEFAULT_PAGE_SIZE);
   const [page, setPage] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
 
-  const { loading, error, data, refetch, variables } = useQuery(MenuService.GET_LIST_MENU, {
+  const { loading, error, data, refetch } = useQuery(MenuService.LIST_MENUS, {
     variables: { first: pageSize, after: '', last: 0, before: '', sort: 'Id', direction: 'ASC' },
   });
+  const [fetched, setFetched] = useState<boolean>(false);
   const [menus, setMenus] = useState<IMenu[]>([]);
 
   useEffect(() => {
     if (!data) return;
     setMenus(data.menus.edges.map((item: Edge<IMenu>) => item.node));
     setCount(data.menus.totalCount);
-  }, [data, variables]);
+    setFetched(true);
+  }, [data]);
 
   useEffect(() => {
-    if (locationState?.refetch) {
+    if (!!data && !fetched) {
       refetch({ first: pageSize, after: '', last: 0, before: '', sort: 'Id', direction: 'ASC' });
-      delete locationState.refetch;
     }
-  }, [locationState, refetch, pageSize]);
+  }, [fetched, data, pageSize, refetch]);
 
   const columns: GridColDef[] = useMemo(
     () => [
