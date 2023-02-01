@@ -1,6 +1,6 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Box, Divider, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,35 +26,42 @@ export const EditMenu = () => {
     variables: { id: Number(id) },
   });
 
+  const { dispatch } = React.useContext(NotificationContext);
+
+  const [name, setName] = React.useState<string>('');
+  const [nameError, setNameError] = React.useState<string>('');
+
+  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>([]);
+
+  const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
+
+  useEffect(() => {
+    if (!data) return;
+    setName(data.menu.name);
+    setMeta(data?.menu.meta.map(m => ({ ...m, errors: {} })));
+  }, [data]);
+
   const onBackClickHandler = () => {
     navigate('../');
   };
 
-  const { dispatch } = React.useContext(NotificationContext);
-
-  const [name, setName] = React.useState<string>(data?.menu.name || '');
-  const [nameError, setNameError] = React.useState<string>('');
-
-  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>(
-    () => data?.menu.meta.map(m => ({ ...m, errors: {} })) || [],
-  );
-
-  const onSubmit = async () => {
-    // TODO: Implement the API request.
-    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
-    try {
-      await MenuService.updateMenu({ name, meta });
-      dispatch({
-        type: ActionTypes.OPEN_NOTIFICATION,
-        message: `${t('notification.editSuccess', {
-          resource: t('menu.title', { count: 1 }),
-          context: 'male',
-        })}!`,
-      });
-      navigate('../');
-    } catch (error) {
-      openDefaultErrorNotification(error, dispatch);
-    }
+  const onSubmit = () => {
+    updateMenu({
+      variables: { menu: { id: Number(id), name, meta } },
+      onCompleted: data => {
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('notification.editSuccess', {
+            resource: t('menu.title', { count: 1 }),
+            context: 'male',
+          })}!`,
+        });
+        navigate(`/menus/${data.updateMenu.id}`, { state: { refetch: true } });
+      },
+      onError: error => {
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
   };
 
   if (loading) return <Loading />;

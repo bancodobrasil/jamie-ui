@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Button, Divider, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
@@ -19,6 +19,7 @@ export const ShowMenu = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
+  const { state: locationState } = useLocation();
 
   const onBackClickHandler = () => {
     navigate('/');
@@ -26,11 +27,17 @@ export const ShowMenu = () => {
 
   const { dispatch } = React.useContext(NotificationContext);
 
-  const { loading, error, data } = useQuery(MenuService.GET_MENU, {
+  const { loading, error, data, refetch } = useQuery(MenuService.GET_MENU, {
     variables: { id: Number(id) },
   });
 
   const [removeMenu, { loading: loadingDelete }] = useMutation(MenuService.REMOVE_MENU);
+
+  useEffect(() => {
+    if (locationState?.refetch) {
+      refetch();
+    }
+  }, [locationState, refetch]);
 
   const onEditClickHandler = () => {
     navigate('edit');

@@ -1,11 +1,4 @@
 import { DocumentNode, gql } from '@apollo/client';
-import { IMenu, IMenuMeta } from '../../types';
-
-interface UpdateMenuPayload {
-  name: string;
-  meta: IMenuMeta[];
-}
-type UpdateMenuResponse = IMenu;
 
 export default class MenuService {
   static GET_LIST_MENU: DocumentNode = gql`
@@ -35,21 +28,13 @@ export default class MenuService {
     }
   `;
 
-  static async updateMenu(payload: UpdateMenuPayload): Promise<UpdateMenuResponse> {
-    const promise = new Promise<UpdateMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to create Menu'));
-        resolve({
-          id: 1,
-          name: 'Menu Mobile',
-          meta: [],
-          items: [],
-        });
-      }, 2000);
-    });
-    const response = await promise;
-    return response;
-  }
+  static UPDATE_MENU: DocumentNode = gql`
+    mutation UpdateMenu($menu: UpdateMenuInput!) {
+      updateMenu(updateMenuInput: $menu) {
+        id
+      }
+    }
+  `;
 
   static REMOVE_MENU: DocumentNode = gql`
     mutation RemoveMenu($id: Int!) {
