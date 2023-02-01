@@ -12,8 +12,8 @@ import {
   Checkbox,
   styled,
 } from '@mui/material';
-import React, { Suspense, useCallback, useMemo, useState } from 'react';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import WidgetsIcon from '@mui/icons-material/Widgets';
@@ -21,16 +21,14 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
-import { i18n, TFunction } from 'i18next';
 import { DateTime } from 'luxon';
-import { Helmet } from 'react-helmet';
-import ErrorBoundary, { ErrorFallbackWithBreadcrumbs } from '../../../components/ErrorBoundary';
+import { useQuery } from '@apollo/client';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
-import { WrapPromise } from '../../../utils/suspense/WrapPromise';
-import { IMenu, IMenuItem, IMenuItemMeta, IMenuMeta, MenuMetaType } from '../../../types';
+import { IMenuItem, IMenuItemMeta, IMenuMeta, MenuMetaType } from '../../../types';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import { MENU_ITEM_VALIDATION } from '../../../constants';
+import DefaultErrorPage from '../../../components/DefaultErrorPage';
 
 enum EnumModified {
   INSERTING,
@@ -84,17 +82,19 @@ const emptyEditingNode: IEditingNode = {
   },
 };
 
-interface Props {
-  id: string;
-  resource: WrapPromise<IMenu>;
-  onBackClickHandler: () => void;
-  t: TFunction;
-  i18n: i18n;
-  navigate: NavigateFunction;
-}
+export const ItemsPreview = () => {
+  const { i18n, t } = useTranslation();
 
-export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigate }: Props) => {
-  const menu = resource.read();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const { loading, error, data } = useQuery(MenuService.GET_MENU, {
+    variables: { id: Number(id) },
+  });
+
+  const onBackClickHandler = () => {
+    navigate('/');
+  };
 
   const [expanded, setExpanded] = useState<string[]>(['0']);
   const [selected, setSelected] = useState<string>('0');
@@ -116,7 +116,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
       }));
       return children;
     };
-    const root: INode[] = menu.items.map(item => ({
+    const root: INode[] = data?.menu.items?.map(item => ({
       id: item.id,
       label: item.label,
       order: item.order,
@@ -133,7 +133,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
         meta: {},
       },
     ];
-  }, [menu, t]);
+  }, [data?.menu, t]);
 
   const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
   const [labelError, setLabelError] = useState<string>('');
@@ -376,7 +376,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
             order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
             modified: EnumModified.INSERTING,
             parent: selectedNode.id,
-            meta: menu.meta.map(m => ({ [m.name]: '' })),
+            meta: data?.menu.meta.map(m => ({ [m.name]: '' })),
           };
           setEditingNode({ ...original, original });
           setSelected('-1');
@@ -408,7 +408,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
       }
       setOperationScreen(action);
     },
-    [menu, findNodeById, nodes, selected, t, expanded],
+    [data?.menu, findNodeById, nodes, selected, t, expanded],
   );
 
   const renderNodes = useCallback(
@@ -558,7 +558,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
           );
       }
     };
-    return menu.meta.map((meta, i) => (
+    return data?.menu.meta.map((meta, i) => (
       <Box
         key={i}
         sx={{
@@ -768,7 +768,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
             />
             <Divider sx={{ mt: '1.5rem' }} />
             {renderMeta()}
-            {menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
+            {data?.menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
             <Box
               sx={{
                 display: 'flex',
@@ -866,7 +866,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
             />
             <Divider sx={{ mt: '1.5rem' }} />
             {renderMeta()}
-            {menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
+            {data?.menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
             <Box
               sx={{
                 display: 'flex',
@@ -957,12 +957,32 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
     }
   };
 
+  if (loading) return <Loading />;
+
+  if (error)
+    return (
+      <DefaultErrorPage
+        title={t('error.failedToLoadResource.title', {
+          resource: t('common.the', {
+            context: 'male',
+            count: 1,
+            field: t('menu.title', { count: 1 }),
+          }).toLowerCase(),
+        })}
+        description={t('error.failedToLoadResource.description')}
+        button={{
+          label: t('error.failedToLoadResource.button'),
+          onClick: () => document.location.reload(),
+        }}
+      />
+    );
+
   return (
     <Box>
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: menu.name, navigateTo: '../' },
+          { label: data?.menu.name, navigateTo: '../' },
           { label: t('menu.preview.title') },
         ]}
         onBack={onBackClickHandler}
@@ -986,7 +1006,7 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
             mb: '2rem',
           }}
         >
-          {menu.name}
+          {data?.menu.name}
         </Typography>
         <Box
           sx={{
@@ -1052,51 +1072,5 @@ export const PageWrapper = ({ id, resource, onBackClickHandler, t, i18n, navigat
         </Box>
       </Box>
     </Box>
-  );
-};
-
-export const ItemsPreview = () => {
-  const { i18n, t } = useTranslation();
-
-  const navigate = useNavigate();
-  const { id } = useParams();
-
-  const resource = MenuService.getMenu({ id: Number(id) });
-
-  const onBackClickHandler = () => {
-    navigate('/');
-  };
-
-  return (
-    <>
-      <Helmet>
-        <title>{t('menu.preview.title')}</title>
-      </Helmet>
-      <ErrorBoundary
-        fallback={
-          <ErrorFallbackWithBreadcrumbs
-            message={t('common.error.service.get', { resource: t('menu.title', { count: 1 }) })}
-            appBreadcrumbsProps={{
-              items: [
-                { label: t('application.title'), navigateTo: '/' },
-                { label: t('menu.title', { count: 1 }) },
-              ],
-              onBack: onBackClickHandler,
-            }}
-          />
-        }
-      >
-        <Suspense fallback={<Loading />}>
-          <PageWrapper
-            id={id}
-            resource={resource}
-            onBackClickHandler={onBackClickHandler}
-            t={t}
-            i18n={i18n}
-            navigate={navigate}
-          />
-        </Suspense>
-      </ErrorBoundary>
-    </>
   );
 };
