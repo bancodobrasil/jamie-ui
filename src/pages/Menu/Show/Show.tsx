@@ -1,33 +1,34 @@
+import { useQuery } from '@apollo/client';
 import { Box, Button, Divider, Typography } from '@mui/material';
-import { TFunction } from 'i18next';
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
-import ErrorBoundary, { ErrorFallbackWithBreadcrumbs } from '../../../components/ErrorBoundary';
+import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
 import {
   ActionTypes,
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import { IMenu } from '../../../types';
-import { WrapPromise } from '../../../utils/suspense/WrapPromise';
 
-interface Props {
-  id: string;
-  resource: WrapPromise<IMenu>;
-  onBackClickHandler: () => void;
-  t: TFunction;
-  navigate: NavigateFunction;
-}
+export const ShowMenu = () => {
+  const { t } = useTranslation();
 
-const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) => {
-  const menu = resource.read();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const onBackClickHandler = () => {
+    navigate('/');
+  };
 
   const { dispatch } = React.useContext(NotificationContext);
+
+  const { loading, error, data } = useQuery(MenuService.GET_MENU, {
+    variables: { id: Number(id) },
+  });
 
   const [loadingDelete, setLoadingDelete] = React.useState<boolean>(false);
 
@@ -63,7 +64,7 @@ const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) =
   };
 
   const renderMeta = () =>
-    menu.meta.map((meta, i) => (
+    data?.menu.meta.map((meta, i) => (
       <Box
         key={i}
         sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
@@ -82,24 +83,47 @@ const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) =
       </Box>
     ));
 
+  if (loading) return <Loading />;
+
+  if (error)
+    return (
+      <DefaultErrorPage
+        title={t('error.failedToLoadResource.title', {
+          resource: t('common.the', {
+            context: 'male',
+            count: 1,
+            field: t('menu.title', { count: 1 }),
+          }).toLowerCase(),
+        })}
+        description={t('error.failedToLoadResource.description')}
+        button={{
+          label: t('error.failedToLoadResource.button'),
+          onClick: () => document.location.reload(),
+        }}
+      />
+    );
+
   return (
     <Box>
       <Helmet>
-        <title>{menu.name}</title>
+        <title>{data?.menu.name}</title>
       </Helmet>
       <AppBreadcrumbs
-        items={[{ label: t('menu.title', { count: 2 }), navigateTo: '/' }, { label: menu.name }]}
+        items={[
+          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+          { label: data?.menu.name },
+        ]}
         onBack={onBackClickHandler}
       />
       <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-        {menu.name}
+        {data?.menu.name}
       </Typography>
       <Divider />
       <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
         {t('menu.fields.meta.title', { count: 2 })}
       </Typography>
       <Box sx={{ mb: '1rem' }} className="space-y-4">
-        {menu.meta.length > 0 ? (
+        {data?.menu.meta.length > 0 ? (
           renderMeta()
         ) : (
           <p className="text-gray-500">{t('common.noData')}</p>
@@ -134,50 +158,5 @@ const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) =
         </Button>
       </Box>
     </Box>
-  );
-};
-
-export const ShowMenu = () => {
-  const { t } = useTranslation();
-
-  const navigate = useNavigate();
-  const { id } = useParams();
-
-  const resource = MenuService.getMenu({ id: Number(id) });
-
-  const onBackClickHandler = () => {
-    navigate('/');
-  };
-
-  return (
-    <>
-      <Helmet>
-        <title>{t('menu.title', { count: 1 })}</title>
-      </Helmet>
-      <ErrorBoundary
-        fallback={
-          <ErrorFallbackWithBreadcrumbs
-            message={t('common.error.service.get', { resource: t('menu.title', { count: 1 }) })}
-            appBreadcrumbsProps={{
-              items: [
-                { label: t('application.title'), navigateTo: '/' },
-                { label: t('menu.title', { count: 1 }) },
-              ],
-              onBack: onBackClickHandler,
-            }}
-          />
-        }
-      >
-        <Suspense fallback={<Loading />}>
-          <PageWrapper
-            id={id}
-            resource={resource}
-            onBackClickHandler={onBackClickHandler}
-            t={t}
-            navigate={navigate}
-          />
-        </Suspense>
-      </ErrorBoundary>
-    </>
   );
 };
