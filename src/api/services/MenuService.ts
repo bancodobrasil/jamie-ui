@@ -7,12 +7,6 @@ interface GetMenuPayload {
 }
 type GetMenuResponse = IMenu;
 
-interface CreateMenuPayload {
-  name: string;
-  meta: IMenuMeta[];
-}
-type CreateMenuResponse = IMenu;
-
 interface UpdateMenuPayload {
   name: string;
   meta: IMenuMeta[];
@@ -119,21 +113,13 @@ export default class MenuService {
     return wrapPromise(promise);
   }
 
-  static async createMenu(payload: CreateMenuPayload): Promise<CreateMenuResponse> {
-    const promise = new Promise<CreateMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to create Menu'));
-        resolve({
-          id: 1,
-          name: 'Menu Mobile',
-          meta: [],
-          items: [],
-        });
-      }, 2000);
-    });
-    const response = await promise;
-    return response;
-  }
+  static CREATE_MENU: DocumentNode = gql`
+    mutation CreateMenu($menu: CreateMenuInput!) {
+      createMenu(createMenuInput: $menu) {
+        id
+      }
+    }
+  `;
 
   static async updateMenu(payload: UpdateMenuPayload): Promise<UpdateMenuResponse> {
     const promise = new Promise<UpdateMenuResponse>((resolve, reject) => {
