@@ -32,8 +32,8 @@ export const CreateMenu = () => {
     navigate('/');
   };
 
-  const onSubmit = async () => {
-    await createMenu({
+  const onSubmit = () => {
+    createMenu({
       variables: { menu: { name, meta } },
       onCompleted: data => {
         dispatch({

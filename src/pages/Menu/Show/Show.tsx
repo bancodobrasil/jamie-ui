@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import React from 'react';
 import { Helmet } from 'react-helmet';
@@ -30,7 +30,7 @@ export const ShowMenu = () => {
     variables: { id: Number(id) },
   });
 
-  const [loadingDelete, setLoadingDelete] = React.useState<boolean>(false);
+  const [removeMenu, { loading: loadingDelete }] = useMutation(MenuService.REMOVE_MENU);
 
   const onEditClickHandler = () => {
     navigate('edit');
@@ -40,26 +40,26 @@ export const ShowMenu = () => {
     navigate('items');
   };
 
-  const onDeleteClickHandler = async () => {
+  const onDeleteClickHandler = () => {
     // eslint-disable-next-line no-restricted-globals, no-alert
     const confirmed = confirm(t('menu.show.messages.confirmDelete'));
     if (confirmed) {
-      try {
-        setLoadingDelete(true);
-        await MenuService.deleteMenu({ id: Number(id) });
-        dispatch({
-          type: ActionTypes.OPEN_NOTIFICATION,
-          message: `${t('notification.deleteSuccess', {
-            resource: t('menu.title', { count: 1 }),
-            context: 'male',
-          })}!`,
-        });
-        navigate('/');
-      } catch (error) {
-        openDefaultErrorNotification(error, dispatch);
-      } finally {
-        setLoadingDelete(false);
-      }
+      removeMenu({
+        variables: { id: Number(id) },
+        onCompleted: data => {
+          dispatch({
+            type: ActionTypes.OPEN_NOTIFICATION,
+            message: `${t('notification.deleteSuccess', {
+              resource: t('menu.title', { count: 1 }),
+              context: 'male',
+            })}!`,
+          });
+          navigate('/');
+        },
+        onError: error => {
+          openDefaultErrorNotification(error, dispatch);
+        },
+      });
     }
   };
 

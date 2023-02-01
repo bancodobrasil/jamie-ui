@@ -50,4 +50,10 @@ export default class MenuService {
     const response = await promise;
     return response;
   }
+
+  static REMOVE_MENU: DocumentNode = gql`
+    mutation RemoveMenu($id: Int!) {
+      removeMenu(id: $id)
+    }
+  `;
 }
