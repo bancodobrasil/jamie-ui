@@ -8,12 +8,13 @@ export interface IMenu {
 }
 
 export interface IMenuItem {
-  id: string;
+  id: number;
   label: string;
   order: number;
   meta: IMenuItemMeta;
   children?: IMenuItem[];
   parent?: Omit<IMenuItem, 'children'>;
+  parentId: number;
   menu?: IMenu;
 }
 

@@ -16,6 +16,13 @@ export default class MenuService {
         id
         name
         meta
+        items {
+          id
+          label
+          order
+          meta
+          parentId
+        }
       }
     }
   `;
@@ -32,6 +39,15 @@ export default class MenuService {
     mutation UpdateMenu($menu: UpdateMenuInput!) {
       updateMenu(updateMenuInput: $menu) {
         id
+        name
+        meta
+        items {
+          id
+          label
+          order
+          meta
+          parentId
+        }
       }
     }
   `;
