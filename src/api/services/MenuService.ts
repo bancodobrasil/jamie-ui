@@ -2,10 +2,36 @@ import { DocumentNode, gql } from '@apollo/client';
 
 export default class MenuService {
   static GET_LIST_MENU: DocumentNode = gql`
-    query GetMenus {
-      menus {
-        id
-        name
+    query GetMenus(
+      $first: Int
+      $after: String
+      $last: Int
+      $before: String
+      $sort: MenuSort
+      $direction: Direction
+    ) {
+      menus(
+        first: $first
+        after: $after
+        last: $last
+        before: $before
+        sort: $sort
+        direction: $direction
+      ) {
+        edges {
+          node {
+            id
+            name
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
       }
     }
   `;

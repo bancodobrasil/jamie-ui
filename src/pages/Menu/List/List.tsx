@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/client';
 import MenuService from '../../../api/services/MenuService';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import './List.style.css';
+import { Edge, IMenu } from '../../../types';
 
 const MENU_LIST_DEFAULT_PAGE_SIZE = 10;
 
@@ -20,15 +21,25 @@ export const ListMenu = () => {
 
   const [pageSize, setPageSize] = useState<number>(MENU_LIST_DEFAULT_PAGE_SIZE);
   const [page, setPage] = useState<number>(0);
-  const [count] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
 
-  const { loading, error, data, refetch } = useQuery(MenuService.GET_LIST_MENU);
+  const { loading, error, data, refetch, variables } = useQuery(MenuService.GET_LIST_MENU, {
+    variables: { first: pageSize, after: '', last: 0, before: '', sort: 'Id', direction: 'ASC' },
+  });
+  const [menus, setMenus] = useState<IMenu[]>([]);
+
+  useEffect(() => {
+    if (!data) return;
+    setMenus(data.menus.edges.map((item: Edge<IMenu>) => item.node));
+    setCount(data.menus.totalCount);
+  }, [data, variables]);
 
   useEffect(() => {
     if (locationState?.refetch) {
-      refetch();
+      refetch({ first: pageSize, after: '', last: 0, before: '', sort: 'Id', direction: 'ASC' });
+      delete locationState.refetch;
     }
-  }, [locationState, refetch]);
+  }, [locationState, refetch, pageSize]);
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -75,18 +86,38 @@ export const ListMenu = () => {
     navigate('create');
   };
 
-  const loadMenus = async (page, limit) => {
-    refetch();
-  };
-
   const onPageSizeChangeHandler = (newPageSize: number) => {
     setPageSize(newPageSize);
-    loadMenus(page + 1, newPageSize);
+    setPage(0);
+    refetch({
+      first: newPageSize,
+      after: '',
+      last: 0,
+      before: '',
+      direction: 'ASC',
+    });
   };
 
   const onPageChangeHandler = (newPage: number) => {
+    const diff = newPage - page;
     setPage(newPage);
-    loadMenus(newPage + 1, pageSize);
+    if (diff > 0) {
+      refetch({
+        first: pageSize,
+        after: data?.menus.pageInfo.endCursor,
+        last: 0,
+        before: '',
+        direction: 'ASC',
+      });
+    } else {
+      refetch({
+        first: 0,
+        after: '',
+        last: pageSize,
+        before: data?.menus.pageInfo.startCursor,
+        direction: 'DESC',
+      });
+    }
   };
 
   const onSelectionModelChangeHandler = (selectionModel: GridSelectionModel) => {
@@ -161,14 +192,14 @@ export const ListMenu = () => {
                 cursor: 'pointer',
               },
             }}
-            rows={data?.menus || []}
+            rows={menus}
             columns={columns}
             paginationMode="server"
             pagination
             pageSize={pageSize}
             page={page}
             rowCount={count}
-            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            rowsPerPageOptions={[1, 5, 10, 25, 50, 100]}
             onPageSizeChange={onPageSizeChangeHandler}
             onPageChange={onPageChangeHandler}
             loading={loading}
