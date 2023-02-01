@@ -33,8 +33,13 @@ export const CreateMenu = () => {
   };
 
   const onSubmit = () => {
+    const formattedMeta = meta.map(m => ({
+      name: m.name,
+      required: m.required,
+      type: m.type,
+    }));
     createMenu({
-      variables: { menu: { name, meta } },
+      variables: { menu: { name, meta: formattedMeta } },
       onCompleted: data => {
         dispatch({
           type: ActionTypes.OPEN_NOTIFICATION,

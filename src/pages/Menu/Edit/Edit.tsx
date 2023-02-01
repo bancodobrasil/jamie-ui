@@ -46,8 +46,13 @@ export const EditMenu = () => {
   };
 
   const onSubmit = () => {
+    const formattedMeta = meta.map(m => ({
+      name: m.name,
+      required: m.required,
+      type: m.type,
+    }));
     updateMenu({
-      variables: { menu: { id: Number(id), name, meta } },
+      variables: { menu: { id: Number(id), name, meta: formattedMeta } },
       onCompleted: data => {
         dispatch({
           type: ActionTypes.OPEN_NOTIFICATION,
