@@ -248,6 +248,7 @@ export const ItemsPreview = () => {
                 label: editingNode.label,
               };
             }
+            // child is not editing node
             if (child.order === editingNode.order) {
               // child is in same position as editing node
               console.log('child is in same position as editing node', child);
@@ -266,20 +267,36 @@ export const ItemsPreview = () => {
             if (child.order > editingNode.order) {
               // child is after editing node
               console.log('child is after editing node', child);
-              // set child order and action based on DELETE or CREATE
-              const action =
-                editingNode.action === EnumAction.UPDATE ? undefined : EnumAction.UPDATE;
-              let { order } = child;
-              if (editingNode.action === EnumAction.DELETE) {
-                order = child.order - 1;
-              } else if (editingNode.action === EnumAction.CREATE) {
-                order = child.order + 1;
-              }
               // set child as UPDATE
+              let action = EnumAction.UPDATE;
+              let { order } = child;
+              if (editingNode.action === EnumAction.UPDATE) {
+                if (child.order < editingNode.original.order) {
+                  // child order is less than editing node original order
+                  // increase child order
+                  order += 1;
+                } else {
+                  // child order is greater than editing node original order
+                  // keep child order as is and set action as undefined
+                  action = undefined;
+                }
+              } else if (editingNode.action === EnumAction.DELETE) {
+                order -= 1;
+              } else if (editingNode.action === EnumAction.CREATE) {
+                order += 1;
+              }
               return { ...child, order, action };
             }
             // child is before editing node
             console.log('child is before editing node', child);
+            if (
+              editingNode.action === EnumAction.UPDATE &&
+              child.order > editingNode.original.order
+            ) {
+              // child order is greater than editing node original order
+              // decrease child order
+              return { ...child, action: EnumAction.UPDATE, order: child.order - 1 };
+            }
             return child;
           });
           if (editingNode.action === EnumAction.CREATE) {
