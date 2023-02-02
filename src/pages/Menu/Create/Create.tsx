@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { Box, Divider, Typography } from '@mui/material';
 import React from 'react';
 import { Helmet } from 'react-helmet';
@@ -25,26 +26,34 @@ export const CreateMenu = () => {
 
   const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>([]);
 
+  const [createMenu] = useMutation(MenuService.CREATE_MENU);
+
   const onBackClickHandler = () => {
     navigate('/');
   };
 
-  const onSubmit = async () => {
-    // TODO: Implement the API request.
-    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
-    try {
-      await MenuService.createMenu({ name, meta });
-      dispatch({
-        type: ActionTypes.OPEN_NOTIFICATION,
-        message: `${t('notification.createSuccess', {
-          resource: t('menu.title', { count: 1 }),
-          context: 'male',
-        })}!`,
-      });
-      navigate('../');
-    } catch (error) {
-      openDefaultErrorNotification(error, dispatch);
-    }
+  const onSubmit = () => {
+    const formattedMeta = meta.map(m => ({
+      name: m.name,
+      required: m.required,
+      type: m.type,
+    }));
+    createMenu({
+      variables: { menu: { name, meta: formattedMeta } },
+      onCompleted: data => {
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('notification.createSuccess', {
+            resource: t('menu.title', { count: 1 }),
+            context: 'male',
+          })}!`,
+        });
+        navigate(`/menus/${data.createMenu.id}`);
+      },
+      onError: error => {
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
   };
 
   return (

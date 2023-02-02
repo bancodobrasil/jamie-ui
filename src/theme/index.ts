@@ -8,11 +8,9 @@ import palette from './palette';
 import typography from './typography';
 
 const ptBRMuiTablePaginationOverride = {
-  defaultProps: {
-    ...ptBR.components.MuiTablePagination.defaultProps,
-    labelRowsPerPage: 'Itens por página',
-    labelDisplayedRows: ({ count, from, to }) => `Mostrando ${from}-${to} itens de ${count} itens`,
-  },
+  getItemAriaLabel: ptBR.components.MuiTablePagination.defaultProps.getItemAriaLabel,
+  labelRowsPerPage: 'Itens por página',
+  labelDisplayedRows: ({ count, from, to }) => `Mostrando ${from}-${to} itens de ${count} itens`,
 };
 
 const ptBRMuiDataGridOverride = {

@@ -1,12 +1,12 @@
+import { useMutation, useQuery } from '@apollo/client';
 import { Box, Divider, Typography } from '@mui/material';
-import { TFunction } from 'i18next';
-import React, { Suspense } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
-import ErrorBoundary, { ErrorFallbackWithBreadcrumbs } from '../../../components/ErrorBoundary';
+import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
 import { MenuForm } from '../../../components/Menu/Form';
 import {
@@ -14,53 +14,90 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import { IMenu, IMenuMetaWithErrors } from '../../../types';
-import { WrapPromise } from '../../../utils/suspense/WrapPromise';
+import { IMenuMetaWithErrors } from '../../../types';
 
-interface Props {
-  id: string;
-  resource: WrapPromise<IMenu>;
-  onBackClickHandler: () => void;
-  t: TFunction;
-  navigate: NavigateFunction;
-}
+export const EditMenu = () => {
+  const { t } = useTranslation();
 
-const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) => {
-  const menu = resource.read();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const { loading, error, data } = useQuery(MenuService.GET_MENU, {
+    variables: { id: Number(id) },
+  });
 
   const { dispatch } = React.useContext(NotificationContext);
 
-  const [name, setName] = React.useState<string>(menu.name);
+  const [name, setName] = React.useState<string>('');
   const [nameError, setNameError] = React.useState<string>('');
 
-  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>(() =>
-    menu.meta.map(m => ({ ...m, errors: {} })),
-  );
+  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>([]);
 
-  const onSubmit = async () => {
-    // TODO: Implement the API request.
-    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
-    try {
-      await MenuService.updateMenu({ name, meta });
-      dispatch({
-        type: ActionTypes.OPEN_NOTIFICATION,
-        message: `${t('notification.editSuccess', {
-          resource: t('menu.title', { count: 1 }),
-          context: 'male',
-        })}!`,
-      });
-      navigate('../');
-    } catch (error) {
-      openDefaultErrorNotification(error, dispatch);
-    }
+  const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
+
+  useEffect(() => {
+    if (!data) return;
+    setName(data.menu.name);
+    setMeta(data?.menu.meta.map(m => ({ ...m, errors: {} })));
+  }, [data]);
+
+  const onBackClickHandler = () => {
+    navigate('../');
   };
+
+  const onSubmit = () => {
+    const formattedMeta = meta.map(m => ({
+      name: m.name,
+      required: m.required,
+      type: m.type,
+    }));
+    updateMenu({
+      variables: { menu: { id: Number(id), name, meta: formattedMeta } },
+      onCompleted: data => {
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('notification.editSuccess', {
+            resource: t('menu.title', { count: 1 }),
+            context: 'male',
+          })}!`,
+        });
+        navigate(`/menus/${data.updateMenu.id}`, { state: { refetch: true } });
+      },
+      onError: error => {
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
+  };
+
+  if (loading) return <Loading />;
+
+  if (error)
+    return (
+      <DefaultErrorPage
+        title={t('error.failedToLoadResource.title', {
+          resource: t('common.the', {
+            context: 'male',
+            count: 1,
+            field: t('menu.title', { count: 1 }),
+          }).toLowerCase(),
+        })}
+        description={t('error.failedToLoadResource.description')}
+        button={{
+          label: t('error.failedToLoadResource.button'),
+          onClick: () => document.location.reload(),
+        }}
+      />
+    );
 
   return (
     <Box>
+      <Helmet>
+        <title>{t('menu.edit.title')}</title>
+      </Helmet>
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: menu.name, navigateTo: '../' },
+          { label: data?.menu.name, navigateTo: '../' },
           { label: t('menu.edit.title') },
         ]}
         onBack={onBackClickHandler}
@@ -81,47 +118,5 @@ const PageWrapper = ({ id, resource, onBackClickHandler, t, navigate }: Props) =
         action="edit"
       />
     </Box>
-  );
-};
-
-export const EditMenu = () => {
-  const { t } = useTranslation();
-
-  const navigate = useNavigate();
-  const { id } = useParams();
-
-  const resource = MenuService.getMenu({ id: Number(id) });
-
-  const onBackClickHandler = () => {
-    navigate('../');
-  };
-
-  return (
-    <>
-      <Helmet>
-        <title>{t('menu.edit.title')}</title>
-      </Helmet>
-      <ErrorBoundary
-        fallback={
-          <ErrorFallbackWithBreadcrumbs
-            message={t('common.error.service.get', { resource: t('menu.title', { count: 1 }) })}
-            appBreadcrumbsProps={{
-              items: [{ label: t('menu.title'), navigateTo: '/' }, { label: t('menu.edit.title') }],
-              onBack: onBackClickHandler,
-            }}
-          />
-        }
-      >
-        <Suspense fallback={<Loading />}>
-          <PageWrapper
-            id={id}
-            resource={resource}
-            onBackClickHandler={onBackClickHandler}
-            t={t}
-            navigate={navigate}
-          />
-        </Suspense>
-      </ErrorBoundary>
-    </>
   );
 };

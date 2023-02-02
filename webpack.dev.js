@@ -17,6 +17,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
   },
+  devtool: 'source-map',
   devServer: {
     host: 'localhost',
     port: 3000,

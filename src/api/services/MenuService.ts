@@ -1,225 +1,86 @@
-import { IPaginatedResponse, IMenu, IMenuMeta, MenuMetaType } from '../../types';
-import wrapPromise, { WrapPromise } from '../../utils/suspense/WrapPromise';
-
-interface GetListMenuPayload {
-  page: number;
-  limit: number;
-}
-type GetListMenuResponse = IPaginatedResponse<IMenu>;
-
-interface GetMenuPayload {
-  id: number;
-}
-type GetMenuResponse = IMenu;
-
-interface CreateMenuPayload {
-  name: string;
-  meta: IMenuMeta[];
-}
-type CreateMenuResponse = IMenu;
-
-interface UpdateMenuPayload {
-  name: string;
-  meta: IMenuMeta[];
-}
-type UpdateMenuResponse = IMenu;
-
-interface DeleteMenuPayload {
-  id: number;
-}
-type DeleteMenuResponse = void;
+import { DocumentNode, gql } from '@apollo/client';
 
 export default class MenuService {
-  static getListMenu(payload: GetListMenuPayload): WrapPromise<GetListMenuResponse> {
-    // TODO: Implement the API request
-    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
-    const promise = new Promise<GetListMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to fetch RuleSheet'));
-        resolve({
-          data: [
-            {
-              id: 1,
-              name: 'Menu Mobile',
-              meta: [],
-              items: [],
-            },
-            {
-              id: 2,
-              name: 'Menu AAPF',
-              meta: [],
-              items: [],
-            },
-          ],
-          total: 2,
-          page: 1,
-          limit: 10,
-          hasNextPage: false,
-          hasPreviousPage: false,
-        });
-      }, 2000);
-    });
-    return wrapPromise(promise);
-  }
+  static LIST_MENUS: DocumentNode = gql`
+    query ListMenus(
+      $first: Int
+      $after: String
+      $last: Int
+      $before: String
+      $sort: MenuSort
+      $direction: Direction
+    ) {
+      menus(
+        first: $first
+        after: $after
+        last: $last
+        before: $before
+        sort: $sort
+        direction: $direction
+      ) {
+        edges {
+          node {
+            id
+            name
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
+      }
+    }
+  `;
 
-  static async getListMenuSync(payload: GetListMenuPayload): Promise<GetListMenuResponse> {
-    // TODO: Implement the API request
-    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
-    const promise = new Promise<GetListMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to fetch Menu'));
-        resolve({
-          data: [
-            {
-              id: 1,
-              name: 'Menu Mobile',
-              meta: [],
-              items: [],
-            },
-            {
-              id: 2,
-              name: 'Menu AAPF',
-              meta: [],
-              items: [],
-            },
-          ],
-          total: 2,
-          page: 1,
-          limit: 10,
-          hasNextPage: false,
-          hasPreviousPage: false,
-        });
-      }, 2000);
-    });
-    const response = await promise;
-    return response;
-  }
+  static GET_MENU: DocumentNode = gql`
+    query GetMenu($id: Int!) {
+      menu(id: $id) {
+        id
+        name
+        meta
+        items {
+          id
+          label
+          order
+          meta
+          parentId
+        }
+      }
+    }
+  `;
 
-  static getMenu(payload: GetMenuPayload): WrapPromise<GetMenuResponse> {
-    // TODO: Implement the API request
-    // The Promise below simulates the loading time of the request, remove it when you implement the request itself.
-    const promise = new Promise<GetMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to fetch RuleSheet'));
-        resolve({
-          id: 1,
-          name: 'Menu Mobile',
-          meta: [
-            {
-              name: 'Responsável',
-              type: MenuMetaType.TEXT,
-              required: true,
-            },
-            {
-              name: 'Código interno',
-              type: MenuMetaType.NUMBER,
-              required: true,
-            },
-            {
-              name: 'Precisa de autenticação?',
-              type: MenuMetaType.BOOLEAN,
-              required: true,
-            },
-            {
-              name: 'Data de expiração',
-              type: MenuMetaType.DATE,
-              required: false,
-            },
-          ],
-          items: [
-            {
-              id: '1',
-              label: 'Transferir',
-              order: 1,
-              meta: {
-                Responsável: 'João',
-                'Código interno': 123,
-                'Precisa de autenticação?': true,
-                'Data de expiração': null,
-              },
-              children: [
-                {
-                  id: '1.1',
-                  label: 'TED',
-                  order: 1,
-                  meta: {
-                    Responsável: 'João',
-                    'Código interno': 123,
-                    'Precisa de autenticação?': true,
-                    'Data de expiração': null,
-                  },
-                },
-                {
-                  id: '1.2',
-                  label: 'DOC',
-                  order: 2,
-                  meta: {
-                    Responsável: 'João',
-                    'Código interno': 123,
-                    'Precisa de autenticação?': true,
-                    'Data de expiração': null,
-                  },
-                },
-              ],
-            },
-            {
-              id: '2',
-              label: 'Saldo',
-              order: 2,
-              meta: {
-                Responsável: 'João',
-                'Código interno': 123,
-                'Precisa de autenticação?': true,
-                'Data de expiração': null,
-              },
-            },
-          ],
-        });
-      }, 2000);
-    });
-    return wrapPromise(promise);
-  }
+  static CREATE_MENU: DocumentNode = gql`
+    mutation CreateMenu($menu: CreateMenuInput!) {
+      createMenu(createMenuInput: $menu) {
+        id
+      }
+    }
+  `;
 
-  static async createMenu(payload: CreateMenuPayload): Promise<CreateMenuResponse> {
-    const promise = new Promise<CreateMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to create Menu'));
-        resolve({
-          id: 1,
-          name: 'Menu Mobile',
-          meta: [],
-          items: [],
-        });
-      }, 2000);
-    });
-    const response = await promise;
-    return response;
-  }
+  static UPDATE_MENU: DocumentNode = gql`
+    mutation UpdateMenu($menu: UpdateMenuInput!) {
+      updateMenu(updateMenuInput: $menu) {
+        id
+        name
+        meta
+        items {
+          id
+          label
+          order
+          meta
+          parentId
+        }
+      }
+    }
+  `;
 
-  static async updateMenu(payload: UpdateMenuPayload): Promise<UpdateMenuResponse> {
-    const promise = new Promise<UpdateMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to create Menu'));
-        resolve({
-          id: 1,
-          name: 'Menu Mobile',
-          meta: [],
-          items: [],
-        });
-      }, 2000);
-    });
-    const response = await promise;
-    return response;
-  }
-
-  static async deleteMenu(payload: DeleteMenuPayload): Promise<DeleteMenuResponse> {
-    const promise = new Promise<DeleteMenuResponse>((resolve, reject) => {
-      setTimeout(() => {
-        // reject(new Error('Failed to create Menu'));
-        resolve();
-      }, 2000);
-    });
-    const response = await promise;
-    return response;
-  }
+  static REMOVE_MENU: DocumentNode = gql`
+    mutation RemoveMenu($id: Int!) {
+      removeMenu(id: $id)
+    }
+  `;
 }
