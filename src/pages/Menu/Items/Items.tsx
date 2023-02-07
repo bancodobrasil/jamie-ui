@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { TreeItem, TreeItemProps, TreeView } from '@mui/lab';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import {
@@ -14,8 +13,6 @@ import {
 } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -25,7 +22,15 @@ import { DateTime } from 'luxon';
 import { useMutation, useQuery } from '@apollo/client';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
-import { IMenu, IMenuItem, IMenuItemMeta, IMenuMeta, MenuMetaType } from '../../../types';
+import {
+  EnumAction,
+  IEditingNode,
+  IMenu,
+  IMenuItem,
+  IMenuMeta,
+  INode,
+  MenuMetaType,
+} from '../../../types';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import { MENU_ITEM_VALIDATION } from '../../../constants';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
@@ -34,27 +39,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-
-enum EnumAction {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-}
-
-interface INode extends Omit<TreeItemProps, 'id' | 'nodeId' | 'children'> {
-  id: number;
-  order: number;
-  children: INode[];
-  meta: IMenuItemMeta;
-  parentId?: number;
-  action?: EnumAction;
-  original?: INode;
-}
-
-interface IEditingNode extends INode {
-  action: EnumAction;
-  original: INode;
-}
+import { NodeTreeView } from '../../../components/Menu/Items';
 
 enum EnumActionScreen {
   SELECTING_ACTION,
@@ -341,14 +326,6 @@ export const ItemsPreview = () => {
     navigate('/');
   };
 
-  const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
-    setExpanded(nodeIds);
-  };
-
-  const handleSelect = (event: React.SyntheticEvent, nodeId: string) => {
-    setSelected(nodeId);
-  };
-
   const handleUpdate = () => {
     const formatNodes = (nodes: INode[]) =>
       nodes
@@ -499,56 +476,6 @@ export const ItemsPreview = () => {
       setOperationScreen(action);
     },
     [data, findNodeById, nodes, selected, t, expanded],
-  );
-
-  const renderNodes = useCallback(
-    (nodes: INode[]) =>
-      nodes.map(node => {
-        let color = 'black';
-        const fontWeight = node.id === editingNode.id ? 'bold' : 'normal';
-        switch (node.action) {
-          case EnumAction.CREATE:
-            color = 'green';
-            break;
-          case EnumAction.UPDATE:
-            color = 'orange';
-            break;
-          case EnumAction.DELETE:
-            color = 'red';
-            break;
-        }
-        if (node.children?.length > 0) {
-          return (
-            <TreeItem
-              key={node.id}
-              nodeId={node.id.toString()}
-              label={node.label}
-              sx={{
-                '& > .MuiTreeItem-content  > .MuiTreeItem-label': {
-                  color,
-                  fontWeight,
-                },
-              }}
-            >
-              {renderNodes(node.children)}
-            </TreeItem>
-          );
-        }
-        return (
-          <TreeItem
-            key={node.id}
-            nodeId={node.id.toString()}
-            label={node.label}
-            sx={{
-              '& .MuiTreeItem-content .MuiTreeItem-label': {
-                color,
-                fontWeight,
-              },
-            }}
-          />
-        );
-      }),
-    [editingNode.id],
   );
 
   const renderMeta = () => {
@@ -1147,19 +1074,15 @@ export const ItemsPreview = () => {
                 {t('menu.preview.root')}
               </Typography>
             </Box>
-            <Box sx={{ width: '100%', height: '100%', border: '1px solid black', p: '1rem' }}>
-              <TreeView
-                defaultExpandIcon={<ExpandMoreIcon />}
-                defaultCollapseIcon={<ExpandLessIcon />}
-                defaultExpanded={['0']}
-                expanded={expanded}
-                selected={selected}
-                onNodeToggle={handleToggle}
-                onNodeSelect={handleSelect}
-              >
-                {renderNodes(preview(nodes, editingNode))}
-              </TreeView>
-            </Box>
+            <NodeTreeView
+              nodes={nodes}
+              editingNode={editingNode}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              selected={selected}
+              setSelected={setSelected}
+              preview={preview}
+            />
           </Box>
 
           <div
