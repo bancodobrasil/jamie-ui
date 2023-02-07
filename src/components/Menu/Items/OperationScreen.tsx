@@ -14,9 +14,11 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SummarizeOutlinedIcon from '@mui/icons-material/SummarizeOutlined';
 import { DateTime } from 'luxon';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { EnumAction, IEditingNode, IMenu, IMenuMeta, INode, MenuMetaType } from '../../../types';
 import { MENU_ITEM_VALIDATION } from '../../../constants';
 import {
@@ -74,6 +76,7 @@ export const OperationScreen = ({
 }: Props) => {
   const { dispatch } = React.useContext(NotificationContext);
 
+  const navigate = useNavigate();
   const { i18n, t } = useTranslation();
 
   const [operationScreen, setOperationScreen] = React.useState<EnumActionScreen>(
@@ -408,7 +411,7 @@ export const OperationScreen = ({
               sx={{ color: 'orange' }}
               variant="outlined"
               color="warning"
-              disabled={!selected}
+              disabled={!selected || selected === '0'}
               onClick={() => handleActionChange(EnumActionScreen.UPDATE)}
             >
               <EditIcon />
@@ -430,7 +433,7 @@ export const OperationScreen = ({
               sx={{ color: 'red' }}
               variant="outlined"
               color="error"
-              disabled={!selected}
+              disabled={!selected || selected === '0'}
               onClick={() => handleActionChange(EnumActionScreen.DELETE)}
             >
               <DeleteIcon />
@@ -449,6 +452,27 @@ export const OperationScreen = ({
               </Typography>
             </Button>
           </Box>
+          <Button
+            variant="outlined"
+            sx={{ mt: '1rem' }}
+            onClick={() => navigate(`${selected}`)}
+            disabled={!selected || selected === '0'}
+          >
+            <SummarizeOutlinedIcon />
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                lineHeight: '0.75rem',
+                letterSpacing: '0.18px',
+                color: 'black',
+                ml: '0.5rem',
+              }}
+            >
+              {t('menu.preview.actions.editTemplate')}
+            </Typography>
+          </Button>
         </Box>
       );
     case EnumActionScreen.INSERT:

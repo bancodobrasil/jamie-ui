@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useKeycloak } from '@react-keycloak/web';
 import { NotificationProvider } from '../../../contexts/NotificationContext';
 import { ListMenu } from '../../../pages/Menu/List';
-import { ItemsPreview } from '../../../pages/Menu/Items';
+import { EditTemplate, ItemsPreview } from '../../../pages/Menu/Items';
 import { CreateMenu } from '../../../pages/Menu/Create';
 import { ShowMenu } from '../../../pages/Menu/Show';
 import { EditMenu } from '../../../pages/Menu/Edit';
@@ -28,7 +28,10 @@ export const AppRoutes = () => {
             <Route index element={<ListMenu />} />
             <Route path=":id">
               <Route index element={<ShowMenu />} />
-              <Route path="items" element={<ItemsPreview />} />
+              <Route path="items">
+                <Route index element={<ItemsPreview />} />
+                <Route path=":itemId" element={<EditTemplate />} />
+              </Route>
               <Route path="edit" element={<EditMenu />} />
             </Route>
             <Route path="create" element={<CreateMenu />} />

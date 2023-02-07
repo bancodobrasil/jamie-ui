@@ -141,7 +141,8 @@
         "title": "Actions",
         "insert": "Insert",
         "edit": "Edit",
-        "delete": "Delete"
+        "delete": "Delete",
+        "editTemplate": "Edit Template"
       },
       "parent": "Parent",
       "newItem": "New Item {{order}}",
@@ -194,6 +195,13 @@
       "messages": {
         "confirmDelete": "Are you sure you want to delete this menu?"
       }
+    }
+  },
+  "menuItem": {
+    "title_one": "Menu Item",
+    "title_other": "Menu Items",
+    "editTemplate": {
+      "title": "Edit Template"
     }
   }
 }
