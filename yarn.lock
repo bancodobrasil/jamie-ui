@@ -2252,6 +2252,22 @@
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
+"@uiw/codemirror-theme-dracula@^4.19.8":
+  version "4.19.8"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-theme-dracula/-/codemirror-theme-dracula-4.19.8.tgz#ddbba795ecdd759c14a6f4687e2e05bb9c46f20a"
+  integrity sha512-YHQJUDnYKrew/YkEPQG3SQFcnKr6MzVbIXxmdKuxlCTrySNFNMK19dKrzY3fwc+Lgpp5r26QLLocTZyCvu1xeA==
+  dependencies:
+    "@uiw/codemirror-themes" "4.19.8"
+
+"@uiw/codemirror-themes@4.19.8":
+  version "4.19.8"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-themes/-/codemirror-themes-4.19.8.tgz#464eaf449fe3dd58a8d2d56a1d10bb1fc98a9e48"
+  integrity sha512-k+0molX6YuQZ7vYymS5DEl3NcHxVE4VP4J0nB7RBnzLrhDwT2K8R5ie7J2eH+4bpppIK1ZZdZ6Mie7U48dH5dQ==
+  dependencies:
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+
 "@uiw/react-codemirror@^4.19.7":
   version "4.19.7"
   resolved "https://registry.yarnpkg.com/@uiw/react-codemirror/-/react-codemirror-4.19.7.tgz#33fbcaa876bb0e66367b2b06d88b833599574379"

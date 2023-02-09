@@ -41,6 +41,7 @@
     "@mui/x-data-grid": "^5.11.0",
     "@mui/x-date-pickers": "^5.0.13",
     "@react-keycloak/web": "^3.4.0",
+    "@uiw/codemirror-theme-dracula": "^4.19.8",
     "@uiw/react-codemirror": "^4.19.7",
     "axios": "^0.27.2",
     "codemirror-lang-ejs": "^0.1.1",
