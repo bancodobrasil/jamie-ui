@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import { ejs } from 'codemirror-lang-ejs';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
@@ -88,7 +88,7 @@ export const EditTemplate = () => {
           <CodeMirror
             value={template}
             height="200px"
-            extensions={[javascript({ jsx: true })]}
+            extensions={[ejs()]}
             onChange={onChange}
             minHeight="60vh"
             minWidth="40vw"
