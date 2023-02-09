@@ -11,6 +11,23 @@ import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 
+const INITIAL_TEMPLATE = `
+<% const { id, label, order, meta, children } = item; %>
+<% const mapChildren = (children) => { %>
+  <% return children.map((child) => { %>
+    <% const { id, label, order, meta, children } = child; %>
+    <% return { id, label, order, meta, children: mapChildren(children) }; %>
+  <% }); %>
+<% }; %>
+{
+  "id": <%= id %>,
+  "label": "<%= label %>",
+  "order": <%= order %>,
+  "meta": <%= JSON.stringify(meta) %>,
+  "children": <%= JSON.stringify(mapChildren(children)) %>
+}
+`;
+
 export const EditTemplate = () => {
   const { itemId } = useParams();
 
@@ -18,7 +35,7 @@ export const EditTemplate = () => {
 
   const { t } = useTranslation();
 
-  const [template, setTemplate] = React.useState("console.log('hello world!');");
+  const [template, setTemplate] = React.useState(INITIAL_TEMPLATE);
 
   const { loading, error, data } = useQuery(MenuItemService.GET_MENU_ITEM, {
     variables: { id: Number(itemId) },
