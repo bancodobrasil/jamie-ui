@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { ejs } from 'codemirror-lang-ejs';
+import { dracula } from '@uiw/codemirror-theme-dracula';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
@@ -89,6 +90,7 @@ export const EditTemplate = () => {
             value={template}
             height="200px"
             extensions={[ejs()]}
+            theme={dracula}
             onChange={onChange}
             minHeight="60vh"
             minWidth="40vw"
