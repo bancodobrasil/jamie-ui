@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
-import { ejs } from 'codemirror-lang-ejs';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
+import { ejsJson } from '../../../utils/codemirror/ejs-json';
 
 const INITIAL_TEMPLATE = `
 <% const { id, label, order, meta, children } = item; %>
@@ -106,7 +106,7 @@ export const EditTemplate = () => {
           <CodeMirror
             value={template}
             height="200px"
-            extensions={[ejs()]}
+            extensions={[ejsJson()]}
             theme={dracula}
             onChange={onChange}
             minHeight="60vh"
