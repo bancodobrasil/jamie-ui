@@ -1,0 +1,48 @@
+@top JsonText { value }
+
+value { True | False | Null | Number | String | Object | Array | EjsOutput }
+
+String { string }
+Object { "{" list<Property>? "}" }
+Array  { "[" list<value>? "]" }
+
+Property { PropertyName ":" value }
+PropertyName { string }
+
+// EJS output (not working yet)
+@skip {} {
+  EjsOutput { output | '"' output '"' }
+  output { "<%=" JavascriptExpression tagClose }
+}
+
+@local tokens {
+  tagClose { "%" $[_\-]? ">" }
+  @else JavascriptExpression
+}
+
+@tokens {
+  True  { "true" }
+  False { "false" }
+  Null  { "null" }
+
+  Number { '-'? int frac? exp?  }
+  int  { '0' | $[1-9] @digit* }
+  frac { '.' @digit+ }
+  exp  { $[eE] $[+\-]? @digit+ }
+
+  string { '"' char* '"' }
+  char { $[\u{20}\u{21}\u{23}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
+  esc  { $["\\\/bfnrt] | "u" hex hex hex hex }
+  hex  { $[0-9a-fA-F] }
+
+  whitespace { $[ \n\r\t] }
+
+  "{" "}" "[" "]"
+}
+
+@precedence { value, empty }
+
+@skip { whitespace }
+list<item> { (!value item | !empty "") ("," (!value item | !empty ""))* }
+
+@detectDelim

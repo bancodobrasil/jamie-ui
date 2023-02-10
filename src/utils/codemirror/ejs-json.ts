@@ -1,9 +1,9 @@
 import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
-import { json, jsonLanguage } from '@codemirror/lang-json';
 import { delimitedIndent, indentNodeProp, LanguageSupport } from '@codemirror/language';
 import { NestedParse, parseMixed } from '@lezer/common';
 import { styleTags, tags as t } from '@lezer/highlight';
-import { ejsLanguage } from './ejs';
+import { ejsLanguage } from 'codemirror-lang-ejs';
+import { jsonEjs, jsonEjsLanguage } from './json';
 
 export const ejsJsonLanguage = ejsLanguage.configure(
   {
@@ -12,9 +12,10 @@ export const ejsJsonLanguage = ejsLanguage.configure(
         JavascriptExpression: delimitedIndent({ closing: '%>', align: false }),
       }),
       styleTags({
-        'OpeningTag ClosingTag': t.strong,
+        'OpeningTag OutputTag ClosingTag': t.controlOperator,
         CommentContent: t.comment,
         Quote: t.quote,
+        'Output/...': t.special(t.string),
       }),
     ],
     wrap: parseMixed(node => {
@@ -29,7 +30,7 @@ export const ejsJsonLanguage = ejsLanguage.configure(
           break;
         case 'Text':
           nestedParse = {
-            parser: jsonLanguage.parser,
+            parser: jsonEjsLanguage.parser,
           };
           break;
       }
@@ -40,5 +41,5 @@ export const ejsJsonLanguage = ejsLanguage.configure(
 );
 
 export function ejsJson() {
-  return new LanguageSupport(ejsJsonLanguage, [javascript().support, json().support]);
+  return new LanguageSupport(ejsJsonLanguage, [javascript().support, jsonEjs().support]);
 }
