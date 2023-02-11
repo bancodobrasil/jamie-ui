@@ -5,18 +5,29 @@ import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
+import { ejs } from 'codemirror-lang-ejs';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
-import { JSON_INITIAL_TEMPLATE } from '../../../constants/template';
+import {
+  JSON_INITIAL_TEMPLATE,
+  PLAINTEXT_INITIAL_TEMPLATE,
+  XML_INITIAL_TEMPLATE,
+} from '../../../constants/template';
 
 enum EnumTemplateFormat {
   JSON = 'json',
   XML = 'xml',
   PLAIN = 'plain',
 }
+
+const languages = {
+  [EnumTemplateFormat.JSON]: ejsJson(),
+  [EnumTemplateFormat.XML]: ejs(),
+  [EnumTemplateFormat.PLAIN]: ejs(),
+};
 
 export const EditTemplate = () => {
   const { itemId } = useParams();
@@ -26,7 +37,11 @@ export const EditTemplate = () => {
   const { t } = useTranslation();
 
   const [templateFormat, setTemplateFormat] = React.useState(EnumTemplateFormat.JSON);
-  const [template, setTemplate] = React.useState(JSON_INITIAL_TEMPLATE);
+  const [template, setTemplate] = React.useState({
+    [EnumTemplateFormat.JSON]: JSON_INITIAL_TEMPLATE,
+    [EnumTemplateFormat.XML]: XML_INITIAL_TEMPLATE,
+    [EnumTemplateFormat.PLAIN]: PLAINTEXT_INITIAL_TEMPLATE,
+  });
 
   const { loading, error, data } = useQuery(MenuItemService.GET_MENU_ITEM, {
     variables: { id: Number(itemId) },
@@ -40,9 +55,15 @@ export const EditTemplate = () => {
     setTemplateFormat(event.target.value);
   }, []);
 
-  const onChange = React.useCallback((value, viewUpdate) => {
-    setTemplate(value);
-  }, []);
+  const onChange = React.useCallback(
+    value => {
+      setTemplate(prevState => ({
+        ...prevState,
+        [templateFormat]: value,
+      }));
+    },
+    [templateFormat],
+  );
 
   if (loading) return <Loading />;
 
@@ -176,9 +197,9 @@ export const EditTemplate = () => {
             }}
           >
             <CodeMirror
-              value={template}
+              value={template[templateFormat]}
               height="200px"
-              extensions={[ejsJson()]}
+              extensions={[languages[templateFormat]]}
               theme={dracula}
               onChange={onChange}
               minHeight="60vh"
