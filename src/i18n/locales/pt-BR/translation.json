@@ -201,7 +201,38 @@
     "title_one": "Item de Menu",
     "title_other": "Itens de Menu",
     "editTemplate": {
-      "title": "Editar Template"
+      "title": "Editar Template",
+      "templateFormat": {
+        "title": "Formato do Template",
+        "description": "O formato do template define como ele será renderizado antes de enviar para a sua aplicação. Você pode usar as variáveis abaixo para definir o template usando a sintaxe do <2>EJS</2> (Embedded JavaScript).",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Texto"
+        },
+        "variables": {
+          "id": {
+            "description": "ID do Item de Menu",
+            "type": "string"
+          },
+          "label": {
+            "description": "Nome do Item de Menu",
+            "type": "string"
+          },
+          "order": {
+            "description": "Ordem do Item de Menu",
+            "type": "number"
+          },
+          "meta": {
+            "description": "Metadados do Item de Menu",
+            "type": "Record<string, string | number | boolean | Date>"
+          },
+          "children": {
+            "description": "Filhos do Item de Menu",
+            "type": "MenuItem[]"
+          }
+        }
+      }
     }
   }
 }

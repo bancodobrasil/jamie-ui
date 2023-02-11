@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import { Box, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
+import { Trans, useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
@@ -10,23 +10,13 @@ import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
+import { JSON_INITIAL_TEMPLATE } from '../../../constants/template';
 
-const INITIAL_TEMPLATE = `
-<% const { id, label, order, meta, children } = item; %>
-<% const mapChildren = (children) => { %>
-  <% return children.map((child) => { %>
-    <% const { id, label, order, meta, children } = child; %>
-    <% return { id, label, order, meta, children: mapChildren(children) }; %>
-  <% }); %>
-<% }; %>
-{
-  "id": <%= id %>,
-  "label": "<%= label %>",
-  "order": <%= order %>,
-  "meta": <%= JSON.stringify(meta) %>,
-  "children": <%= JSON.stringify(mapChildren(children)) %>
+enum EnumTemplateFormat {
+  JSON = 'json',
+  XML = 'xml',
+  PLAIN = 'plain',
 }
-`;
 
 export const EditTemplate = () => {
   const { itemId } = useParams();
@@ -35,7 +25,8 @@ export const EditTemplate = () => {
 
   const { t } = useTranslation();
 
-  const [template, setTemplate] = React.useState(INITIAL_TEMPLATE);
+  const [templateFormat, setTemplateFormat] = React.useState(EnumTemplateFormat.JSON);
+  const [template, setTemplate] = React.useState(JSON_INITIAL_TEMPLATE);
 
   const { loading, error, data } = useQuery(MenuItemService.GET_MENU_ITEM, {
     variables: { id: Number(itemId) },
@@ -44,6 +35,10 @@ export const EditTemplate = () => {
   const onBackClickHandler = () => {
     navigate('/');
   };
+
+  const onChangeTemplateFormat = React.useCallback(event => {
+    setTemplateFormat(event.target.value);
+  }, []);
 
   const onChange = React.useCallback((value, viewUpdate) => {
     setTemplate(value);
@@ -102,16 +97,95 @@ export const EditTemplate = () => {
         >
           {t('menuItem.editTemplate.title')}
         </Typography>
-        <Box sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', flex: 1 }}>
-          <CodeMirror
-            value={template}
-            height="200px"
-            extensions={[ejsJson()]}
-            theme={dracula}
-            onChange={onChange}
-            minHeight="60vh"
-            minWidth="40vw"
-          />
+        <Box
+          sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            flex: 1,
+          }}
+        >
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              flex: 1,
+            }}
+          >
+            <Box
+              sx={{
+                maxWidth: '40vw',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                flex: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  flex: 1,
+                }}
+              >
+                <Typography variant="h2" component="h2">
+                  {t('menuItem.editTemplate.templateFormat.title')}
+                </Typography>
+                <Typography variant="body1" component="p" sx={{ mt: '0.5rem' }}>
+                  <Trans i18nKey="menuItem.editTemplate.templateFormat.description">
+                    X{' '}
+                    <Link
+                      href="https://ejs.co/"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      underline="always"
+                    >
+                      Y
+                    </Link>{' '}
+                    Z
+                  </Trans>
+                </Typography>
+              </Box>
+              <FormControl sx={{ ml: '4rem', width: 120 }}>
+                <Select value={templateFormat} onChange={onChangeTemplateFormat}>
+                  <MenuItem value={EnumTemplateFormat.JSON}>
+                    {t('menuItem.editTemplate.templateFormat.formats.json')}
+                  </MenuItem>
+                  <MenuItem value={EnumTemplateFormat.XML}>
+                    {t('menuItem.editTemplate.templateFormat.formats.xml')}
+                  </MenuItem>
+                  <MenuItem value={EnumTemplateFormat.PLAIN}>
+                    {t('menuItem.editTemplate.templateFormat.formats.plain')}
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              width: '40vw',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'flex-start',
+              flex: 1,
+            }}
+          >
+            <CodeMirror
+              value={template}
+              height="200px"
+              extensions={[ejsJson()]}
+              theme={dracula}
+              onChange={onChange}
+              minHeight="60vh"
+              width="100%"
+              maxWidth="40vw"
+            />
+          </Box>
         </Box>
       </Box>
     </Box>
