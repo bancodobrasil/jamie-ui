@@ -3308,10 +3308,10 @@ cmd-shim@^5.0.0:
   dependencies:
     mkdirp-infer-owner "^2.0.0"
 
-codemirror-lang-ejs@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/codemirror-lang-ejs/-/codemirror-lang-ejs-0.1.3.tgz#807bd66d3b2288870ab63ca36c17096a86e8e2f7"
-  integrity sha512-WO7Hqv/P7BecUDWKrCA9SI7SIpd9/WeKUXlw0nw5lxDAIPJsLRxDiM8ZnogpKupNhDPx+qQjDMiO1eUBF79U/w==
+codemirror-lang-ejs@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/codemirror-lang-ejs/-/codemirror-lang-ejs-0.1.4.tgz#0eba7f90032c5f0b968f90327ebbdf6b9bad8e27"
+  integrity sha512-MW1JCRlHspC7KRLWaT3sw9XK/8Hu9HEXIsL0EnzxlF9Q9cS+Vg1wpkkumJ3CH+x3W7goOXDfkU3tYDuc0SL3vg==
   dependencies:
     "@codemirror/lang-javascript" "^6.1.3"
     "@codemirror/language" "^6.5.0"
