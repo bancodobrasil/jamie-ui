@@ -11,6 +11,7 @@ import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
+import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import {
   JSON_INITIAL_TEMPLATE,
   PLAINTEXT_INITIAL_TEMPLATE,
@@ -22,12 +23,6 @@ enum EnumTemplateFormat {
   XML = 'xml',
   PLAIN = 'plain',
 }
-
-const languages = {
-  [EnumTemplateFormat.JSON]: ejsJson(),
-  [EnumTemplateFormat.XML]: ejs(),
-  [EnumTemplateFormat.PLAIN]: ejs(),
-};
 
 export const EditTemplate = () => {
   const { itemId } = useParams();
@@ -43,20 +38,32 @@ export const EditTemplate = () => {
     [EnumTemplateFormat.PLAIN]: PLAINTEXT_INITIAL_TEMPLATE,
   });
 
+  const [language, setLanguage] = React.useState(ejsJson);
+
+  React.useEffect(() => {
+    switch (templateFormat) {
+      case EnumTemplateFormat.JSON:
+        setLanguage(ejsJson);
+        break;
+      case EnumTemplateFormat.XML:
+        setLanguage(ejsXml);
+        break;
+      case EnumTemplateFormat.PLAIN:
+        setLanguage(ejs);
+        break;
+    }
+  }, [templateFormat]);
+
   const { loading, error, data } = useQuery(MenuItemService.GET_MENU_ITEM, {
     variables: { id: Number(itemId) },
   });
-
-  const onBackClickHandler = () => {
-    navigate('/');
-  };
 
   const onChangeTemplateFormat = React.useCallback(event => {
     setTemplateFormat(event.target.value);
   }, []);
 
   const onChange = React.useCallback(
-    value => {
+    (value: string) => {
       setTemplate(prevState => ({
         ...prevState,
         [templateFormat]: value,
@@ -64,6 +71,10 @@ export const EditTemplate = () => {
     },
     [templateFormat],
   );
+
+  const onBackClickHandler = () => {
+    navigate('/');
+  };
 
   if (loading) return <Loading />;
 
@@ -199,12 +210,11 @@ export const EditTemplate = () => {
             <CodeMirror
               value={template[templateFormat]}
               height="200px"
-              extensions={[languages[templateFormat]]}
+              extensions={[language]}
               theme={dracula}
               onChange={onChange}
               minHeight="60vh"
-              width="100%"
-              maxWidth="40vw"
+              width="40vw"
             />
           </Box>
         </Box>
