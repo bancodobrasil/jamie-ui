@@ -52,7 +52,7 @@
     "@uiw/codemirror-theme-dracula": "^4.19.8",
     "@uiw/react-codemirror": "^4.19.7",
     "axios": "^0.27.2",
-    "codemirror-lang-ejs": "^0.1.4",
+    "codemirror-lang-ejs": "^0.1.5",
     "graphql": "^16.6.0",
     "history": "^5.0.0",
     "i18next": "^22.4.6",
