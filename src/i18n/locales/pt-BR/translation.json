@@ -232,6 +232,10 @@
             "type": "MenuItem[]"
           }
         }
+      },
+      "result": {
+        "title": "Resultado",
+        "description": "Esse é o resultado do template que você definiu:"
       }
     }
   }

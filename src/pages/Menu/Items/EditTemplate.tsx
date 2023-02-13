@@ -17,6 +17,7 @@ import {
   PLAINTEXT_INITIAL_TEMPLATE,
   XML_INITIAL_TEMPLATE,
 } from '../../../constants/template';
+import CodeViewer from '../../../components/CodeViewer';
 
 enum EnumTemplateFormat {
   JSON = 'json',
@@ -130,27 +131,21 @@ export const EditTemplate = () => {
           {t('menuItem.editTemplate.title')}
         </Typography>
         <Box
-          sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            flex: 1,
-          }}
+          sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'space-between' }}
         >
           <Box
             sx={{
+              maxWidth: '40vw',
               width: '100%',
+              height: '100%',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'flex-start',
-              justifyContent: 'flex-start',
               flex: 1,
             }}
           >
             <Box
               sx={{
-                maxWidth: '40vw',
                 display: 'flex',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
@@ -197,25 +192,72 @@ export const EditTemplate = () => {
                 </Select>
               </FormControl>
             </Box>
+            <Box
+              sx={{
+                width: '40vw',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'flex-start',
+                flex: 1,
+              }}
+            >
+              <CodeMirror
+                value={template[templateFormat]}
+                height="200px"
+                extensions={[language]}
+                theme={dracula}
+                onChange={onChange}
+                minHeight="60vh"
+                width="40vw"
+              />
+            </Box>
           </Box>
           <Box
             sx={{
-              width: '40vw',
+              maxWidth: '40vw',
+              width: '100%',
               height: '100%',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'flex-start',
               flex: 1,
             }}
           >
-            <CodeMirror
-              value={template[templateFormat]}
-              height="200px"
-              extensions={[language]}
-              theme={dracula}
-              onChange={onChange}
-              minHeight="60vh"
-              width="40vw"
-            />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  flex: 1,
+                }}
+              >
+                <Typography variant="h2" component="h2">
+                  {t('menuItem.editTemplate.result.title')}
+                </Typography>
+                <Typography variant="body1" component="p" sx={{ mt: '0.5rem' }}>
+                  {t('menuItem.editTemplate.result.description')}
+                </Typography>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'flex-start',
+                flex: 1,
+                mt: '1rem',
+              }}
+            >
+              <CodeViewer code={`{"test": "bb"}`} language="json" />
+            </Box>
           </Box>
         </Box>
       </Box>
