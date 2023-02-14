@@ -5,7 +5,8 @@ import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
-import { ejs } from 'codemirror-lang-ejs';
+import { ejs as ejsLang } from 'codemirror-lang-ejs';
+import ejs from 'ejs';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
@@ -38,6 +39,7 @@ export const EditTemplate = () => {
     [EnumTemplateFormat.XML]: XML_INITIAL_TEMPLATE,
     [EnumTemplateFormat.PLAIN]: PLAINTEXT_INITIAL_TEMPLATE,
   });
+  const [templateResult, setTemplateResult] = React.useState('');
 
   const [language, setLanguage] = React.useState(ejsJson);
 
@@ -50,7 +52,7 @@ export const EditTemplate = () => {
         setLanguage(ejsXml);
         break;
       case EnumTemplateFormat.PLAIN:
-        setLanguage(ejs);
+        setLanguage(ejsLang);
         break;
     }
   }, [templateFormat]);
@@ -58,6 +60,35 @@ export const EditTemplate = () => {
   const { loading, error, data } = useQuery(MenuItemService.GET_MENU_ITEM, {
     variables: { id: Number(itemId) },
   });
+
+  React.useEffect(() => {
+    if (!data) return;
+    const item = data?.menuItem;
+    const children = item.children.map(child => ({
+      id: child.id,
+      label: child.label,
+      order: child.order,
+      meta: child.meta,
+    }));
+    try {
+      const result = ejs.render(template[templateFormat], {
+        item: {
+          id: item.id,
+          label: item.label,
+          order: item.order,
+          meta: item.meta,
+          children,
+        },
+      });
+      if (templateFormat === EnumTemplateFormat.JSON) {
+        setTemplateResult(JSON.stringify(JSON.parse(result), null, 2));
+        return;
+      }
+      setTemplateResult(result);
+    } catch (error) {
+      /* empty */
+    }
+  }, [template, templateFormat, data]);
 
   const onChangeTemplateFormat = React.useCallback(event => {
     setTemplateFormat(event.target.value);
@@ -112,9 +143,11 @@ export const EditTemplate = () => {
         sx={{
           width: '100%',
           height: '80vh',
+          maxHeight: '80vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          overflow: 'hidden',
         }}
       >
         <Typography
@@ -178,7 +211,15 @@ export const EditTemplate = () => {
                   </Trans>
                 </Typography>
               </Box>
-              <FormControl sx={{ ml: '4rem', width: 120 }}>
+              <FormControl
+                sx={{
+                  ml: '4rem',
+                  width: 120,
+                  height: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
                 <Select value={templateFormat} onChange={onChangeTemplateFormat}>
                   <MenuItem value={EnumTemplateFormat.JSON}>
                     {t('menuItem.editTemplate.templateFormat.formats.json')}
@@ -203,11 +244,11 @@ export const EditTemplate = () => {
             >
               <CodeMirror
                 value={template[templateFormat]}
-                height="200px"
+                height="60vh"
                 extensions={[language]}
                 theme={dracula}
                 onChange={onChange}
-                minHeight="60vh"
+                maxHeight="60vh"
                 width="40vw"
               />
             </Box>
@@ -228,6 +269,7 @@ export const EditTemplate = () => {
                 display: 'flex',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
+                flex: 1,
               }}
             >
               <Box
@@ -248,15 +290,16 @@ export const EditTemplate = () => {
             </Box>
             <Box
               sx={{
+                maxHeight: '60vh',
+                minHeight: '60vh',
                 width: '100%',
-                height: '100%',
                 display: 'flex',
-                alignItems: 'flex-start',
                 flex: 1,
                 mt: '1rem',
+                overflowY: 'auto',
               }}
             >
-              <CodeViewer code={`{"test": "bb"}`} language="json" />
+              <CodeViewer code={templateResult} language={templateFormat} />
             </Box>
           </Box>
         </Box>

@@ -16,10 +16,10 @@ interface Props {
 const CodeViewer = ({ code, language, lineNumbers = true }: Props) => {
   useEffect(() => {
     Prism.highlightAll();
-  }, []);
+  }, [code]);
   return (
-    <Box className="CodeViewer">
-      <pre className={lineNumbers ? 'line-numbers' : ''}>
+    <Box className="CodeViewer" sx={{ width: '100%', display: 'flex' }}>
+      <pre className={`${lineNumbers ? 'line-numbers' : ''} w-full flex-1`}>
         <code className={`language-${language}`}>{code}</code>
       </pre>
     </Box>

@@ -9,6 +9,13 @@ export default class MenuItemService {
         order
         meta
         parentId
+        children {
+          id
+          label
+          order
+          meta
+          parentId
+        }
         menu {
           id
           name
