@@ -14,7 +14,22 @@ import NotFound from '../../../pages/NotFound';
 import Layout from '../../Layout';
 
 export const AppRoutes = () => {
-  const { initialized } = useKeycloak();
+  const { initialized, keycloak } = useKeycloak();
+
+  React.useEffect(() => {
+    if (!initialized || !keycloak) return;
+    if (!keycloak.authenticated) {
+      keycloak.onTokenExpired = undefined;
+    }
+    keycloak.onTokenExpired = () => {
+      keycloak.updateToken(5);
+    };
+    // Force refresh token
+    keycloak.updateToken(-1);
+    return () => {
+      if (keycloak) keycloak.onTokenExpired = undefined;
+    };
+  }, [initialized, keycloak, keycloak?.authenticated]);
 
   const renderRoutes = () => {
     if (!initialized) {
