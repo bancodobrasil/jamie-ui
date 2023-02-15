@@ -158,6 +158,7 @@ const NotificationProvider: React.FC<Props> = ({ children }) => {
       type: ActionTypes.SET_DEFAULT_PROPS,
       snackbarProps: {
         ...themeSnackbarProps,
+        autoHideDuration: 6000,
         anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
         onClose: onSnackbarCloseHandler,
       },

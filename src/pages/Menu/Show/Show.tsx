@@ -43,6 +43,10 @@ export const ShowMenu = () => {
     navigate('edit');
   };
 
+  const onEditTemplateClickHandler = () => {
+    navigate('editTemplate');
+  };
+
   const onEditItemsClickHandler = () => {
     navigate('items');
   };
@@ -145,6 +149,14 @@ export const ShowMenu = () => {
           disabled={loadingDelete}
         >
           {t('menu.show.actions.edit')}
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{ mr: '1rem' }}
+          onClick={onEditTemplateClickHandler}
+          disabled={loadingDelete}
+        >
+          {t('menu.show.actions.editTemplate')}
         </Button>
         <Button
           variant="outlined"
