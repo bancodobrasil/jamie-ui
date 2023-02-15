@@ -189,6 +189,7 @@
       "actions": {
         "title": "Actions",
         "edit": "Edit Menu",
+        "editTemplate": "Edit Template",
         "editItems": "Edit Items",
         "delete": "Delete"
       },

@@ -8,13 +8,14 @@ import { dracula } from '@uiw/codemirror-theme-dracula';
 import { ejs as ejsLang } from 'codemirror-lang-ejs';
 import ejs from 'ejs';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
-import MenuItemService from '../../../api/services/MenuItemService';
+import MenuService from '../../../api/services/MenuService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
-import MenuItemInitialTemplate from '../../../utils/template/MenuItemInitialTemplate';
+import { IMenu, IMenuItem } from '../../../types';
+import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
 
 enum EnumTemplateFormat {
   JSON = 'json',
@@ -22,8 +23,8 @@ enum EnumTemplateFormat {
   PLAIN = 'plain',
 }
 
-export const EditTemplateItems = () => {
-  const { itemId } = useParams();
+export const EditTemplateMenu = () => {
+  const { id } = useParams();
 
   const navigate = useNavigate();
 
@@ -31,9 +32,9 @@ export const EditTemplateItems = () => {
 
   const [templateFormat, setTemplateFormat] = React.useState(EnumTemplateFormat.JSON);
   const [template, setTemplate] = React.useState({
-    [EnumTemplateFormat.JSON]: MenuItemInitialTemplate.JSON,
-    [EnumTemplateFormat.XML]: MenuItemInitialTemplate.XML,
-    [EnumTemplateFormat.PLAIN]: MenuItemInitialTemplate.PLAIN,
+    [EnumTemplateFormat.JSON]: MenuInitialTemplate.JSON,
+    [EnumTemplateFormat.XML]: MenuInitialTemplate.XML,
+    [EnumTemplateFormat.PLAIN]: MenuInitialTemplate.PLAIN,
   });
   const [templateResult, setTemplateResult] = React.useState('');
 
@@ -53,27 +54,46 @@ export const EditTemplateItems = () => {
     }
   }, [templateFormat]);
 
-  const { loading, error, data } = useQuery(MenuItemService.GET_MENU_ITEM, {
-    variables: { id: Number(itemId) },
+  const { loading, error, data } = useQuery(MenuService.GET_MENU, {
+    variables: { id: Number(id) },
   });
 
   React.useEffect(() => {
     if (!data) return;
-    const item = data?.menuItem;
-    const children = item.children.map(child => ({
-      id: child.id,
-      label: child.label,
-      order: child.order,
-      meta: child.meta,
-    }));
-    try {
-      const result = ejs.render(template[templateFormat], {
-        item: {
+    const { menu }: { menu: IMenu } = data;
+    let items: IMenuItem[] = menu.items || [];
+    const getChildren = (parent: IMenuItem): IMenuItem[] => {
+      const children = items
+        .filter(item => item.parentId === parent.id)
+        .map((item: IMenuItem & { __typename?: string }) => {
+          const { __typename, ...rest } = item;
+          return {
+            ...rest,
+            children: getChildren(item),
+          };
+        })
+        .sort((a, b) => a.order - b.order);
+      return children;
+    };
+    items =
+      items
+        .map(item => ({
           id: item.id,
           label: item.label,
           order: item.order,
+          children: getChildren(item),
+          parentId: item.parentId || 0,
           meta: item.meta,
-          children,
+        }))
+        .filter(item => !item.parentId)
+        .sort((a, b) => a.order - b.order) || [];
+    try {
+      const result = ejs.render(template[templateFormat], {
+        menu: {
+          id: menu.id,
+          name: menu.name,
+          meta: menu.meta,
+          items,
         },
       });
       if (templateFormat === EnumTemplateFormat.JSON) {
@@ -129,9 +149,8 @@ export const EditTemplateItems = () => {
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menuItem.menu.name, navigateTo: '../../' },
-          { label: t('menu.preview.title'), navigateTo: '../' },
-          { label: data?.menuItem.label },
+          { label: data?.menu.name, navigateTo: '../' },
+          { label: t('menuItem.editTemplate.title') },
         ]}
         onBack={onBackClickHandler}
       />

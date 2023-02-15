@@ -29,7 +29,7 @@ export default class MenuInitialTemplate {
 <% } -%>
 <% return \`
 \${spaces}<item id="\${id}" label="\${label}" order="\${order}">
-  \${spaces}\${meta ? childrenMetaTags(meta).join(\`\\n\`) : ''}\${children?.length ? '\\n' + mapChildren(children, level + 1).join(\`\\n\`) : ''}
+  \${spaces}\${meta ? childrenMetaTags(meta).join(\`\\n\${spaces}  \`) : ''}\${children?.length ? '\\n' + mapChildren(children, level + 1).join(\`\\n\`) : ''}
 \${spaces}</item>\`;
 %>
 <% }); %>

@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useKeycloak } from '@react-keycloak/web';
 import { NotificationProvider } from '../../../contexts/NotificationContext';
 import { ListMenu } from '../../../pages/Menu/List';
-import { EditTemplate, ItemsPreview } from '../../../pages/Menu/Items';
+import { EditTemplateItems, ItemsPreview } from '../../../pages/Menu/Items';
 import { CreateMenu } from '../../../pages/Menu/Create';
 import { ShowMenu } from '../../../pages/Menu/Show';
 import { EditMenu } from '../../../pages/Menu/Edit';
+import { EditTemplateMenu } from '../../../pages/Menu/EditTemplate';
 import Loading from '../../Loading';
 import { ProtectedRoute } from '.';
 import NotFound from '../../../pages/NotFound';
@@ -28,11 +29,12 @@ export const AppRoutes = () => {
             <Route index element={<ListMenu />} />
             <Route path=":id">
               <Route index element={<ShowMenu />} />
+              <Route path="edit" element={<EditMenu />} />
+              <Route path="editTemplate" element={<EditTemplateMenu />} />
               <Route path="items">
                 <Route index element={<ItemsPreview />} />
-                <Route path=":itemId" element={<EditTemplate />} />
+                <Route path=":itemId" element={<EditTemplateItems />} />
               </Route>
-              <Route path="edit" element={<EditMenu />} />
             </Route>
             <Route path="create" element={<CreateMenu />} />
           </Route>
