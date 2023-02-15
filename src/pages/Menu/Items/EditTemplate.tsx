@@ -13,12 +13,8 @@ import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
-import {
-  JSON_INITIAL_TEMPLATE,
-  PLAINTEXT_INITIAL_TEMPLATE,
-  XML_INITIAL_TEMPLATE,
-} from '../../../constants/template';
 import CodeViewer from '../../../components/CodeViewer';
+import MenuItemInitialTemplate from '../../../utils/template/MenuItemInitialTemplate';
 
 enum EnumTemplateFormat {
   JSON = 'json',
@@ -35,9 +31,9 @@ export const EditTemplate = () => {
 
   const [templateFormat, setTemplateFormat] = React.useState(EnumTemplateFormat.JSON);
   const [template, setTemplate] = React.useState({
-    [EnumTemplateFormat.JSON]: JSON_INITIAL_TEMPLATE,
-    [EnumTemplateFormat.XML]: XML_INITIAL_TEMPLATE,
-    [EnumTemplateFormat.PLAIN]: PLAINTEXT_INITIAL_TEMPLATE,
+    [EnumTemplateFormat.JSON]: MenuItemInitialTemplate.JSON,
+    [EnumTemplateFormat.XML]: MenuItemInitialTemplate.XML,
+    [EnumTemplateFormat.PLAIN]: MenuItemInitialTemplate.PLAIN,
   });
   const [templateResult, setTemplateResult] = React.useState('');
 

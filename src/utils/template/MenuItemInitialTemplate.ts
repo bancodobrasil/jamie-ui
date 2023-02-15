@@ -1,6 +1,7 @@
-export const EJS_INITIAL_TEMPLATE = '<% const { id, label, order, meta, children } = item; -%>';
+export default class MenuItemInitialTemplate {
+  public static EJS = '<% const { id, label, order, meta, children } = item; -%>';
 
-export const JSON_INITIAL_TEMPLATE = `${EJS_INITIAL_TEMPLATE}
+  public static JSON = `${MenuItemInitialTemplate.EJS}
 {
   "id": <%= id %>,
   "label": "<%= label %>",
@@ -9,7 +10,7 @@ export const JSON_INITIAL_TEMPLATE = `${EJS_INITIAL_TEMPLATE}
   "children": <%- children && JSON.stringify(children) %>
 }`;
 
-export const XML_INITIAL_TEMPLATE = `${EJS_INITIAL_TEMPLATE}
+  public static XML = `${MenuItemInitialTemplate.EJS}
 <% const metaTags = (meta) => { -%>
 <% return Object.keys(meta).map((key) => { -%>
 <% return \`<meta key="\${key}" value="\${meta[key]}" />\`; %>
@@ -30,9 +31,10 @@ export const XML_INITIAL_TEMPLATE = `${EJS_INITIAL_TEMPLATE}
   <%- children && mapChildren(children).join('\\n  ') %>
 </item>`;
 
-export const PLAINTEXT_INITIAL_TEMPLATE = `${EJS_INITIAL_TEMPLATE}
+  public static PLAIN = `${MenuItemInitialTemplate.EJS}
 id = <%= id %>;
 label = "<%= label %>";
 order = <%= order %>;
 meta = <%- JSON.stringify(meta, null, 2) %>;
 children = <%- JSON.stringify(children, null, 2) %>;`;
+}
