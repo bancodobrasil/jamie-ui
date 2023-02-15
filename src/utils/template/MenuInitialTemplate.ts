@@ -2,11 +2,24 @@ export default class MenuInitialTemplate {
   public static EJS = '<% const { id, name, meta, items } = menu; -%>';
 
   public static JSON = `${MenuInitialTemplate.EJS}
+<% const mapChildren = (children) => { -%>
+  <%_ return children.map((child) => { -%>
+    <%_ const { id, label, order, meta, children } = child; -%>
+    <%_ return {
+      id,
+      label,
+      order,
+      meta,
+      children: children?.length ? mapChildren(children) : [],
+    }
+    %>
+  <%_ }); %>
+<% }; -%>
 {
   "id": <%= id %>,
   "name": "<%= name %>",
   "meta": <%- meta && JSON.stringify(meta) %>,
-  "items": <%- items && JSON.stringify(items) %>
+  "items": <%- items && JSON.stringify(mapChildren(items)) %>
 }`;
 
   public static XML = `${MenuInitialTemplate.EJS}
@@ -27,16 +40,26 @@ export default class MenuInitialTemplate {
 <% for (let i = level; i > 0; i--) { -%>
 <% spaces += '  '; -%>
 <% } -%>
-<% return \`
-\${spaces}<item id="\${id}" label="\${label}" order="\${order}">
-  \${spaces}\${meta ? childrenMetaTags(meta).join(\`\\n\${spaces}  \`) : ''}\${children?.length ? '\\n' + mapChildren(children, level + 1).join(\`\\n\`) : ''}
-\${spaces}</item>\`;
-%>
+<% let item = \`  \${spaces}<item id="\${id}" label="\${label}" order="\${order}">\\n\` -%>
+<% if (meta) {
+  item += \`\${spaces}    \${childrenMetaTags(meta).join('\\n    ' + spaces)}\\n\`;
+} -%>
+<% if (children?.length) {
+  item += \`\${spaces}    <children>
+\${mapChildren(children, level + 2).join('\\n')}
+\${spaces}    </children>\\n\`;
+} -%>
+<% item += \`  \${spaces}</item>\`; -%>
+<% return item; %>
 <% }); %>
 <% }; -%>
 <menu id="<%= id %>" name="<%= name %>">
-  <%- meta?.length ? metaTags(meta).join('\\n  ') : '' %>
-  <%- items?.length ? mapChildren(items, 0).join('\\n') : '' %>
+<%- meta?.length ? '  ' + metaTags(meta).join('\\n  ') + '\\n' : '' -%>
+<% if(items?.length) { -%>
+  <items>
+<%- mapChildren(items, 0).join('\\n') %>
+  </items>
+<% } -%>
 </menu>`;
 
   public static PLAIN = `${MenuInitialTemplate.EJS}
