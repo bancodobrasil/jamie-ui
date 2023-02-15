@@ -42,12 +42,16 @@ export default class MenuService {
         id
         name
         meta
+        template
+        templateFormat
         items {
           id
           label
           order
           meta
           parentId
+          template
+          templateFormat
         }
       }
     }

@@ -14,14 +14,8 @@ import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
-import { IMenu, IMenuItem } from '../../../types';
+import { EnumTemplateFormat, IMenu, IMenuItem } from '../../../types';
 import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
-
-enum EnumTemplateFormat {
-  JSON = 'json',
-  XML = 'xml',
-  PLAIN = 'plain',
-}
 
 export const EditTemplateMenu = () => {
   const { id } = useParams();
@@ -37,6 +31,7 @@ export const EditTemplateMenu = () => {
     [EnumTemplateFormat.PLAIN]: MenuInitialTemplate.PLAIN,
   });
   const [templateResult, setTemplateResult] = React.useState('');
+  const [loadedInitialTemplate, setLoadedInitialTemplate] = React.useState(false);
 
   const [language, setLanguage] = React.useState(ejsJson);
 
@@ -57,6 +52,18 @@ export const EditTemplateMenu = () => {
   const { loading, error, data } = useQuery(MenuService.GET_MENU, {
     variables: { id: Number(id) },
   });
+
+  React.useEffect(() => {
+    if (!data || loadedInitialTemplate) return;
+    const { menu }: { menu: IMenu } = data;
+    if (menu.templateFormat) setTemplateFormat(menu.templateFormat);
+    if (menu.template)
+      setTemplate({
+        ...template,
+        [menu.templateFormat]: menu.template,
+      });
+    setLoadedInitialTemplate(true);
+  }, [data, loadedInitialTemplate, template]);
 
   React.useEffect(() => {
     if (!data) return;
