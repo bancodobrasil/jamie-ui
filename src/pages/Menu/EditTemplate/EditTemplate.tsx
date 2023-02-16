@@ -77,16 +77,31 @@ export const EditTemplateMenu = () => {
 
   React.useEffect(() => {
     if (!data) return;
-    const { menu }: { menu: IMenu } = data;
+    const { menu }: { menu: IMenu & { __typename: string } } = data;
     let items: IMenuItem[] = menu.items || [];
     const getChildren = (parent: IMenuItem): IMenuItem[] => {
       const children = items
         .filter(item => item.parentId === parent.id)
         .map((item: IMenuItem & { __typename?: string }) => {
-          const { __typename, ...rest } = item;
+          const { __typename, template, templateFormat, ...rest } = item;
+          let formattedTemplate = template;
+          if (template) {
+            formattedTemplate = ejs.render(template, {
+              item: {
+                ...rest,
+                children: getChildren(item),
+                templateFormat,
+              },
+            });
+            if (templateFormat === EnumTemplateFormat.JSON) {
+              formattedTemplate = JSON.parse(formattedTemplate);
+            }
+          }
           return {
             ...rest,
             children: getChildren(item),
+            template: formattedTemplate,
+            templateFormat,
           };
         })
         .sort((a, b) => a.order - b.order);
@@ -94,22 +109,35 @@ export const EditTemplateMenu = () => {
     };
     items =
       items
-        .map(item => ({
-          id: item.id,
-          label: item.label,
-          order: item.order,
-          children: getChildren(item),
-          parentId: item.parentId || 0,
-          meta: item.meta,
-        }))
+        .map((item: IMenuItem & { __typename: string }) => {
+          const { __typename, template, templateFormat, ...rest } = item;
+          let formattedTemplate = template;
+          if (template) {
+            formattedTemplate = ejs.render(template, {
+              item: {
+                ...rest,
+                children: getChildren(item),
+                templateFormat,
+              },
+            });
+            if (templateFormat === EnumTemplateFormat.JSON) {
+              formattedTemplate = JSON.parse(formattedTemplate);
+            }
+          }
+          return {
+            ...rest,
+            children: getChildren(item),
+            template: formattedTemplate,
+            templateFormat,
+          };
+        })
         .filter(item => !item.parentId)
         .sort((a, b) => a.order - b.order) || [];
     try {
+      const { __typename, template: menuTemplate, ...rest } = menu;
       const result = ejs.render(template[templateFormat], {
         menu: {
-          id: menu.id,
-          name: menu.name,
-          meta: menu.meta,
+          ...rest,
           items,
         },
       });
