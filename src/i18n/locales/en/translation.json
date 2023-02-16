@@ -116,6 +116,7 @@
     "fields": {
       "name": "Name",
       "items": "Items",
+      "template": "Template",
       "meta": {
         "title_one": "Metadata",
         "title_other": "Metadata",
@@ -201,6 +202,10 @@
   "menuItem": {
     "title_one": "Menu Item",
     "title_other": "Menu Items",
+    "of": "Menu Item's $t(menu.fields.{{field}})",
+    "fields": {
+      "template": "Template"
+    },
     "editTemplate": {
       "title": "Edit Template",
       "templateFormat": {

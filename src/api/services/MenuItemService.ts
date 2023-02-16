@@ -9,17 +9,21 @@ export default class MenuItemService {
         order
         meta
         parentId
-        children {
-          id
-          label
-          order
-          meta
-          parentId
-        }
+        template
+        templateFormat
         menu {
           id
           name
           meta
+          items {
+            id
+            label
+            order
+            meta
+            parentId
+            template
+            templateFormat
+          }
         }
       }
     }
