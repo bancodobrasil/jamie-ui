@@ -15,6 +15,7 @@ export default class MenuItemService {
           id
           name
           meta
+          templateFormat
           items {
             id
             label

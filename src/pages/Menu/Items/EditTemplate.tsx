@@ -68,6 +68,7 @@ export const EditTemplateItems = () => {
     if (!data || loadedInitialTemplate) return;
     const item = data.menuItem;
     if (item.templateFormat) setTemplateFormat(item.templateFormat);
+    else if (item.menu.templateFormat) setTemplateFormat(item.menu.templateFormat);
     if (item.template)
       setTemplate({
         ...template,
