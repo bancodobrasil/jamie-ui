@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
+import { Box, Button, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { ejs as ejsLang } from 'codemirror-lang-ejs';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import ejs from 'ejs';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';
@@ -127,8 +128,45 @@ export const EditTemplateMenu = () => {
     [templateFormat],
   );
 
+  const resetDefaultTemplate = React.useCallback(() => {
+    switch (templateFormat) {
+      case EnumTemplateFormat.JSON:
+        setTemplate({
+          ...template,
+          [templateFormat]: MenuInitialTemplate.JSON,
+        });
+        break;
+      case EnumTemplateFormat.XML:
+        setTemplate({
+          ...template,
+          [templateFormat]: MenuInitialTemplate.XML,
+        });
+        break;
+      case EnumTemplateFormat.PLAIN:
+        setTemplate({
+          ...template,
+          [templateFormat]: MenuInitialTemplate.PLAIN,
+        });
+        break;
+    }
+  }, [template, templateFormat]);
+
   const onBackClickHandler = () => {
     navigate('/');
+  };
+
+  const onSaveClickHandler = () => {
+    // TODO: Save template
+  };
+
+  const onDiscardClickHandler = () => {
+    if (data?.menu.templateFormat) setTemplateFormat(data.menu.templateFormat);
+    if (data?.menu.template)
+      setTemplate({
+        ...template,
+        [data.menu.templateFormat]: data.menu.template,
+      });
+    else resetDefaultTemplate();
   };
 
   if (loading) return <Loading />;
@@ -273,6 +311,50 @@ export const EditTemplateMenu = () => {
                 maxHeight="60vh"
                 width="40vw"
               />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              mt: '2rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              maxWidth: '10vw',
+              px: '2rem',
+            }}
+          >
+            <Box
+              sx={{
+                height: '60vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h2" component="h2" sx={{ mb: '2rem' }}>
+                {t('menuItem.editTemplate.actions.title')}
+              </Typography>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ mb: '1rem' }}
+                onClick={onSaveClickHandler}
+              >
+                {t('menuItem.editTemplate.actions.save')}
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ mb: '1rem' }}
+                onClick={onDiscardClickHandler}
+              >
+                {t('menuItem.editTemplate.actions.discard')}
+              </Button>
+              <Button variant="contained" color="primary" onClick={resetDefaultTemplate}>
+                {t('menuItem.editTemplate.actions.useDefault')}
+              </Button>
             </Box>
           </Box>
           <Box

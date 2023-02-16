@@ -237,6 +237,12 @@
       "result": {
         "title": "Result",
         "description": "This is the result of the template you defined:"
+      },
+      "actions": {
+        "title": "Actions",
+        "save": "Save Template",
+        "discard": "Discard Changes",
+        "useDefault": "Use Default Template"
       }
     }
   }
