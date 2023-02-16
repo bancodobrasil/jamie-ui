@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
@@ -17,8 +17,15 @@ import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
 import { EnumTemplateFormat, IMenu, IMenuItem } from '../../../types';
 import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
+import {
+  ActionTypes,
+  NotificationContext,
+  openDefaultErrorNotification,
+} from '../../../contexts/NotificationContext';
 
 export const EditTemplateMenu = () => {
+  const { dispatch } = React.useContext(NotificationContext);
+
   const { id } = useParams();
 
   const navigate = useNavigate();
@@ -53,6 +60,8 @@ export const EditTemplateMenu = () => {
   const { loading, error, data } = useQuery(MenuService.GET_MENU, {
     variables: { id: Number(id) },
   });
+
+  const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
   React.useEffect(() => {
     if (!data || loadedInitialTemplate) return;
@@ -152,11 +161,31 @@ export const EditTemplateMenu = () => {
   }, [template, templateFormat]);
 
   const onBackClickHandler = () => {
-    navigate('/');
+    navigate('../');
   };
 
   const onSaveClickHandler = () => {
-    // TODO: Save template
+    updateMenu({
+      variables: {
+        menu: {
+          id: Number(id),
+          template: template[templateFormat],
+          templateFormat,
+        },
+      },
+      onCompleted: data => {
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('notification.editSuccess', {
+            resource: t('menu.of', { field: 'template' }),
+            context: 'male',
+          })}!`,
+        });
+      },
+      onError: error => {
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
   };
 
   const onDiscardClickHandler = () => {
