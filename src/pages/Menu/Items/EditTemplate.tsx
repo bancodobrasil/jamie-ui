@@ -197,11 +197,11 @@ export const EditTemplateItems = () => {
   };
 
   const onDiscardClickHandler = () => {
-    if (data?.menu.templateFormat) setTemplateFormat(data.menu.templateFormat);
-    if (data?.menu.template)
+    if (data?.menuItem.templateFormat) setTemplateFormat(data.menuItem.templateFormat);
+    if (data?.menuItem.template)
       setTemplate({
         ...template,
-        [data.menu.templateFormat]: data.menu.template,
+        [data.menuItem.templateFormat]: data.menuItem.template,
       });
     else resetDefaultTemplate();
   };
