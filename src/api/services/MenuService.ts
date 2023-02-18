@@ -41,7 +41,15 @@ export default class MenuService {
       menu(id: $id) {
         id
         name
-        meta
+        meta {
+          id
+          name
+          type
+          order
+          required
+          enabled
+          defaultValue
+        }
         template
         templateFormat
         items {
