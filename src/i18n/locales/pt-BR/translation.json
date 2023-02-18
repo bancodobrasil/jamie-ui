@@ -124,6 +124,8 @@
         "add": "Adicionar Metadado",
         "name": "Nome",
         "required": "Obrigatório",
+        "enabled": "Habilitado",
+        "defaultValue": "Valor Padrão",
         "type": {
           "title_one": "Tipo",
           "title_other": "Tipos",

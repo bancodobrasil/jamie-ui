@@ -124,6 +124,8 @@
         "add": "Add Metadata",
         "name": "Name",
         "required": "Required",
+        "enabled": "Enabled",
+        "defaultValue": "Default Value",
         "type": {
           "title_one": "Type",
           "title_other": "Types",
