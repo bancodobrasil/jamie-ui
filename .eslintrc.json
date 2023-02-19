@@ -33,7 +33,8 @@
       "no-param-reassign": "off",
       "no-plusplus": 0,
       "react/prop-types": "off",
-      "no-console": ["error", { "allow": ["tron", "error"] }]
+      "no-console": ["error", { "allow": ["tron", "error"] }],
+      "no-underscore-dangle": 0
     },
     "settings": {
       "import/resolver": {
