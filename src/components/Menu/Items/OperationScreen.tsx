@@ -10,7 +10,7 @@ import {
   Divider,
 } from '@mui/material';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -643,7 +643,7 @@ export const OperationScreen = ({
           </Box>
           <Box className="flex items-center space-x-4">
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
-              <DatePicker
+              <DateTimePicker
                 label={t('menuItem.fields.startPublication')}
                 value={editingNode.startPublication}
                 onChange={(date: DateTime) => {
@@ -667,10 +667,15 @@ export const OperationScreen = ({
                     sx={{ mt: '1.25rem' }}
                   />
                 )}
+                componentsProps={{
+                  actionBar: {
+                    actions: ['clear', 'today'],
+                  },
+                }}
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
-              <DatePicker
+              <DateTimePicker
                 label={t('menuItem.fields.endPublication')}
                 value={editingNode.endPublication}
                 onChange={(date: DateTime) => {
@@ -694,6 +699,11 @@ export const OperationScreen = ({
                     sx={{ mt: '1.25rem' }}
                   />
                 )}
+                componentsProps={{
+                  actionBar: {
+                    actions: ['clear', 'today'],
+                  },
+                }}
               />
             </LocalizationProvider>
           </Box>
@@ -821,7 +831,7 @@ export const OperationScreen = ({
           </Box>
           <Box className="flex items-center space-x-4">
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
-              <DatePicker
+              <DateTimePicker
                 label={t('menuItem.fields.startPublication')}
                 value={editingNode.startPublication}
                 onChange={(date: DateTime) => {
@@ -845,10 +855,15 @@ export const OperationScreen = ({
                     sx={{ mt: '1.25rem' }}
                   />
                 )}
+                componentsProps={{
+                  actionBar: {
+                    actions: ['clear', 'today'],
+                  },
+                }}
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
-              <DatePicker
+              <DateTimePicker
                 label={t('menuItem.fields.endPublication')}
                 value={editingNode.endPublication}
                 onChange={(date: DateTime) => {
@@ -872,6 +887,11 @@ export const OperationScreen = ({
                     sx={{ mt: '1.25rem' }}
                   />
                 )}
+                componentsProps={{
+                  actionBar: {
+                    actions: ['clear', 'today'],
+                  },
+                }}
               />
             </LocalizationProvider>
           </Box>
