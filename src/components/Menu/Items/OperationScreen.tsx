@@ -717,28 +717,45 @@ export const OperationScreen = ({
               width: '100%',
             }}
           />
-          <TextField
-            type="number"
-            label={t('menu.preview.inputs.order.label')}
-            InputLabelProps={{ shrink: true }}
-            value={editingNode.order}
-            onChange={e => {
-              const parent = findNodeById(nodes, editingNode.parentId);
-              const order = Math.min(
-                Math.max(Number(e.target.value), 1),
-                parent.children?.length ? parent.children.length : 1,
-              );
-              if (order === editingNode.order) return;
-              setEditingNode({
-                ...editingNode,
-                order,
-              });
-            }}
-            sx={{
-              mt: '2rem',
-              width: '6rem',
-            }}
-          />
+          <Box className="flex items-center space-x-4">
+            <TextField
+              type="number"
+              label={t('menu.preview.inputs.order.label')}
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.order}
+              onChange={e => {
+                const parent = findNodeById(nodes, editingNode.parentId);
+                const order = Math.min(
+                  Math.max(Number(e.target.value), 1),
+                  parent.children?.length ? parent.children.length : 1,
+                );
+                if (order === editingNode.order) return;
+                setEditingNode({
+                  ...editingNode,
+                  order,
+                });
+              }}
+              sx={{
+                mt: '2rem',
+                width: '6rem',
+              }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editingNode.enabled}
+                  onChange={e => {
+                    setEditingNode({
+                      ...editingNode,
+                      enabled: e.target.checked,
+                    });
+                  }}
+                />
+              }
+              label={t('menu.fields.enabled')}
+              sx={{ mt: '2rem' }}
+            />
+          </Box>
           <Divider sx={{ mt: '2rem' }} />
           {data?.menu.meta?.length && (
             <Box sx={{ mt: '1.5rem' }}>

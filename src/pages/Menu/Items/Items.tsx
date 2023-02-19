@@ -133,10 +133,8 @@ export const ItemsPreview = () => {
           // set current node as UPDATE
           nodesPreview.push({
             ...node,
+            ...editingNode,
             action: EnumInputAction.UPDATE,
-            label: editingNode.label,
-            order: editingNode.order,
-            meta: editingNode.meta,
           });
         } else {
           // editing node is DELETE
@@ -183,9 +181,8 @@ export const ItemsPreview = () => {
                 // set child as UPDATE
                 return {
                   ...child,
+                  ...editingNode,
                   action: EnumInputAction.UPDATE,
-                  label: editingNode.label,
-                  meta: editingNode.meta,
                 };
               }
               // child is in different position
@@ -193,10 +190,8 @@ export const ItemsPreview = () => {
               // set child as UPDATE and set order as editing node order
               return {
                 ...child,
+                ...editingNode,
                 action: EnumInputAction.UPDATE,
-                label: editingNode.label,
-                order: editingNode.order,
-                meta: editingNode.meta,
               };
             }
             // child is not editing node

@@ -60,6 +60,9 @@ export default class MenuService {
           parentId
           template
           templateFormat
+          enabled
+          startPublication
+          endPublication
         }
       }
     }
@@ -93,6 +96,9 @@ export default class MenuService {
           order
           meta
           parentId
+          enabled
+          startPublication
+          endPublication
         }
       }
     }
