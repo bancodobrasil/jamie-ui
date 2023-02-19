@@ -14,7 +14,7 @@ import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
-import { EnumTemplateFormat, IMenu, IMenuItem } from '../../../types';
+import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem } from '../../../types';
 import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
 import {
   ActionTypes,
@@ -76,12 +76,12 @@ export const EditTemplateMenu = () => {
 
   React.useEffect(() => {
     if (!data) return;
-    const { menu }: { menu: IMenu & { __typename: string } } = data;
+    const { menu }: { menu: GraphQLData<IMenu> } = data;
     let items: IMenuItem[] = menu.items || [];
     const getChildren = (parent: IMenuItem): IMenuItem[] => {
       const children = items
         .filter(item => item.parentId === parent.id)
-        .map((item: IMenuItem & { __typename?: string }) => {
+        .map((item: GraphQLData<IMenuItem>) => {
           const { __typename, template, templateFormat, ...rest } = item;
           let formattedTemplate = template;
           if (template) {
@@ -108,7 +108,7 @@ export const EditTemplateMenu = () => {
     };
     items =
       items
-        .map((item: IMenuItem & { __typename: string }) => {
+        .map((item: GraphQLData<IMenuItem>) => {
           const { __typename, template, templateFormat, ...rest } = item;
           let formattedTemplate = template;
           if (template) {

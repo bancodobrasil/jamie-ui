@@ -9,18 +9,7 @@ export enum FormAction {
   UPDATE = 'UPDATE',
 }
 
-export interface IPaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
-
-export interface IFieldError {
-  [field: string]: string;
-}
+export type GraphQLData<T> = T & { __typename: string };
 
 export interface Edge<T> {
   node: T;

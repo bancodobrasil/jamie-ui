@@ -1,4 +1,4 @@
-import { EnumInputAction, IFieldError } from './common';
+import { EnumInputAction } from './common';
 import { EnumTemplateFormat } from './template';
 
 export interface IMenu {
@@ -57,7 +57,9 @@ export interface IMenuMeta {
 }
 
 export interface IMenuMetaWithErrors extends IMenuMeta {
-  errors: IFieldError;
+  errors: {
+    [field: string]: string;
+  };
 }
 
 export interface IMenuItemMeta {

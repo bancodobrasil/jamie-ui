@@ -7,7 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
-import { EnumInputAction, IEditingNode, IMenu, IMenuItem, INode } from '../../../types';
+import {
+  EnumInputAction,
+  GraphQLData,
+  IEditingNode,
+  IMenu,
+  IMenuItem,
+  INode,
+} from '../../../types';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { NodeTreeView, OperationScreen } from '../../../components/Menu/Items';
@@ -51,7 +58,7 @@ export const ItemsPreview = () => {
     const getChildren = (parent: IMenuItem): INode[] => {
       const children = items
         .filter(item => item.parentId === parent.id)
-        .map((item: IMenuItem & { __typename?: string }) => {
+        .map((item: GraphQLData<IMenuItem>) => {
           const { __typename, ...rest } = item;
           return {
             ...rest,

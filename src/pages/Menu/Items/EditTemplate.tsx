@@ -15,7 +15,7 @@ import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
 import MenuItemInitialTemplate from '../../../utils/template/MenuItemInitialTemplate';
-import { EnumTemplateFormat, IMenuItem } from '../../../types';
+import { EnumTemplateFormat, GraphQLData, IMenuItem } from '../../../types';
 import MenuService from '../../../api/services/MenuService';
 import {
   ActionTypes,
@@ -78,11 +78,11 @@ export const EditTemplateItems = () => {
 
   React.useEffect(() => {
     if (!data) return;
-    const item: IMenuItem & { __typename: string } = data?.menuItem;
+    const item: GraphQLData<IMenuItem> = data?.menuItem;
     const getChildren = (parent: IMenuItem): IMenuItem[] => {
       const children = item.menu.items
         .filter(item => item.parentId === parent.id)
-        .map((item: IMenuItem & { __typename?: string }) => {
+        .map((item: GraphQLData<IMenuItem>) => {
           const { __typename, template, templateFormat, ...rest } = item;
           let formattedTemplate = template;
           if (template) {
