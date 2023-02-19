@@ -270,6 +270,7 @@ export const MenuForm = ({
             helperText={m.errors.name}
             sx={{ width: '16rem' }}
             className="bg-white"
+            required
           />
           <FormControl sx={{ width: '16rem' }} className="bg-white">
             <InputLabel id={`meta[${i}].type-label`}>
@@ -281,6 +282,7 @@ export const MenuForm = ({
               value={m.type}
               label={t('menu.fields.meta.type.title', { count: 1 })}
               required
+              disabled={action === 'edit' && m.action !== EnumInputAction.CREATE}
               onChange={(e: SelectChangeEvent) => {
                 const { value } = e.target;
                 const updatedMeta = [...meta];
