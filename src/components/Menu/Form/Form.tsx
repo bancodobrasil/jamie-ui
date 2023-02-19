@@ -28,7 +28,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { MENU_VALIDATION } from '../../../constants';
-import { EnumInputAction, IMenuMetaWithErrors, MenuMetaType } from '../../../types';
+import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../types';
 import './styles.css';
 
 const Form = styled('form')({
@@ -61,7 +61,7 @@ interface Props {
   loadingSubmit: boolean;
   onSubmit: () => void;
   onBack: () => void;
-  action: 'create' | 'edit';
+  action: FormAction;
 }
 
 export const MenuForm = ({
@@ -161,7 +161,7 @@ export const MenuForm = ({
             id={`meta[${index}].defaultValue`}
             label={t('menu.fields.meta.defaultValue')}
             placeholder={
-              action === 'create'
+              action === FormAction.CREATE
                 ? t('menu.create.placeholders.meta.defaultValue')
                 : t('menu.edit.placeholders.meta.defaultValue')
             }
@@ -196,7 +196,7 @@ export const MenuForm = ({
             id={`meta[${index}].defaultValue`}
             label={t('menu.fields.meta.defaultValue')}
             placeholder={
-              action === 'create'
+              action === FormAction.CREATE
                 ? t('menu.create.placeholders.meta.defaultValue')
                 : t('menu.edit.placeholders.meta.defaultValue')
             }
@@ -317,7 +317,7 @@ export const MenuForm = ({
                   id={`meta[${i}].name`}
                   label={t('menu.fields.meta.name')}
                   placeholder={
-                    action === 'create'
+                    action === FormAction.CREATE
                       ? t('menu.create.placeholders.meta.name')
                       : t('menu.edit.placeholders.meta.name')
                   }
@@ -353,7 +353,7 @@ export const MenuForm = ({
                     id={`meta[${i}].type`}
                     value={m.type}
                     label={t('menu.fields.meta.type.title', { count: 1 })}
-                    disabled={action === 'edit' && m.action !== EnumInputAction.CREATE}
+                    disabled={action === FormAction.UPDATE && m.action !== EnumInputAction.CREATE}
                     onChange={(e: SelectChangeEvent) => {
                       const { value } = e.target;
                       const updatedMeta = [...meta];
@@ -441,7 +441,7 @@ export const MenuForm = ({
           id="name"
           label={t('menu.of', { field: 'name' })}
           placeholder={
-            action === 'create'
+            action === FormAction.CREATE
               ? t('menu.create.placeholders.name')
               : t('menu.edit.placeholders.name')
           }
@@ -534,7 +534,7 @@ export const MenuForm = ({
                 marginLeft: '16px',
               }}
             >
-              {action === 'create' ? t('menu.create.title') : t('menu.edit.title')}
+              {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')}
             </Button>
           </Box>
         </Box>

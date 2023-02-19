@@ -12,7 +12,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import { IMenuMetaWithErrors } from '../../../types';
+import { FormAction, IMenuMetaWithErrors } from '../../../types';
 
 export const CreateMenu = () => {
   const { t } = useTranslation();
@@ -91,7 +91,7 @@ export const CreateMenu = () => {
         loadingSubmit={loadingSubmit}
         onSubmit={onSubmit}
         onBack={onBackClickHandler}
-        action="create"
+        action={FormAction.CREATE}
       />
     </Box>
   );

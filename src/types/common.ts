@@ -4,6 +4,11 @@ export enum EnumInputAction {
   DELETE = 'DELETE',
 }
 
+export enum FormAction {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+}
+
 export interface IPaginatedResponse<T> {
   data: T[];
   total: number;

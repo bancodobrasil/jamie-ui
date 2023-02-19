@@ -14,7 +14,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import { EnumInputAction, IMenuMetaWithErrors } from '../../../types';
+import { EnumInputAction, FormAction, IMenuMetaWithErrors } from '../../../types';
 
 export const EditMenu = () => {
   const { t } = useTranslation();
@@ -147,7 +147,7 @@ export const EditMenu = () => {
         loadingSubmit={loadingSubmit}
         onSubmit={onSubmit}
         onBack={onBackClickHandler}
-        action="edit"
+        action={FormAction.UPDATE}
       />
     </Box>
   );
