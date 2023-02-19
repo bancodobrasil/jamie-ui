@@ -40,6 +40,7 @@ const Form = styled('form')({
   flexDirection: 'column',
   width: '100%',
   paddingRight: '1rem',
+  paddingBottom: '1rem',
   overflowY: 'auto',
 });
 
@@ -384,6 +385,7 @@ export const OperationScreen = ({
     };
     return data?.menu.meta
       .filter(meta => meta.enabled)
+      .sort((a, b) => a.order - b.order)
       .map((meta, i) => (
         <Box
           key={i}
@@ -613,9 +615,16 @@ export const OperationScreen = ({
               width: '6rem',
             }}
           />
-          <Divider sx={{ mt: '1.5rem' }} />
-          {renderMeta()}
-          {data?.menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
+          <Divider sx={{ mt: '2rem' }} />
+          {data?.menu.meta?.length && (
+            <Box sx={{ mt: '1.5rem' }}>
+              <Typography variant="h3">
+                {t('menu.fields.meta.title', { count: data.menu.meta.length })}
+              </Typography>
+              {renderMeta()}
+              <Divider sx={{ mt: '1.5rem' }} />
+            </Box>
+          )}
           <Box
             sx={{
               display: 'flex',
@@ -711,9 +720,16 @@ export const OperationScreen = ({
               width: '6rem',
             }}
           />
-          <Divider sx={{ mt: '1.5rem' }} />
-          {renderMeta()}
-          {data?.menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
+          <Divider sx={{ mt: '2rem' }} />
+          {data?.menu.meta?.length && (
+            <Box sx={{ mt: '1.5rem' }}>
+              <Typography variant="h3">
+                {t('menu.fields.meta.title', { count: data.menu.meta.length })}
+              </Typography>
+              {renderMeta()}
+              <Divider sx={{ mt: '1.5rem' }} />
+            </Box>
+          )}
           <Box
             sx={{
               display: 'flex',
