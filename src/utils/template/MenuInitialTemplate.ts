@@ -3,6 +3,18 @@ export default class MenuInitialTemplate {
 
   public static JSON = `${MenuInitialTemplate.EJS}
 <%
+  const mapChildrenMeta = (meta) => {
+    return Object.entries(meta).reduce((acc, [id, value]) => {
+      const { name, enabled } = menu.meta.find(m => {
+        return m.id === Number(id)
+      });
+      if(!enabled) return acc;
+      return {
+        ...acc,
+        [name]: value,
+      };
+    }, {});
+  };
   const mapChildren = (children) => {
     return children.map((child) => {
       const { id, label, order, meta, children, template } = child;
@@ -13,7 +25,7 @@ export default class MenuInitialTemplate {
         id,
         label,
         order,
-        meta,
+        meta: meta ? mapChildrenMeta(meta) : {},
         children: children?.length ? mapChildren(children) : [],
       }
     });
@@ -37,9 +49,11 @@ export default class MenuInitialTemplate {
     })
   };
   const childrenMetaTags = (meta) => {
-    return Object.keys(meta).map((key) => {
-      return \`<meta key="\${key}" value="\${meta[key]}" />\`
-    });
+    return Object.entries(meta).map(([id, value]) => {
+      const { name, enabled } = menu.meta.find(m => m.id === Number(id));
+      if(!enabled) return null;
+      return \`<meta name="\${name}" value="\${value}" />\`
+    }).filter(m => !!m);
   };
   const mapChildren = (children, level) => {
     return children.map((child) => {
@@ -83,18 +97,18 @@ export default class MenuInitialTemplate {
       if (template) {
         return template;
       }
-      return JSON.stringify({
+      return {
         id,
         label,
         order,
         meta,
         children: children?.length ? mapChildren(children) : undefined,
-      }, null, 2)
+      };
     });
   };
 %>
 id = <%= id %>;
 name = "<%= name %>";
 meta = <%- JSON.stringify(meta, null, 2) %>;
-items = <%- items?.length ? mapChildren(items).join(',\\n') : [] %>;`;
+items = <%- items?.length ? JSON.stringify(mapChildren(items), null, 2) : [] %>;`;
 }
