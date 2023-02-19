@@ -1,13 +1,12 @@
 import { TreeItemProps } from '@mui/lab';
 import { EnumInputAction } from './common';
-import { IMenuItemMeta } from './model';
+import { IMenuItem } from './model';
 
-export interface INode extends Omit<TreeItemProps, 'id' | 'nodeId' | 'children'> {
+export interface INode
+  extends Omit<TreeItemProps, 'id' | 'nodeId' | 'children' | 'label'>,
+    Omit<IMenuItem, 'id' | 'children'> {
   id: number;
-  order: number;
   children: INode[];
-  meta: IMenuItemMeta;
-  parentId?: number;
   action?: EnumInputAction;
   original?: INode;
 }

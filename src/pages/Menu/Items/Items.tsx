@@ -22,6 +22,7 @@ const emptyEditingNode: IEditingNode = {
   id: 0,
   label: '',
   order: 0,
+  enabled: true,
   action: EnumInputAction.CREATE,
   parentId: 0,
   children: [],
@@ -30,6 +31,7 @@ const emptyEditingNode: IEditingNode = {
     id: 0,
     label: '',
     order: 0,
+    enabled: true,
     action: EnumInputAction.CREATE,
     parentId: 0,
     children: [],
@@ -53,11 +55,11 @@ export const ItemsPreview = () => {
   const [selected, setSelected] = useState<string>('0');
 
   const nodes = useMemo<INode[]>(() => {
-    const items: IMenuItem[] = updatedMenu?.items || data?.menu.items || [];
+    const items: GraphQLData<IMenuItem>[] = updatedMenu?.items || data?.menu.items || [];
     const getChildren = (parent: IMenuItem): INode[] => {
       const children = items
         .filter(item => item.parentId === parent.id)
-        .map((item: GraphQLData<IMenuItem>) => {
+        .map(item => {
           const { __typename, ...rest } = item;
           return {
             ...rest,
@@ -69,14 +71,13 @@ export const ItemsPreview = () => {
     };
     const root: INode[] =
       items
-        .map(item => ({
-          id: item.id,
-          label: item.label,
-          order: item.order,
-          children: getChildren(item),
-          parentId: item.parentId || 0,
-          meta: item.meta,
-        }))
+        .map(item => {
+          const { __typename, ...rest } = item;
+          return {
+            ...rest,
+            children: getChildren(item),
+          };
+        })
         .filter(item => !item.parentId)
         .sort((a, b) => a.order - b.order) || [];
     return [
@@ -84,6 +85,7 @@ export const ItemsPreview = () => {
         id: 0,
         label: t('menu.preview.root'),
         order: 1,
+        enabled: true,
         children: root,
         meta: {},
       },
