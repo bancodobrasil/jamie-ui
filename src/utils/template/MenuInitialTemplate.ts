@@ -29,8 +29,11 @@ export default class MenuInitialTemplate {
   public static XML = `${MenuInitialTemplate.EJS}
 <% 
   const metaTags = (meta) => {
-    return meta.map(({name, required, type}) => {
-      return \`<meta name="\${name}" required="\${required}" type="\${type}" />\`;
+    return meta.map(({id, name, type, required, order, enabled, defaultValue}) => {
+      let item = \`<meta id="\${id}" name="\${name}" type="\${type}" required="\${required}" order="\${order}" enabled="\${enabled}" \`;
+      defaultValue && (item += \`defaultValue="\${defaultValue}" \`);
+      item += '/>';
+      return item;
     })
   };
   const childrenMetaTags = (meta) => {
