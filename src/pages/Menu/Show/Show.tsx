@@ -85,7 +85,7 @@ export const ShowMenu = () => {
           sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
           className="space-y-1"
         >
-          <Typography variant="h4" component="h4">
+          <Typography variant="h4" component="h4" className={!meta.enabled ? 'line-through' : ''}>
             {meta.order}. {meta.name}
           </Typography>
           <Typography variant="body1" component="p">
