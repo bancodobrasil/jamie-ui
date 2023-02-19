@@ -137,7 +137,6 @@ export const OperationScreen = ({
           })}!`,
         });
         setUpdatedMenu(data.updateMenu);
-        setEditingNode(emptyEditingNode);
         setOperationScreen(EnumInputActionScreen.SELECTING_ACTION);
       },
       onError: error => {
@@ -228,6 +227,8 @@ export const OperationScreen = ({
             meta,
             enabled: true,
             children: [],
+            startPublication: '',
+            endPublication: '',
           };
           setEditingNode({ ...node, action: EnumInputAction.CREATE, original: node });
           setSelected('-1');
@@ -629,11 +630,66 @@ export const OperationScreen = ({
                   }}
                 />
               }
-              label={t('menu.fields.enabled')}
+              label={t('menuItem.fields.enabled')}
               sx={{ mt: '2rem' }}
             />
           </Box>
-
+          <Box className="flex items-center space-x-4">
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DatePicker
+                label={t('menuItem.fields.startPublication')}
+                value={editingNode.startPublication}
+                onChange={(date: DateTime) => {
+                  setEditingNode({
+                    ...editingNode,
+                    startPublication: date.toISO(),
+                  });
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!editingNode.startPublication && params.error}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DatePicker
+                label={t('menuItem.fields.endPublication')}
+                value={editingNode.endPublication}
+                onChange={(date: DateTime) => {
+                  setEditingNode({
+                    ...editingNode,
+                    endPublication: date.toISO(),
+                  });
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!editingNode.endPublication && params.error}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+          </Box>
           <Divider sx={{ mt: '2rem' }} />
           {data?.menu.meta?.length && (
             <Box sx={{ mt: '1.5rem' }}>
@@ -752,9 +808,65 @@ export const OperationScreen = ({
                   }}
                 />
               }
-              label={t('menu.fields.enabled')}
+              label={t('menuItem.fields.enabled')}
               sx={{ mt: '2rem' }}
             />
+          </Box>
+          <Box className="flex items-center space-x-4">
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DatePicker
+                label={t('menuItem.fields.startPublication')}
+                value={editingNode.startPublication}
+                onChange={(date: DateTime) => {
+                  setEditingNode({
+                    ...editingNode,
+                    startPublication: date.toISO(),
+                  });
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!editingNode.startPublication && params.error}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DatePicker
+                label={t('menuItem.fields.endPublication')}
+                value={editingNode.endPublication}
+                onChange={(date: DateTime) => {
+                  setEditingNode({
+                    ...editingNode,
+                    endPublication: date.toISO(),
+                  });
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!editingNode.endPublication && params.error}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
           </Box>
           <Divider sx={{ mt: '2rem' }} />
           {data?.menu.meta?.length && (

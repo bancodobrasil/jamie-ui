@@ -117,9 +117,6 @@
       "name": "Nome",
       "items": "Itens",
       "template": "Template",
-      "enabled": "Habilitado",
-      "startPublication": "Data de Início de Publicação",
-      "endPublication": "Data de Fim de Publicação",
       "meta": {
         "title_one": "Metadado",
         "title_other": "Metadados",
@@ -211,7 +208,10 @@
     "title_other": "Itens de Menu",
     "of": "$t(menu.fields.{{field}}) do Item de Menu",
     "fields": {
-      "template": "Template"
+      "template": "Template",
+      "enabled": "Habilitado",
+      "startPublication": "Data de Início de Publicação",
+      "endPublication": "Data de Fim de Publicação"
     },
     "editTemplate": {
       "title": "Editar Template",

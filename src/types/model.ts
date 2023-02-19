@@ -16,8 +16,8 @@ export interface IMenuItem {
   order: number;
   meta: IMenuItemMeta;
   enabled: boolean;
-  startPublication?: Date;
-  endPublication?: Date;
+  startPublication?: string;
+  endPublication?: string;
   children?: IMenuItem[];
   parent?: Omit<IMenuItem, 'children'>;
   parentId?: number;
