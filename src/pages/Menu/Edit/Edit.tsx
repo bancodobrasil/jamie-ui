@@ -33,10 +33,12 @@ export const EditMenu = () => {
 
   const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
+  const [loaded, setLoaded] = React.useState<boolean>(false);
+
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
   useEffect(() => {
-    if (!data) return;
+    if (loaded || !data) return;
     setName(data.menu.name);
     setMetaWithErrors(
       data?.menu.meta.map(m => {
@@ -45,7 +47,8 @@ export const EditMenu = () => {
         return { ...rest, errors: {} };
       }),
     );
-  }, [data]);
+    setLoaded(true);
+  }, [loaded, data]);
 
   const onBackClickHandler = () => {
     navigate('../');
@@ -88,8 +91,6 @@ export const EditMenu = () => {
     });
   };
 
-  if (loading) return <Loading />;
-
   if (error)
     return (
       <DefaultErrorPage
@@ -107,6 +108,8 @@ export const EditMenu = () => {
         }}
       />
     );
+
+  if (loading || !loaded) return <Loading />;
 
   return (
     <Box>

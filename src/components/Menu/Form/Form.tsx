@@ -51,6 +51,9 @@ export const MenuForm = ({
   action,
 }: Props) => {
   const { t, i18n } = useTranslation();
+
+  const [initialMeta] = React.useState<IMenuMetaWithErrors[]>(JSON.parse(JSON.stringify(meta)));
+
   const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -123,6 +126,11 @@ export const MenuForm = ({
                 : t('menu.edit.placeholders.meta.defaultValue')
             }
             value={m.defaultValue}
+            required={
+              m.action === EnumInputAction.UPDATE &&
+              m.required &&
+              initialMeta.find(m2 => m2.id === m.id)?.required === false
+            }
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
@@ -153,6 +161,11 @@ export const MenuForm = ({
                 : t('menu.edit.placeholders.meta.defaultValue')
             }
             value={m.defaultValue}
+            required={
+              m.action === EnumInputAction.UPDATE &&
+              m.required &&
+              initialMeta.find(m2 => m2.id === m.id)?.required === false
+            }
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
@@ -214,6 +227,11 @@ export const MenuForm = ({
               renderInput={params => (
                 <TextField
                   {...params}
+                  required={
+                    m.action === EnumInputAction.UPDATE &&
+                    m.required &&
+                    initialMeta.find(m2 => m2.id === m.id)?.required === false
+                  }
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -272,7 +290,7 @@ export const MenuForm = ({
             className="bg-white"
             required
           />
-          <FormControl sx={{ width: '16rem' }} className="bg-white">
+          <FormControl sx={{ width: '16rem' }} className="bg-white" required>
             <InputLabel id={`meta[${i}].type-label`}>
               {t('menu.fields.meta.type.title', { count: 1 })}
             </InputLabel>
@@ -281,7 +299,6 @@ export const MenuForm = ({
               id={`meta[${i}].type`}
               value={m.type}
               label={t('menu.fields.meta.type.title', { count: 1 })}
-              required
               disabled={action === 'edit' && m.action !== EnumInputAction.CREATE}
               onChange={(e: SelectChangeEvent) => {
                 const { value } = e.target;
@@ -324,7 +341,8 @@ export const MenuForm = ({
             control={
               <Checkbox
                 id={`meta[${i}].required`}
-                checked={m.required}
+                checked={m.required || m.type === MenuMetaType.BOOLEAN}
+                disabled={m.type === MenuMetaType.BOOLEAN}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   const { checked } = event.target;
                   const updatedMeta = [...meta];
