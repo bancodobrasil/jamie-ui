@@ -98,8 +98,19 @@ export const OperationScreen = ({
       nodes
         .map(node => {
           const { id, children, original, parentId, ...rest } = node;
+          const meta = Object.keys(rest.meta).reduce((acc, key) => {
+            const meta = rest.meta[key];
+            if (meta == null || meta === '') {
+              return acc;
+            }
+            return {
+              ...acc,
+              [key]: meta,
+            };
+          }, {});
           return {
             ...rest,
+            meta,
             children: children && formatNodes(children),
             id: id === -1 ? undefined : id,
           };
@@ -195,7 +206,16 @@ export const OperationScreen = ({
           break;
         case EnumInputActionScreen.INSERT:
           data?.menu.meta.forEach(m => {
-            meta[m.name] = '';
+            switch (m.type) {
+              case MenuMetaType.TEXT:
+              case MenuMetaType.NUMBER:
+              case MenuMetaType.DATE:
+                meta[m.name] = m.defaultValue || '';
+                break;
+              case MenuMetaType.BOOLEAN:
+                meta[m.name] = m.defaultValue || false;
+                break;
+            }
           });
           original = {
             id: -1,
@@ -215,8 +235,22 @@ export const OperationScreen = ({
             !selectedNode && setSelected('');
             return;
           }
+          data?.menu.meta.forEach(m => {
+            const defaultValue = selectedNode.meta[m.id] || m.defaultValue;
+            switch (m.type) {
+              case MenuMetaType.TEXT:
+              case MenuMetaType.NUMBER:
+              case MenuMetaType.DATE:
+                meta[m.name] = defaultValue || '';
+                break;
+              case MenuMetaType.BOOLEAN:
+                meta[m.name] = defaultValue || false;
+                break;
+            }
+          });
           setEditingNode({
             ...selectedNode,
+            meta,
             action: EnumInputAction.UPDATE,
             original: selectedNode,
           });
@@ -281,7 +315,7 @@ export const OperationScreen = ({
               type="number"
               label={meta.name}
               InputLabelProps={{ shrink: true }}
-              value={editingNode.meta[meta.name] || ''}
+              value={editingNode.meta[meta.name]}
               required={meta.required}
               onChange={e => {
                 setEditingNode({
@@ -302,7 +336,7 @@ export const OperationScreen = ({
               type="text"
               label={meta.name}
               InputLabelProps={{ shrink: true }}
-              value={editingNode.meta[meta.name] || ''}
+              value={editingNode.meta[meta.name]}
               required={meta.required}
               onChange={e => {
                 const m = { ...editingNode.meta, [meta.name]: e.target.value };
@@ -317,7 +351,7 @@ export const OperationScreen = ({
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
               <DatePicker
                 label={meta.name}
-                value={editingNode.meta[meta.name] || ''}
+                value={editingNode.meta[meta.name]}
                 onChange={date => {
                   setEditingNode({
                     ...editingNode,
@@ -348,17 +382,19 @@ export const OperationScreen = ({
           );
       }
     };
-    return data?.menu.meta.map((meta, i) => (
-      <Box
-        key={i}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {renderInput(meta)}
-      </Box>
-    ));
+    return data?.menu.meta
+      .filter(meta => meta.enabled)
+      .map((meta, i) => (
+        <Box
+          key={i}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {renderInput(meta)}
+        </Box>
+      ));
   };
 
   switch (operationScreen) {
