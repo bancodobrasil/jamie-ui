@@ -14,7 +14,7 @@ import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
-import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem } from '../../../types';
+import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem, IMenuMeta } from '../../../types';
 import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
 import {
   ActionTypes,
@@ -134,6 +134,10 @@ export const EditTemplateMenu = () => {
         .sort((a, b) => a.order - b.order) || [];
     try {
       const { __typename, template: menuTemplate, ...rest } = menu;
+      rest.meta = rest.meta.map((meta: GraphQLData<IMenuMeta>) => {
+        const { __typename, ...rest } = meta;
+        return rest;
+      });
       const result = ejs.render(template[templateFormat], {
         menu: {
           ...rest,
