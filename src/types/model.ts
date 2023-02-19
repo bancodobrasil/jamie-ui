@@ -15,9 +15,12 @@ export interface IMenuItem {
   label: string;
   order: number;
   meta: IMenuItemMeta;
+  enabled: boolean;
+  startPublication?: Date;
+  endPublication?: Date;
   children?: IMenuItem[];
   parent?: Omit<IMenuItem, 'children'>;
-  parentId: number;
+  parentId?: number;
   menu?: IMenu;
   template?: string;
   templateFormat?: EnumTemplateFormat;
