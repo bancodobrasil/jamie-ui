@@ -19,7 +19,14 @@ import { DateTime } from 'luxon';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { EnumAction, IEditingNode, IMenu, IMenuMeta, INode, MenuMetaType } from '../../../types';
+import {
+  EnumInputAction,
+  IEditingNode,
+  IMenu,
+  IMenuMeta,
+  INode,
+  MenuMetaType,
+} from '../../../types';
 import { MENU_ITEM_VALIDATION } from '../../../constants';
 import {
   ActionTypes,
@@ -36,7 +43,7 @@ const Form = styled('form')({
   overflowY: 'auto',
 });
 
-enum EnumActionScreen {
+enum EnumInputActionScreen {
   SELECTING_ACTION,
   INSERT,
   UPDATE,
@@ -79,8 +86,8 @@ export const OperationScreen = ({
   const navigate = useNavigate();
   const { i18n, t } = useTranslation();
 
-  const [operationScreen, setOperationScreen] = React.useState<EnumActionScreen>(
-    EnumActionScreen.SELECTING_ACTION,
+  const [operationScreen, setOperationScreen] = React.useState<EnumInputActionScreen>(
+    EnumInputActionScreen.SELECTING_ACTION,
   );
   const [labelError, setLabelError] = React.useState<string>('');
 
@@ -119,7 +126,7 @@ export const OperationScreen = ({
         });
         setUpdatedMenu(data.updateMenu);
         setEditingNode(emptyEditingNode);
-        setOperationScreen(EnumActionScreen.SELECTING_ACTION);
+        setOperationScreen(EnumInputActionScreen.SELECTING_ACTION);
       },
       onError: error => {
         openDefaultErrorNotification(error, dispatch);
@@ -175,7 +182,7 @@ export const OperationScreen = ({
   };
 
   const handleActionChange = React.useCallback(
-    (action: EnumActionScreen) => {
+    (action: EnumInputActionScreen) => {
       const selectedNode = findNodeById(nodes, Number(selected));
       if (expanded.indexOf(selectedNode.id.toString()) === -1) {
         setExpanded([...expanded, selectedNode.id.toString()]);
@@ -183,10 +190,10 @@ export const OperationScreen = ({
       let original;
       const meta = {};
       switch (action) {
-        case EnumActionScreen.SELECTING_ACTION:
+        case EnumInputActionScreen.SELECTING_ACTION:
           setEditingNode(emptyEditingNode);
           break;
-        case EnumActionScreen.INSERT:
+        case EnumInputActionScreen.INSERT:
           data?.menu.meta.forEach(m => {
             meta[m.name] = '';
           });
@@ -196,33 +203,33 @@ export const OperationScreen = ({
               order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
             }),
             order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
-            action: EnumAction.CREATE,
+            action: EnumInputAction.CREATE,
             parentId: selectedNode.id,
             meta,
           };
           setEditingNode({ ...original, original });
           setSelected('-1');
           break;
-        case EnumActionScreen.UPDATE:
+        case EnumInputActionScreen.UPDATE:
           if (!selectedNode || selectedNode.id === 0) {
             !selectedNode && setSelected('');
             return;
           }
           setEditingNode({
             ...selectedNode,
-            action: EnumAction.UPDATE,
+            action: EnumInputAction.UPDATE,
             original: selectedNode,
           });
           setSelected(selectedNode.id.toString());
           break;
-        case EnumActionScreen.DELETE:
+        case EnumInputActionScreen.DELETE:
           if (!selectedNode || selectedNode.id === 0) {
             !selectedNode && setSelected('');
             return;
           }
           setEditingNode({
             ...selectedNode,
-            action: EnumAction.DELETE,
+            action: EnumInputAction.DELETE,
             original: selectedNode,
           });
           setSelected(selectedNode.id.toString());
@@ -355,7 +362,7 @@ export const OperationScreen = ({
   };
 
   switch (operationScreen) {
-    case EnumActionScreen.SELECTING_ACTION:
+    case EnumInputActionScreen.SELECTING_ACTION:
       return (
         <Box
           sx={{
@@ -390,7 +397,7 @@ export const OperationScreen = ({
               sx={{ color: 'green' }}
               variant="outlined"
               color="success"
-              onClick={() => handleActionChange(EnumActionScreen.INSERT)}
+              onClick={() => handleActionChange(EnumInputActionScreen.INSERT)}
             >
               <AddIcon />
               <Typography
@@ -412,7 +419,7 @@ export const OperationScreen = ({
               variant="outlined"
               color="warning"
               disabled={!selected || selected === '0'}
-              onClick={() => handleActionChange(EnumActionScreen.UPDATE)}
+              onClick={() => handleActionChange(EnumInputActionScreen.UPDATE)}
             >
               <EditIcon />
               <Typography
@@ -434,7 +441,7 @@ export const OperationScreen = ({
               variant="outlined"
               color="error"
               disabled={!selected || selected === '0'}
-              onClick={() => handleActionChange(EnumActionScreen.DELETE)}
+              onClick={() => handleActionChange(EnumInputActionScreen.DELETE)}
             >
               <DeleteIcon />
               <Typography
@@ -475,7 +482,7 @@ export const OperationScreen = ({
           </Button>
         </Box>
       );
-    case EnumActionScreen.INSERT:
+    case EnumInputActionScreen.INSERT:
       return (
         <Form onSubmit={handleInsertSubmit}>
           <Typography
@@ -592,14 +599,14 @@ export const OperationScreen = ({
               variant="contained"
               color="error"
               sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
             >
               {t('buttons.discard')}
             </Button>
           </Box>
         </Form>
       );
-    case EnumActionScreen.UPDATE:
+    case EnumInputActionScreen.UPDATE:
       return (
         <Form onSubmit={handleUpdateSubmit}>
           <Typography
@@ -690,14 +697,14 @@ export const OperationScreen = ({
               variant="contained"
               color="error"
               sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
             >
               {t('buttons.discard')}
             </Button>
           </Box>
         </Form>
       );
-    case EnumActionScreen.DELETE:
+    case EnumInputActionScreen.DELETE:
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', pr: '1rem' }}>
           <Typography
@@ -754,7 +761,7 @@ export const OperationScreen = ({
               variant="contained"
               color="error"
               sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
             >
               {t('buttons.discard')}
             </Button>

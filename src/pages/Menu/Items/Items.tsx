@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
-import { EnumAction, IEditingNode, IMenu, IMenuItem, INode } from '../../../types';
+import { EnumInputAction, IEditingNode, IMenu, IMenuItem, INode } from '../../../types';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { NodeTreeView, OperationScreen } from '../../../components/Menu/Items';
@@ -16,7 +16,7 @@ const emptyEditingNode: IEditingNode = {
   id: 0,
   label: '',
   order: 0,
-  action: EnumAction.CREATE,
+  action: EnumInputAction.CREATE,
   parentId: 0,
   children: [],
   meta: {},
@@ -24,7 +24,7 @@ const emptyEditingNode: IEditingNode = {
     id: 0,
     label: '',
     order: 0,
-    action: EnumAction.CREATE,
+    action: EnumInputAction.CREATE,
     parentId: 0,
     children: [],
     meta: {},
@@ -109,8 +109,8 @@ export const ItemsPreview = () => {
       if (!node.children) return undefined;
       return node.children.map(child => {
         const children = deleteChildren(child);
-        if (children) return { ...child, children, action: EnumAction.DELETE };
-        return { ...child, action: EnumAction.DELETE };
+        if (children) return { ...child, children, action: EnumInputAction.DELETE };
+        return { ...child, action: EnumInputAction.DELETE };
       });
     };
     nodes.forEach(node => {
@@ -118,13 +118,13 @@ export const ItemsPreview = () => {
       if (node.id === editingNode.id) {
         // editing node is current node
         console.log('editing node is current node', node);
-        if (editingNode.action === EnumAction.UPDATE) {
+        if (editingNode.action === EnumInputAction.UPDATE) {
           // editing node is UPDATE
           console.log('editing node is UPDATE');
           // set current node as UPDATE
           nodesPreview.push({
             ...node,
-            action: EnumAction.UPDATE,
+            action: EnumInputAction.UPDATE,
             label: editingNode.label,
             order: editingNode.order,
             meta: editingNode.meta,
@@ -135,7 +135,7 @@ export const ItemsPreview = () => {
           // set current node as DELETE
           nodesPreview.push({
             ...node,
-            action: EnumAction.DELETE,
+            action: EnumInputAction.DELETE,
             children: deleteChildren(node),
           });
         }
@@ -149,7 +149,7 @@ export const ItemsPreview = () => {
           nodesPreview.push({
             ...node,
             children: [editingNode],
-            action: EnumAction.UPDATE,
+            action: EnumInputAction.UPDATE,
           });
         } else {
           let children = node.children.map(child => {
@@ -159,13 +159,13 @@ export const ItemsPreview = () => {
               if (child.order === editingNode.order) {
                 // child is in same position
                 console.log('child is in same position');
-                if (editingNode.action === EnumAction.DELETE) {
+                if (editingNode.action === EnumInputAction.DELETE) {
                   // editing node is DELETE
                   console.log('editing node is DELETE');
                   // set child as DELETE
                   return {
                     ...child,
-                    action: EnumAction.DELETE,
+                    action: EnumInputAction.DELETE,
                     children: deleteChildren(child),
                   };
                 }
@@ -174,7 +174,7 @@ export const ItemsPreview = () => {
                 // set child as UPDATE
                 return {
                   ...child,
-                  action: EnumAction.UPDATE,
+                  action: EnumInputAction.UPDATE,
                   label: editingNode.label,
                   meta: editingNode.meta,
                 };
@@ -184,7 +184,7 @@ export const ItemsPreview = () => {
               // set child as UPDATE and set order as editing node order
               return {
                 ...child,
-                action: EnumAction.UPDATE,
+                action: EnumInputAction.UPDATE,
                 label: editingNode.label,
                 order: editingNode.order,
                 meta: editingNode.meta,
@@ -197,22 +197,22 @@ export const ItemsPreview = () => {
               // set order based on existing node order diff (moving up or down)
               const diff = editingNode.order - editingNode.original.order;
               let order = diff >= 0 ? child.order - 1 : child.order + 1;
-              if (editingNode.action === EnumAction.DELETE) {
+              if (editingNode.action === EnumInputAction.DELETE) {
                 // editing node is DELETE
                 console.log('editing node is DELETE');
                 // decrease order
                 order = child.order - 1;
               }
               // set child as UPDATE and decrease order
-              return { ...child, action: EnumAction.UPDATE, order };
+              return { ...child, action: EnumInputAction.UPDATE, order };
             }
             if (child.order > editingNode.order) {
               // child is after editing node
               console.log('child is after editing node', child);
               // set child as UPDATE
-              let action = EnumAction.UPDATE;
+              let action = EnumInputAction.UPDATE;
               let { order } = child;
-              if (editingNode.action === EnumAction.UPDATE) {
+              if (editingNode.action === EnumInputAction.UPDATE) {
                 if (child.order < editingNode.original.order) {
                   // child order is less than editing node original order
                   // increase child order
@@ -222,9 +222,9 @@ export const ItemsPreview = () => {
                   // keep child order as is and set action as undefined
                   action = undefined;
                 }
-              } else if (editingNode.action === EnumAction.DELETE) {
+              } else if (editingNode.action === EnumInputAction.DELETE) {
                 order -= 1;
-              } else if (editingNode.action === EnumAction.CREATE) {
+              } else if (editingNode.action === EnumInputAction.CREATE) {
                 order += 1;
               }
               return { ...child, order, action };
@@ -232,16 +232,16 @@ export const ItemsPreview = () => {
             // child is before editing node
             console.log('child is before editing node', child);
             if (
-              editingNode.action === EnumAction.UPDATE &&
+              editingNode.action === EnumInputAction.UPDATE &&
               child.order > editingNode.original.order
             ) {
               // child order is greater than editing node original order
               // decrease child order
-              return { ...child, action: EnumAction.UPDATE, order: child.order - 1 };
+              return { ...child, action: EnumInputAction.UPDATE, order: child.order - 1 };
             }
             return child;
           });
-          if (editingNode.action === EnumAction.CREATE) {
+          if (editingNode.action === EnumInputAction.CREATE) {
             // editing node is CREATE
             console.log('editing node is CREATE');
             // add editing node to parent children
@@ -249,7 +249,7 @@ export const ItemsPreview = () => {
           }
           children = children.sort((a, b) => a.order - b.order);
           // set parent as UPDATE
-          nodesPreview.push({ ...node, children, action: EnumAction.UPDATE });
+          nodesPreview.push({ ...node, children, action: EnumInputAction.UPDATE });
         }
       } else {
         // current node is not parent of editing node
@@ -260,7 +260,7 @@ export const ItemsPreview = () => {
           // add current node to preview
           const children = preview(node.children, editingNode);
           if (JSON.stringify(children) !== JSON.stringify(node.children)) {
-            nodesPreview.push({ ...node, children, action: EnumAction.UPDATE });
+            nodesPreview.push({ ...node, children, action: EnumInputAction.UPDATE });
           } else {
             // children has no changes
             console.log('children has no changes');

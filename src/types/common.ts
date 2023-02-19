@@ -1,7 +1,7 @@
-export interface IGraphQLQuery {
-  query: string;
-  operationName?: string;
-  variables?: Record<string, unknown>;
+export enum EnumInputAction {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
 }
 
 export interface IPaginatedResponse<T> {

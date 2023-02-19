@@ -1,4 +1,4 @@
-import { IFieldError } from './common';
+import { EnumInputAction, IFieldError } from './common';
 import { EnumTemplateFormat } from './template';
 
 export interface IMenu {
@@ -46,6 +46,7 @@ export enum MenuMetaType {
 }
 
 export interface IMenuMeta {
+  action: EnumInputAction;
   id?: number;
   name: string;
   order: number;

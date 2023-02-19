@@ -1,11 +1,6 @@
 import { TreeItemProps } from '@mui/lab';
+import { EnumInputAction } from './common';
 import { IMenuItemMeta } from './model';
-
-export enum EnumAction {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-}
 
 export interface INode extends Omit<TreeItemProps, 'id' | 'nodeId' | 'children'> {
   id: number;
@@ -13,11 +8,11 @@ export interface INode extends Omit<TreeItemProps, 'id' | 'nodeId' | 'children'>
   children: INode[];
   meta: IMenuItemMeta;
   parentId?: number;
-  action?: EnumAction;
+  action?: EnumInputAction;
   original?: INode;
 }
 
 export interface IEditingNode extends INode {
-  action: EnumAction;
+  action: EnumInputAction;
   original: INode;
 }
