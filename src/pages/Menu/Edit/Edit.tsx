@@ -31,14 +31,14 @@ export const EditMenu = () => {
   const [name, setName] = React.useState<string>('');
   const [nameError, setNameError] = React.useState<string>('');
 
-  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>([]);
+  const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
   useEffect(() => {
     if (!data) return;
     setName(data.menu.name);
-    setMeta(data?.menu.meta.map(m => ({ ...m, errors: {} })));
+    setMetaWithErrors(data?.menu.meta.map(m => ({ ...m, errors: {} })));
   }, [data]);
 
   const onBackClickHandler = () => {
@@ -46,13 +46,13 @@ export const EditMenu = () => {
   };
 
   const onSubmit = () => {
-    const formattedMeta = meta.map(m => ({
-      name: m.name,
-      required: m.required,
-      type: m.type,
-    }));
+    const meta = metaWithErrors.map(m => {
+      const { errors, ...rest } = m;
+      rest.defaultValue === '' && delete rest.defaultValue;
+      return rest;
+    });
     updateMenu({
-      variables: { menu: { id: Number(id), name, meta: formattedMeta } },
+      variables: { menu: { id: Number(id), name, meta } },
       onCompleted: data => {
         dispatch({
           type: ActionTypes.OPEN_NOTIFICATION,
@@ -111,8 +111,8 @@ export const EditMenu = () => {
         setName={setName}
         nameError={nameError}
         setNameError={setNameError}
-        meta={meta}
-        setMeta={setMeta}
+        meta={metaWithErrors}
+        setMeta={setMetaWithErrors}
         onBack={onBackClickHandler}
         onSubmit={onSubmit}
         action="edit"
