@@ -117,6 +117,9 @@
       "name": "Name",
       "items": "Items",
       "template": "Template",
+      "enabled": "Enabled",
+      "startPublication": "Start Publication Date",
+      "endPublication": "End Publication Date",
       "meta": {
         "title_one": "Metadata",
         "title_other": "Metadata",

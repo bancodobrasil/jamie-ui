@@ -75,6 +75,7 @@ export const ItemsPreview = () => {
           const { __typename, ...rest } = item;
           return {
             ...rest,
+            parentId: item.parentId || 0,
             children: getChildren(item),
           };
         })

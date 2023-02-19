@@ -199,7 +199,7 @@ export const OperationScreen = ({
       if (expanded.indexOf(selectedNode.id.toString()) === -1) {
         setExpanded([...expanded, selectedNode.id.toString()]);
       }
-      let original;
+      let node: INode;
       const meta = {};
       switch (action) {
         case EnumInputActionScreen.SELECTING_ACTION:
@@ -218,17 +218,18 @@ export const OperationScreen = ({
                 break;
             }
           });
-          original = {
+          node = {
             id: -1,
             label: t('menu.preview.newItem', {
               order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
             }),
             order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
-            action: EnumInputAction.CREATE,
             parentId: selectedNode.id,
             meta,
+            enabled: true,
+            children: [],
           };
-          setEditingNode({ ...original, original });
+          setEditingNode({ ...node, action: EnumInputAction.CREATE, original: node });
           setSelected('-1');
           break;
         case EnumInputActionScreen.UPDATE:
@@ -593,28 +594,46 @@ export const OperationScreen = ({
               width: '100%',
             }}
           />
-          <TextField
-            type="number"
-            label={t('menu.preview.inputs.order.label')}
-            InputLabelProps={{ shrink: true }}
-            value={editingNode.order}
-            onChange={e => {
-              const parent = findNodeById(nodes, editingNode.parentId);
-              const order = Math.min(
-                Math.max(Number(e.target.value), 1),
-                parent.children?.length ? parent.children.length + 1 : 1,
-              );
-              if (order === editingNode.order) return;
-              setEditingNode({
-                ...editingNode,
-                order,
-              });
-            }}
-            sx={{
-              mt: '2rem',
-              width: '6rem',
-            }}
-          />
+          <Box className="flex items-center space-x-4">
+            <TextField
+              type="number"
+              label={t('menu.preview.inputs.order.label')}
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.order}
+              onChange={e => {
+                const parent = findNodeById(nodes, editingNode.parentId);
+                const order = Math.min(
+                  Math.max(Number(e.target.value), 1),
+                  parent.children?.length ? parent.children.length + 1 : 1,
+                );
+                if (order === editingNode.order) return;
+                setEditingNode({
+                  ...editingNode,
+                  order,
+                });
+              }}
+              sx={{
+                mt: '2rem',
+                width: '6rem',
+              }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editingNode.enabled}
+                  onChange={e => {
+                    setEditingNode({
+                      ...editingNode,
+                      enabled: e.target.checked,
+                    });
+                  }}
+                />
+              }
+              label={t('menu.fields.enabled')}
+              sx={{ mt: '2rem' }}
+            />
+          </Box>
+
           <Divider sx={{ mt: '2rem' }} />
           {data?.menu.meta?.length && (
             <Box sx={{ mt: '1.5rem' }}>
