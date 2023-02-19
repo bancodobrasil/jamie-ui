@@ -144,6 +144,7 @@ export const OperationScreen = ({
         });
         setUpdatedMenu(data.updateMenu);
         setOperationScreen(EnumInputActionScreen.SELECTING_ACTION);
+        setEditingNode(emptyEditingNode);
       },
       onError: error => {
         openDefaultErrorNotification(error, dispatch);
