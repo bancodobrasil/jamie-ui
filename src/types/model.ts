@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { EnumInputAction } from './common';
 import { EnumTemplateFormat } from './template';
 
@@ -16,8 +17,8 @@ export interface IMenuItem {
   order: number;
   meta: IMenuItemMeta;
   enabled: boolean;
-  startPublication?: string;
-  endPublication?: string;
+  startPublication?: DateTime;
+  endPublication?: DateTime;
   children?: IMenuItem[];
   parent?: Omit<IMenuItem, 'children'>;
   parentId?: number;

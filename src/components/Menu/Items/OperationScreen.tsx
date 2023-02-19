@@ -109,8 +109,14 @@ export const OperationScreen = ({
               [key]: meta,
             };
           }, {});
+          const startPublication = rest.startPublication?.isValid
+            ? rest.startPublication.toISO()
+            : null;
+          const endPublication = rest.endPublication?.isValid ? rest.endPublication.toISO() : null;
           return {
             ...rest,
+            startPublication,
+            endPublication,
             meta,
             children: children && formatNodes(children),
             id: id === -1 ? undefined : id,
@@ -227,8 +233,8 @@ export const OperationScreen = ({
             meta,
             enabled: true,
             children: [],
-            startPublication: '',
-            endPublication: '',
+            startPublication: null,
+            endPublication: null,
           };
           setEditingNode({ ...node, action: EnumInputAction.CREATE, original: node });
           setSelected('-1');
@@ -355,7 +361,7 @@ export const OperationScreen = ({
               <DatePicker
                 label={meta.name}
                 value={editingNode.meta[meta.name]}
-                onChange={date => {
+                onChange={(date: DateTime) => {
                   setEditingNode({
                     ...editingNode,
                     meta: {
@@ -642,7 +648,7 @@ export const OperationScreen = ({
                 onChange={(date: DateTime) => {
                   setEditingNode({
                     ...editingNode,
-                    startPublication: date.toISO(),
+                    startPublication: date,
                   });
                 }}
                 renderInput={params => (
@@ -669,7 +675,7 @@ export const OperationScreen = ({
                 onChange={(date: DateTime) => {
                   setEditingNode({
                     ...editingNode,
-                    endPublication: date.toISO(),
+                    endPublication: date,
                   });
                 }}
                 renderInput={params => (
@@ -820,7 +826,7 @@ export const OperationScreen = ({
                 onChange={(date: DateTime) => {
                   setEditingNode({
                     ...editingNode,
-                    startPublication: date.toISO(),
+                    startPublication: date,
                   });
                 }}
                 renderInput={params => (
@@ -847,7 +853,7 @@ export const OperationScreen = ({
                 onChange={(date: DateTime) => {
                   setEditingNode({
                     ...editingNode,
-                    endPublication: date.toISO(),
+                    endPublication: date,
                   });
                 }}
                 renderInput={params => (
