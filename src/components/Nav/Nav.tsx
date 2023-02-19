@@ -76,7 +76,7 @@ export const Nav = () => {
         display: 'flex',
         alignItems: 'center',
         px: '2rem',
-        height: '5rem',
+        minHeight: '5rem',
       }}
       className="shadow"
     >

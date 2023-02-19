@@ -36,6 +36,7 @@ export const CreateMenu = () => {
     const meta = metaWithErrors.map(m => {
       const { errors, ...rest } = m;
       rest.defaultValue === '' && delete rest.defaultValue;
+      rest.id && delete rest.id;
       rest.action && delete rest.action;
       return rest;
     });
@@ -58,21 +59,23 @@ export const CreateMenu = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Helmet>
         <title>{t('menu.create.title')}</title>
       </Helmet>
-      <AppBreadcrumbs
-        items={[
-          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: t('menu.create.title') },
-        ]}
-        onBack={onBackClickHandler}
-      />
-      <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-        {t('menu.create.title')}
-      </Typography>
-      <Divider />
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
+        <AppBreadcrumbs
+          items={[
+            { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+            { label: t('menu.create.title') },
+          ]}
+          onBack={onBackClickHandler}
+        />
+        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
+          {t('menu.create.title')}
+        </Typography>
+        <Divider />
+      </Box>
       <MenuForm
         name={name}
         setName={setName}

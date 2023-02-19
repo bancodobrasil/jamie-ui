@@ -41,11 +41,13 @@ export const EditMenu = () => {
     if (loaded || !data) return;
     setName(data.menu.name);
     setMetaWithErrors(
-      data?.menu.meta.map(m => {
-        const { __typename, ...rest } = m;
-        if (!rest.defaultValue) rest.defaultValue = '';
-        return { ...rest, errors: {} };
-      }),
+      data?.menu.meta
+        .map(m => {
+          const { __typename, ...rest } = m;
+          if (!rest.defaultValue) rest.defaultValue = '';
+          return { ...rest, errors: {} };
+        })
+        .sort((a, b) => a.order - b.order),
     );
     setLoaded(true);
   }, [loaded, data]);
@@ -112,22 +114,24 @@ export const EditMenu = () => {
   if (loading || !loaded) return <Loading />;
 
   return (
-    <Box>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Helmet>
         <title>{t('menu.edit.title')}</title>
       </Helmet>
-      <AppBreadcrumbs
-        items={[
-          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menu.name, navigateTo: '../' },
-          { label: t('menu.edit.title') },
-        ]}
-        onBack={onBackClickHandler}
-      />
-      <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-        {t('menu.edit.title')}
-      </Typography>
-      <Divider />
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
+        <AppBreadcrumbs
+          items={[
+            { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+            { label: data?.menu.name, navigateTo: '../' },
+            { label: t('menu.edit.title') },
+          ]}
+          onBack={onBackClickHandler}
+        />
+        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
+          {t('menu.edit.title')}
+        </Typography>
+        <Divider />
+      </Box>
       <MenuForm
         name={name}
         setName={setName}
