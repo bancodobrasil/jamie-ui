@@ -304,7 +304,9 @@ export const MenuForm = ({
             ref={provided.innerRef}
             {...provided.draggableProps}
             sx={{ opacity: snapshot.isDragging ? 0.5 : 1, display: 'flex', alignItems: 'center' }}
-            className="border-gray-200 border rounded-md p-4 mb-4 w-fit"
+            className={`border-gray-200 border rounded-md p-4 mb-4 w-fit${
+              !m.enabled ? ' bg-gray-200/75' : ''
+            }`}
           >
             <div {...provided.dragHandleProps}>
               <DragIndicatorIcon />
