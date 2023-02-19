@@ -78,7 +78,15 @@ export default class MenuService {
       updateMenu(updateMenuInput: $menu) {
         id
         name
-        meta
+        meta {
+          id
+          name
+          type
+          order
+          required
+          enabled
+          defaultValue
+        }
         items {
           id
           label

@@ -14,7 +14,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import { IMenuMetaWithErrors } from '../../../types';
+import { EnumInputAction, IMenuMetaWithErrors } from '../../../types';
 
 export const EditMenu = () => {
   const { t } = useTranslation();
@@ -38,7 +38,13 @@ export const EditMenu = () => {
   useEffect(() => {
     if (!data) return;
     setName(data.menu.name);
-    setMetaWithErrors(data?.menu.meta.map(m => ({ ...m, errors: {} })));
+    setMetaWithErrors(
+      data?.menu.meta.map(m => {
+        const { __typename, ...rest } = m;
+        if (!rest.defaultValue) rest.defaultValue = '';
+        return { ...rest, errors: {} };
+      }),
+    );
   }, [data]);
 
   const onBackClickHandler = () => {
@@ -46,11 +52,24 @@ export const EditMenu = () => {
   };
 
   const onSubmit = () => {
-    const meta = metaWithErrors.map(m => {
-      const { errors, ...rest } = m;
-      rest.defaultValue === '' && delete rest.defaultValue;
-      return rest;
-    });
+    const meta = metaWithErrors
+      .filter(m => !!m.action)
+      .map(m => {
+        const { errors, ...rest } = m;
+        if (rest.defaultValue === '') {
+          rest.defaultValue = null;
+        }
+        if (rest.action === EnumInputAction.UPDATE) {
+          Object.entries(rest).forEach(([key, value]) => {
+            if (key === 'id') return;
+            const previousValue = data.menu.meta.find(m => m.id === rest.id)[key];
+            if (value === previousValue) {
+              delete rest[key];
+            }
+          });
+        }
+        return rest;
+      });
     updateMenu({
       variables: { menu: { id: Number(id), name, meta } },
       onCompleted: data => {

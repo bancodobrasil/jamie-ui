@@ -46,7 +46,7 @@ export enum MenuMetaType {
 }
 
 export interface IMenuMeta {
-  action: EnumInputAction;
+  action?: EnumInputAction;
   id?: number;
   name: string;
   order: number;

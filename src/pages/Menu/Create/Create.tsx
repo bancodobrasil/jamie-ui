@@ -36,6 +36,7 @@ export const CreateMenu = () => {
     const meta = metaWithErrors.map(m => {
       const { errors, ...rest } = m;
       rest.defaultValue === '' && delete rest.defaultValue;
+      rest.action && delete rest.action;
       return rest;
     });
     createMenu({

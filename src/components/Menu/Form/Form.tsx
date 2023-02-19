@@ -18,7 +18,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { MENU_VALIDATION } from '../../../constants';
-import { IMenuMetaWithErrors, MenuMetaType } from '../../../types';
+import { EnumInputAction, IMenuMetaWithErrors, MenuMetaType } from '../../../types';
 
 const Form = styled('form')({
   flex: 1,
@@ -126,6 +126,9 @@ export const MenuForm = ({
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
+              if (updatedMeta[index].action !== EnumInputAction.CREATE) {
+                updatedMeta[index].action = EnumInputAction.UPDATE;
+              }
               updatedMeta[index].defaultValue = value;
               updatedMeta[index].errors.defaultValue = '';
               setMeta(updatedMeta);
@@ -153,6 +156,9 @@ export const MenuForm = ({
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
+              if (updatedMeta[index].action !== EnumInputAction.CREATE) {
+                updatedMeta[index].action = EnumInputAction.UPDATE;
+              }
               updatedMeta[index].defaultValue = value;
               updatedMeta[index].errors.defaultValue = '';
               setMeta(updatedMeta);
@@ -177,6 +183,9 @@ export const MenuForm = ({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const { checked } = e.target;
                   const updatedMeta = [...meta];
+                  if (updatedMeta[index].action !== EnumInputAction.CREATE) {
+                    updatedMeta[index].action = EnumInputAction.UPDATE;
+                  }
                   updatedMeta[index].defaultValue = !!checked;
                   updatedMeta[index].errors.defaultValue = '';
                   setMeta(updatedMeta);
@@ -195,6 +204,9 @@ export const MenuForm = ({
               value={m.defaultValue}
               onChange={date => {
                 const updatedMeta = [...meta];
+                if (updatedMeta[index].action !== EnumInputAction.CREATE) {
+                  updatedMeta[index].action = EnumInputAction.UPDATE;
+                }
                 updatedMeta[index].defaultValue = date;
                 updatedMeta[index].errors.defaultValue = '';
                 setMeta(updatedMeta);
@@ -241,6 +253,9 @@ export const MenuForm = ({
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
+              if (updatedMeta[i].action !== EnumInputAction.CREATE) {
+                updatedMeta[i].action = EnumInputAction.UPDATE;
+              }
               updatedMeta[i].name = value;
               updatedMeta[i].errors.name = '';
               setMeta(updatedMeta);
@@ -269,6 +284,9 @@ export const MenuForm = ({
               onChange={(e: SelectChangeEvent) => {
                 const { value } = e.target;
                 const updatedMeta = [...meta];
+                if (updatedMeta[i].action !== EnumInputAction.CREATE) {
+                  updatedMeta[i].action = EnumInputAction.UPDATE;
+                }
                 updatedMeta[i].type = value as MenuMetaType;
                 setMeta(updatedMeta);
                 switch (value as MenuMetaType) {
@@ -308,6 +326,9 @@ export const MenuForm = ({
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   const { checked } = event.target;
                   const updatedMeta = [...meta];
+                  if (updatedMeta[i].action !== EnumInputAction.CREATE) {
+                    updatedMeta[i].action = EnumInputAction.UPDATE;
+                  }
                   updatedMeta[i].required = checked;
                   setMeta(updatedMeta);
                 }}
@@ -323,6 +344,9 @@ export const MenuForm = ({
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   const { checked } = event.target;
                   const updatedMeta = [...meta];
+                  if (updatedMeta[i].action !== EnumInputAction.CREATE) {
+                    updatedMeta[i].action = EnumInputAction.UPDATE;
+                  }
                   updatedMeta[i].enabled = checked;
                   setMeta(updatedMeta);
                 }}
@@ -371,6 +395,7 @@ export const MenuForm = ({
           onClick={() => {
             const updatedMeta = [...meta];
             updatedMeta.push({
+              action: EnumInputAction.CREATE,
               name: '',
               type: MenuMetaType.TEXT,
               order: meta.length + 1,
