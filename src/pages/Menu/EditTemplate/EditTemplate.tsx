@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { ejs as ejsLang } from 'codemirror-lang-ejs';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import ejs from 'ejs';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';

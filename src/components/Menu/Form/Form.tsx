@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   DragDropContext,
   Draggable,
