@@ -174,7 +174,8 @@
         "name": "Enter the menu's name...",
         "meta": {
           "name": "Enter the menu metadata's name...",
-          "type": "Enter the menu metadata's type..."
+          "type": "Enter the menu metadata's type...",
+          "defaultValue": "Enter the menu metadata's default value..."
         }
       }
     },
@@ -184,7 +185,8 @@
         "name": "Enter the menu's name...",
         "meta": {
           "name": "Enter the menu metadata's name...",
-          "type": "Enter the menu metadata's type..."
+          "type": "Enter the menu metadata's type...",
+          "defaultValue": "Enter the menu metadata's default value..."
         }
       }
     },

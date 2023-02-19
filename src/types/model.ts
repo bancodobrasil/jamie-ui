@@ -46,8 +46,12 @@ export enum MenuMetaType {
 }
 
 export interface IMenuMeta {
+  id?: number;
   name: string;
+  order: number;
   required: boolean;
+  enabled: boolean;
+  defaultValue?: unknown;
   type: MenuMetaType;
 }
 

@@ -10,11 +10,15 @@ import {
   SelectChangeEvent,
   styled,
   TextField,
+  Typography,
 } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { IMenuMetaWithErrors, MenuMetaType } from '../../../types';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import { DateTime } from 'luxon';
 import { MENU_VALIDATION } from '../../../constants';
+import { IMenuMetaWithErrors, MenuMetaType } from '../../../types';
 
 const Form = styled('form')({
   flex: 1,
@@ -46,7 +50,7 @@ export const MenuForm = ({
   onBack,
   action,
 }: Props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -106,83 +110,227 @@ export const MenuForm = ({
     onSubmit();
   };
 
-  const renderMeta = () =>
-    meta.map((m, i) => (
-      <Box key={i} sx={{ display: 'flex' }} className="space-x-2">
-        <span className="text-lg mt-[0.75rem]">{i + 1}.</span>
-        <TextField
-          id={`meta[${i}].name`}
-          label={t('menu.fields.meta.of', { field: 'name' })}
-          placeholder={
-            action === 'create'
-              ? t('menu.create.placeholders.meta.name')
-              : t('menu.edit.placeholders.meta.name')
-          }
-          value={meta[i].name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const { value } = e.target;
-            const updatedMeta = [...meta];
-            updatedMeta[i].name = value;
-            updatedMeta[i].errors.name = '';
-            setMeta(updatedMeta);
-          }}
-          inputProps={{
-            maxLength: MENU_VALIDATION.META_NAME_MAX_LENGTH,
-          }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          error={!!meta[i].errors.name}
-          helperText={meta[i].errors.name}
-          sx={{ width: '16rem' }}
-          className="bg-white"
-        />
-        <FormControl sx={{ width: '16rem' }} className="bg-white">
-          <InputLabel id={`meta[${i}].type-label`}>
-            {t('menu.fields.meta.of', { field: 'type.title_one' })}
-          </InputLabel>
-          <Select
-            labelId={`meta[${i}].type-label`}
-            id={`meta[${i}].type`}
-            value={meta[i].type}
-            label={t('menu.fields.meta.of', { field: 'type.title_one' })}
-            required
-            onChange={(e: SelectChangeEvent) => {
+  const renderMetaDefaultValue = (m: IMenuMetaWithErrors, index: number) => {
+    switch (m.type) {
+      case MenuMetaType.TEXT:
+        return (
+          <TextField
+            id={`meta[${index}].defaultValue`}
+            label={t('menu.fields.meta.defaultValue')}
+            placeholder={
+              action === 'create'
+                ? t('menu.create.placeholders.meta.defaultValue')
+                : t('menu.edit.placeholders.meta.defaultValue')
+            }
+            value={m.defaultValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
-              updatedMeta[i].type = value as MenuMetaType;
+              updatedMeta[index].defaultValue = value;
+              updatedMeta[index].errors.defaultValue = '';
               setMeta(updatedMeta);
             }}
-          >
-            <MenuItem value={MenuMetaType.TEXT}>
-              {t(`menu.fields.meta.type.${MenuMetaType.TEXT}`)}
-            </MenuItem>
-            <MenuItem value={MenuMetaType.NUMBER}>
-              {t(`menu.fields.meta.type.${MenuMetaType.NUMBER}`)}
-            </MenuItem>
-            <MenuItem value={MenuMetaType.BOOLEAN}>
-              {t(`menu.fields.meta.type.${MenuMetaType.BOOLEAN}`)}
-            </MenuItem>
-            <MenuItem value={MenuMetaType.DATE}>
-              {t(`menu.fields.meta.type.${MenuMetaType.DATE}`)}
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <FormControlLabel
-          control={
-            <Checkbox
-              id={`meta[${i}].required`}
-              checked={meta[i].required}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const { checked } = event.target;
+            InputLabelProps={{
+              shrink: true,
+            }}
+            error={!!m.errors.defaultValue}
+            helperText={m.errors.defaultValue}
+            sx={{ width: '16rem' }}
+            className="bg-white"
+          />
+        );
+      case MenuMetaType.NUMBER:
+        return (
+          <TextField
+            id={`meta[${index}].defaultValue`}
+            label={t('menu.fields.meta.defaultValue')}
+            placeholder={
+              action === 'create'
+                ? t('menu.create.placeholders.meta.defaultValue')
+                : t('menu.edit.placeholders.meta.defaultValue')
+            }
+            value={m.defaultValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const { value } = e.target;
+              const updatedMeta = [...meta];
+              updatedMeta[index].defaultValue = value;
+              updatedMeta[index].errors.defaultValue = '';
+              setMeta(updatedMeta);
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            error={!!m.errors.defaultValue}
+            helperText={m.errors.defaultValue}
+            sx={{ width: '16rem' }}
+            className="bg-white"
+            type="number"
+          />
+        );
+      case MenuMetaType.BOOLEAN:
+        return (
+          <FormControlLabel
+            control={
+              <Checkbox
+                id={`meta[${index}].defaultValue`}
+                checked={m.defaultValue === true}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const { checked } = e.target;
+                  const updatedMeta = [...meta];
+                  updatedMeta[index].defaultValue = !!checked;
+                  updatedMeta[index].errors.defaultValue = '';
+                  setMeta(updatedMeta);
+                }}
+                color="primary"
+              />
+            }
+            label={t('menu.fields.meta.defaultValue')}
+          />
+        );
+      case MenuMetaType.DATE:
+        return (
+          <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+            <DatePicker
+              label={t('menu.fields.meta.defaultValue')}
+              value={m.defaultValue}
+              onChange={date => {
                 const updatedMeta = [...meta];
-                updatedMeta[i].required = checked;
+                updatedMeta[index].defaultValue = date;
+                updatedMeta[index].errors.defaultValue = '';
                 setMeta(updatedMeta);
               }}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={!!m.errors.defaultValue}
+                  helperText={m.errors.defaultValue}
+                  sx={{ width: '16rem' }}
+                  className="bg-white"
+                  inputProps={{
+                    ...params.inputProps,
+                    placeholder: `${t('common.example')}: ${DateTime.now()
+                      .plus({ days: 5 })
+                      .setLocale(i18n.language)
+                      .toLocaleString()}`,
+                  }}
+                />
+              )}
             />
-          }
-          label={t('menu.fields.meta.required')}
-        />
+          </LocalizationProvider>
+        );
+    }
+  };
+
+  const renderMeta = () =>
+    meta.map((m, i) => (
+      <Box key={i}>
+        <Box sx={{ display: 'flex' }} className="space-x-2">
+          <span className="text-lg mt-[0.75rem]">{m.order}.</span>
+          <TextField
+            id={`meta[${i}].name`}
+            label={t('menu.fields.meta.name')}
+            placeholder={
+              action === 'create'
+                ? t('menu.create.placeholders.meta.name')
+                : t('menu.edit.placeholders.meta.name')
+            }
+            value={m.name}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const { value } = e.target;
+              const updatedMeta = [...meta];
+              updatedMeta[i].name = value;
+              updatedMeta[i].errors.name = '';
+              setMeta(updatedMeta);
+            }}
+            inputProps={{
+              maxLength: MENU_VALIDATION.META_NAME_MAX_LENGTH,
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            error={!!m.errors.name}
+            helperText={m.errors.name}
+            sx={{ width: '16rem' }}
+            className="bg-white"
+          />
+          <FormControl sx={{ width: '16rem' }} className="bg-white">
+            <InputLabel id={`meta[${i}].type-label`}>
+              {t('menu.fields.meta.type.title', { count: 1 })}
+            </InputLabel>
+            <Select
+              labelId={`meta[${i}].type-label`}
+              id={`meta[${i}].type`}
+              value={m.type}
+              label={t('menu.fields.meta.type.title', { count: 1 })}
+              required
+              onChange={(e: SelectChangeEvent) => {
+                const { value } = e.target;
+                const updatedMeta = [...meta];
+                updatedMeta[i].type = value as MenuMetaType;
+                setMeta(updatedMeta);
+                switch (value as MenuMetaType) {
+                  case MenuMetaType.TEXT:
+                  case MenuMetaType.NUMBER:
+                  case MenuMetaType.DATE:
+                    updatedMeta[i].defaultValue = '';
+                    break;
+                  case MenuMetaType.BOOLEAN:
+                    updatedMeta[i].defaultValue = false;
+                    break;
+                }
+              }}
+            >
+              <MenuItem value={MenuMetaType.TEXT}>
+                {t(`menu.fields.meta.type.${MenuMetaType.TEXT}`)}
+              </MenuItem>
+              <MenuItem value={MenuMetaType.NUMBER}>
+                {t(`menu.fields.meta.type.${MenuMetaType.NUMBER}`)}
+              </MenuItem>
+              <MenuItem value={MenuMetaType.BOOLEAN}>
+                {t(`menu.fields.meta.type.${MenuMetaType.BOOLEAN}`)}
+              </MenuItem>
+              <MenuItem value={MenuMetaType.DATE}>
+                {t(`menu.fields.meta.type.${MenuMetaType.DATE}`)}
+              </MenuItem>
+            </Select>
+          </FormControl>
+          {renderMetaDefaultValue(m, i)}
+        </Box>
+        <Box sx={{ display: 'flex', ml: '1.5rem' }} className="mt-2 space-x-2">
+          <FormControlLabel
+            control={
+              <Checkbox
+                id={`meta[${i}].required`}
+                checked={m.required}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const { checked } = event.target;
+                  const updatedMeta = [...meta];
+                  updatedMeta[i].required = checked;
+                  setMeta(updatedMeta);
+                }}
+              />
+            }
+            label={t('menu.fields.meta.required')}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                id={`meta[${i}].enabled`}
+                checked={m.enabled}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const { checked } = event.target;
+                  const updatedMeta = [...meta];
+                  updatedMeta[i].enabled = checked;
+                  setMeta(updatedMeta);
+                }}
+              />
+            }
+            label={t('menu.fields.meta.enabled')}
+          />
+        </Box>
       </Box>
     ));
   return (
@@ -212,6 +360,9 @@ export const MenuForm = ({
         helperText={nameError}
         sx={{ width: '16rem' }}
       />
+      <Typography variant="h3" sx={{ mt: '2rem' }}>
+        {t('menu.fields.meta.title', { count: 2 })}
+      </Typography>
       {meta.length > 0 && <div className="mt-8 space-y-4">{renderMeta()}</div>}
       <Box sx={{ mt: '2rem' }}>
         <Button
@@ -219,7 +370,15 @@ export const MenuForm = ({
           color="primary"
           onClick={() => {
             const updatedMeta = [...meta];
-            updatedMeta.push({ name: '', type: MenuMetaType.TEXT, required: false, errors: {} });
+            updatedMeta.push({
+              name: '',
+              type: MenuMetaType.TEXT,
+              order: meta.length + 1,
+              required: false,
+              enabled: true,
+              defaultValue: '',
+              errors: {},
+            });
             setMeta(updatedMeta);
           }}
         >

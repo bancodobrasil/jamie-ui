@@ -24,7 +24,7 @@ export const CreateMenu = () => {
   const [name, setName] = React.useState<string>('');
   const [nameError, setNameError] = React.useState<string>('');
 
-  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>([]);
+  const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
   const [createMenu] = useMutation(MenuService.CREATE_MENU);
 
@@ -33,13 +33,13 @@ export const CreateMenu = () => {
   };
 
   const onSubmit = () => {
-    const formattedMeta = meta.map(m => ({
-      name: m.name,
-      required: m.required,
-      type: m.type,
-    }));
+    const meta = metaWithErrors.map(m => {
+      const { errors, ...rest } = m;
+      rest.defaultValue === '' && delete rest.defaultValue;
+      return rest;
+    });
     createMenu({
-      variables: { menu: { name, meta: formattedMeta } },
+      variables: { menu: { name, meta } },
       onCompleted: data => {
         dispatch({
           type: ActionTypes.OPEN_NOTIFICATION,
@@ -77,8 +77,8 @@ export const CreateMenu = () => {
         setName={setName}
         nameError={nameError}
         setNameError={setNameError}
-        meta={meta}
-        setMeta={setMeta}
+        meta={metaWithErrors}
+        setMeta={setMetaWithErrors}
         onBack={onBackClickHandler}
         onSubmit={onSubmit}
         action="create"

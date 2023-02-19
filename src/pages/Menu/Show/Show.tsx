@@ -74,8 +74,10 @@ export const ShowMenu = () => {
     }
   };
 
-  const renderMeta = () =>
-    data?.menu.meta
+  const renderMeta = () => {
+    if (!data?.menu.meta) return null;
+    const meta = [...data.menu.meta];
+    return meta
       .sort((a, b) => a.order - b.order)
       .map(meta => (
         <Box
@@ -104,7 +106,7 @@ export const ShowMenu = () => {
           )}
         </Box>
       ));
-
+  };
   if (loading) return <Loading />;
 
   if (error)
