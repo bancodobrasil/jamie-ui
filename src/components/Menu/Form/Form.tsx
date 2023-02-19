@@ -58,6 +58,7 @@ interface Props {
   setNameError: (nameError: string) => void;
   meta: IMenuMetaWithErrors[];
   setMeta: (meta: IMenuMetaWithErrors[]) => void;
+  loadingSubmit: boolean;
   onSubmit: () => void;
   onBack: () => void;
   action: 'create' | 'edit';
@@ -70,6 +71,7 @@ export const MenuForm = ({
   setNameError,
   meta,
   setMeta,
+  loadingSubmit,
   onSubmit,
   onBack,
   action,
@@ -77,8 +79,6 @@ export const MenuForm = ({
   const { t, i18n } = useTranslation();
 
   const [initialMeta] = React.useState<IMenuMetaWithErrors[]>(JSON.parse(JSON.stringify(meta)));
-
-  const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,7 +133,6 @@ export const MenuForm = ({
     });
     if (metaHasError) return;
 
-    setLoadingSubmit(true);
     onSubmit();
   };
 

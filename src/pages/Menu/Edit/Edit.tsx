@@ -28,12 +28,14 @@ export const EditMenu = () => {
 
   const { dispatch } = React.useContext(NotificationContext);
 
+  const [loaded, setLoaded] = React.useState<boolean>(false);
+
   const [name, setName] = React.useState<string>('');
   const [nameError, setNameError] = React.useState<string>('');
 
   const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
-  const [loaded, setLoaded] = React.useState<boolean>(false);
+  const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
@@ -57,6 +59,7 @@ export const EditMenu = () => {
   };
 
   const onSubmit = () => {
+    setLoadingSubmit(true);
     const meta = metaWithErrors
       .filter(m => !!m.action)
       .map(m => {
@@ -78,6 +81,7 @@ export const EditMenu = () => {
     updateMenu({
       variables: { menu: { id: Number(id), name, meta } },
       onCompleted: data => {
+        setLoadingSubmit(false);
         dispatch({
           type: ActionTypes.OPEN_NOTIFICATION,
           message: `${t('notification.editSuccess', {
@@ -88,6 +92,7 @@ export const EditMenu = () => {
         navigate(`/menus/${data.updateMenu.id}`, { state: { refetch: true } });
       },
       onError: error => {
+        setLoadingSubmit(false);
         openDefaultErrorNotification(error, dispatch);
       },
     });
@@ -139,8 +144,9 @@ export const EditMenu = () => {
         setNameError={setNameError}
         meta={metaWithErrors}
         setMeta={setMetaWithErrors}
-        onBack={onBackClickHandler}
+        loadingSubmit={loadingSubmit}
         onSubmit={onSubmit}
+        onBack={onBackClickHandler}
         action="edit"
       />
     </Box>

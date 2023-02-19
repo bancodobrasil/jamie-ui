@@ -26,6 +26,8 @@ export const CreateMenu = () => {
 
   const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
+  const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
+
   const [createMenu] = useMutation(MenuService.CREATE_MENU);
 
   const onBackClickHandler = () => {
@@ -33,6 +35,7 @@ export const CreateMenu = () => {
   };
 
   const onSubmit = () => {
+    setLoadingSubmit(true);
     const meta = metaWithErrors.map(m => {
       const { errors, ...rest } = m;
       rest.defaultValue === '' && delete rest.defaultValue;
@@ -43,6 +46,7 @@ export const CreateMenu = () => {
     createMenu({
       variables: { menu: { name, meta } },
       onCompleted: data => {
+        setLoadingSubmit(false);
         dispatch({
           type: ActionTypes.OPEN_NOTIFICATION,
           message: `${t('notification.createSuccess', {
@@ -53,6 +57,7 @@ export const CreateMenu = () => {
         navigate(`/menus/${data.createMenu.id}`);
       },
       onError: error => {
+        setLoadingSubmit(false);
         openDefaultErrorNotification(error, dispatch);
       },
     });
@@ -83,8 +88,9 @@ export const CreateMenu = () => {
         setNameError={setNameError}
         meta={metaWithErrors}
         setMeta={setMetaWithErrors}
-        onBack={onBackClickHandler}
+        loadingSubmit={loadingSubmit}
         onSubmit={onSubmit}
+        onBack={onBackClickHandler}
         action="create"
       />
     </Box>
