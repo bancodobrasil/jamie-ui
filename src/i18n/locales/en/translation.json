@@ -91,6 +91,14 @@
     "common": {
       "button": {
         "reload": "Reload {{resource}}"
+      },
+      "date": {
+        "invalidDate": "Invalid date",
+        "disablePast": "Past dates are disabled",
+        "minDate": "Date must be after {{minDate}}",
+        "maxDate": "Date must be before {{maxDate}}",
+        "minTime": "Time must be after {{minTime}}",
+        "maxTime": "Time must be before {{maxTime}}"
       }
     },
     "unauthorized": {

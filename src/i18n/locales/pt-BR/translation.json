@@ -91,6 +91,14 @@
     "common": {
       "button": {
         "reload": "Recarregar {{resource}}"
+      },
+      "date": {
+        "invalidDate": "Data inválida",
+        "disablePast": "Não é possível selecionar datas passadas",
+        "minDate": "Data deve ser depois de {{minDate}}",
+        "maxDate": "Data deve ser antes de {{maxDate}}",
+        "minTime": "Horário deve ser depois de {{minTime}}",
+        "maxTime": "Horário deve ser antes de {{maxTime}}"
       }
     },
     "unauthorized": {

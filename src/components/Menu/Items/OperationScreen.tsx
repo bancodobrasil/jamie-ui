@@ -91,6 +91,8 @@ export const OperationScreen = ({
     EnumInputActionScreen.SELECTING_ACTION,
   );
   const [labelError, setLabelError] = React.useState<string>('');
+  const [startPublicationError, setStartPublicationError] = React.useState<string>('');
+  const [endPublicationError, setEndPublicationError] = React.useState<string>('');
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
@@ -644,6 +646,7 @@ export const OperationScreen = ({
           <Box className="flex items-center space-x-4">
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
               <DateTimePicker
+                disablePast
                 label={t('menuItem.fields.startPublication')}
                 value={editingNode.startPublication}
                 onChange={(date: DateTime) => {
@@ -652,11 +655,62 @@ export const OperationScreen = ({
                     startPublication: date,
                   });
                 }}
+                maxDateTime={editingNode.endPublication}
+                onError={(reason, value) => {
+                  switch (reason) {
+                    case 'invalidDate':
+                      setStartPublicationError(t('error.common.date.invalidDate'));
+                      break;
+                    case 'disablePast':
+                      setStartPublicationError(t('error.common.date.disablePast'));
+                      break;
+                    case 'maxDate':
+                      setStartPublicationError(
+                        t('error.common.date.maxDate', {
+                          maxDate: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minDate':
+                      setStartPublicationError(
+                        t('error.common.date.minDate', {
+                          minDate: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'maxTime':
+                      setStartPublicationError(
+                        t('error.common.date.maxTime', {
+                          maxTime: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minTime':
+                      setStartPublicationError(
+                        t('error.common.date.minTime', {
+                          minTime: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    default:
+                      setStartPublicationError('');
+                      break;
+                  }
+                }}
                 renderInput={params => (
                   <TextField
                     {...params}
                     InputLabelProps={{ shrink: true }}
                     error={!!editingNode.startPublication && params.error}
+                    helperText={startPublicationError || params.helperText}
                     inputProps={{
                       ...params.inputProps,
                       placeholder: `${t('common.example')}: ${DateTime.now()
@@ -676,6 +730,7 @@ export const OperationScreen = ({
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
               <DateTimePicker
+                disablePast
                 label={t('menuItem.fields.endPublication')}
                 value={editingNode.endPublication}
                 onChange={(date: DateTime) => {
@@ -684,11 +739,62 @@ export const OperationScreen = ({
                     endPublication: date,
                   });
                 }}
+                minDateTime={editingNode.startPublication}
+                onError={(reason, value) => {
+                  switch (reason) {
+                    case 'invalidDate':
+                      setEndPublicationError(t('error.common.date.invalidDate'));
+                      break;
+                    case 'disablePast':
+                      setEndPublicationError(t('error.common.date.disablePast'));
+                      break;
+                    case 'maxDate':
+                      setEndPublicationError(
+                        t('error.common.date.maxDate', {
+                          maxDate: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minDate':
+                      setEndPublicationError(
+                        t('error.common.date.minDate', {
+                          minDate: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'maxTime':
+                      setEndPublicationError(
+                        t('error.common.date.maxTime', {
+                          maxTime: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minTime':
+                      setEndPublicationError(
+                        t('error.common.date.minTime', {
+                          minTime: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    default:
+                      setEndPublicationError('');
+                      break;
+                  }
+                }}
                 renderInput={params => (
                   <TextField
                     {...params}
                     InputLabelProps={{ shrink: true }}
                     error={!!editingNode.endPublication && params.error}
+                    helperText={endPublicationError || params.helperText}
                     inputProps={{
                       ...params.inputProps,
                       placeholder: `${t('common.example')}: ${DateTime.now()
@@ -729,6 +835,7 @@ export const OperationScreen = ({
               color="success"
               sx={{ mt: '2rem', mr: '1rem' }}
               type="submit"
+              disabled={!!labelError || !!startPublicationError || !!endPublicationError}
             >
               {t('buttons.save')}
             </Button>
@@ -832,6 +939,7 @@ export const OperationScreen = ({
           <Box className="flex items-center space-x-4">
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
               <DateTimePicker
+                disablePast
                 label={t('menuItem.fields.startPublication')}
                 value={editingNode.startPublication}
                 onChange={(date: DateTime) => {
@@ -840,11 +948,62 @@ export const OperationScreen = ({
                     startPublication: date,
                   });
                 }}
+                maxDateTime={editingNode.endPublication}
+                onError={(reason, value) => {
+                  switch (reason) {
+                    case 'invalidDate':
+                      setStartPublicationError(t('error.common.date.invalidDate'));
+                      break;
+                    case 'disablePast':
+                      setStartPublicationError(t('error.common.date.disablePast'));
+                      break;
+                    case 'maxDate':
+                      setStartPublicationError(
+                        t('error.common.date.maxDate', {
+                          maxDate: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minDate':
+                      setStartPublicationError(
+                        t('error.common.date.minDate', {
+                          minDate: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'maxTime':
+                      setStartPublicationError(
+                        t('error.common.date.maxTime', {
+                          maxTime: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minTime':
+                      setStartPublicationError(
+                        t('error.common.date.minTime', {
+                          minTime: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    default:
+                      setStartPublicationError('');
+                      break;
+                  }
+                }}
                 renderInput={params => (
                   <TextField
                     {...params}
                     InputLabelProps={{ shrink: true }}
                     error={!!editingNode.startPublication && params.error}
+                    helperText={startPublicationError || params.helperText}
                     inputProps={{
                       ...params.inputProps,
                       placeholder: `${t('common.example')}: ${DateTime.now()
@@ -864,6 +1023,7 @@ export const OperationScreen = ({
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
               <DateTimePicker
+                disablePast
                 label={t('menuItem.fields.endPublication')}
                 value={editingNode.endPublication}
                 onChange={(date: DateTime) => {
@@ -872,11 +1032,62 @@ export const OperationScreen = ({
                     endPublication: date,
                   });
                 }}
+                minDateTime={editingNode.startPublication}
+                onError={(reason, value) => {
+                  switch (reason) {
+                    case 'invalidDate':
+                      setEndPublicationError(t('error.common.date.invalidDate'));
+                      break;
+                    case 'disablePast':
+                      setEndPublicationError(t('error.common.date.disablePast'));
+                      break;
+                    case 'maxDate':
+                      setEndPublicationError(
+                        t('error.common.date.maxDate', {
+                          maxDate: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minDate':
+                      setEndPublicationError(
+                        t('error.common.date.minDate', {
+                          minDate: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'maxTime':
+                      setEndPublicationError(
+                        t('error.common.date.maxTime', {
+                          maxTime: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minTime':
+                      setEndPublicationError(
+                        t('error.common.date.minTime', {
+                          minTime: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    default:
+                      setEndPublicationError('');
+                      break;
+                  }
+                }}
                 renderInput={params => (
                   <TextField
                     {...params}
                     InputLabelProps={{ shrink: true }}
                     error={!!editingNode.endPublication && params.error}
+                    helperText={endPublicationError || params.helperText}
                     inputProps={{
                       ...params.inputProps,
                       placeholder: `${t('common.example')}: ${DateTime.now()
@@ -917,6 +1128,7 @@ export const OperationScreen = ({
               color="success"
               sx={{ mt: '2rem', mr: '1rem' }}
               type="submit"
+              disabled={!!labelError || !!startPublicationError || !!endPublicationError}
             >
               {t('buttons.save')}
             </Button>

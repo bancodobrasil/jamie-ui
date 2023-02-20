@@ -24,6 +24,9 @@ i18n
     fallbackLng: 'en',
     supportedLngs: ['en', 'pt-BR'],
     load: 'currentOnly',
+    interpolation: {
+      escapeValue: false,
+    },
     // debug: true,
   });
 
