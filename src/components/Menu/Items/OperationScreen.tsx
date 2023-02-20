@@ -204,7 +204,7 @@ export const OperationScreen = ({
   const handleActionChange = React.useCallback(
     (action: EnumInputActionScreen) => {
       const selectedNode = findNodeById(nodes, Number(selected));
-      if (expanded.indexOf(selectedNode.id.toString()) === -1) {
+      if (expanded.find(id => id === selectedNode?.id.toString())) {
         setExpanded([...expanded, selectedNode.id.toString()]);
       }
       let node: INode;
