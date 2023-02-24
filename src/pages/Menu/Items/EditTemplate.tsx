@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
+import { Box, Button, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { ejs as ejsLang } from 'codemirror-lang-ejs';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import ejs from 'ejs';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuItemService from '../../../api/services/MenuItemService';
@@ -15,15 +16,18 @@ import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
 import MenuItemInitialTemplate from '../../../utils/template/MenuItemInitialTemplate';
-
-enum EnumTemplateFormat {
-  JSON = 'json',
-  XML = 'xml',
-  PLAIN = 'plain',
-}
+import { EnumTemplateFormat, IMenuItem } from '../../../types';
+import MenuService from '../../../api/services/MenuService';
+import {
+  ActionTypes,
+  NotificationContext,
+  openDefaultErrorNotification,
+} from '../../../contexts/NotificationContext';
 
 export const EditTemplateItems = () => {
-  const { itemId } = useParams();
+  const { dispatch } = React.useContext(NotificationContext);
+
+  const { id, itemId } = useParams();
 
   const navigate = useNavigate();
 
@@ -36,6 +40,7 @@ export const EditTemplateItems = () => {
     [EnumTemplateFormat.PLAIN]: MenuItemInitialTemplate.PLAIN,
   });
   const [templateResult, setTemplateResult] = React.useState('');
+  const [loadedInitialTemplate, setLoadedInitialTemplate] = React.useState(false);
 
   const [language, setLanguage] = React.useState(ejsJson);
 
@@ -57,23 +62,58 @@ export const EditTemplateItems = () => {
     variables: { id: Number(itemId) },
   });
 
+  const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
+
+  React.useEffect(() => {
+    if (!data || loadedInitialTemplate) return;
+    const item = data.menuItem;
+    if (item.templateFormat) setTemplateFormat(item.templateFormat);
+    else if (item.menu.templateFormat) setTemplateFormat(item.menu.templateFormat);
+    if (item.template)
+      setTemplate({
+        ...template,
+        [item.templateFormat]: item.template,
+      });
+    setLoadedInitialTemplate(true);
+  }, [data, loadedInitialTemplate, template]);
+
   React.useEffect(() => {
     if (!data) return;
-    const item = data?.menuItem;
-    const children = item.children.map(child => ({
-      id: child.id,
-      label: child.label,
-      order: child.order,
-      meta: child.meta,
-    }));
+    const item: IMenuItem & { __typename: string } = data?.menuItem;
+    const getChildren = (parent: IMenuItem): IMenuItem[] => {
+      const children = item.menu.items
+        .filter(item => item.parentId === parent.id)
+        .map((item: IMenuItem & { __typename?: string }) => {
+          const { __typename, template, templateFormat, ...rest } = item;
+          let formattedTemplate = template;
+          if (template) {
+            formattedTemplate = ejs.render(template, {
+              item: {
+                ...rest,
+                children: getChildren(item),
+                templateFormat,
+              },
+            });
+            if (templateFormat === EnumTemplateFormat.JSON) {
+              formattedTemplate = JSON.parse(formattedTemplate);
+            }
+          }
+          return {
+            ...rest,
+            children: getChildren(item),
+            template: formattedTemplate,
+            templateFormat,
+          };
+        })
+        .sort((a, b) => a.order - b.order);
+      return children;
+    };
+    const { __typename, template: itemTemplate, ...rest } = item;
     try {
       const result = ejs.render(template[templateFormat], {
         item: {
-          id: item.id,
-          label: item.label,
-          order: item.order,
-          meta: item.meta,
-          children,
+          ...rest,
+          children: getChildren(item),
         },
       });
       if (templateFormat === EnumTemplateFormat.JSON) {
@@ -84,7 +124,7 @@ export const EditTemplateItems = () => {
     } catch (error) {
       /* empty */
     }
-  }, [template, templateFormat, data]);
+  }, [template, templateFormat, data, itemId]);
 
   const onChangeTemplateFormat = React.useCallback(event => {
     setTemplateFormat(event.target.value);
@@ -100,8 +140,71 @@ export const EditTemplateItems = () => {
     [templateFormat],
   );
 
+  const resetDefaultTemplate = React.useCallback(() => {
+    switch (templateFormat) {
+      case EnumTemplateFormat.JSON:
+        setTemplate({
+          ...template,
+          [templateFormat]: MenuItemInitialTemplate.JSON,
+        });
+        break;
+      case EnumTemplateFormat.XML:
+        setTemplate({
+          ...template,
+          [templateFormat]: MenuItemInitialTemplate.XML,
+        });
+        break;
+      case EnumTemplateFormat.PLAIN:
+        setTemplate({
+          ...template,
+          [templateFormat]: MenuItemInitialTemplate.PLAIN,
+        });
+        break;
+    }
+  }, [template, templateFormat]);
+
   const onBackClickHandler = () => {
-    navigate('/');
+    navigate('../');
+  };
+
+  const onSaveClickHandler = () => {
+    updateMenu({
+      variables: {
+        menu: {
+          id: Number(id),
+          items: [
+            {
+              action: 'update',
+              id: Number(itemId),
+              template: template[templateFormat],
+              templateFormat,
+            },
+          ],
+        },
+      },
+      onCompleted: data => {
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('notification.editSuccess', {
+            resource: t('menuItem.of', { field: 'template' }),
+            context: 'male',
+          })}!`,
+        });
+      },
+      onError: error => {
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
+  };
+
+  const onDiscardClickHandler = () => {
+    if (data?.menuItem.templateFormat) setTemplateFormat(data.menuItem.templateFormat);
+    if (data?.menuItem.template)
+      setTemplate({
+        ...template,
+        [data.menuItem.templateFormat]: data.menuItem.template,
+      });
+    else resetDefaultTemplate();
   };
 
   if (loading) return <Loading />;
@@ -247,6 +350,50 @@ export const EditTemplateItems = () => {
                 maxHeight="60vh"
                 width="40vw"
               />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              mt: '2rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              maxWidth: '10vw',
+              px: '2rem',
+            }}
+          >
+            <Box
+              sx={{
+                height: '60vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h2" component="h2" sx={{ mb: '2rem' }}>
+                {t('menuItem.editTemplate.actions.title')}
+              </Typography>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ mb: '1rem' }}
+                onClick={onSaveClickHandler}
+              >
+                {t('menuItem.editTemplate.actions.save')}
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ mb: '1rem' }}
+                onClick={onDiscardClickHandler}
+              >
+                {t('menuItem.editTemplate.actions.discard')}
+              </Button>
+              <Button variant="contained" color="primary" onClick={resetDefaultTemplate}>
+                {t('menuItem.editTemplate.actions.useDefault')}
+              </Button>
             </Box>
           </Box>
           <Box

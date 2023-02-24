@@ -280,7 +280,7 @@ export const ItemsPreview = () => {
   }, []);
 
   const onBackClickHandler = () => {
-    navigate('/');
+    navigate('../');
   };
 
   if (loading) return <Loading />;

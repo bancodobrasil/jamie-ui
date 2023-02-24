@@ -116,6 +116,7 @@
     "fields": {
       "name": "Nome",
       "items": "Itens",
+      "template": "Template",
       "meta": {
         "title_one": "Metadado",
         "title_other": "Metadados",
@@ -201,6 +202,10 @@
   "menuItem": {
     "title_one": "Item de Menu",
     "title_other": "Itens de Menu",
+    "of": "$t(menu.fields.{{field}}) do Item de Menu",
+    "fields": {
+      "template": "Template"
+    },
     "editTemplate": {
       "title": "Editar Template",
       "templateFormat": {
@@ -237,6 +242,12 @@
       "result": {
         "title": "Resultado",
         "description": "Esse é o resultado do template que você definiu:"
+      },
+      "actions": {
+        "title": "Ações",
+        "save": "Salvar Template",
+        "discard": "Descartar Alterações",
+        "useDefault": "Usar Template Padrão"
       }
     }
   }

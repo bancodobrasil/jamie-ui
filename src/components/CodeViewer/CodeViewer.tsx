@@ -19,7 +19,7 @@ const CodeViewer = ({ code, language, lineNumbers = true }: Props) => {
   }, [code]);
   return (
     <Box className="CodeViewer" sx={{ width: '100%', display: 'flex' }}>
-      <pre className={`${lineNumbers ? 'line-numbers' : ''} w-full flex-1`}>
+      <pre className={`${lineNumbers ? 'line-numbers' : ''} w-full flex-1`} style={{ margin: 0 }}>
         <code className={`language-${language}`}>{code}</code>
       </pre>
     </Box>

@@ -1,10 +1,13 @@
 import { IFieldError } from './common';
+import { EnumTemplateFormat } from './template';
 
 export interface IMenu {
   id: number;
   name: string;
   meta: IMenuMeta[];
   items: IMenuItem[];
+  template?: string;
+  templateFormat?: EnumTemplateFormat;
 }
 
 export interface IMenuItem {
@@ -16,6 +19,8 @@ export interface IMenuItem {
   parent?: Omit<IMenuItem, 'children'>;
   parentId: number;
   menu?: IMenu;
+  template?: string;
+  templateFormat?: EnumTemplateFormat;
 }
 
 export enum MenuMetaType {
