@@ -10,7 +10,7 @@ import {
   Divider,
 } from '@mui/material';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,7 +19,14 @@ import { DateTime } from 'luxon';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { EnumAction, IEditingNode, IMenu, IMenuMeta, INode, MenuMetaType } from '../../../types';
+import {
+  EnumInputAction,
+  IEditingNode,
+  IMenu,
+  IMenuMeta,
+  INode,
+  MenuMetaType,
+} from '../../../types';
 import { MENU_ITEM_VALIDATION } from '../../../constants';
 import {
   ActionTypes,
@@ -33,10 +40,11 @@ const Form = styled('form')({
   flexDirection: 'column',
   width: '100%',
   paddingRight: '1rem',
+  paddingBottom: '1rem',
   overflowY: 'auto',
 });
 
-enum EnumActionScreen {
+enum EnumInputActionScreen {
   SELECTING_ACTION,
   INSERT,
   UPDATE,
@@ -79,10 +87,12 @@ export const OperationScreen = ({
   const navigate = useNavigate();
   const { i18n, t } = useTranslation();
 
-  const [operationScreen, setOperationScreen] = React.useState<EnumActionScreen>(
-    EnumActionScreen.SELECTING_ACTION,
+  const [operationScreen, setOperationScreen] = React.useState<EnumInputActionScreen>(
+    EnumInputActionScreen.SELECTING_ACTION,
   );
   const [labelError, setLabelError] = React.useState<string>('');
+  const [startPublicationError, setStartPublicationError] = React.useState<string>('');
+  const [endPublicationError, setEndPublicationError] = React.useState<string>('');
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
@@ -91,8 +101,25 @@ export const OperationScreen = ({
       nodes
         .map(node => {
           const { id, children, original, parentId, ...rest } = node;
+          const meta = Object.keys(rest.meta).reduce((acc, key) => {
+            const meta = rest.meta[key];
+            if (meta == null || meta === '') {
+              return acc;
+            }
+            return {
+              ...acc,
+              [key]: meta,
+            };
+          }, {});
+          const startPublication = rest.startPublication?.isValid
+            ? rest.startPublication.toISO()
+            : null;
+          const endPublication = rest.endPublication?.isValid ? rest.endPublication.toISO() : null;
           return {
             ...rest,
+            startPublication,
+            endPublication,
+            meta,
             children: children && formatNodes(children),
             id: id === -1 ? undefined : id,
           };
@@ -118,8 +145,8 @@ export const OperationScreen = ({
           })}!`,
         });
         setUpdatedMenu(data.updateMenu);
+        setOperationScreen(EnumInputActionScreen.SELECTING_ACTION);
         setEditingNode(emptyEditingNode);
-        setOperationScreen(EnumActionScreen.SELECTING_ACTION);
       },
       onError: error => {
         openDefaultErrorNotification(error, dispatch);
@@ -175,54 +202,80 @@ export const OperationScreen = ({
   };
 
   const handleActionChange = React.useCallback(
-    (action: EnumActionScreen) => {
+    (action: EnumInputActionScreen) => {
       const selectedNode = findNodeById(nodes, Number(selected));
-      if (expanded.indexOf(selectedNode.id.toString()) === -1) {
+      if (expanded.find(id => id === selectedNode?.id.toString())) {
         setExpanded([...expanded, selectedNode.id.toString()]);
       }
-      let original;
+      let node: INode;
       const meta = {};
       switch (action) {
-        case EnumActionScreen.SELECTING_ACTION:
+        case EnumInputActionScreen.SELECTING_ACTION:
           setEditingNode(emptyEditingNode);
           break;
-        case EnumActionScreen.INSERT:
+        case EnumInputActionScreen.INSERT:
           data?.menu.meta.forEach(m => {
-            meta[m.name] = '';
+            switch (m.type) {
+              case MenuMetaType.TEXT:
+              case MenuMetaType.NUMBER:
+              case MenuMetaType.DATE:
+                meta[m.name] = m.defaultValue || '';
+                break;
+              case MenuMetaType.BOOLEAN:
+                meta[m.name] = m.defaultValue || false;
+                break;
+            }
           });
-          original = {
+          node = {
             id: -1,
             label: t('menu.preview.newItem', {
               order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
             }),
             order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
-            action: EnumAction.CREATE,
             parentId: selectedNode.id,
             meta,
+            enabled: true,
+            children: [],
+            startPublication: null,
+            endPublication: null,
           };
-          setEditingNode({ ...original, original });
+          setEditingNode({ ...node, action: EnumInputAction.CREATE, original: node });
           setSelected('-1');
           break;
-        case EnumActionScreen.UPDATE:
+        case EnumInputActionScreen.UPDATE:
           if (!selectedNode || selectedNode.id === 0) {
             !selectedNode && setSelected('');
             return;
           }
+          data?.menu.meta.forEach(m => {
+            const defaultValue = selectedNode.meta[m.id] || m.defaultValue;
+            switch (m.type) {
+              case MenuMetaType.TEXT:
+              case MenuMetaType.NUMBER:
+              case MenuMetaType.DATE:
+                meta[m.name] = defaultValue || '';
+                break;
+              case MenuMetaType.BOOLEAN:
+                meta[m.name] = defaultValue || false;
+                break;
+            }
+          });
           setEditingNode({
             ...selectedNode,
-            action: EnumAction.UPDATE,
+            meta,
+            action: EnumInputAction.UPDATE,
             original: selectedNode,
           });
           setSelected(selectedNode.id.toString());
           break;
-        case EnumActionScreen.DELETE:
+        case EnumInputActionScreen.DELETE:
           if (!selectedNode || selectedNode.id === 0) {
             !selectedNode && setSelected('');
             return;
           }
           setEditingNode({
             ...selectedNode,
-            action: EnumAction.DELETE,
+            action: EnumInputAction.DELETE,
             original: selectedNode,
           });
           setSelected(selectedNode.id.toString());
@@ -274,7 +327,7 @@ export const OperationScreen = ({
               type="number"
               label={meta.name}
               InputLabelProps={{ shrink: true }}
-              value={editingNode.meta[meta.name] || ''}
+              value={editingNode.meta[meta.name]}
               required={meta.required}
               onChange={e => {
                 setEditingNode({
@@ -295,7 +348,7 @@ export const OperationScreen = ({
               type="text"
               label={meta.name}
               InputLabelProps={{ shrink: true }}
-              value={editingNode.meta[meta.name] || ''}
+              value={editingNode.meta[meta.name]}
               required={meta.required}
               onChange={e => {
                 const m = { ...editingNode.meta, [meta.name]: e.target.value };
@@ -310,8 +363,8 @@ export const OperationScreen = ({
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
               <DatePicker
                 label={meta.name}
-                value={editingNode.meta[meta.name] || ''}
-                onChange={date => {
+                value={editingNode.meta[meta.name]}
+                onChange={(date: DateTime) => {
                   setEditingNode({
                     ...editingNode,
                     meta: {
@@ -341,21 +394,24 @@ export const OperationScreen = ({
           );
       }
     };
-    return data?.menu.meta.map((meta, i) => (
-      <Box
-        key={i}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {renderInput(meta)}
-      </Box>
-    ));
+    return data?.menu.meta
+      .filter(meta => meta.enabled)
+      .sort((a, b) => a.order - b.order)
+      .map((meta, i) => (
+        <Box
+          key={i}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {renderInput(meta)}
+        </Box>
+      ));
   };
 
   switch (operationScreen) {
-    case EnumActionScreen.SELECTING_ACTION:
+    case EnumInputActionScreen.SELECTING_ACTION:
       return (
         <Box
           sx={{
@@ -390,7 +446,7 @@ export const OperationScreen = ({
               sx={{ color: 'green' }}
               variant="outlined"
               color="success"
-              onClick={() => handleActionChange(EnumActionScreen.INSERT)}
+              onClick={() => handleActionChange(EnumInputActionScreen.INSERT)}
             >
               <AddIcon />
               <Typography
@@ -412,7 +468,7 @@ export const OperationScreen = ({
               variant="outlined"
               color="warning"
               disabled={!selected || selected === '0'}
-              onClick={() => handleActionChange(EnumActionScreen.UPDATE)}
+              onClick={() => handleActionChange(EnumInputActionScreen.UPDATE)}
             >
               <EditIcon />
               <Typography
@@ -434,7 +490,7 @@ export const OperationScreen = ({
               variant="outlined"
               color="error"
               disabled={!selected || selected === '0'}
-              onClick={() => handleActionChange(EnumActionScreen.DELETE)}
+              onClick={() => handleActionChange(EnumInputActionScreen.DELETE)}
             >
               <DeleteIcon />
               <Typography
@@ -475,7 +531,7 @@ export const OperationScreen = ({
           </Button>
         </Box>
       );
-    case EnumActionScreen.INSERT:
+    case EnumInputActionScreen.INSERT:
       return (
         <Form onSubmit={handleInsertSubmit}>
           <Typography
@@ -548,31 +604,225 @@ export const OperationScreen = ({
               width: '100%',
             }}
           />
-          <TextField
-            type="number"
-            label={t('menu.preview.inputs.order.label')}
-            InputLabelProps={{ shrink: true }}
-            value={editingNode.order}
-            onChange={e => {
-              const parent = findNodeById(nodes, editingNode.parentId);
-              const order = Math.min(
-                Math.max(Number(e.target.value), 1),
-                parent.children?.length ? parent.children.length + 1 : 1,
-              );
-              if (order === editingNode.order) return;
-              setEditingNode({
-                ...editingNode,
-                order,
-              });
-            }}
-            sx={{
-              mt: '2rem',
-              width: '6rem',
-            }}
-          />
-          <Divider sx={{ mt: '1.5rem' }} />
-          {renderMeta()}
-          {data?.menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
+          <Box className="flex items-center space-x-4">
+            <TextField
+              type="number"
+              label={t('menu.preview.inputs.order.label')}
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.order}
+              onChange={e => {
+                const parent = findNodeById(nodes, editingNode.parentId);
+                const order = Math.min(
+                  Math.max(Number(e.target.value), 1),
+                  parent.children?.length ? parent.children.length + 1 : 1,
+                );
+                if (order === editingNode.order) return;
+                setEditingNode({
+                  ...editingNode,
+                  order,
+                });
+              }}
+              sx={{
+                mt: '2rem',
+                width: '6rem',
+              }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editingNode.enabled}
+                  onChange={e => {
+                    setEditingNode({
+                      ...editingNode,
+                      enabled: e.target.checked,
+                    });
+                  }}
+                />
+              }
+              label={t('menuItem.fields.enabled')}
+              sx={{ mt: '2rem' }}
+            />
+          </Box>
+          <Box className="flex items-center space-x-4">
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DateTimePicker
+                disablePast
+                label={t('menuItem.fields.startPublication')}
+                value={editingNode.startPublication}
+                onChange={(date: DateTime) => {
+                  setEditingNode({
+                    ...editingNode,
+                    startPublication: date,
+                  });
+                }}
+                maxDateTime={editingNode.endPublication}
+                onError={(reason, value) => {
+                  switch (reason) {
+                    case 'invalidDate':
+                      setStartPublicationError(t('error.common.date.invalidDate'));
+                      break;
+                    case 'disablePast':
+                      setStartPublicationError(t('error.common.date.disablePast'));
+                      break;
+                    case 'maxDate':
+                      setStartPublicationError(
+                        t('error.common.date.maxDate', {
+                          maxDate: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minDate':
+                      setStartPublicationError(
+                        t('error.common.date.minDate', {
+                          minDate: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'maxTime':
+                      setStartPublicationError(
+                        t('error.common.date.maxTime', {
+                          maxTime: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minTime':
+                      setStartPublicationError(
+                        t('error.common.date.minTime', {
+                          minTime: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    default:
+                      setStartPublicationError('');
+                      break;
+                  }
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!editingNode.startPublication && params.error}
+                    helperText={startPublicationError || params.helperText}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+                componentsProps={{
+                  actionBar: {
+                    actions: ['clear', 'today'],
+                  },
+                }}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DateTimePicker
+                disablePast
+                label={t('menuItem.fields.endPublication')}
+                value={editingNode.endPublication}
+                onChange={(date: DateTime) => {
+                  setEditingNode({
+                    ...editingNode,
+                    endPublication: date,
+                  });
+                }}
+                minDateTime={editingNode.startPublication}
+                onError={(reason, value) => {
+                  switch (reason) {
+                    case 'invalidDate':
+                      setEndPublicationError(t('error.common.date.invalidDate'));
+                      break;
+                    case 'disablePast':
+                      setEndPublicationError(t('error.common.date.disablePast'));
+                      break;
+                    case 'maxDate':
+                      setEndPublicationError(
+                        t('error.common.date.maxDate', {
+                          maxDate: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minDate':
+                      setEndPublicationError(
+                        t('error.common.date.minDate', {
+                          minDate: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'maxTime':
+                      setEndPublicationError(
+                        t('error.common.date.maxTime', {
+                          maxTime: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minTime':
+                      setEndPublicationError(
+                        t('error.common.date.minTime', {
+                          minTime: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    default:
+                      setEndPublicationError('');
+                      break;
+                  }
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!editingNode.endPublication && params.error}
+                    helperText={endPublicationError || params.helperText}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+                componentsProps={{
+                  actionBar: {
+                    actions: ['clear', 'today'],
+                  },
+                }}
+              />
+            </LocalizationProvider>
+          </Box>
+          <Divider sx={{ mt: '2rem' }} />
+          {data?.menu.meta?.length && (
+            <Box sx={{ mt: '1.5rem' }}>
+              <Typography variant="h3">
+                {t('menu.fields.meta.title', { count: data.menu.meta.length })}
+              </Typography>
+              {renderMeta()}
+              <Divider sx={{ mt: '1.5rem' }} />
+            </Box>
+          )}
           <Box
             sx={{
               display: 'flex',
@@ -585,6 +835,7 @@ export const OperationScreen = ({
               color="success"
               sx={{ mt: '2rem', mr: '1rem' }}
               type="submit"
+              disabled={!!labelError || !!startPublicationError || !!endPublicationError}
             >
               {t('buttons.save')}
             </Button>
@@ -592,14 +843,14 @@ export const OperationScreen = ({
               variant="contained"
               color="error"
               sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
             >
               {t('buttons.discard')}
             </Button>
           </Box>
         </Form>
       );
-    case EnumActionScreen.UPDATE:
+    case EnumInputActionScreen.UPDATE:
       return (
         <Form onSubmit={handleUpdateSubmit}>
           <Typography
@@ -646,31 +897,225 @@ export const OperationScreen = ({
               width: '100%',
             }}
           />
-          <TextField
-            type="number"
-            label={t('menu.preview.inputs.order.label')}
-            InputLabelProps={{ shrink: true }}
-            value={editingNode.order}
-            onChange={e => {
-              const parent = findNodeById(nodes, editingNode.parentId);
-              const order = Math.min(
-                Math.max(Number(e.target.value), 1),
-                parent.children?.length ? parent.children.length : 1,
-              );
-              if (order === editingNode.order) return;
-              setEditingNode({
-                ...editingNode,
-                order,
-              });
-            }}
-            sx={{
-              mt: '2rem',
-              width: '6rem',
-            }}
-          />
-          <Divider sx={{ mt: '1.5rem' }} />
-          {renderMeta()}
-          {data?.menu.meta.length > 0 && <Divider sx={{ mt: '2rem' }} />}
+          <Box className="flex items-center space-x-4">
+            <TextField
+              type="number"
+              label={t('menu.preview.inputs.order.label')}
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.order}
+              onChange={e => {
+                const parent = findNodeById(nodes, editingNode.parentId);
+                const order = Math.min(
+                  Math.max(Number(e.target.value), 1),
+                  parent.children?.length ? parent.children.length : 1,
+                );
+                if (order === editingNode.order) return;
+                setEditingNode({
+                  ...editingNode,
+                  order,
+                });
+              }}
+              sx={{
+                mt: '2rem',
+                width: '6rem',
+              }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editingNode.enabled}
+                  onChange={e => {
+                    setEditingNode({
+                      ...editingNode,
+                      enabled: e.target.checked,
+                    });
+                  }}
+                />
+              }
+              label={t('menuItem.fields.enabled')}
+              sx={{ mt: '2rem' }}
+            />
+          </Box>
+          <Box className="flex items-center space-x-4">
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DateTimePicker
+                disablePast
+                label={t('menuItem.fields.startPublication')}
+                value={editingNode.startPublication}
+                onChange={(date: DateTime) => {
+                  setEditingNode({
+                    ...editingNode,
+                    startPublication: date,
+                  });
+                }}
+                maxDateTime={editingNode.endPublication}
+                onError={(reason, value) => {
+                  switch (reason) {
+                    case 'invalidDate':
+                      setStartPublicationError(t('error.common.date.invalidDate'));
+                      break;
+                    case 'disablePast':
+                      setStartPublicationError(t('error.common.date.disablePast'));
+                      break;
+                    case 'maxDate':
+                      setStartPublicationError(
+                        t('error.common.date.maxDate', {
+                          maxDate: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minDate':
+                      setStartPublicationError(
+                        t('error.common.date.minDate', {
+                          minDate: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'maxTime':
+                      setStartPublicationError(
+                        t('error.common.date.maxTime', {
+                          maxTime: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minTime':
+                      setStartPublicationError(
+                        t('error.common.date.minTime', {
+                          minTime: editingNode.endPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    default:
+                      setStartPublicationError('');
+                      break;
+                  }
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!editingNode.startPublication && params.error}
+                    helperText={startPublicationError || params.helperText}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+                componentsProps={{
+                  actionBar: {
+                    actions: ['clear', 'today'],
+                  },
+                }}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              <DateTimePicker
+                disablePast
+                label={t('menuItem.fields.endPublication')}
+                value={editingNode.endPublication}
+                onChange={(date: DateTime) => {
+                  setEditingNode({
+                    ...editingNode,
+                    endPublication: date,
+                  });
+                }}
+                minDateTime={editingNode.startPublication}
+                onError={(reason, value) => {
+                  switch (reason) {
+                    case 'invalidDate':
+                      setEndPublicationError(t('error.common.date.invalidDate'));
+                      break;
+                    case 'disablePast':
+                      setEndPublicationError(t('error.common.date.disablePast'));
+                      break;
+                    case 'maxDate':
+                      setEndPublicationError(
+                        t('error.common.date.maxDate', {
+                          maxDate: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minDate':
+                      setEndPublicationError(
+                        t('error.common.date.minDate', {
+                          minDate: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATE_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'maxTime':
+                      setEndPublicationError(
+                        t('error.common.date.maxTime', {
+                          maxTime: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    case 'minTime':
+                      setEndPublicationError(
+                        t('error.common.date.minTime', {
+                          minTime: editingNode.startPublication
+                            .setLocale(i18n.language)
+                            .toLocaleString(DateTime.DATETIME_SHORT),
+                        }),
+                      );
+                      break;
+                    default:
+                      setEndPublicationError('');
+                      break;
+                  }
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!editingNode.endPublication && params.error}
+                    helperText={endPublicationError || params.helperText}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: `${t('common.example')}: ${DateTime.now()
+                        .plus({ days: 5 })
+                        .setLocale(i18n.language)
+                        .toLocaleString()}`,
+                    }}
+                    sx={{ mt: '1.25rem' }}
+                  />
+                )}
+                componentsProps={{
+                  actionBar: {
+                    actions: ['clear', 'today'],
+                  },
+                }}
+              />
+            </LocalizationProvider>
+          </Box>
+          <Divider sx={{ mt: '2rem' }} />
+          {data?.menu.meta?.length && (
+            <Box sx={{ mt: '1.5rem' }}>
+              <Typography variant="h3">
+                {t('menu.fields.meta.title', { count: data.menu.meta.length })}
+              </Typography>
+              {renderMeta()}
+              <Divider sx={{ mt: '1.5rem' }} />
+            </Box>
+          )}
           <Box
             sx={{
               display: 'flex',
@@ -683,6 +1128,7 @@ export const OperationScreen = ({
               color="success"
               sx={{ mt: '2rem', mr: '1rem' }}
               type="submit"
+              disabled={!!labelError || !!startPublicationError || !!endPublicationError}
             >
               {t('buttons.save')}
             </Button>
@@ -690,14 +1136,14 @@ export const OperationScreen = ({
               variant="contained"
               color="error"
               sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
             >
               {t('buttons.discard')}
             </Button>
           </Box>
         </Form>
       );
-    case EnumActionScreen.DELETE:
+    case EnumInputActionScreen.DELETE:
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', pr: '1rem' }}>
           <Typography
@@ -754,7 +1200,7 @@ export const OperationScreen = ({
               variant="contained"
               color="error"
               sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumActionScreen.SELECTING_ACTION)}
+              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
             >
               {t('buttons.discard')}
             </Button>

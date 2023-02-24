@@ -1,8 +1,20 @@
 export default class MenuItemInitialTemplate {
-  public static EJS = '<% const { id, label, order, meta, children } = item; -%>';
+  public static EJS = '<% const { id, label, order, meta, children, menu } = item; -%>';
 
   public static JSON = `${MenuItemInitialTemplate.EJS}
 <%
+  const mapMeta = (meta) => {
+    return Object.entries(meta).reduce((acc, [id, value]) => {
+      const { name, enabled } = menu.meta.find(m => {
+        return m.id === Number(id)
+      });
+      if(!enabled) return acc;
+      return {
+        ...acc,
+        [name]: value,
+      };
+    }, {});
+  };
   const mapChildren = (children) => {
     return children.map((child) => {
       const { id, label, order, meta, children, template } = child;
@@ -13,7 +25,7 @@ export default class MenuItemInitialTemplate {
         id,
         label,
         order,
-        meta,
+        meta: meta ? mapMeta(meta) : {},
         children: children?.length ? mapChildren(children) : [],
       }
     });
@@ -23,16 +35,18 @@ export default class MenuItemInitialTemplate {
   "id": <%= id %>,
   "label": "<%= label %>",
   "order": <%= order %>,
-  "meta": <%- meta &&  JSON.stringify(meta) %>,
+  "meta": <%- meta &&  JSON.stringify(mapMeta(meta)) %>,
   "children": <%- children && JSON.stringify(mapChildren(children)) %>
 }`;
 
   public static XML = `${MenuItemInitialTemplate.EJS}
 <% 
   const metaTags = (meta) => {
-    return Object.keys(meta).map((key) => {
-      return \`<meta key="\${key}" value="\${meta[key]}" />\`
-    });
+    return Object.entries(meta).map(([id, value]) => {
+      const { name, enabled } = menu.meta.find(m => m.id === Number(id));
+      if(!enabled) return null;
+      return \`<meta name="\${name}" value="\${value}" />\`
+    }).filter(m => !!m);
   };
   const mapChildren = (children, level) => {
     return children.map((child) => {
@@ -76,13 +90,13 @@ export default class MenuItemInitialTemplate {
       if (template) {
         return template;
       }
-      return JSON.stringify({
+      return {
         id,
         label,
         order,
         meta,
         children: children?.length ? mapChildren(children) : undefined,
-      }, null, 2)
+      };
     });
   };
 %>
@@ -90,5 +104,5 @@ id = <%= id %>;
 label = "<%= label %>";
 order = <%= order %>;
 meta = <%- JSON.stringify(meta, null, 2) %>;
-children = <%- children?.length ? mapChildren(children).join(',\\n') : [] %>;`;
+children = <%- children?.length ? JSON.stringify(mapChildren(children), null, 2) : [] %>;`;
 }

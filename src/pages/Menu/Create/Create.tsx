@@ -12,7 +12,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import { IMenuMetaWithErrors } from '../../../types';
+import { FormAction, IMenuMetaWithErrors } from '../../../types';
 
 export const CreateMenu = () => {
   const { t } = useTranslation();
@@ -24,7 +24,9 @@ export const CreateMenu = () => {
   const [name, setName] = React.useState<string>('');
   const [nameError, setNameError] = React.useState<string>('');
 
-  const [meta, setMeta] = React.useState<IMenuMetaWithErrors[]>([]);
+  const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
+
+  const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
 
   const [createMenu] = useMutation(MenuService.CREATE_MENU);
 
@@ -33,14 +35,18 @@ export const CreateMenu = () => {
   };
 
   const onSubmit = () => {
-    const formattedMeta = meta.map(m => ({
-      name: m.name,
-      required: m.required,
-      type: m.type,
-    }));
+    setLoadingSubmit(true);
+    const meta = metaWithErrors.map(m => {
+      const { errors, ...rest } = m;
+      rest.defaultValue === '' && delete rest.defaultValue;
+      rest.id && delete rest.id;
+      rest.action && delete rest.action;
+      return rest;
+    });
     createMenu({
-      variables: { menu: { name, meta: formattedMeta } },
+      variables: { menu: { name, meta } },
       onCompleted: data => {
+        setLoadingSubmit(false);
         dispatch({
           type: ActionTypes.OPEN_NOTIFICATION,
           message: `${t('notification.createSuccess', {
@@ -51,37 +57,41 @@ export const CreateMenu = () => {
         navigate(`/menus/${data.createMenu.id}`);
       },
       onError: error => {
+        setLoadingSubmit(false);
         openDefaultErrorNotification(error, dispatch);
       },
     });
   };
 
   return (
-    <Box>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Helmet>
         <title>{t('menu.create.title')}</title>
       </Helmet>
-      <AppBreadcrumbs
-        items={[
-          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: t('menu.create.title') },
-        ]}
-        onBack={onBackClickHandler}
-      />
-      <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-        {t('menu.create.title')}
-      </Typography>
-      <Divider />
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
+        <AppBreadcrumbs
+          items={[
+            { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+            { label: t('menu.create.title') },
+          ]}
+          onBack={onBackClickHandler}
+        />
+        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
+          {t('menu.create.title')}
+        </Typography>
+        <Divider />
+      </Box>
       <MenuForm
         name={name}
         setName={setName}
         nameError={nameError}
         setNameError={setNameError}
-        meta={meta}
-        setMeta={setMeta}
-        onBack={onBackClickHandler}
+        meta={metaWithErrors}
+        setMeta={setMetaWithErrors}
+        loadingSubmit={loadingSubmit}
         onSubmit={onSubmit}
-        action="create"
+        onBack={onBackClickHandler}
+        action={FormAction.CREATE}
       />
     </Box>
   );

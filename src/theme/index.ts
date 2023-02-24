@@ -3,6 +3,7 @@ import { createTheme } from '@mui/material/styles';
 import { GridLocaleText, ptBR as ptBRDataGrid } from '@mui/x-data-grid';
 import type {} from '@mui/x-data-grid/themeAugmentation';
 import { ptBR } from '@mui/material/locale';
+import { ptBR as datePickersPtBR } from '@mui/x-date-pickers';
 
 import palette from './palette';
 import typography from './typography';
@@ -39,6 +40,7 @@ const localizedTheme = language => {
   if (language === 'pt-BR') {
     return [
       ptBR,
+      datePickersPtBR,
       {
         components: {
           MuiTablePagination: ptBRMuiTablePaginationOverride,

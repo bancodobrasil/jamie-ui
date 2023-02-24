@@ -1,21 +1,15 @@
-export interface IGraphQLQuery {
-  query: string;
-  operationName?: string;
-  variables?: Record<string, unknown>;
+export enum EnumInputAction {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
 }
 
-export interface IPaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+export enum FormAction {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
 }
 
-export interface IFieldError {
-  [field: string]: string;
-}
+export type GraphQLData<T> = T & { __typename: string };
 
 export interface Edge<T> {
   node: T;

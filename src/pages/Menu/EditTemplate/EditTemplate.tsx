@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { ejs as ejsLang } from 'codemirror-lang-ejs';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import ejs from 'ejs';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';
@@ -15,7 +14,7 @@ import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
-import { EnumTemplateFormat, IMenu, IMenuItem } from '../../../types';
+import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem, IMenuMeta } from '../../../types';
 import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
 import {
   ActionTypes,
@@ -77,12 +76,12 @@ export const EditTemplateMenu = () => {
 
   React.useEffect(() => {
     if (!data) return;
-    const { menu }: { menu: IMenu & { __typename: string } } = data;
+    const { menu }: { menu: GraphQLData<IMenu> } = data;
     let items: IMenuItem[] = menu.items || [];
     const getChildren = (parent: IMenuItem): IMenuItem[] => {
       const children = items
         .filter(item => item.parentId === parent.id)
-        .map((item: IMenuItem & { __typename?: string }) => {
+        .map((item: GraphQLData<IMenuItem>) => {
           const { __typename, template, templateFormat, ...rest } = item;
           let formattedTemplate = template;
           if (template) {
@@ -109,7 +108,7 @@ export const EditTemplateMenu = () => {
     };
     items =
       items
-        .map((item: IMenuItem & { __typename: string }) => {
+        .map((item: GraphQLData<IMenuItem>) => {
           const { __typename, template, templateFormat, ...rest } = item;
           let formattedTemplate = template;
           if (template) {
@@ -135,6 +134,10 @@ export const EditTemplateMenu = () => {
         .sort((a, b) => a.order - b.order) || [];
     try {
       const { __typename, template: menuTemplate, ...rest } = menu;
+      rest.meta = rest.meta.map((meta: GraphQLData<IMenuMeta>) => {
+        const { __typename, ...rest } = meta;
+        return rest;
+      });
       const result = ejs.render(template[templateFormat], {
         menu: {
           ...rest,

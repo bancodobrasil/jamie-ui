@@ -11,10 +11,21 @@ export default class MenuItemService {
         parentId
         template
         templateFormat
+        enabled
+        startPublication
+        endPublication
         menu {
           id
           name
-          meta
+          meta {
+            id
+            name
+            type
+            order
+            required
+            enabled
+            defaultValue
+          }
           templateFormat
           items {
             id
@@ -24,6 +35,9 @@ export default class MenuItemService {
             parentId
             template
             templateFormat
+            enabled
+            startPublication
+            endPublication
           }
         }
       }

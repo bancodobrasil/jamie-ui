@@ -28,6 +28,7 @@ const Layout = ({ children }: Props) => {
         <Nav />
         <Box
           sx={{
+            height: 'calc(100% - 5rem)',
             width: '100%',
             flex: 1,
             boxSizing: 'border-box',

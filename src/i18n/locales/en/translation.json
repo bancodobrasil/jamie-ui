@@ -91,6 +91,14 @@
     "common": {
       "button": {
         "reload": "Reload {{resource}}"
+      },
+      "date": {
+        "invalidDate": "Invalid date",
+        "disablePast": "Past dates are disabled",
+        "minDate": "Date must be after {{minDate}}",
+        "maxDate": "Date must be before {{maxDate}}",
+        "minTime": "Time must be after {{minTime}}",
+        "maxTime": "Time must be before {{maxTime}}"
       }
     },
     "unauthorized": {
@@ -124,6 +132,8 @@
         "add": "Add Metadata",
         "name": "Name",
         "required": "Required",
+        "enabled": "Enabled",
+        "defaultValue": "Default Value",
         "type": {
           "title_one": "Type",
           "title_other": "Types",
@@ -172,7 +182,8 @@
         "name": "Enter the menu's name...",
         "meta": {
           "name": "Enter the menu metadata's name...",
-          "type": "Enter the menu metadata's type..."
+          "type": "Enter the menu metadata's type...",
+          "defaultValue": "Enter the menu metadata's default value..."
         }
       }
     },
@@ -182,7 +193,8 @@
         "name": "Enter the menu's name...",
         "meta": {
           "name": "Enter the menu metadata's name...",
-          "type": "Enter the menu metadata's type..."
+          "type": "Enter the menu metadata's type...",
+          "defaultValue": "Enter the menu metadata's default value..."
         }
       }
     },
@@ -204,7 +216,10 @@
     "title_other": "Menu Items",
     "of": "Menu Item's $t(menu.fields.{{field}})",
     "fields": {
-      "template": "Template"
+      "template": "Template",
+      "enabled": "Enabled",
+      "startPublication": "Start Publication Date",
+      "endPublication": "End Publication Date"
     },
     "editTemplate": {
       "title": "Edit Template",

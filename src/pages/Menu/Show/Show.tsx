@@ -74,26 +74,39 @@ export const ShowMenu = () => {
     }
   };
 
-  const renderMeta = () =>
-    data?.menu.meta.map((meta, i) => (
-      <Box
-        key={i}
-        sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-        className="space-y-1"
-      >
-        <Typography variant="h4" component="h4">
-          {i + 1}. {meta.name}
-        </Typography>
-        <Typography variant="body1" component="p">
-          {t('menu.fields.meta.type.title', { count: 1 })}:{' '}
-          <b>{t(`menu.fields.meta.type.${meta.type}`)}</b>
-        </Typography>
-        <Typography variant="body1" component="p">
-          {t('common.required')}? <b>{meta.required ? t('common.yes') : t('common.no')}</b>
-        </Typography>
-      </Box>
-    ));
-
+  const renderMeta = () => {
+    if (!data?.menu.meta) return null;
+    const meta = [...data.menu.meta];
+    return meta
+      .sort((a, b) => a.order - b.order)
+      .map(meta => (
+        <Box
+          key={meta.id}
+          sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+          className="space-y-1"
+        >
+          <Typography variant="h4" component="h4" className={!meta.enabled ? 'line-through' : ''}>
+            {meta.order}. {meta.name}
+          </Typography>
+          <Typography variant="body1" component="p">
+            {t('menu.fields.meta.type.title', { count: 1 })}:{' '}
+            <b>{t(`menu.fields.meta.type.${meta.type}`)}</b>
+          </Typography>
+          <Typography variant="body1" component="p">
+            {t('common.required')}? <b>{meta.required ? t('common.yes') : t('common.no')}</b>
+          </Typography>
+          <Typography variant="body1" component="p">
+            {t('menu.fields.meta.enabled')}?{' '}
+            <b>{meta.enabled ? t('common.yes') : t('common.no')}</b>
+          </Typography>
+          {meta.defaultValue && (
+            <Typography variant="body1" component="p">
+              {t('menu.fields.meta.defaultValue')}: <b>{meta.defaultValue}</b>
+            </Typography>
+          )}
+        </Box>
+      ));
+  };
   if (loading) return <Loading />;
 
   if (error)

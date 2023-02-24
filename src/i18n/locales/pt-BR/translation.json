@@ -91,6 +91,14 @@
     "common": {
       "button": {
         "reload": "Recarregar {{resource}}"
+      },
+      "date": {
+        "invalidDate": "Data inválida",
+        "disablePast": "Não é possível selecionar datas passadas",
+        "minDate": "Data deve ser depois de {{minDate}}",
+        "maxDate": "Data deve ser antes de {{maxDate}}",
+        "minTime": "Horário deve ser depois de {{minTime}}",
+        "maxTime": "Horário deve ser antes de {{maxTime}}"
       }
     },
     "unauthorized": {
@@ -124,6 +132,8 @@
         "add": "Adicionar Metadado",
         "name": "Nome",
         "required": "Obrigatório",
+        "enabled": "Habilitado",
+        "defaultValue": "Valor Padrão",
         "type": {
           "title_one": "Tipo",
           "title_other": "Tipos",
@@ -172,7 +182,8 @@
         "name": "Digite o nome do menu...",
         "meta": {
           "name": "Digite o nome do metadado...",
-          "type": "Digite o tipo do metadado..."
+          "type": "Digite o tipo do metadado...",
+          "defaultValue": "Digite o valor padrão do metadado..."
         }
       }
     },
@@ -182,7 +193,8 @@
         "name": "Digite o nome do menu...",
         "meta": {
           "name": "Digite o nome do metadado...",
-          "type": "Digite o tipo do metadado..."
+          "type": "Digite o tipo do metadado...",
+          "defaultValue": "Digite o valor padrão do metadado..."
         }
       }
     },
@@ -204,7 +216,10 @@
     "title_other": "Itens de Menu",
     "of": "$t(menu.fields.{{field}}) do Item de Menu",
     "fields": {
-      "template": "Template"
+      "template": "Template",
+      "enabled": "Habilitado",
+      "startPublication": "Data de Início de Publicação",
+      "endPublication": "Data de Fim de Publicação"
     },
     "editTemplate": {
       "title": "Editar Template",

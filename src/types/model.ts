@@ -1,4 +1,5 @@
-import { IFieldError } from './common';
+import { DateTime } from 'luxon';
+import { EnumInputAction } from './common';
 import { EnumTemplateFormat } from './template';
 
 export interface IMenu {
@@ -15,9 +16,12 @@ export interface IMenuItem {
   label: string;
   order: number;
   meta: IMenuItemMeta;
+  enabled: boolean;
+  startPublication?: DateTime;
+  endPublication?: DateTime;
   children?: IMenuItem[];
   parent?: Omit<IMenuItem, 'children'>;
-  parentId: number;
+  parentId?: number;
   menu?: IMenu;
   template?: string;
   templateFormat?: EnumTemplateFormat;
@@ -46,13 +50,20 @@ export enum MenuMetaType {
 }
 
 export interface IMenuMeta {
+  action?: EnumInputAction;
+  id?: number;
   name: string;
+  order: number;
   required: boolean;
+  enabled: boolean;
+  defaultValue?: unknown;
   type: MenuMetaType;
 }
 
 export interface IMenuMetaWithErrors extends IMenuMeta {
-  errors: IFieldError;
+  errors: {
+    [field: string]: string;
+  };
 }
 
 export interface IMenuItemMeta {

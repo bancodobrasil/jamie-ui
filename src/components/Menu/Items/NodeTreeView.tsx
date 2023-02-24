@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { TreeItem, TreeView } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { EnumAction, IEditingNode, INode } from '../../../types';
+import { EnumInputAction, IEditingNode, INode } from '../../../types';
 
 interface Props {
   nodes: INode[];
@@ -38,13 +38,13 @@ export const NodeTreeView = ({
         let color = 'black';
         const fontWeight = node.id === editingNode.id ? 'bold' : 'normal';
         switch (node.action) {
-          case EnumAction.CREATE:
+          case EnumInputAction.CREATE:
             color = 'green';
             break;
-          case EnumAction.UPDATE:
+          case EnumInputAction.UPDATE:
             color = 'orange';
             break;
-          case EnumAction.DELETE:
+          case EnumInputAction.DELETE:
             color = 'red';
             break;
         }
