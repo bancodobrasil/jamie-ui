@@ -27,7 +27,10 @@
     "required": "Required",
     "optional": "Optional",
     "fields": {
-      "id": "ID"
+      "id": "ID",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "version": "Version"
     }
   },
   "buttons": {
@@ -143,7 +146,15 @@
           "date": "Date"
         },
         "value": "Value"
-      }
+      },
+      "revision": {
+        "title_one": "Version",
+        "title_other": "Versions",
+        "description": "Description",
+        "snapshot": "Snapshot"
+      },
+      "currentRevision": "Current Version",
+      "publishedRevision": "Published Version"
     },
     "preview": {
       "title": "Edit Items",
