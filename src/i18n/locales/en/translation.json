@@ -279,5 +279,27 @@
         "useDefault": "Use Default Template"
       }
     }
+  },
+  "menuRevision": {
+    "title_one": "Menu Version",
+    "title_other": "Menu Versions",
+    "of": "Menu Version's $t(menu.fields.{{field}})",
+    "fields": {
+      "id": "ID",
+      "description": "Description",
+      "snapshot": "Snapshot"
+    },
+    "create": {
+      "title": "Close Menu Version",
+      "placeholders": {
+        "description": "Enter the menu version's description..."
+      }
+    },
+    "restore": {
+      "title": "Restore Menu Version"
+    },
+    "publish": {
+      "title": "Publish Menu Version"
+    }
   }
 }

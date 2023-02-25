@@ -164,7 +164,7 @@
         "insert": "Inserir",
         "edit": "Editar",
         "delete": "Deletar",
-        "editTemplate":  "Editar Template"
+        "editTemplate": "Editar Template"
       },
       "parent": "Item Pai",
       "newItem": "Novo Item {{order}}",
@@ -278,6 +278,28 @@
         "discard": "Descartar Alterações",
         "useDefault": "Usar Template Padrão"
       }
+    }
+  },
+  "menuRevision": {
+    "title_one": "Versão do Menu",
+    "title_other": "Versões do Menu",
+    "of": "Versão do Menu $t(menu.fields.{{field}})",
+    "fields": {
+      "id": "ID",
+      "description": "Descrição",
+      "snapshot": "Snapshot"
+    },
+    "create": {
+      "title": "Fechar Versão do Menu",
+      "placeholders": {
+        "description": "Insira a descrição da versão do menu..."
+      }
+    },
+    "restore": {
+      "title": "Restaurar Versão do Menu"
+    },
+    "publish": {
+      "title": "Publicar Versão do Menu"
     }
   }
 }

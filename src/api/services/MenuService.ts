@@ -123,4 +123,21 @@ export default class MenuService {
       removeMenu(id: $id)
     }
   `;
+
+  static GET_MENU_REVISIONS: DocumentNode = gql`
+    query GetMenuRevisions($id: Int!) {
+      menu(id: $id) {
+        id
+        name
+        currentRevisionId
+        publishedRevisionId
+        revisions {
+          id
+          description
+          createdAt
+          snapshot
+        }
+      }
+    }
+  `;
 }
