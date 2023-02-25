@@ -12,6 +12,9 @@ import Loading from '../../Loading';
 import { ProtectedRoute } from '.';
 import NotFound from '../../../pages/NotFound';
 import Layout from '../../Layout';
+import RestoreRevision from '../../../pages/Menu/Revisions/Restore';
+import CreateRevision from '../../../pages/Menu/Revisions/Create';
+import PublishRevision from '../../../pages/Menu/Revisions/Publish';
 
 export const AppRoutes = () => {
   const { initialized, keycloak } = useKeycloak();
@@ -50,6 +53,9 @@ export const AppRoutes = () => {
                 <Route index element={<ItemsPreview />} />
                 <Route path=":itemId" element={<EditTemplateItems />} />
               </Route>
+              <Route path="restoreVersion" element={<RestoreRevision />} />
+              <Route path="closeVersion" element={<CreateRevision />} />
+              <Route path="publishVersion" element={<PublishRevision />} />
             </Route>
             <Route path="create" element={<CreateMenu />} />
           </Route>
