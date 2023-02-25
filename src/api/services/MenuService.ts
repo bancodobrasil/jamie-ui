@@ -68,6 +68,16 @@ export default class MenuService {
           startPublication
           endPublication
         }
+        currentRevision {
+          id
+          description
+        }
+        publishedRevision {
+          id
+          description
+        }
+        createdAt
+        updatedAt
       }
     }
   `;
