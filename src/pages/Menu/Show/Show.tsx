@@ -75,6 +75,18 @@ export const ShowMenu = () => {
     }
   };
 
+  const onRestoreRevisionClickHandler = () => {
+    navigate('restoreVersion');
+  };
+
+  const onCreateRevisionClickHandler = () => {
+    navigate('closeVersion');
+  };
+
+  const onPublishRevisionClickHandler = () => {
+    navigate('publishVersion');
+  };
+
   const renderMeta = () => {
     if (!data?.menu.meta) return null;
     const meta = [...data.menu.meta];
@@ -205,40 +217,56 @@ export const ShowMenu = () => {
         )}
       </Box>
       <Divider />
-      <Box sx={{ display: 'flex', my: '1rem' }}>
-        <Button
-          variant="contained"
-          sx={{ mr: '1rem' }}
-          onClick={onEditClickHandler}
-          disabled={loadingDelete}
-        >
-          {t('menu.show.actions.edit')}
-        </Button>
-        <Button
-          variant="outlined"
-          sx={{ mr: '1rem' }}
-          onClick={onEditTemplateClickHandler}
-          disabled={loadingDelete}
-        >
-          {t('menu.show.actions.editTemplate')}
-        </Button>
-        <Button
-          variant="outlined"
-          sx={{ mr: '1rem' }}
-          onClick={onEditItemsClickHandler}
-          disabled={loadingDelete}
-        >
-          {t('menu.show.actions.editItems')}
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          sx={{ mr: '1rem' }}
-          onClick={onDeleteClickHandler}
-          disabled={loadingDelete}
-        >
-          {t('menu.show.actions.delete')}
-        </Button>
+      <Box className="flex flex-col space-y-4 my-4 w-fit">
+        <Typography variant="h2" component="h2">
+          {t('menu.show.actions.title')}:
+        </Typography>
+        <Box className="flex space-x-8">
+          <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
+            {t('menu.show.actions.edit')}
+          </Button>
+          <Button variant="outlined" onClick={onEditTemplateClickHandler} disabled={loadingDelete}>
+            {t('menu.show.actions.editTemplate')}
+          </Button>
+          <Button variant="outlined" onClick={onEditItemsClickHandler} disabled={loadingDelete}>
+            {t('menu.show.actions.editItems')}
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={onDeleteClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.delete')}
+          </Button>
+        </Box>
+        <Divider />
+        <Box className="flex justify-center space-x-8">
+          <Button
+            variant="outlined"
+            color="warning"
+            onClick={onRestoreRevisionClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.restoreRevision')}
+          </Button>
+          <Button
+            variant="outlined"
+            color="success"
+            onClick={onCreateRevisionClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.createRevision')}
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={onPublishRevisionClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.publishRevision')}
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

@@ -215,7 +215,10 @@
         "edit": "Edit Menu",
         "editTemplate": "Edit Template",
         "editItems": "Edit Items",
-        "delete": "Delete"
+        "delete": "Delete",
+        "createRevision": "Close Version",
+        "publishRevision": "Publish Version",
+        "restoreRevision": "Restore Version"
       },
       "messages": {
         "confirmDelete": "Are you sure you want to delete this menu?"
