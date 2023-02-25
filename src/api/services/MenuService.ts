@@ -22,6 +22,10 @@ export default class MenuService {
           node {
             id
             name
+            createdAt
+            updatedAt
+            currentRevisionId
+            publishedRevisionId
           }
           cursor
         }

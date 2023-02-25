@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useQuery } from '@apollo/client';
+import { DateTime } from 'luxon';
 import MenuService from '../../../api/services/MenuService';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import './List.style.css';
@@ -14,7 +15,7 @@ import { Edge, IMenu } from '../../../types';
 const MENU_LIST_DEFAULT_PAGE_SIZE = 10;
 
 export const ListMenu = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -57,6 +58,42 @@ export const ListMenu = () => {
         flex: 1,
       },
       {
+        field: 'createdAt',
+        headerName: t('common.fields.createdAt'),
+        disableColumnMenu: true,
+        minWidth: 200,
+        renderCell: params =>
+          DateTime.fromISO(params.value)
+            .setLocale(i18n.language)
+            .toLocaleString(DateTime.DATETIME_SHORT),
+      },
+      {
+        field: 'updatedAt',
+        headerName: t('common.fields.updatedAt'),
+        disableColumnMenu: true,
+        minWidth: 200,
+        renderCell: params =>
+          DateTime.fromISO(params.value)
+            .setLocale(i18n.language)
+            .toLocaleString(DateTime.DATETIME_SHORT),
+      },
+      {
+        field: 'currentRevisionId',
+        headerName: t('menu.fields.currentRevision'),
+        disableColumnMenu: true,
+        sortable: false,
+        minWidth: 150,
+        renderCell: params => params.value || '-',
+      },
+      {
+        field: 'publishedRevisionId',
+        headerName: t('menu.fields.publishedRevision'),
+        disableColumnMenu: true,
+        sortable: false,
+        minWidth: 150,
+        renderCell: params => params.value || '-',
+      },
+      {
         field: '',
         headerName: '',
         headerClassName: 'MuiDataGrid-headerHidden',
@@ -79,7 +116,7 @@ export const ListMenu = () => {
         },
       },
     ],
-    [t, navigate],
+    [t, i18n, navigate],
   );
 
   const handleButtonCreateOnClick = () => {
