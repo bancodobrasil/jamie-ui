@@ -129,13 +129,46 @@ export default class MenuService {
       menu(id: $id) {
         id
         name
-        currentRevisionId
-        publishedRevisionId
+        currentRevision {
+          id
+          description
+          createdAt
+          snapshot
+        }
+        publishedRevision {
+          id
+          description
+          createdAt
+          snapshot
+        }
         revisions {
           id
           description
           createdAt
           snapshot
+        }
+        meta {
+          id
+          name
+          type
+          order
+          required
+          enabled
+          defaultValue
+        }
+        template
+        templateFormat
+        items {
+          id
+          label
+          order
+          meta
+          parentId
+          template
+          templateFormat
+          enabled
+          startPublication
+          endPublication
         }
       }
     }

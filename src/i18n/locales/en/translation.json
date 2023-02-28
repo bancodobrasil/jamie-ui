@@ -8,6 +8,9 @@
   "common": {
     "yes": "Yes",
     "no": "No",
+    "from": "From",
+    "to": "To",
+    "noChanges": "No changes",
     "example": "Example",
     "loading": "Loading",
     "loadingField": "Loading {{field}}",
@@ -293,6 +296,10 @@
       "title": "Close Menu Version",
       "placeholders": {
         "description": "Enter the menu version's description..."
+      },
+      "reviewChanges": {
+        "title": "Review Changes",
+        "description": "The following changes will be applied to the new menu version:"
       }
     },
     "restore": {
