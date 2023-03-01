@@ -1,6 +1,6 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
-import { Box, Typography } from '@mui/material';
+import { useMutation, useQuery } from '@apollo/client';
+import { Box, Typography, TextField, Divider, Button } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,13 @@ import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
 import { deepDiff } from '../../../utils/deepDiff';
+import { MENU_REVISION_VALIDATION } from '../../../constants';
+import MenuRevisionService from '../../../api/services/MenuRevisionService';
+import {
+  ActionTypes,
+  NotificationContext,
+  openDefaultErrorNotification,
+} from '../../../contexts/NotificationContext';
 
 const CreateRevision = () => {
   const { t } = useTranslation();
@@ -21,9 +28,18 @@ const CreateRevision = () => {
     navigate('/');
   };
 
+  const { dispatch } = React.useContext(NotificationContext);
+
+  const [description, setDescription] = React.useState('');
+  const [descriptionError, setDescriptionError] = React.useState('');
+
+  const [loadingSubmit, setLoadingSubmit] = React.useState(false);
+
   const { loading, error, data } = useQuery(MenuService.GET_MENU_REVISIONS, {
     variables: { id: Number(id) },
   });
+
+  const [createRevision] = useMutation(MenuRevisionService.CREATE_REVISION);
 
   const menuDiff: any = React.useMemo(() => {
     if (!data?.menu) return null;
@@ -361,6 +377,53 @@ const CreateRevision = () => {
     });
   };
 
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let tmpDescriptionError = '';
+    if (description.length < MENU_REVISION_VALIDATION.DESCRIPTION_MIN_LENGTH) {
+      tmpDescriptionError = t('form.validation.min', {
+        field: t('menu.fields.name'),
+        min: MENU_REVISION_VALIDATION.DESCRIPTION_MIN_LENGTH,
+      });
+    } else if (description.length > MENU_REVISION_VALIDATION.DESCRIPTION_MAX_LENGTH) {
+      tmpDescriptionError = t('form.validation.max', {
+        field: t('menu.fields.name'),
+        max: MENU_REVISION_VALIDATION.DESCRIPTION_MAX_LENGTH,
+      });
+    }
+    if (tmpDescriptionError) {
+      setDescriptionError(tmpDescriptionError);
+      return;
+    }
+    setLoadingSubmit(true);
+    createRevision({
+      variables: {
+        input: {
+          menuId: Number(id),
+          description,
+          setAsCurrent: true,
+        },
+      },
+      onCompleted: data => {
+        setLoadingSubmit(false);
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('notification.createSuccess', {
+            resource: t('menuRevision.title', { count: 1 }),
+            context: 'male',
+          })}!`,
+        });
+        navigate(`/menus/${id}`);
+      },
+      onError: error => {
+        setLoadingSubmit(false);
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
+  };
+
   if (error)
     return (
       <DefaultErrorPage
@@ -439,6 +502,44 @@ const CreateRevision = () => {
           {t('menu.fields.template')}:
         </Typography>
         {renderTemplateChanges(menuDiff?.template, `/menus/${id}/editTemplate`)}
+      </Box>
+      <Divider />
+      <Box className="flex flex-col py-4" component="form" onSubmit={handleFormSubmit}>
+        <Typography variant="h4" component="h4">
+          {t('common.commentary')}:
+        </Typography>
+        <TextField
+          id="description"
+          label={t('menuRevision.fields.description')}
+          placeholder={t('menuRevision.create.placeholders.description')}
+          required
+          value={description}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const { value } = e.target;
+            setDescriptionError('');
+            setDescription(value);
+          }}
+          inputProps={{
+            maxLength: MENU_REVISION_VALIDATION.DESCRIPTION_MAX_LENGTH,
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          error={!!descriptionError}
+          helperText={descriptionError}
+          sx={{ width: '20rem', my: '1rem' }}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          disabled={loadingSubmit}
+          sx={{
+            width: 'fit-content',
+          }}
+        >
+          {t('menuRevision.create.title')}
+        </Button>
       </Box>
     </Box>
   );

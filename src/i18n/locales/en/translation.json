@@ -17,6 +17,7 @@
     "deleted_female": "Deleted",
     "added_male": "Added",
     "added_female": "Added",
+    "commentary": "Commentary",
     "example": "Example",
     "loading": "Loading",
     "loadingField": "Loading {{field}}",
