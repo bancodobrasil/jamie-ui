@@ -164,8 +164,8 @@ export default class MenuService {
           order
           meta
           parentId
-          template
           templateFormat
+          template
           enabled
           startPublication
           endPublication

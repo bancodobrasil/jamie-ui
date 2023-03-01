@@ -10,6 +10,7 @@
     "no": "Não",
     "from": "De",
     "to": "Para",
+    "viewChanges": "Ver alterações",
     "noChanges": "Nenhuma alteração",
     "none": "Nenhum",
     "deleted_male": "Removido",
@@ -136,6 +137,14 @@
       "name": "Nome",
       "items": "Itens",
       "template": "Template",
+      "templateFormat": {
+        "title": "Formato do Template",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Texto"
+        }
+      },
       "meta": {
         "title_one": "Metadado",
         "title_other": "Metadados",
@@ -241,6 +250,14 @@
       "label": "Nome",
       "children": "Itens Filhos",
       "template": "Template",
+      "templateFormat": {
+        "title": "Formato do Template",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Texto"
+        }
+      },
       "enabled": "Habilitado",
       "startPublication": "Data de Início de Publicação",
       "endPublication": "Data de Fim de Publicação"

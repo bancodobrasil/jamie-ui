@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
@@ -141,6 +141,20 @@ const CreateRevision = () => {
     );
   };
 
+  const renderTemplateChanges = (to: any, linkPath: string) => {
+    if (to === undefined)
+      return (
+        <Typography variant="body1" component="p">
+          {t('common.noChanges')}
+        </Typography>
+      );
+    return (
+      <Typography variant="body1" component="span" sx={{ textDecorationLine: 'underline' }}>
+        <Link to={linkPath}>{t('common.viewChanges')}</Link>
+      </Typography>
+    );
+  };
+
   const renderMetaChanges = (from: any, to: any) => {
     const fields = Object.keys(to);
     return fields.map(field => {
@@ -252,12 +266,29 @@ const CreateRevision = () => {
           </Box>
         );
       }
-      const fieldName = t(`menuItem.fields.${field}`);
+      if (field === 'template') {
+        const itemId = from?.id || to.id;
+        return (
+          <Box className="flex flex-col my-1 ml-4" key={field}>
+            <Typography variant="body1" component="span">
+              <b>{t('menuItem.fields.template')}</b>:
+            </Typography>
+            {renderTemplateChanges(to[field], `/menus/${id}/items/${itemId}`)}
+          </Box>
+        );
+      }
+      const fieldName =
+        field === 'templateFormat'
+          ? t(`menuItem.fields.${field}.title`)
+          : t(`menuItem.fields.${field}`);
       let fieldValueFrom = from?.[field];
       let fieldValueTo = to[field];
       if (field === 'enabled') {
         fieldValueFrom = fieldValueFrom ? t('common.yes') : t('common.no');
         fieldValueTo = fieldValueTo ? t('common.yes') : t('common.no');
+      } else if (field === 'templateFormat') {
+        fieldValueFrom = t(`menuItem.fields.templateFormat.formats.${fieldValueFrom}`);
+        fieldValueTo = t(`menuItem.fields.templateFormat.formats.${fieldValueTo}`);
       }
       if (!fieldValueFrom && !fieldValueTo) return null;
       if (from?.[field] === undefined || from?.[field] === null) {
@@ -389,6 +420,25 @@ const CreateRevision = () => {
           {t('menu.fields.items')}:
         </Typography>
         {renderItems(menuDiff?.items)}
+      </Box>
+      <Box className="flex flex-col my-4">
+        <Typography variant="h4" component="h4">
+          {t('menu.fields.templateFormat.title')}:
+        </Typography>
+        {renderChanges(
+          data?.menu.currentRevision?.snapshot.templateFormat &&
+            t(
+              `menu.fields.templateFormat.formats.${data?.menu.currentRevision?.snapshot.templateFormat}`,
+            ),
+          menuDiff?.templateFormat &&
+            t(`menu.fields.templateFormat.formats.${menuDiff?.templateFormat}`),
+        )}
+      </Box>
+      <Box className="flex flex-col my-4">
+        <Typography variant="h4" component="h4">
+          {t('menu.fields.template')}:
+        </Typography>
+        {renderTemplateChanges(menuDiff?.template, `/menus/${id}/editTemplate`)}
       </Box>
     </Box>
   );

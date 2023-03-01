@@ -10,6 +10,7 @@
     "no": "No",
     "from": "From",
     "to": "To",
+    "viewChanges": "View changes",
     "noChanges": "No changes",
     "none": "None",
     "deleted_male": "Deleted",
@@ -136,6 +137,14 @@
       "name": "Name",
       "items": "Items",
       "template": "Template",
+      "templateFormat": {
+        "title": "Template Format",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Plain Text"
+        }
+      },
       "meta": {
         "title_one": "Metadata",
         "title_other": "Metadata",
@@ -241,6 +250,14 @@
       "label": "Label",
       "children": "Children",
       "template": "Template",
+      "templateFormat": {
+        "title": "Template Format",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Plain Text"
+        }
+      },
       "enabled": "Enabled",
       "startPublication": "Start Publication Date",
       "endPublication": "End Publication Date"
