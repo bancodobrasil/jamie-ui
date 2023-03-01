@@ -173,7 +173,7 @@ export const EditTemplateItems = () => {
           id: Number(id),
           items: [
             {
-              action: 'update',
+              action: 'UPDATE',
               id: Number(itemId),
               template: template[templateFormat],
               templateFormat,
