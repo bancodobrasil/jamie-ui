@@ -217,7 +217,7 @@ export const ShowMenu = () => {
         )}
       </Box>
       <Divider />
-      <Box className="flex flex-col space-y-4 my-4 w-fit">
+      <Box className="flex flex-col space-y-4 py-4 w-fit">
         <Typography variant="h2" component="h2">
           {t('menu.show.actions.title')}:
         </Typography>

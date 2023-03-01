@@ -8,4 +8,12 @@ export default class MenuRevisionService {
       }
     }
   `;
+
+  static RESTORE_REVISION: DocumentNode = gql`
+    mutation RestoreMenuRevision($menuId: Int!, $revisionId: Int!) {
+      restoreRevision(menuId: $menuId, revisionId: $revisionId) {
+        id
+      }
+    }
+  `;
 }

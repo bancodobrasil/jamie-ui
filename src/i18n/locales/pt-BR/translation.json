@@ -333,7 +333,10 @@
       "selectRevision": "Selecione a versão do menu que deseja restaurar:",
       "reviewChanges": {
         "title": "Revisar Alterações",
-        "description": "As alterações abaixo serão descartadas após a restauração da versão do menu:"
+        "description": "As alterações abaixo serão aplicadas após a restauração da versão do menu:"
+      },
+      "notification": {
+        "success": "Versão do menu restaurada com sucesso"
       }
     },
     "publish": {

@@ -1,13 +1,15 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   Box,
+  Button,
   SelectChangeEvent,
   Typography,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
+  Divider,
 } from '@mui/material';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +20,12 @@ import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
 import { deepDiff } from '../../../utils/deepDiff';
 import { MenuRevisionsDiff } from '../../../components/Menu/Revisions';
+import MenuRevisionService from '../../../api/services/MenuRevisionService';
+import {
+  ActionTypes,
+  NotificationContext,
+  openDefaultErrorNotification,
+} from '../../../contexts/NotificationContext';
 
 const RestoreRevision = () => {
   const { t } = useTranslation();
@@ -29,11 +37,17 @@ const RestoreRevision = () => {
     navigate('/');
   };
 
+  const { dispatch } = React.useContext(NotificationContext);
+
   const [selectedRevision, setSelectedRevision] = React.useState(null);
+
+  const [loadingSubmit, setLoadingSubmit] = React.useState(false);
 
   const { loading, error, data } = useQuery(MenuService.GET_MENU_REVISIONS, {
     variables: { id: Number(id) },
   });
+
+  const [restoreRevision] = useMutation(MenuRevisionService.RESTORE_REVISION);
 
   const getChildren = React.useCallback((items: any[], parent: any): any[] => {
     const children = items
@@ -145,6 +159,28 @@ const RestoreRevision = () => {
     ));
   };
 
+  const onSubmitClickHandler = async () => {
+    setLoadingSubmit(true);
+    restoreRevision({
+      variables: {
+        menuId: Number(id),
+        revisionId: selectedRevision.id,
+      },
+      onCompleted: data => {
+        setLoadingSubmit(false);
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('menuRevision.restore.notification.success')}!`,
+        });
+        navigate(`/menus/${id}`);
+      },
+      onError: error => {
+        setLoadingSubmit(false);
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
+  };
+
   if (error)
     return (
       <DefaultErrorPage
@@ -208,6 +244,21 @@ const RestoreRevision = () => {
             {t('menuRevision.restore.reviewChanges.description')}
           </Typography>
           <MenuRevisionsDiff id={id} diff={menuDiff} snapshot={menu} />
+          <Divider />
+          <Box className="py-4">
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              disabled={loadingSubmit}
+              onClick={onSubmitClickHandler}
+              sx={{
+                width: 'fit-content',
+              }}
+            >
+              {t('menuRevision.restore.title')}
+            </Button>
+          </Box>
         </>
       ) : null}
     </Box>

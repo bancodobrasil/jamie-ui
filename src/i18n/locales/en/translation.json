@@ -333,7 +333,10 @@
       "selectRevision": "Select a menu version to restore:",
       "reviewChanges": {
         "title": "Review Changes",
-        "description": "The following changes will be discarded after restoring the menu version:"
+        "description": "The following changes will be applied after restoring the menu version:"
+      },
+      "notification": {
+        "success": "The menu version was restored successfully"
       }
     },
     "publish": {
