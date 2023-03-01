@@ -69,6 +69,15 @@ const CreateRevision = () => {
       .filter(item => !item.parentId)
       .sort((a, b) => a.order - b.order);
 
+    if (!currentRevision)
+      return {
+        name,
+        meta: currentMeta,
+        items: currentItems,
+        template,
+        templateFormat,
+      };
+
     const snapshot = { ...currentRevision.snapshot };
     snapshot.items = snapshot.items
       ?.map(item => ({

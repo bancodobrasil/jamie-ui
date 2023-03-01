@@ -96,7 +96,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
         </Typography>
       );
     return Object.keys(diff.meta).map(index => {
-      const from = snapshot.meta[index];
+      const from = snapshot?.meta[index];
       const to = diff.meta[index];
       if (to === null)
         return (
@@ -136,7 +136,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
     const ids = Object.keys(to);
     return ids.map(id => {
       const fromValue = from?.[id];
-      const fromName = snapshot.meta?.find((meta: any) => meta.id === Number(id))?.name;
+      const fromName = snapshot?.meta?.find((meta: any) => meta.id === Number(id))?.name;
       const toValue = to[id];
       let toName =
         diff.meta && Object.keys(diff.meta).find(key => diff.meta[key]?.id === Number(id));
@@ -281,8 +281,8 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
         return children || [];
       };
       const from = isChildren
-        ? getChildren(parentId, snapshot.items)[index]
-        : snapshot.items?.[index];
+        ? getChildren(parentId, snapshot?.items)[index]
+        : snapshot?.items?.[index];
       const to = items[index];
       if (to === null)
         return (
@@ -324,7 +324,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
         <Typography variant="h4" component="h4">
           {t('menu.fields.name')}:
         </Typography>
-        {renderChanges(snapshot.name, diff?.name)}
+        {renderChanges(snapshot?.name, diff?.name)}
       </Box>
       <Box className="flex flex-col my-4">
         <Typography variant="h4" component="h4">
@@ -343,7 +343,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
           {t('menu.fields.templateFormat.title')}:
         </Typography>
         {renderChanges(
-          snapshot.templateFormat &&
+          snapshot?.templateFormat &&
             t(`menu.fields.templateFormat.formats.${snapshot.templateFormat}`),
           diff?.templateFormat && t(`menu.fields.templateFormat.formats.${diff?.templateFormat}`),
         )}
