@@ -329,7 +329,12 @@
       "noChanges": "No changes were made to the menu."
     },
     "restore": {
-      "title": "Restore Menu Version"
+      "title": "Restore Menu Version",
+      "selectRevision": "Select a menu version to restore:",
+      "reviewChanges": {
+        "title": "Review Changes",
+        "description": "The following changes will be discarded after restoring the menu version:"
+      }
     },
     "publish": {
       "title": "Publish Menu Version"

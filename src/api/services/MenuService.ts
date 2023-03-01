@@ -164,11 +164,15 @@ export default class MenuService {
           order
           meta
           parentId
+          menuId
           templateFormat
           template
           enabled
           startPublication
           endPublication
+          createdAt
+          updatedAt
+          version
         }
       }
     }

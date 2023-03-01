@@ -216,8 +216,20 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
         </Typography>
       );
     return Object.keys(items).map(index => {
+      const getChildren = (parentId: number, items?: any[]) => {
+        let children;
+        for (let i = 0; i < items?.length; i++) {
+          if (items[i].id === parentId) {
+            children = items[i].children;
+            break;
+          }
+          children = getChildren(parentId, items[i].children);
+          if (children) break;
+        }
+        return children || [];
+      };
       const from = isChildren
-        ? snapshot.items?.filter(i => i.parentId === parentId)[index]
+        ? getChildren(parentId, snapshot.items)[index]
         : snapshot.items?.[index];
       const to = items[index];
       if (to === null)
