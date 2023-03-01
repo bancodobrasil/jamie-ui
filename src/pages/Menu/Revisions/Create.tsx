@@ -41,7 +41,7 @@ const CreateRevision = () => {
 
   const [createRevision] = useMutation(MenuRevisionService.CREATE_REVISION);
 
-  const menuDiff: any = React.useMemo(() => {
+  const menu: any = React.useMemo(() => {
     if (!data?.menu) return null;
     const { name, meta, items, template, templateFormat, currentRevision } = data.menu;
     const removeTypename = (arr: any[]) =>
@@ -59,7 +59,7 @@ const CreateRevision = () => {
         .sort((a, b) => a.order - b.order);
       return children;
     };
-    let currentMeta = meta && removeTypename(meta);
+    const currentMeta = meta && removeTypename(meta);
     let currentItems = items && removeTypename(items);
     currentItems = currentItems
       .map(item => ({
@@ -68,8 +68,7 @@ const CreateRevision = () => {
       }))
       .filter(item => !item.parentId)
       .sort((a, b) => a.order - b.order);
-    if (!currentRevision)
-      return { name, meta: currentMeta, items: currentItems, template, templateFormat };
+
     const snapshot = { ...currentRevision.snapshot };
     snapshot.items = snapshot.items
       ?.map(item => ({
@@ -78,6 +77,22 @@ const CreateRevision = () => {
       }))
       .filter(item => !item.parentId)
       .sort((a, b) => a.order - b.order);
+
+    return {
+      name,
+      meta: currentMeta,
+      items: currentItems,
+      template,
+      templateFormat,
+      currentRevision: { ...currentRevision, snapshot },
+    };
+  }, [data]);
+
+  const menuDiff: any = React.useMemo(() => {
+    if (!menu) return null;
+    if (!menu.currentRevision) return menu;
+    let currentMeta = [...menu.meta];
+    const { snapshot } = menu.currentRevision;
     const updatedMeta = snapshot.meta?.map((item: any, index: number) => {
       const current = currentMeta?.[index];
       if (!current || item.id !== current.id || item.type !== current.type) {
@@ -105,11 +120,13 @@ const CreateRevision = () => {
         }
         return { ...current, children: setUpdatedItems(item.children, current.children) };
       });
+    let currentItems = [...menu.items];
     const updatedItems = setUpdatedItems(snapshot.items, currentItems);
     currentItems = [...(updatedItems || []), ...(currentItems || [])].filter((item, index, arr) => {
       if (item === null) return true;
       return arr.findIndex(i => i?.id === item.id) === index;
     });
+    const { name, template, templateFormat } = menu;
     const diff = Object.entries(
       deepDiff(snapshot, {
         name,
@@ -134,7 +151,7 @@ const CreateRevision = () => {
         return acc;
       }, {});
     return diff;
-  }, [data]);
+  }, [menu]);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -225,7 +242,7 @@ const CreateRevision = () => {
       <Typography variant="body1" component="p" sx={{ my: '0.5rem' }}>
         {t('menuRevision.create.reviewChanges.description')}
       </Typography>
-      <MenuRevisionsDiff id={id} diff={menuDiff} snapshot={data?.menu.currentRevision?.snapshot} />
+      <MenuRevisionsDiff id={id} diff={menuDiff} snapshot={menu.currentRevision?.snapshot} />
       <Divider />
       {menuDiff && Object.keys(menuDiff).length > 0 ? (
         <Box className="flex flex-col py-4" component="form" onSubmit={handleFormSubmit}>
