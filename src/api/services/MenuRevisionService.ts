@@ -96,4 +96,52 @@ export default class MenuRevisionService {
       }
     }
   `;
+
+  static PUBLISH_REVISION: DocumentNode = gql`
+    mutation PublishMenuRevision($menuId: Int!, $revisionId: Int!) {
+      publishRevision(menuId: $menuId, revisionId: $revisionId) {
+        id
+        name
+        publishedRevision {
+          id
+          description
+          createdAt
+          snapshot
+        }
+        revisions {
+          id
+          description
+          createdAt
+          snapshot
+        }
+        meta {
+          id
+          name
+          type
+          order
+          required
+          enabled
+          defaultValue
+        }
+        template
+        templateFormat
+        items {
+          id
+          label
+          order
+          meta
+          parentId
+          menuId
+          templateFormat
+          template
+          enabled
+          startPublication
+          endPublication
+          createdAt
+          updatedAt
+          version
+        }
+      }
+    }
+  `;
 }

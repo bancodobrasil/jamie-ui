@@ -343,7 +343,16 @@
       "noChanges": "Nenhuma alteração foi feita no menu."
     },
     "publish": {
-      "title": "Publicar Versão do Menu"
+      "title": "Publicar Versão do Menu",
+      "selectRevision": "Selecione a versão do menu que deseja publicar",
+      "reviewChanges": {
+        "title": "Revisar Alterações",
+        "description": "As alterações abaixo serão aplicadas após a publicação da versão do menu:"
+      },
+      "notification": {
+        "success": "Versão do menu publicada com sucesso"
+      },
+      "noChanges": "Nenhuma alteração foi feita no menu."
     }
   }
 }
