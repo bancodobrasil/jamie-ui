@@ -239,6 +239,7 @@
     "of": "$t(menu.fields.{{field}}) do Item de Menu",
     "fields": {
       "label": "Nome",
+      "children": "Itens Filhos",
       "template": "Template",
       "enabled": "Habilitado",
       "startPublication": "Data de Início de Publicação",

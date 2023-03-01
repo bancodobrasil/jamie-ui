@@ -33,24 +33,36 @@ const CreateRevision = () => {
         const { __typename, ...rest } = item;
         return rest;
       });
-    let currentItems = items && removeTypename(items);
+    const getChildren = (items: any[], parent: any): any[] => {
+      const children = items
+        .filter(item => item.parentId === parent.id)
+        .map(item => ({
+          ...item,
+          children: getChildren(items, item),
+        }))
+        .sort((a, b) => a.order - b.order);
+      return children;
+    };
     let currentMeta = meta && removeTypename(meta);
+    let currentItems = items && removeTypename(items);
+    currentItems = currentItems
+      .map(item => ({
+        ...item,
+        children: getChildren(currentItems || [], item),
+      }))
+      .filter(item => !item.parentId)
+      .sort((a, b) => a.order - b.order);
     if (!currentRevision)
       return { name, meta: currentMeta, items: currentItems, template, templateFormat };
-    const updatedItems = currentRevision.snapshot.items?.map((item: any, index: number) => {
-      const current = currentItems?.[index];
-      if (!current || item.id !== current.id) {
-        const updatedItem = currentItems?.find(i => i.id === item.id);
-        if (updatedItem) return updatedItem;
-        return null;
-      }
-      return current;
-    });
-    currentItems = [...(updatedItems || []), ...(currentItems || [])].filter((item, index, arr) => {
-      if (item === null) return true;
-      return arr.findIndex(i => i?.id === item.id) === index;
-    });
-    const updatedMeta = currentRevision.snapshot.meta?.map((item: any, index: number) => {
+    const snapshot = { ...currentRevision.snapshot };
+    snapshot.items = snapshot.items
+      ?.map(item => ({
+        ...item,
+        children: getChildren(snapshot.items || [], item),
+      }))
+      .filter(item => !item.parentId)
+      .sort((a, b) => a.order - b.order);
+    const updatedMeta = snapshot.meta?.map((item: any, index: number) => {
       const current = currentMeta?.[index];
       if (!current || item.id !== current.id || item.type !== current.type) {
         const updatedItem = currentMeta?.find(i => i.id === item.id && i.type === item.type);
@@ -63,17 +75,27 @@ const CreateRevision = () => {
       if (item === null) return true;
       return arr.findIndex(i => i?.id === item.id) === index;
     });
-    console.log(
-      deepDiff(currentRevision.snapshot, {
-        name,
-        meta: currentMeta,
-        items: currentItems,
-        template,
-        templateFormat,
-      }),
-    );
+    const setUpdatedItems = (snapshotItems: any[], currentItems: any[]) =>
+      snapshotItems?.map((item: any, index: number) => {
+        const current = currentItems?.[index];
+        if (!current || item.id !== current.id) {
+          const updatedItem = currentItems?.find(i => i.id === item.id);
+          if (updatedItem)
+            return {
+              ...updatedItem,
+              children: setUpdatedItems(item.children, updatedItem.children),
+            };
+          return null;
+        }
+        return { ...current, children: setUpdatedItems(item.children, current.children) };
+      });
+    const updatedItems = setUpdatedItems(snapshot.items, currentItems);
+    currentItems = [...(updatedItems || []), ...(currentItems || [])].filter((item, index, arr) => {
+      if (item === null) return true;
+      return arr.findIndex(i => i?.id === item.id) === index;
+    });
     const diff = Object.entries(
-      deepDiff(currentRevision.snapshot, {
+      deepDiff(snapshot, {
         name,
         meta: currentMeta,
         items: currentItems,
@@ -95,7 +117,6 @@ const CreateRevision = () => {
         }, acc);
         return acc;
       }, {});
-    console.log(diff);
     return diff;
   }, [data]);
 
@@ -214,13 +235,23 @@ const CreateRevision = () => {
         field === 'parentId' ||
         field === 'menuId' ||
         field === 'menu' ||
-        field === 'children' ||
         field === 'createdAt' ||
         field === 'updatedAt' ||
         field === 'deletedAt' ||
         field === 'version'
       )
         return null;
+      if (field === 'children') {
+        const id = from?.id || to.id;
+        return (
+          <Box className="flex flex-col my-1 ml-4" key={field}>
+            <Typography variant="body1" component="span">
+              <b>{t('menuItem.fields.children')}</b>:
+            </Typography>
+            {renderItems(to[field], true, id)}
+          </Box>
+        );
+      }
       const fieldName = t(`menuItem.fields.${field}`);
       let fieldValueFrom = from?.[field];
       let fieldValueTo = to[field];
@@ -253,21 +284,23 @@ const CreateRevision = () => {
     });
   };
 
-  const renderItems = () => {
-    if (!menuDiff?.items)
+  const renderItems = (items: any[], isChildren?: boolean, parentId?: number) => {
+    if (!items)
       return (
         <Typography variant="body1" component="p">
           {t('common.noChanges')}
         </Typography>
       );
-    return Object.keys(menuDiff.items).map(index => {
-      const from = data.menu.currentRevision.snapshot.items[index];
-      const to = menuDiff.items[index];
+    return Object.keys(items).map(index => {
+      const from = isChildren
+        ? data.menu.currentRevision.snapshot.items?.filter(i => i.parentId === parentId)[index]
+        : data.menu.currentRevision.snapshot.items?.[index];
+      const to = items[index];
       if (to === null)
         return (
           <Box className="flex flex-col my-2" key={index}>
             <Typography variant="h5" component="h5" className="line-through">
-              {from.id}. {from.label}
+              {from.order}. {from.label}
             </Typography>
             <Typography variant="body1" component="p" sx={{ ml: '1rem', color: 'error.main' }}>
               {t('common.deleted', { context: 'male' })}
@@ -278,7 +311,7 @@ const CreateRevision = () => {
         return (
           <Box className="flex flex-col my-2" key={index}>
             <Typography variant="h5" component="h5">
-              {to.id}. {to.label}
+              {to.order}. {to.label}
             </Typography>
             <Typography variant="body1" component="p" sx={{ ml: '1rem', color: 'success.main' }}>
               {t('common.added', { context: 'male' })}
@@ -289,7 +322,7 @@ const CreateRevision = () => {
       return (
         <Box className="flex flex-col my-2" key={index}>
           <Typography variant="h5" component="h5">
-            {to.id || from.id}. {to.label || from.label}:
+            {to.order || from.order}. {to.label || from.label}:
           </Typography>
           {renderItemChanges(from, to)}
         </Box>
@@ -355,7 +388,7 @@ const CreateRevision = () => {
         <Typography variant="h4" component="h4">
           {t('menu.fields.items')}:
         </Typography>
-        {renderItems()}
+        {renderItems(menuDiff?.items)}
       </Box>
     </Box>
   );

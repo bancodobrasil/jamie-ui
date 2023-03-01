@@ -239,6 +239,7 @@
     "of": "Menu Item's $t(menu.fields.{{field}})",
     "fields": {
       "label": "Label",
+      "children": "Children",
       "template": "Template",
       "enabled": "Enabled",
       "startPublication": "Start Publication Date",
