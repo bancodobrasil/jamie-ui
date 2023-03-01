@@ -181,6 +181,60 @@ const RestoreRevision = () => {
     });
   };
 
+  const renderDiff = () => {
+    if (!selectedRevision)
+      return (
+        <Typography variant="h6" component="h6">
+          {t('menuRevision.restore.selectRevision')}
+        </Typography>
+      );
+    if (!menuDiff || !Object.keys(menuDiff).length)
+      return (
+        <Box className="flex flex-col py-4">
+          <Typography variant="h6" component="h6">
+            <i className="text-gray-400">{t('menuRevision.restore.noChanges')}</i>
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(`/menus/${id}`)}
+            sx={{
+              width: 'fit-content',
+              mt: '1rem',
+            }}
+          >
+            {t('buttons.back')}
+          </Button>
+        </Box>
+      );
+    return (
+      <>
+        <Typography variant="h2" component="h2" sx={{ my: '0.5rem' }}>
+          {t('menuRevision.restore.reviewChanges.title')}
+        </Typography>
+        <Typography variant="body1" component="p" sx={{ my: '0.5rem' }}>
+          {t('menuRevision.restore.reviewChanges.description')}
+        </Typography>
+        <MenuRevisionsDiff id={id} diff={menuDiff} snapshot={menu} />
+        <Divider />
+        <Box className="py-4">
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={loadingSubmit}
+            onClick={onSubmitClickHandler}
+            sx={{
+              width: 'fit-content',
+            }}
+          >
+            {t('menuRevision.restore.title')}
+          </Button>
+        </Box>
+      </>
+    );
+  };
+
   if (error)
     return (
       <DefaultErrorPage
@@ -217,7 +271,7 @@ const RestoreRevision = () => {
       <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
         {t('menuRevision.restore.title')}
       </Typography>
-      <FormControl sx={{ width: '16rem', mb: '1rem' }} className="bg-white" required>
+      <FormControl sx={{ width: '16rem', mb: '1rem' }} className="bg-white">
         <InputLabel id="selectedRevision-label">
           {t('menu.of', { field: 'revision.title_one' })}
         </InputLabel>
@@ -235,32 +289,7 @@ const RestoreRevision = () => {
           {renderMenuRevisions()}
         </Select>
       </FormControl>
-      {menuDiff && Object.keys(menuDiff).length ? (
-        <>
-          <Typography variant="h2" component="h2" sx={{ my: '0.5rem' }}>
-            {t('menuRevision.restore.reviewChanges.title')}
-          </Typography>
-          <Typography variant="body1" component="p" sx={{ my: '0.5rem' }}>
-            {t('menuRevision.restore.reviewChanges.description')}
-          </Typography>
-          <MenuRevisionsDiff id={id} diff={menuDiff} snapshot={menu} />
-          <Divider />
-          <Box className="py-4">
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={loadingSubmit}
-              onClick={onSubmitClickHandler}
-              sx={{
-                width: 'fit-content',
-              }}
-            >
-              {t('menuRevision.restore.title')}
-            </Button>
-          </Box>
-        </>
-      ) : null}
+      {renderDiff()}
     </Box>
   );
 };
