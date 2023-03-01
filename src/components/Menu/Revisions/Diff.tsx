@@ -8,13 +8,42 @@ interface Props {
   id: string;
   diff: any;
   snapshot: any;
+  renderTemplateChanges?: (from: any, to: any, linkPath: string) => JSX.Element;
 }
 
-export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
+export const MenuRevisionsDiff = ({ id, diff, snapshot, renderTemplateChanges }: Props) => {
   const { t } = useTranslation();
 
-  const renderChanges = (from: any, to?: any) => {
-    if (to === undefined)
+  const defaultRenderTemplateChanges = (from: any, to: any, linkPath: string) => {
+    if (to === undefined || (from === undefined && to === null))
+      return (
+        <Typography variant="body1" component="p">
+          {t('common.noChanges')}
+        </Typography>
+      );
+    if (to === null)
+      return (
+        <Typography variant="body1" component="p" sx={{ color: 'error.main' }}>
+          {t('common.deleted', { context: 'male' })}
+        </Typography>
+      );
+    if (!linkPath)
+      return (
+        <Typography variant="body1" component="p" sx={{ color: 'warning.main' }}>
+          {t('common.changed', { context: 'male' })}
+        </Typography>
+      );
+    return (
+      <Typography variant="body1" component="span" sx={{ textDecorationLine: 'underline' }}>
+        <Link to={linkPath}>{t('common.viewChanges')}</Link>
+      </Typography>
+    );
+  };
+
+  renderTemplateChanges = renderTemplateChanges || defaultRenderTemplateChanges;
+
+  const renderChanges = (from?: any, to?: any) => {
+    if (to === undefined || (from === undefined && to === null) || from === to)
       return (
         <Typography variant="body1" component="p">
           {t('common.noChanges')}
@@ -28,23 +57,9 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
         </Typography>
         <ArrowForwardIcon sx={{ mx: '0.5rem' }} />
         <Typography variant="body1" component="span">
-          {t('common.to')}: <b>{to}</b>
+          {t('common.to')}: {to ? <b>{to}</b> : <i className="text-gray-500">{t('common.none')}</i>}
         </Typography>
       </Box>
-    );
-  };
-
-  const renderTemplateChanges = (to: any, linkPath: string) => {
-    if (to === undefined)
-      return (
-        <Typography variant="body1" component="p">
-          {t('common.noChanges')}
-        </Typography>
-      );
-    return (
-      <Typography variant="body1" component="span" sx={{ textDecorationLine: 'underline' }}>
-        <Link to={linkPath}>{t('common.viewChanges')}</Link>
-      </Typography>
     );
   };
 
@@ -208,7 +223,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
             <Typography variant="body1" component="span">
               <b>{t('menuItem.fields.template')}</b>:
             </Typography>
-            {renderTemplateChanges(to[field], `/menus/${id}/items/${itemId}`)}
+            {renderTemplateChanges(from?.[field], to[field], `/menus/${id}/items/${itemId}`)}
           </Box>
         );
       }
@@ -232,8 +247,9 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
         fieldValueFrom = fieldValueFrom ? t('common.yes') : t('common.no');
         fieldValueTo = fieldValueTo ? t('common.yes') : t('common.no');
       } else if (field === 'templateFormat') {
-        fieldValueFrom = t(`menuItem.fields.templateFormat.formats.${fieldValueFrom}`);
-        fieldValueTo = t(`menuItem.fields.templateFormat.formats.${fieldValueTo}`);
+        fieldValueFrom =
+          fieldValueFrom && t(`menuItem.fields.templateFormat.formats.${fieldValueFrom}`);
+        fieldValueTo = fieldValueTo && t(`menuItem.fields.templateFormat.formats.${fieldValueTo}`);
       }
       if (!fieldValueFrom && !fieldValueTo) return null;
       if (from?.[field] === undefined || from?.[field] === null) {
@@ -352,7 +368,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
         <Typography variant="h4" component="h4">
           {t('menu.fields.template')}:
         </Typography>
-        {renderTemplateChanges(diff?.template, `/menus/${id}/editTemplate`)}
+        {renderTemplateChanges(snapshot?.template, diff?.template, `/menus/${id}/editTemplate`)}
       </Box>
     </>
   );
