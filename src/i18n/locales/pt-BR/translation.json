@@ -325,7 +325,8 @@
       "reviewChanges": {
         "title": "Revisar Alterações",
         "description": "As alterações abaixo serão aplicadas na nova versão do menu:"
-      }
+      },
+      "noChanges": "Nenhuma alteração foi feita no menu."
     },
     "restore": {
       "title": "Restaurar Versão do Menu"

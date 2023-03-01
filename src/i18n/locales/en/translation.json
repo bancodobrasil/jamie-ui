@@ -325,7 +325,8 @@
       "reviewChanges": {
         "title": "Review Changes",
         "description": "The following changes will be applied to the new menu version:"
-      }
+      },
+      "noChanges": "No changes were made to the menu."
     },
     "restore": {
       "title": "Restore Menu Version"

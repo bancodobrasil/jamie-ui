@@ -120,7 +120,7 @@ const CreateRevision = () => {
       }),
     )
       .filter(([key, value]) => {
-        if (value.to === undefined) return false;
+        if (value.to === undefined || (value.from === undefined && value.to === null)) return false;
         return true;
       })
       .reduce((acc, [key, value]) => {
@@ -504,43 +504,62 @@ const CreateRevision = () => {
         {renderTemplateChanges(menuDiff?.template, `/menus/${id}/editTemplate`)}
       </Box>
       <Divider />
-      <Box className="flex flex-col py-4" component="form" onSubmit={handleFormSubmit}>
-        <Typography variant="h4" component="h4">
-          {t('common.commentary')}:
-        </Typography>
-        <TextField
-          id="description"
-          label={t('menuRevision.fields.description')}
-          placeholder={t('menuRevision.create.placeholders.description')}
-          required
-          value={description}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const { value } = e.target;
-            setDescriptionError('');
-            setDescription(value);
-          }}
-          inputProps={{
-            maxLength: MENU_REVISION_VALIDATION.DESCRIPTION_MAX_LENGTH,
-          }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          error={!!descriptionError}
-          helperText={descriptionError}
-          sx={{ width: '20rem', my: '1rem' }}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={loadingSubmit}
-          sx={{
-            width: 'fit-content',
-          }}
-        >
-          {t('menuRevision.create.title')}
-        </Button>
-      </Box>
+      {menuDiff && Object.keys(menuDiff).length > 0 ? (
+        <Box className="flex flex-col py-4" component="form" onSubmit={handleFormSubmit}>
+          <Typography variant="h4" component="h4">
+            {t('common.commentary')}:
+          </Typography>
+          <TextField
+            id="description"
+            label={t('menuRevision.fields.description')}
+            placeholder={t('menuRevision.create.placeholders.description')}
+            required
+            value={description}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const { value } = e.target;
+              setDescriptionError('');
+              setDescription(value);
+            }}
+            inputProps={{
+              maxLength: MENU_REVISION_VALIDATION.DESCRIPTION_MAX_LENGTH,
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            error={!!descriptionError}
+            helperText={descriptionError}
+            sx={{ width: '20rem', my: '1rem' }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={loadingSubmit}
+            sx={{
+              width: 'fit-content',
+            }}
+          >
+            {t('menuRevision.create.title')}
+          </Button>
+        </Box>
+      ) : (
+        <Box className="flex flex-col py-4">
+          <Typography variant="h6" component="h6">
+            <i className="text-gray-400">{t('menuRevision.create.noChanges')}</i>
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(`/menus/${id}`)}
+            sx={{
+              width: 'fit-content',
+              mt: '1rem',
+            }}
+          >
+            {t('buttons.back')}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
