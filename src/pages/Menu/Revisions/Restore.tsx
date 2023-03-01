@@ -114,7 +114,13 @@ const RestoreRevision = () => {
     );
     const diff = Object.entries(deepDiff(menu, snapshot))
       .filter(([key, value]) => {
-        if (value.to === undefined || (value.from === undefined && value.to === null)) return false;
+        if (value.to === undefined || (value.from === undefined && value.to === null)) {
+          if (key.includes('items') && key.includes('meta') && value.from !== undefined) {
+            value.to = null;
+            return true;
+          }
+          return false;
+        }
         return true;
       })
       .reduce((acc, [key, value]) => {

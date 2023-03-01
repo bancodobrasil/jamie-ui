@@ -132,13 +132,55 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
     });
   };
 
+  const renderItemMeta = (from: any, to: any) => {
+    const ids = Object.keys(to);
+    return ids.map(id => {
+      const fromValue = from?.[id];
+      const fromName = snapshot.meta?.find((meta: any) => meta.id === Number(id))?.name;
+      const toValue = to[id];
+      let toName =
+        diff.meta && Object.keys(diff.meta).find(key => diff.meta[key]?.id === Number(id));
+      toName = toName ? diff.meta[toName].name : fromName;
+      if (toValue === null)
+        return (
+          <Box className="flex flex-col my-1 ml-4" key={id}>
+            <Typography variant="body1" component="span" className="line-through">
+              <b>{fromName}</b>:
+            </Typography>
+            <Typography variant="body1" component="p" sx={{ color: 'error.main' }}>
+              {t('common.deleted', { context: 'male' })}
+            </Typography>
+          </Box>
+        );
+      if (!fromValue)
+        return (
+          <Box className="flex flex-col my-1 ml-4" key={id}>
+            <Typography variant="body1" component="span">
+              <b>{toName}</b>:
+            </Typography>
+            <Typography variant="body1" component="p" sx={{ color: 'success.main' }}>
+              {t('common.added', { context: 'male' })}
+            </Typography>
+            {renderChanges(fromValue, toValue)}
+          </Box>
+        );
+      return (
+        <Box className="flex flex-col my-1 ml-4" key={id}>
+          <Typography variant="body1" component="span">
+            <b>{toName}</b>:
+          </Typography>
+          {renderChanges(fromValue, toValue)}
+        </Box>
+      );
+    });
+  };
+
   const renderItemChanges = (from: any, to: any) => {
     const fields = Object.keys(to);
     return fields.map(field => {
       if (
         field === 'id' ||
         field === 'order' ||
-        field === 'meta' ||
         field === 'parentId' ||
         field === 'menuId' ||
         field === 'menu' ||
@@ -167,6 +209,16 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
               <b>{t('menuItem.fields.template')}</b>:
             </Typography>
             {renderTemplateChanges(to[field], `/menus/${id}/items/${itemId}`)}
+          </Box>
+        );
+      }
+      if (field === 'meta') {
+        return (
+          <Box className="flex flex-col my-1 ml-4" key={field}>
+            <Typography variant="body1" component="span">
+              <b>{t('menu.fields.meta.title', { count: 2 })}</b>:
+            </Typography>
+            {renderItemMeta(from?.[field], to[field])}
           </Box>
         );
       }
