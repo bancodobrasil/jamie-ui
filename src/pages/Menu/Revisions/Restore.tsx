@@ -55,8 +55,7 @@ const RestoreRevision = () => {
       .map(item => ({
         ...item,
         children: getChildren(items, item),
-      }))
-      .sort((a, b) => a.order - b.order);
+      }));
     return children;
   }, []);
 
@@ -75,8 +74,7 @@ const RestoreRevision = () => {
         ...item,
         children: getChildren(currentItems || [], item),
       }))
-      .filter(item => !item.parentId)
-      .sort((a, b) => a.order - b.order);
+      .filter(item => !item.parentId);
     return { name, meta: currentMeta, items: currentItems, template, templateFormat };
   }, [data?.menu, getChildren]);
 
@@ -88,8 +86,7 @@ const RestoreRevision = () => {
         ...item,
         children: getChildren(snapshot.items || [], item),
       }))
-      .filter(item => !item.parentId)
-      .sort((a, b) => a.order - b.order);
+      .filter(item => !item.parentId);
     const updatedMeta = menu.meta?.map((item: any, index: number) => {
       const current = snapshot.meta?.[index];
       if (!current || item.id !== current.id || item.type !== current.type) {

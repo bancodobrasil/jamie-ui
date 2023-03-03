@@ -195,7 +195,6 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot, renderTemplateChanges }:
     return fields.map(field => {
       if (
         field === 'id' ||
-        field === 'order' ||
         field === 'parentId' ||
         field === 'menuId' ||
         field === 'menu' ||
@@ -283,55 +282,64 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot, renderTemplateChanges }:
           {t('common.noChanges')}
         </Typography>
       );
-    return Object.keys(items).map(index => {
-      const getChildren = (parentId: number, items?: any[]) => {
-        let children;
-        for (let i = 0; i < items?.length; i++) {
-          if (items[i].id === parentId) {
-            children = items[i].children;
-            break;
+    return Object.keys(items)
+      .sort((a, b) => {
+        const aOrder = items[a].order;
+        const bOrder = items[b].order;
+        if (!aOrder || !bOrder) return Number(a) - Number(b);
+        if (aOrder < bOrder) return -1;
+        if (aOrder > bOrder) return 1;
+        return 0;
+      })
+      .map(index => {
+        const getChildren = (parentId: number, items?: any[]) => {
+          let children;
+          for (let i = 0; i < items?.length; i++) {
+            if (items[i].id === parentId) {
+              children = items[i].children;
+              break;
+            }
+            children = getChildren(parentId, items[i].children);
+            if (children) break;
           }
-          children = getChildren(parentId, items[i].children);
-          if (children) break;
-        }
-        return children || [];
-      };
-      const from = isChildren
-        ? getChildren(parentId, snapshot?.items)[index]
-        : snapshot?.items?.[index];
-      const to = items[index];
-      if (to === null)
-        return (
-          <Box className="flex flex-col my-2" key={index}>
-            <Typography variant="h5" component="h5" className="line-through">
-              {from.order}. {from.label}
-            </Typography>
-            <Typography variant="body1" component="p" sx={{ ml: '1rem', color: 'error.main' }}>
-              {t('common.deleted', { context: 'male' })}
-            </Typography>
-          </Box>
-        );
-      if (!from || (to.id && from.id !== to.id))
+          return children || [];
+        };
+        const to = items[index];
+        const from = isChildren
+          ? getChildren(parentId, snapshot?.items)[index]
+          : snapshot?.items?.[index];
+        if (to === null)
+          return (
+            <Box className="flex flex-col my-2" key={index}>
+              <Typography variant="h5" component="h5" className="line-through">
+                {from.order}. {from.label}
+              </Typography>
+              <Typography variant="body1" component="p" sx={{ ml: '1rem', color: 'error.main' }}>
+                {t('common.deleted', { context: 'male' })}
+              </Typography>
+            </Box>
+          );
+        if (!from || (to.id && from.id !== to.id))
+          return (
+            <Box className="flex flex-col my-2" key={index}>
+              <Typography variant="h5" component="h5">
+                {to.order || from.order}. {to.label || from.label}
+              </Typography>
+              <Typography variant="body1" component="p" sx={{ ml: '1rem', color: 'success.main' }}>
+                {t('common.added', { context: 'male' })}
+              </Typography>
+              {renderItemChanges(from, to)}
+            </Box>
+          );
         return (
           <Box className="flex flex-col my-2" key={index}>
             <Typography variant="h5" component="h5">
-              {to.order}. {to.label}
-            </Typography>
-            <Typography variant="body1" component="p" sx={{ ml: '1rem', color: 'success.main' }}>
-              {t('common.added', { context: 'male' })}
+              {to.order || from.order}. {to.label || from.label}:
             </Typography>
             {renderItemChanges(from, to)}
           </Box>
         );
-      return (
-        <Box className="flex flex-col my-2" key={index}>
-          <Typography variant="h5" component="h5">
-            {to.order || from.order}. {to.label || from.label}:
-          </Typography>
-          {renderItemChanges(from, to)}
-        </Box>
-      );
-    });
+      });
   };
 
   return (

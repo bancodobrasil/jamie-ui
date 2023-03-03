@@ -55,8 +55,7 @@ const CreateRevision = () => {
         .map(item => ({
           ...item,
           children: getChildren(items, item),
-        }))
-        .sort((a, b) => a.order - b.order);
+        }));
       return children;
     };
     const currentMeta = meta && removeTypename(meta);
@@ -66,8 +65,7 @@ const CreateRevision = () => {
         ...item,
         children: getChildren(currentItems || [], item),
       }))
-      .filter(item => !item.parentId)
-      .sort((a, b) => a.order - b.order);
+      .filter(item => !item.parentId);
 
     if (!currentRevision)
       return {
@@ -84,8 +82,7 @@ const CreateRevision = () => {
         ...item,
         children: getChildren(snapshot.items || [], item),
       }))
-      .filter(item => !item.parentId)
-      .sort((a, b) => a.order - b.order);
+      .filter(item => !item.parentId);
 
     return {
       name,

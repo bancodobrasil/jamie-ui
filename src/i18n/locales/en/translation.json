@@ -251,6 +251,7 @@
     "of": "Menu Item's $t(menu.fields.{{field}})",
     "fields": {
       "label": "Label",
+      "order": "Order",
       "children": "Children",
       "template": "Template",
       "templateFormat": {

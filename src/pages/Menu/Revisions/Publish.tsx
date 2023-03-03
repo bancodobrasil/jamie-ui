@@ -55,8 +55,7 @@ const PublishRevision = () => {
       .map(item => ({
         ...item,
         children: getChildren(items, item),
-      }))
-      .sort((a, b) => a.order - b.order);
+      }));
     return children;
   }, []);
 
@@ -76,8 +75,7 @@ const PublishRevision = () => {
         ...item,
         children: getChildren(currentItems || [], item),
       }))
-      .filter(item => !item.parentId)
-      .sort((a, b) => a.order - b.order);
+      .filter(item => !item.parentId);
     return {
       ...publishedRevision,
       snapshot: { ...snapshot, items: currentItems, meta: currentMeta },
@@ -92,8 +90,7 @@ const PublishRevision = () => {
         ...item,
         children: getChildren(snapshot.items || [], item),
       }))
-      .filter(item => !item.parentId)
-      .sort((a, b) => a.order - b.order);
+      .filter(item => !item.parentId);
     const updatedMeta = publishedRevision?.snapshot.meta?.map((item: any, index: number) => {
       const current = snapshot.meta?.[index];
       if (!current || item.id !== current.id || item.type !== current.type) {
