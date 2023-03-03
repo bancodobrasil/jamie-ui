@@ -3,6 +3,9 @@ import { DocumentNode, gql } from '@apollo/client';
 export const ALL_MENU_PROPERTIES = `
 id
 name
+createdAt
+updatedAt
+version
 currentRevisionId
 publishedRevisionId
 currentRevision {
