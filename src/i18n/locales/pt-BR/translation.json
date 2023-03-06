@@ -8,6 +8,18 @@
   "common": {
     "yes": "Sim",
     "no": "Não",
+    "from": "De",
+    "to": "Para",
+    "viewChanges": "Ver alterações",
+    "noChanges": "Nenhuma alteração",
+    "none": "Nenhum",
+    "deleted_male": "Removido",
+    "deleted_female": "Removida",
+    "added_male": "Adicionado",
+    "added_female": "Adicionada",
+    "changed_male": "Alterado",
+    "changed_female": "Alterada",
+    "commentary": "Comentário",
     "example": "Exemplo",
     "loading": "Carregando",
     "loadingField": "Carregando {{field}}",
@@ -27,7 +39,10 @@
     "required": "Obrigatório",
     "optional": "Opcional",
     "fields": {
-      "id": "ID"
+      "id": "ID",
+      "createdAt": "Criado em",
+      "updatedAt": "Atualizado em",
+      "version": "Versão"
     }
   },
   "buttons": {
@@ -125,6 +140,14 @@
       "name": "Nome",
       "items": "Itens",
       "template": "Template",
+      "templateFormat": {
+        "title": "Formato do Template",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Texto"
+        }
+      },
       "meta": {
         "title_one": "Metadado",
         "title_other": "Metadados",
@@ -143,7 +166,15 @@
           "date": "Data"
         },
         "value": "Valor"
-      }
+      },
+      "revision": {
+        "title_one": "Versão",
+        "title_other": "Versões",
+        "description": "Descrição",
+        "snapshot": "Snapshot"
+      },
+      "currentRevision": "Versão Atual",
+      "publishedRevision": "Versão Publicada"
     },
     "preview": {
       "title": "Editar Itens",
@@ -153,7 +184,7 @@
         "insert": "Inserir",
         "edit": "Editar",
         "delete": "Deletar",
-        "editTemplate":  "Editar Template"
+        "editTemplate": "Editar Template"
       },
       "parent": "Item Pai",
       "newItem": "Novo Item {{order}}",
@@ -204,7 +235,10 @@
         "edit": "Editar Menu",
         "editTemplate": "Editar Template",
         "editItems": "Editar Itens",
-        "delete": "Deletar"
+        "delete": "Deletar",
+        "createRevision": "Fechar Versão",
+        "publishRevision": "Publicar Versão",
+        "restoreRevision": "Restaurar Versão"
       },
       "messages": {
         "confirmDelete": "Tem certeza que deseja deletar esse menu?"
@@ -216,7 +250,18 @@
     "title_other": "Itens de Menu",
     "of": "$t(menu.fields.{{field}}) do Item de Menu",
     "fields": {
+      "label": "Nome",
+      "order": "Ordem",
+      "children": "Itens Filhos",
       "template": "Template",
+      "templateFormat": {
+        "title": "Formato do Template",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Texto"
+        }
+      },
       "enabled": "Habilitado",
       "startPublication": "Data de Início de Publicação",
       "endPublication": "Data de Fim de Publicação"
@@ -264,6 +309,51 @@
         "discard": "Descartar Alterações",
         "useDefault": "Usar Template Padrão"
       }
+    }
+  },
+  "menuRevision": {
+    "title_one": "Versão do Menu",
+    "title_other": "Versões do Menu",
+    "of": "Versão do Menu $t(menu.fields.{{field}})",
+    "fields": {
+      "id": "ID",
+      "description": "Descrição",
+      "snapshot": "Snapshot"
+    },
+    "create": {
+      "title": "Fechar Versão do Menu",
+      "placeholders": {
+        "description": "Insira a descrição da versão do menu..."
+      },
+      "reviewChanges": {
+        "title": "Revisar Alterações",
+        "description": "As alterações abaixo serão aplicadas na nova versão do menu:"
+      },
+      "noChanges": "Nenhuma alteração foi feita no menu."
+    },
+    "restore": {
+      "title": "Restaurar Versão do Menu",
+      "selectRevision": "Selecione a versão do menu que deseja restaurar",
+      "reviewChanges": {
+        "title": "Revisar Alterações",
+        "description": "As alterações abaixo serão aplicadas após a restauração da versão do menu:"
+      },
+      "notification": {
+        "success": "Versão do menu restaurada com sucesso"
+      },
+      "noChanges": "Nenhuma alteração foi feita no menu."
+    },
+    "publish": {
+      "title": "Publicar Versão do Menu",
+      "selectRevision": "Selecione a versão do menu que deseja publicar",
+      "reviewChanges": {
+        "title": "Revisar Alterações",
+        "description": "As alterações abaixo serão aplicadas após a publicação da versão do menu:"
+      },
+      "notification": {
+        "success": "Versão do menu publicada com sucesso"
+      },
+      "noChanges": "Nenhuma alteração foi feita no menu."
     }
   }
 }

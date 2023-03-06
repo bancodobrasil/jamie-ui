@@ -8,6 +8,18 @@
   "common": {
     "yes": "Yes",
     "no": "No",
+    "from": "From",
+    "to": "To",
+    "viewChanges": "View changes",
+    "noChanges": "No changes",
+    "none": "None",
+    "deleted_male": "Deleted",
+    "deleted_female": "Deleted",
+    "added_male": "Added",
+    "added_female": "Added",
+    "changed_male": "Changed",
+    "changed_female": "Changed",
+    "commentary": "Commentary",
     "example": "Example",
     "loading": "Loading",
     "loadingField": "Loading {{field}}",
@@ -27,7 +39,10 @@
     "required": "Required",
     "optional": "Optional",
     "fields": {
-      "id": "ID"
+      "id": "ID",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "version": "Version"
     }
   },
   "buttons": {
@@ -125,6 +140,14 @@
       "name": "Name",
       "items": "Items",
       "template": "Template",
+      "templateFormat": {
+        "title": "Template Format",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Plain Text"
+        }
+      },
       "meta": {
         "title_one": "Metadata",
         "title_other": "Metadata",
@@ -143,7 +166,15 @@
           "date": "Date"
         },
         "value": "Value"
-      }
+      },
+      "revision": {
+        "title_one": "Version",
+        "title_other": "Versions",
+        "description": "Description",
+        "snapshot": "Snapshot"
+      },
+      "currentRevision": "Current Version",
+      "publishedRevision": "Published Version"
     },
     "preview": {
       "title": "Edit Items",
@@ -204,7 +235,10 @@
         "edit": "Edit Menu",
         "editTemplate": "Edit Template",
         "editItems": "Edit Items",
-        "delete": "Delete"
+        "delete": "Delete",
+        "createRevision": "Close Version",
+        "publishRevision": "Publish Version",
+        "restoreRevision": "Restore Version"
       },
       "messages": {
         "confirmDelete": "Are you sure you want to delete this menu?"
@@ -216,7 +250,18 @@
     "title_other": "Menu Items",
     "of": "Menu Item's $t(menu.fields.{{field}})",
     "fields": {
+      "label": "Label",
+      "order": "Order",
+      "children": "Children",
       "template": "Template",
+      "templateFormat": {
+        "title": "Template Format",
+        "formats": {
+          "json": "JSON",
+          "xml": "XML",
+          "plain": "Plain Text"
+        }
+      },
       "enabled": "Enabled",
       "startPublication": "Start Publication Date",
       "endPublication": "End Publication Date"
@@ -264,6 +309,52 @@
         "discard": "Discard Changes",
         "useDefault": "Use Default Template"
       }
+    }
+  },
+  "menuRevision": {
+    "title_one": "Menu Version",
+    "title_other": "Menu Versions",
+    "of": "Menu Version's $t(menu.fields.{{field}})",
+    "fields": {
+      "id": "ID",
+      "description": "Description",
+      "snapshot": "Snapshot"
+    },
+    "create": {
+      "title": "Close Menu Version",
+      "placeholders": {
+        "description": "Enter the menu version's description..."
+      },
+      "reviewChanges": {
+        "title": "Review Changes",
+        "description": "The following changes will be applied to the new menu version:"
+      },
+      "noChanges": "No changes were made to the menu."
+    },
+    "restore": {
+      "title": "Restore Menu Version",
+      "selectRevision": "Select a menu version to restore",
+      "reviewChanges": {
+        "title": "Review Changes",
+        "description": "The following changes will be applied after restoring the menu version:"
+      },
+      "notification": {
+        "success": "The menu version was restored successfully"
+      },
+      "noChanges": "No changes were made to the menu."
+    },
+    "publish": {
+      "title": "Publish Menu Version",
+
+      "selectRevision": "Select a menu version to publish",
+      "reviewChanges": {
+        "title": "Review Changes",
+        "description": "The following changes will be applied after publishing the menu version:"
+      },
+      "notification": {
+        "success": "The menu version was published successfully"
+      },
+      "noChanges": "No changes were made to the menu."
     }
   }
 }

@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Button, Divider, Typography } from '@mui/material';
+import { DateTime } from 'luxon';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +16,7 @@ import {
 } from '../../../contexts/NotificationContext';
 
 export const ShowMenu = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -72,6 +73,18 @@ export const ShowMenu = () => {
         },
       });
     }
+  };
+
+  const onRestoreRevisionClickHandler = () => {
+    navigate('restoreVersion');
+  };
+
+  const onCreateRevisionClickHandler = () => {
+    navigate('closeVersion');
+  };
+
+  const onPublishRevisionClickHandler = () => {
+    navigate('publishVersion');
   };
 
   const renderMeta = () => {
@@ -142,6 +155,56 @@ export const ShowMenu = () => {
       <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
         {data?.menu.name}
       </Typography>
+      <Box sx={{ mb: '1rem' }} className="space-y-4">
+        <Box className="space-y-1">
+          <Typography variant="h5" component="h5" className="mb-2">
+            {t('common.fields.createdAt')}:
+          </Typography>
+          <Typography variant="body1" component="p">
+            <b>
+              {DateTime.fromISO(data?.menu.createdAt)
+                .setLocale(i18n.language)
+                .toLocaleString(DateTime.DATETIME_FULL)}
+            </b>
+          </Typography>
+        </Box>
+        <Box className="space-y-1">
+          <Typography variant="h5" component="h5" className="mb-2">
+            {t('common.fields.updatedAt')}:
+          </Typography>
+          <Typography variant="body1" component="p">
+            <b>
+              {DateTime.fromISO(data?.menu.updatedAt)
+                .setLocale(i18n.language)
+                .toLocaleString(DateTime.DATETIME_FULL)}
+            </b>
+          </Typography>
+        </Box>
+        <Box className="space-y-1">
+          <Typography variant="h5" component="h5" className="mb-2">
+            {t('menu.fields.currentRevision')}:
+          </Typography>
+          <Typography variant="body1" component="p">
+            {t('common.fields.id')}: <b>{data?.menu.currentRevision?.id || '-'}</b>
+          </Typography>
+          <Typography variant="body1" component="p">
+            {t('menu.fields.revision.description')}:{' '}
+            <b>{data?.menu.currentRevision?.description || '-'}</b>
+          </Typography>
+        </Box>
+        <Box className="space-y-1">
+          <Typography variant="h5" component="h5" className="mb-2">
+            {t('menu.fields.publishedRevision')}:
+          </Typography>
+          <Typography variant="body1" component="p">
+            {t('common.fields.id')}: <b>{data?.menu.publishedRevision?.id || '-'}</b>
+          </Typography>
+          <Typography variant="body1" component="p">
+            {t('menu.fields.revision.description')}:{' '}
+            <b>{data?.menu.publishedRevision?.description || '-'}</b>
+          </Typography>
+        </Box>
+      </Box>
       <Divider />
       <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
         {t('menu.fields.meta.title', { count: 2 })}
@@ -154,40 +217,56 @@ export const ShowMenu = () => {
         )}
       </Box>
       <Divider />
-      <Box sx={{ display: 'flex', my: '1rem' }}>
-        <Button
-          variant="contained"
-          sx={{ mr: '1rem' }}
-          onClick={onEditClickHandler}
-          disabled={loadingDelete}
-        >
-          {t('menu.show.actions.edit')}
-        </Button>
-        <Button
-          variant="outlined"
-          sx={{ mr: '1rem' }}
-          onClick={onEditTemplateClickHandler}
-          disabled={loadingDelete}
-        >
-          {t('menu.show.actions.editTemplate')}
-        </Button>
-        <Button
-          variant="outlined"
-          sx={{ mr: '1rem' }}
-          onClick={onEditItemsClickHandler}
-          disabled={loadingDelete}
-        >
-          {t('menu.show.actions.editItems')}
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          sx={{ mr: '1rem' }}
-          onClick={onDeleteClickHandler}
-          disabled={loadingDelete}
-        >
-          {t('menu.show.actions.delete')}
-        </Button>
+      <Box className="flex flex-col space-y-4 py-4 w-fit">
+        <Typography variant="h2" component="h2">
+          {t('menu.show.actions.title')}:
+        </Typography>
+        <Box className="flex space-x-8">
+          <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
+            {t('menu.show.actions.edit')}
+          </Button>
+          <Button variant="outlined" onClick={onEditTemplateClickHandler} disabled={loadingDelete}>
+            {t('menu.show.actions.editTemplate')}
+          </Button>
+          <Button variant="outlined" onClick={onEditItemsClickHandler} disabled={loadingDelete}>
+            {t('menu.show.actions.editItems')}
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={onDeleteClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.delete')}
+          </Button>
+        </Box>
+        <Divider />
+        <Box className="flex justify-center space-x-8">
+          <Button
+            variant="outlined"
+            color="warning"
+            onClick={onRestoreRevisionClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.restoreRevision')}
+          </Button>
+          <Button
+            variant="outlined"
+            color="success"
+            onClick={onCreateRevisionClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.createRevision')}
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={onPublishRevisionClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.publishRevision')}
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

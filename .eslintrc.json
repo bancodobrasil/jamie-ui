@@ -35,7 +35,8 @@
       "react/prop-types": "off",
       "no-console": ["error", { "allow": ["tron", "error"] }],
       "no-underscore-dangle": 0,
-      "import/no-extraneous-dependencies": 0
+      "import/no-extraneous-dependencies": 0,
+      "@typescript-eslint/no-explicit-any": 0
     },
     "settings": {
       "import/resolver": {

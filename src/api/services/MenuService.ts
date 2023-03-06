@@ -1,5 +1,60 @@
 import { DocumentNode, gql } from '@apollo/client';
 
+export const ALL_MENU_PROPERTIES = `
+id
+name
+createdAt
+updatedAt
+version
+currentRevisionId
+publishedRevisionId
+currentRevision {
+  id
+  description
+  createdAt
+  snapshot
+}
+publishedRevision {
+  id
+  description
+  createdAt
+  snapshot
+}
+revisions {
+  id
+  description
+  createdAt
+  snapshot
+}
+meta {
+  id
+  name
+  type
+  order
+  required
+  enabled
+  defaultValue
+}
+template
+templateFormat
+items {
+  id
+  label
+  order
+  meta
+  parentId
+  menuId
+  templateFormat
+  template
+  enabled
+  startPublication
+  endPublication
+  createdAt
+  updatedAt
+  version
+}
+`;
+
 export default class MenuService {
   static LIST_MENUS: DocumentNode = gql`
     query ListMenus(
@@ -22,6 +77,10 @@ export default class MenuService {
           node {
             id
             name
+            createdAt
+            updatedAt
+            currentRevisionId
+            publishedRevisionId
           }
           cursor
         }
@@ -39,31 +98,7 @@ export default class MenuService {
   static GET_MENU: DocumentNode = gql`
     query GetMenu($id: Int!) {
       menu(id: $id) {
-        id
-        name
-        meta {
-          id
-          name
-          type
-          order
-          required
-          enabled
-          defaultValue
-        }
-        template
-        templateFormat
-        items {
-          id
-          label
-          order
-          meta
-          parentId
-          template
-          templateFormat
-          enabled
-          startPublication
-          endPublication
-        }
+        ${ALL_MENU_PROPERTIES}
       }
     }
   `;
@@ -71,7 +106,7 @@ export default class MenuService {
   static CREATE_MENU: DocumentNode = gql`
     mutation CreateMenu($menu: CreateMenuInput!) {
       createMenu(createMenuInput: $menu) {
-        id
+        ${ALL_MENU_PROPERTIES}
       }
     }
   `;
@@ -79,27 +114,7 @@ export default class MenuService {
   static UPDATE_MENU: DocumentNode = gql`
     mutation UpdateMenu($menu: UpdateMenuInput!) {
       updateMenu(updateMenuInput: $menu) {
-        id
-        name
-        meta {
-          id
-          name
-          type
-          order
-          required
-          enabled
-          defaultValue
-        }
-        items {
-          id
-          label
-          order
-          meta
-          parentId
-          enabled
-          startPublication
-          endPublication
-        }
+        ${ALL_MENU_PROPERTIES}
       }
     }
   `;
@@ -107,6 +122,14 @@ export default class MenuService {
   static REMOVE_MENU: DocumentNode = gql`
     mutation RemoveMenu($id: Int!) {
       removeMenu(id: $id)
+    }
+  `;
+
+  static GET_MENU_REVISIONS: DocumentNode = gql`
+    query GetMenuRevisions($id: Int!) {
+      menu(id: $id) {
+        ${ALL_MENU_PROPERTIES}
+      }
     }
   `;
 }

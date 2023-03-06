@@ -77,8 +77,6 @@ export const MenuForm = ({
 }: Props) => {
   const { t, i18n } = useTranslation();
 
-  const [initialMeta] = React.useState<IMenuMetaWithErrors[]>(JSON.parse(JSON.stringify(meta)));
-
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -165,11 +163,7 @@ export const MenuForm = ({
                 : t('menu.edit.placeholders.meta.defaultValue')
             }
             value={m.defaultValue}
-            required={
-              m.action === EnumInputAction.UPDATE &&
-              m.required &&
-              initialMeta.find(m2 => m2.id === m.id)?.required === false
-            }
+            required={m.required}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
@@ -200,11 +194,7 @@ export const MenuForm = ({
                 : t('menu.edit.placeholders.meta.defaultValue')
             }
             value={m.defaultValue}
-            required={
-              m.action === EnumInputAction.UPDATE &&
-              m.required &&
-              initialMeta.find(m2 => m2.id === m.id)?.required === false
-            }
+            required={m.required}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
@@ -266,11 +256,7 @@ export const MenuForm = ({
               renderInput={params => (
                 <TextField
                   {...params}
-                  required={
-                    m.action === EnumInputAction.UPDATE &&
-                    m.required &&
-                    initialMeta.find(m2 => m2.id === m.id)?.required === false
-                  }
+                  required={m.required}
                   InputLabelProps={{
                     shrink: true,
                   }}
