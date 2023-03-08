@@ -2,7 +2,7 @@ import { IMenuItem } from '../../types';
 
 export default class TemplateHelpers {
   public static renderItemsXML(items: IMenuItem[]) {
-    if (!items) return '';
+    if (!items || !items.length) return '';
     const renderItem = (item: IMenuItem, spaces = '    ', isChildren = false): string => {
       if (!item.enabled) return '';
       if (item.template) return item.template;
