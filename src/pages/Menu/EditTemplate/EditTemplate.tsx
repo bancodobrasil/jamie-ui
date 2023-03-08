@@ -1,4 +1,3 @@
-/* eslint-disable prefer-rest-params */
 import React from 'react';
 import { Box, Button, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
@@ -84,23 +83,10 @@ export const EditTemplateMenu = () => {
 
   React.useEffect(() => {
     if (!data) return;
-    Handlebars.registerHelper('renderItemsXML', TemplateHelpers.renderItemsXML);
+    Handlebars.registerHelper(TemplateHelpers.logicOperators);
+    Handlebars.registerHelper('length', TemplateHelpers.getLength);
     Handlebars.registerHelper('json', TemplateHelpers.json);
-    Handlebars.registerHelper({
-      eq: (v1, v2) => v1 === v2,
-      ne: (v1, v2) => v1 !== v2,
-      lt: (v1, v2) => v1 < v2,
-      gt: (v1, v2) => v1 > v2,
-      lte: (v1, v2) => v1 <= v2,
-      gte: (v1, v2) => v1 >= v2,
-      and() {
-        return Array.prototype.every.call(arguments, Boolean);
-      },
-      or() {
-        return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
-      },
-      length: v => v?.length,
-    });
+    Handlebars.registerHelper('renderItemsXML', TemplateHelpers.renderItemsXML);
     const { menu }: { menu: GraphQLData<IMenu> } = data;
     let items: IMenuItem[] = menu.items || [];
     const getItemMeta = (meta: IMenuItemMeta): Record<string, unknown> => {
