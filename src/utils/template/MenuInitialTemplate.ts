@@ -2,8 +2,8 @@ export default class MenuInitialTemplate {
   public static JSON = `{
   "id": {{id}},
   "name": "{{name}}",
-  "meta": {{{prettyJSON meta}}},
-  "items": {{{prettyJSON items}}}
+  "meta": {{{json meta spaces=2}}},
+  "items": {{{json items spaces=2}}}
 }`;
 
   public static XML = `<menu id="{{id}}" name="{{name}}">
@@ -19,6 +19,6 @@ export default class MenuInitialTemplate {
 
   public static PLAIN = `id = {{id}};
 name = "{{name}}";
-meta = {{{prettyJSON meta}}};
-items = {{{prettyJSON items}}};`;
+meta = {{{json meta spaces=2}}};
+items = {{{json items spaces=2}}};`;
 }

@@ -1,3 +1,4 @@
+import Handlebars from 'handlebars';
 import { IMenuItem } from '../../types';
 
 export default class TemplateHelpers {
@@ -39,7 +40,7 @@ export default class TemplateHelpers {
     return xml;
   }
 
-  public static prettyJSON(obj: any) {
-    return JSON.stringify(obj, null, 2);
+  public static json(context: any, options: Handlebars.HelperOptions) {
+    return JSON.stringify(context, null, options.hash.spaces);
   }
 }

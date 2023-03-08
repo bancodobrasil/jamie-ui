@@ -84,7 +84,7 @@ export const EditTemplateMenu = () => {
   React.useEffect(() => {
     if (!data) return;
     Handlebars.registerHelper('renderItemsXML', TemplateHelpers.renderItemsXML);
-    Handlebars.registerHelper('prettyJSON', TemplateHelpers.prettyJSON);
+    Handlebars.registerHelper('json', TemplateHelpers.json);
     const { menu }: { menu: GraphQLData<IMenu> } = data;
     let items: IMenuItem[] = menu.items || [];
     const getItemMeta = (meta: IMenuItemMeta): Record<string, unknown> => {
