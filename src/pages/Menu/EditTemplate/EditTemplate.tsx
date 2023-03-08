@@ -163,11 +163,13 @@ export const EditTemplateMenu = () => {
         return rest;
       });
       const result = Handlebars.compile(template[templateFormat])({
-        ...rest,
-        items,
+        menu: {
+          ...rest,
+          items,
+        },
       });
       if (templateFormat === EnumTemplateFormat.JSON) {
-        setTemplateResult(JSON.stringify(JSON.parse(result), null, 2));
+        setTemplateResult(result);
         return;
       }
       setTemplateResult(result);
