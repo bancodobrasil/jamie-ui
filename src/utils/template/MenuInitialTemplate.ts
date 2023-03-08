@@ -3,7 +3,7 @@ export default class MenuInitialTemplate {
   "id": {{id}},
   "name": "{{name}}",
   "meta": {{{json meta spaces=2}}},
-  "items": {{{json items spaces=2}}}
+  "items": {{{renderItemsJSON items spaces=2}}}
 }`;
 
   public static XML = `<menu id="{{id}}" name="{{name}}" {{~#unless (and (length meta) (length items))}}/>{{else}}>

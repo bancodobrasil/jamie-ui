@@ -24,6 +24,23 @@ export default class TemplateHelpers {
     return JSON.stringify(context, null, options.hash.spaces);
   }
 
+  public static renderItemsJSON(items: IMenuItem[], options: Handlebars.HelperOptions) {
+    if (!items || !items.length) return [];
+    const renderItem = (item: IMenuItem): Record<string, unknown> => {
+      if (!item.enabled) return null;
+      if (item.template) return JSON.parse(item.template);
+      let children = item.children?.map(renderItem).filter(v => v !== null);
+      if (!children?.length) children = undefined;
+      const { id, label, order, meta } = item;
+      return { id, label, order, meta, children };
+    };
+    return JSON.stringify(
+      items.map(renderItem).filter(v => v !== null),
+      null,
+      options.hash.spaces,
+    );
+  }
+
   public static renderItemsXML(items: IMenuItem[]) {
     if (!items || !items.length) return '';
     const renderItem = (item: IMenuItem, spaces = '    ', isChildren = false): string => {
