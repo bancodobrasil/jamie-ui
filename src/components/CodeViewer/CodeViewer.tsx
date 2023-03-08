@@ -14,6 +14,7 @@ interface Props {
 }
 
 const CodeViewer = ({ code, language, lineNumbers = true }: Props) => {
+  language = language === 'plain' ? 'json' : language;
   useEffect(() => {
     Prism.highlightAll();
   }, [code]);

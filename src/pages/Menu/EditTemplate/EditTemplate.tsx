@@ -5,14 +5,13 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
-import { ejs as ejsLang } from 'codemirror-lang-ejs';
 import Handlebars from 'handlebars/dist/handlebars';
+import { json } from '@codemirror/lang-json';
+import { xml } from '@codemirror/lang-xml';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
-import { ejsJson } from '../../../utils/codemirror/ejs-json';
-import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
 import {
   EnumTemplateFormat,
@@ -48,18 +47,18 @@ export const EditTemplateMenu = () => {
   const [templateResult, setTemplateResult] = React.useState('');
   const [loadedInitialTemplate, setLoadedInitialTemplate] = React.useState(false);
 
-  const [language, setLanguage] = React.useState(ejsJson);
+  const [language, setLanguage] = React.useState(json);
 
   React.useEffect(() => {
     switch (templateFormat) {
       case EnumTemplateFormat.JSON:
-        setLanguage(ejsJson);
+        setLanguage(json);
         break;
       case EnumTemplateFormat.XML:
-        setLanguage(ejsXml);
+        setLanguage(xml());
         break;
       case EnumTemplateFormat.PLAIN:
-        setLanguage(ejsLang);
+        setLanguage(json);
         break;
     }
   }, [templateFormat]);
