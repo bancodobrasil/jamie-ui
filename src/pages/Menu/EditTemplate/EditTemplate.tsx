@@ -99,6 +99,7 @@ export const EditTemplateMenu = () => {
       or() {
         return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
       },
+      length: v => v?.length,
     });
     const { menu }: { menu: GraphQLData<IMenu> } = data;
     let items: IMenuItem[] = menu.items || [];
