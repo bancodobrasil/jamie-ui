@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { ejs as ejsLang } from 'codemirror-lang-ejs';
-import ejs from 'ejs';
+import Handlebars from 'handlebars/dist/handlebars';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';
 import Loading from '../../../components/Loading';
@@ -14,13 +14,21 @@ import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { ejsJson } from '../../../utils/codemirror/ejs-json';
 import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
-import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem, IMenuMeta } from '../../../types';
+import {
+  EnumTemplateFormat,
+  GraphQLData,
+  IMenu,
+  IMenuItem,
+  IMenuItemMeta,
+  IMenuMeta,
+} from '../../../types';
 import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
 import {
   ActionTypes,
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
+import TemplateHelpers from '../../../utils/template/TemplateHelpers';
 
 export const EditTemplateMenu = () => {
   const { dispatch } = React.useContext(NotificationContext);
@@ -76,21 +84,33 @@ export const EditTemplateMenu = () => {
 
   React.useEffect(() => {
     if (!data) return;
+    Handlebars.registerHelper('renderItemsXML', TemplateHelpers.renderItemsXML);
+    Handlebars.registerHelper('prettyJSON', TemplateHelpers.prettyJSON);
     const { menu }: { menu: GraphQLData<IMenu> } = data;
     let items: IMenuItem[] = menu.items || [];
+    const getItemMeta = (meta: IMenuItemMeta): Record<string, unknown> => {
+      const result: Record<string, unknown> = {};
+      if (!meta) return result;
+      menu.meta?.forEach((item: IMenuMeta) => {
+        if (item.enabled && meta[item.id]) {
+          result[item.name] = meta[item.id];
+        }
+      });
+      return result;
+    };
     const getChildren = (parent: IMenuItem): IMenuItem[] => {
       const children = items
         .filter(item => item.parentId === parent.id)
         .map((item: GraphQLData<IMenuItem>) => {
           const { __typename, template, templateFormat, ...rest } = item;
+          const meta = getItemMeta(rest.meta);
           let formattedTemplate = template;
           if (template) {
-            formattedTemplate = ejs.render(template, {
-              item: {
-                ...rest,
-                children: getChildren(item),
-                templateFormat,
-              },
+            formattedTemplate = Handlebars.compile(template)({
+              ...rest,
+              meta,
+              children: getChildren(item),
+              templateFormat,
             });
             if (templateFormat === EnumTemplateFormat.JSON) {
               formattedTemplate = JSON.parse(formattedTemplate);
@@ -98,6 +118,7 @@ export const EditTemplateMenu = () => {
           }
           return {
             ...rest,
+            meta,
             children: getChildren(item),
             template: formattedTemplate,
             templateFormat,
@@ -110,14 +131,14 @@ export const EditTemplateMenu = () => {
       items
         .map((item: GraphQLData<IMenuItem>) => {
           const { __typename, template, templateFormat, ...rest } = item;
+          const meta = getItemMeta(rest.meta);
           let formattedTemplate = template;
           if (template) {
-            formattedTemplate = ejs.render(template, {
-              item: {
-                ...rest,
-                children: getChildren(item),
-                templateFormat,
-              },
+            formattedTemplate = Handlebars.compile(template)({
+              ...rest,
+              meta,
+              children: getChildren(item),
+              templateFormat,
             });
             if (templateFormat === EnumTemplateFormat.JSON) {
               formattedTemplate = JSON.parse(formattedTemplate);
@@ -125,6 +146,7 @@ export const EditTemplateMenu = () => {
           }
           return {
             ...rest,
+            meta,
             children: getChildren(item),
             template: formattedTemplate,
             templateFormat,
@@ -138,11 +160,9 @@ export const EditTemplateMenu = () => {
         const { __typename, ...rest } = meta;
         return rest;
       });
-      const result = ejs.render(template[templateFormat], {
-        menu: {
-          ...rest,
-          items,
-        },
+      const result = Handlebars.compile(template[templateFormat])({
+        ...rest,
+        items,
       });
       if (templateFormat === EnumTemplateFormat.JSON) {
         setTemplateResult(JSON.stringify(JSON.parse(result), null, 2));
@@ -150,7 +170,7 @@ export const EditTemplateMenu = () => {
       }
       setTemplateResult(result);
     } catch (error) {
-      /* empty */
+      // empty
     }
   }, [template, templateFormat, data]);
 
