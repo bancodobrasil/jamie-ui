@@ -29,7 +29,7 @@ export default class TemplateHelpers {
   }
 
   public static renderItemsJSON(items: IMenuItem[], options: Handlebars.HelperOptions) {
-    if (!items || !items.length) return [];
+    if (!items || !items.length) return TemplateHelpers.json([], options);
     const renderItem = (item: IMenuItem): Record<string, unknown> => {
       if (!item.enabled) return null;
       if (item.template) return JSON.parse(item.template);
