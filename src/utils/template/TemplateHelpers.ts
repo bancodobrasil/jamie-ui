@@ -24,6 +24,10 @@ export default class TemplateHelpers {
     return JSON.stringify(context, null, options.hash.spaces);
   }
 
+  public static jsonFormatter(options: Handlebars.HelperOptions) {
+    return JSON.stringify(JSON.parse(options.fn(this)), null, options.hash.spaces);
+  }
+
   public static renderItemsJSON(items: IMenuItem[], options: Handlebars.HelperOptions) {
     if (!items || !items.length) return [];
     const renderItem = (item: IMenuItem): Record<string, unknown> => {

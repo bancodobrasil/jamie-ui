@@ -86,6 +86,7 @@ export const EditTemplateMenu = () => {
     Handlebars.registerHelper(TemplateHelpers.logicOperators);
     Handlebars.registerHelper('length', TemplateHelpers.getLength);
     Handlebars.registerHelper('json', TemplateHelpers.json);
+    Handlebars.registerHelper('jsonFormatter', TemplateHelpers.jsonFormatter);
     Handlebars.registerHelper('renderItemsJSON', TemplateHelpers.renderItemsJSON);
     Handlebars.registerHelper('renderItemsXML', TemplateHelpers.renderItemsXML);
     const { menu }: { menu: GraphQLData<IMenu> } = data;
