@@ -3,7 +3,7 @@ import { IMenuItem } from '../../types';
 export default class TemplateHelpers {
   public static renderItemsXML(items: IMenuItem[]) {
     if (!items) return '';
-    const renderItem = (item: IMenuItem, spaces = '  ', isChildren = false): string => {
+    const renderItem = (item: IMenuItem, spaces = '    ', isChildren = false): string => {
       if (!item.enabled) return '';
       if (item.template) return item.template;
       const tag = isChildren ? 'child' : 'item';
@@ -17,23 +17,25 @@ export default class TemplateHelpers {
         itemXml += '\n';
         Object.keys(item.meta).forEach(key => {
           const value = item.meta[key];
-          itemXml += `${spaces}  <meta key="${key}" value="${value}" />`;
+          itemXml += `${spaces}  <meta key="${key}" value="${value}" />\n`;
         });
       }
-      if (item.children) {
-        itemXml += '\n';
+      if (item.children && item.children.length) {
+        itemXml += `${spaces}  <children>`;
         item.children.forEach(child => {
-          itemXml += `\n${renderItem(child, `${spaces}  `, true)}`;
+          itemXml += `\n${renderItem(child, `${spaces}    `, true)}`;
         });
+        itemXml += `\n${spaces}  </children>\n`;
       }
-      itemXml += `${spaces}</${tag}>\n`;
+      itemXml += `${spaces}</${tag}>`;
       return itemXml;
     };
     let xml = '';
+    xml += `  <items>`;
     items.forEach(item => {
       xml += `\n${renderItem(item)}`;
     });
-    xml = xml.substring(0, xml.length - 1);
+    xml += `\n  </items>`;
     return xml;
   }
 
