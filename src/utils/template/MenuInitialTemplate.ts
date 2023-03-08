@@ -4,8 +4,7 @@ export default class MenuInitialTemplate {
   "name": "{{name}}",
   "meta": {{{prettyJSON meta}}},
   "items": {{{prettyJSON items}}}
-}
-`;
+}`;
 
   public static XML = `<menu id="{{id}}" name="{{name}}">
   {{~#each meta as |meta|}}

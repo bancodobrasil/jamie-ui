@@ -339,7 +339,7 @@ export const EditTemplateMenu = () => {
                   <Trans i18nKey="menuItem.editTemplate.templateFormat.description">
                     X{' '}
                     <Link
-                      href="https://ejs.co/"
+                      href="https://handlebarsjs.com/"
                       rel="noopener noreferrer"
                       target="_blank"
                       underline="always"
