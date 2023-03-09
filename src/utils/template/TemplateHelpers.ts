@@ -45,7 +45,7 @@ export default class TemplateHelpers {
     );
   }
 
-  public static renderItemsXML(items: IMenuItem[]) {
+  public static renderItemsXML(items: IMenuItem[], options: Handlebars.HelperOptions) {
     if (!items || !items.length) return '';
     const renderItem = (item: IMenuItem, spaces = '    ', isChildren = false): string => {
       if (!item.enabled) return '';
@@ -74,12 +74,13 @@ export default class TemplateHelpers {
       itemXml += `${spaces}</${tag}>`;
       return itemXml;
     };
+    const rootTag = options.hash.isChildren ? 'children' : 'items';
     let xml = '';
-    xml += `  <items>`;
+    xml += `  <${rootTag}>`;
     items.forEach(item => {
-      xml += `\n${renderItem(item)}`;
+      xml += `\n${renderItem(item, '    ', options.hash.isChildren)}`;
     });
-    xml += `\n  </items>`;
+    xml += `\n  </${rootTag}>`;
     return xml;
   }
 }
