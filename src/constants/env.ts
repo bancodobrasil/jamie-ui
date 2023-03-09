@@ -9,3 +9,4 @@ const getConfig = varname => {
 export const JAMIE_UI_BASE_URL = getConfig('${JAMIE_UI_BASE_URL}');
 export const JAMIE_KEYCLOAK_BASE_URL = getConfig('${JAMIE_KEYCLOAK_BASE_URL}');
 export const JAMIE_API_BASE_URL = getConfig('${JAMIE_API_BASE_URL}');
+export const IS_DEVELOP = getConfig('${NODE_ENV}') === 'develop';

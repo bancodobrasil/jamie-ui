@@ -4,7 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { useTranslation } from 'react-i18next';
-import keycloak from '../../keycloak';
+import keycloak, { initOptions } from '../../keycloak';
 import '../../i18n';
 import '../../styles/global.css';
 import theme from '../../theme';
@@ -25,7 +25,7 @@ const Pages = () => {
 };
 
 const App = () => (
-  <ReactKeycloakProvider authClient={keycloak}>
+  <ReactKeycloakProvider authClient={keycloak} initOptions={initOptions}>
     <Suspense fallback={<Loading />}>
       <ApolloProvider client={client}>
         <Pages />
