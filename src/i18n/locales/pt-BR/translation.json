@@ -353,7 +353,8 @@
       "notification": {
         "success": "Versão do menu publicada com sucesso"
       },
-      "noChanges": "Nenhuma alteração foi feita no menu."
+      "noChanges": "Nenhuma alteração foi feita no menu.",
+      "noTemplate": "A versão do menu não possui um template definido."
     }
   }
 }

@@ -354,7 +354,8 @@
       "notification": {
         "success": "The menu version was published successfully"
       },
-      "noChanges": "No changes were made to the menu."
+      "noChanges": "No changes were made to the menu.",
+      "noTemplate": "The menu version does not have a template."
     }
   }
 }

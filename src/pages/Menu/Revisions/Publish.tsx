@@ -169,6 +169,13 @@ const PublishRevision = () => {
           {t('menuRevision.publish.selectRevision')}
         </Typography>
       );
+    if (!selectedRevision.snapshot.template) {
+      return (
+        <Typography variant="h6" component="h6" sx={{ color: 'error.main' }}>
+          {t('menuRevision.publish.noTemplate')}
+        </Typography>
+      );
+    }
     if (!menuDiff || !Object.keys(menuDiff).length)
       return (
         <Box className="flex flex-col py-4">
