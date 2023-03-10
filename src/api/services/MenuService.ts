@@ -132,4 +132,10 @@ export default class MenuService {
       }
     }
   `;
+
+  static RENDER_MENU_TEMPLATE: DocumentNode = gql`
+    query RenderMenuTemplate($input: RenderMenuTemplateInput!) {
+      renderMenuTemplate(renderMenuTemplateInput: $input)
+    }
+  `;
 }
