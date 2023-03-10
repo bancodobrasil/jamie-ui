@@ -18,7 +18,6 @@ import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
-import { deepDiff } from '../../../utils/deepDiff';
 import { MenuRevisionsDiff } from '../../../components/Menu/Revisions';
 import MenuRevisionService from '../../../api/services/MenuRevisionService';
 import {
@@ -26,6 +25,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
+import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
 
 const RestoreRevision = () => {
   const { t } = useTranslation();
@@ -123,27 +123,7 @@ const RestoreRevision = () => {
         return arr.findIndex(i => i?.id === item.id) === index;
       },
     );
-    const diff = Object.entries(deepDiff(menu, snapshot))
-      .filter(([key, value]) => {
-        if (value.to === undefined || (value.from === undefined && value.to === null)) {
-          if (key.includes('items') && key.includes('meta') && value.from !== undefined) {
-            value.to = null;
-            return true;
-          }
-          return false;
-        }
-        return true;
-      })
-      .reduce((acc, [key, value]) => {
-        const split = key.split('.');
-        split.reduce((acc, key, index) => {
-          if (index === split.length - 1) {
-            acc[key] = value.to;
-          } else if (!acc[key]) acc[key] = {};
-          return acc[key];
-        }, acc);
-        return acc;
-      }, {});
+    const diff = menuRevisionDiff(menu, snapshot);
     return diff;
   }, [menu, selectedRevision, getChildren]);
 
