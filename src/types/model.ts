@@ -14,6 +14,9 @@ export interface IMenu {
     [EnumTemplateFormat.XML]: string;
     [EnumTemplateFormat.PLAIN]: string;
   };
+  createdAt?: DateTime;
+  updatedAt?: DateTime;
+  version?: number;
 }
 
 export interface IMenuItem {
@@ -35,6 +38,10 @@ export interface IMenuItem {
     [EnumTemplateFormat.XML]: string;
     [EnumTemplateFormat.PLAIN]: string;
   };
+  menuId?: number;
+  createdAt?: DateTime;
+  updatedAt?: DateTime;
+  version?: number;
 }
 
 export enum MenuMetaType {

@@ -100,7 +100,18 @@ export const OperationScreen = ({
     const formatNodes = (nodes: INode[]) =>
       nodes
         .map(node => {
-          const { id, children, original, parentId, ...rest } = node;
+          const {
+            id,
+            children,
+            original,
+            parentId,
+            createdAt,
+            updatedAt,
+            version,
+            menuId,
+            defaultTemplate,
+            ...rest
+          } = node;
           const meta = Object.keys(rest.meta).reduce((acc, key) => {
             const meta = rest.meta[key];
             if (meta == null || meta === '') {
