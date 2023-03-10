@@ -44,6 +44,7 @@ defaultTemplate {
 }
 items {
   id
+  menuId
   label
   order
   meta

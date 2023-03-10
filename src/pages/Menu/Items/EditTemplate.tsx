@@ -60,7 +60,7 @@ export const EditTemplateItems = () => {
   }, [templateFormat]);
 
   const { loading, error, data } = useQuery(MenuItemService.GET_MENU_ITEM, {
-    variables: { id: Number(itemId) },
+    variables: { id: Number(itemId), menuId: Number(id) },
   });
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);

@@ -2,9 +2,10 @@ import { DocumentNode, gql } from '@apollo/client';
 
 export default class MenuItemService {
   static GET_MENU_ITEM: DocumentNode = gql`
-    query GetMenuItem($id: Int!) {
-      menuItem(id: $id) {
+    query GetMenuItem($id: Int!, $menuId: Int!) {
+      menuItem(id: $id, menuId: $menuId) {
         id
+        menuId
         label
         order
         meta
@@ -34,6 +35,7 @@ export default class MenuItemService {
           templateFormat
           items {
             id
+            menuId
             label
             order
             meta
