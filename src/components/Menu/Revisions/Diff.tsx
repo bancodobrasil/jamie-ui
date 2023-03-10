@@ -198,6 +198,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot, renderTemplateChanges }:
         field === 'parentId' ||
         field === 'menuId' ||
         field === 'menu' ||
+        field === 'defaultTemplate' ||
         field === 'createdAt' ||
         field === 'updatedAt' ||
         field === 'deletedAt' ||
@@ -284,8 +285,8 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot, renderTemplateChanges }:
       );
     return Object.keys(items)
       .sort((a, b) => {
-        const aOrder = items[a].order;
-        const bOrder = items[b].order;
+        const aOrder = items[a]?.order;
+        const bOrder = items[b]?.order;
         if (!aOrder || !bOrder) return Number(a) - Number(b);
         if (aOrder < bOrder) return -1;
         if (aOrder > bOrder) return 1;

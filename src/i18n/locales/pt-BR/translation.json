@@ -270,7 +270,7 @@
       "title": "Editar Template",
       "templateFormat": {
         "title": "Formato do Template",
-        "description": "O formato do template define como ele será renderizado antes de enviar para a sua aplicação. Você pode usar as variáveis abaixo para definir o template usando a sintaxe do <2>EJS</2> (Embedded JavaScript).",
+        "description": "O formato do template define como ele será renderizado antes de enviar para a sua aplicação. Você pode usar as variáveis abaixo para definir o template usando a sintaxe do <2>Handlebars</2>.",
         "formats": {
           "json": "JSON",
           "xml": "XML",
@@ -353,7 +353,8 @@
       "notification": {
         "success": "Versão do menu publicada com sucesso"
       },
-      "noChanges": "Nenhuma alteração foi feita no menu."
+      "noChanges": "Nenhuma alteração foi feita no menu.",
+      "noTemplate": "A versão do menu não possui um template definido."
     }
   }
 }

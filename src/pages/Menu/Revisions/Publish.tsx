@@ -18,7 +18,6 @@ import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
-import { deepDiff } from '../../../utils/deepDiff';
 import { MenuRevisionsDiff } from '../../../components/Menu/Revisions';
 import MenuRevisionService from '../../../api/services/MenuRevisionService';
 import {
@@ -26,6 +25,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
+import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
 
 const PublishRevision = () => {
   const { t } = useTranslation();
@@ -127,27 +127,7 @@ const PublishRevision = () => {
         return arr.findIndex(i => i?.id === item.id) === index;
       },
     );
-    const diff = Object.entries(deepDiff(publishedRevision?.snapshot || {}, snapshot))
-      .filter(([key, value]) => {
-        if (value.to === undefined || (value.from === undefined && value.to === null)) {
-          if (key.includes('items') && key.includes('meta') && value.from !== undefined) {
-            value.to = null;
-            return true;
-          }
-          return false;
-        }
-        return true;
-      })
-      .reduce((acc, [key, value]) => {
-        const split = key.split('.');
-        split.reduce((acc, key, index) => {
-          if (index === split.length - 1) {
-            acc[key] = value.to;
-          } else if (!acc[key]) acc[key] = {};
-          return acc[key];
-        }, acc);
-        return acc;
-      }, {});
+    const diff = menuRevisionDiff(publishedRevision?.snapshot || {}, snapshot);
     return diff;
   }, [publishedRevision, selectedRevision, getChildren]);
 
@@ -189,6 +169,13 @@ const PublishRevision = () => {
           {t('menuRevision.publish.selectRevision')}
         </Typography>
       );
+    if (!selectedRevision.snapshot.template) {
+      return (
+        <Typography variant="h6" component="h6" sx={{ color: 'error.main' }}>
+          {t('menuRevision.publish.noTemplate')}
+        </Typography>
+      );
+    }
     if (!menuDiff || !Object.keys(menuDiff).length)
       return (
         <Box className="flex flex-col py-4">

@@ -8,7 +8,6 @@ import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
-import { deepDiff } from '../../../utils/deepDiff';
 import { MENU_REVISION_VALIDATION } from '../../../constants';
 import MenuRevisionService from '../../../api/services/MenuRevisionService';
 import {
@@ -17,6 +16,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { MenuRevisionsDiff } from '../../../components/Menu/Revisions';
+import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
 
 const CreateRevision = () => {
   const { t } = useTranslation();
@@ -133,35 +133,13 @@ const CreateRevision = () => {
       return arr.findIndex(i => i?.id === item.id) === index;
     });
     const { name, template, templateFormat } = menu;
-    const diff = Object.entries(
-      deepDiff(snapshot, {
-        name,
-        meta: currentMeta,
-        items: currentItems,
-        template,
-        templateFormat,
-      }),
-    )
-      .filter(([key, value]) => {
-        if (value.to === undefined || (value.from === undefined && value.to === null)) {
-          if (key.includes('items') && key.includes('meta') && value.from !== undefined) {
-            value.to = null;
-            return true;
-          }
-          return false;
-        }
-        return true;
-      })
-      .reduce((acc, [key, value]) => {
-        const split = key.split('.');
-        split.reduce((acc, key, index) => {
-          if (index === split.length - 1) {
-            acc[key] = value.to;
-          } else if (!acc[key]) acc[key] = {};
-          return acc[key];
-        }, acc);
-        return acc;
-      }, {});
+    const diff = menuRevisionDiff(snapshot, {
+      name,
+      meta: currentMeta,
+      items: currentItems,
+      template,
+      templateFormat,
+    });
     return diff;
   }, [menu]);
 

@@ -1,21 +1,18 @@
 import React from 'react';
 import { Box, Button, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
-import { ejs as ejsLang } from 'codemirror-lang-ejs';
-import ejs from 'ejs';
+import { json } from '@codemirror/lang-json';
+import { xml } from '@codemirror/lang-xml';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
-import { ejsJson } from '../../../utils/codemirror/ejs-json';
-import { ejsXml } from '../../../utils/codemirror/ejs-xml';
 import CodeViewer from '../../../components/CodeViewer';
 import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem, IMenuMeta } from '../../../types';
-import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
 import {
   ActionTypes,
   NotificationContext,
@@ -32,26 +29,31 @@ export const EditTemplateMenu = () => {
   const { t } = useTranslation();
 
   const [templateFormat, setTemplateFormat] = React.useState(EnumTemplateFormat.JSON);
+  const [defaultTemplate, setDefaultTemplate] = React.useState({
+    [EnumTemplateFormat.JSON]: '',
+    [EnumTemplateFormat.XML]: '',
+    [EnumTemplateFormat.PLAIN]: '',
+  });
   const [template, setTemplate] = React.useState({
-    [EnumTemplateFormat.JSON]: MenuInitialTemplate.JSON,
-    [EnumTemplateFormat.XML]: MenuInitialTemplate.XML,
-    [EnumTemplateFormat.PLAIN]: MenuInitialTemplate.PLAIN,
+    [EnumTemplateFormat.JSON]: '',
+    [EnumTemplateFormat.XML]: '',
+    [EnumTemplateFormat.PLAIN]: '',
   });
   const [templateResult, setTemplateResult] = React.useState('');
   const [loadedInitialTemplate, setLoadedInitialTemplate] = React.useState(false);
 
-  const [language, setLanguage] = React.useState(ejsJson);
+  const [language, setLanguage] = React.useState(json);
 
   React.useEffect(() => {
     switch (templateFormat) {
       case EnumTemplateFormat.JSON:
-        setLanguage(ejsJson);
+        setLanguage(json);
         break;
       case EnumTemplateFormat.XML:
-        setLanguage(ejsXml);
+        setLanguage(xml());
         break;
       case EnumTemplateFormat.PLAIN:
-        setLanguage(ejsLang);
+        setLanguage(json);
         break;
     }
   }, [templateFormat]);
@@ -62,15 +64,29 @@ export const EditTemplateMenu = () => {
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
+  const [renderMenuTemplate] = useLazyQuery(MenuService.RENDER_MENU_TEMPLATE, {
+    defaultOptions: {
+      variables: {
+        input: {
+          name: data?.menu.name,
+          template: template[templateFormat],
+          templateFormat,
+          meta: data?.menu.meta,
+          items: data?.menu.items,
+        },
+      },
+    },
+  });
+
   React.useEffect(() => {
     if (!data || loadedInitialTemplate) return;
     const { menu }: { menu: IMenu } = data;
+    setDefaultTemplate(menu.defaultTemplate);
     if (menu.templateFormat) setTemplateFormat(menu.templateFormat);
-    if (menu.template)
-      setTemplate({
-        ...template,
-        [menu.templateFormat]: menu.template,
-      });
+    setTemplate({
+      ...menu.defaultTemplate,
+      [menu.templateFormat]: menu.template,
+    });
     setLoadedInitialTemplate(true);
   }, [data, loadedInitialTemplate, template]);
 
@@ -82,25 +98,30 @@ export const EditTemplateMenu = () => {
       const children = items
         .filter(item => item.parentId === parent.id)
         .map((item: GraphQLData<IMenuItem>) => {
-          const { __typename, template, templateFormat, ...rest } = item;
-          let formattedTemplate = template;
-          if (template) {
-            formattedTemplate = ejs.render(template, {
-              item: {
-                ...rest,
-                children: getChildren(item),
-                templateFormat,
-              },
-            });
-            if (templateFormat === EnumTemplateFormat.JSON) {
-              formattedTemplate = JSON.parse(formattedTemplate);
-            }
-          }
-          return {
-            ...rest,
-            children: getChildren(item),
-            template: formattedTemplate,
+          const {
+            id,
+            label,
+            order,
+            template,
             templateFormat,
+            meta,
+            parentId,
+            enabled,
+            startPublication,
+            endPublication,
+          } = item;
+          return {
+            id,
+            label,
+            order,
+            template,
+            templateFormat,
+            meta,
+            parentId,
+            enabled,
+            startPublication,
+            endPublication,
+            children: getChildren(item),
           };
         })
         .sort((a, b) => a.order - b.order);
@@ -109,50 +130,59 @@ export const EditTemplateMenu = () => {
     items =
       items
         .map((item: GraphQLData<IMenuItem>) => {
-          const { __typename, template, templateFormat, ...rest } = item;
-          let formattedTemplate = template;
-          if (template) {
-            formattedTemplate = ejs.render(template, {
-              item: {
-                ...rest,
-                children: getChildren(item),
-                templateFormat,
-              },
-            });
-            if (templateFormat === EnumTemplateFormat.JSON) {
-              formattedTemplate = JSON.parse(formattedTemplate);
-            }
-          }
-          return {
-            ...rest,
-            children: getChildren(item),
-            template: formattedTemplate,
+          const {
+            id,
+            label,
+            order,
+            template,
             templateFormat,
+            meta,
+            parentId,
+            enabled,
+            startPublication,
+            endPublication,
+          } = item;
+          return {
+            id,
+            label,
+            order,
+            template,
+            templateFormat,
+            meta,
+            parentId,
+            enabled,
+            startPublication,
+            endPublication,
+            children: getChildren(item),
           };
         })
         .filter(item => !item.parentId)
         .sort((a, b) => a.order - b.order) || [];
-    try {
-      const { __typename, template: menuTemplate, ...rest } = menu;
-      rest.meta = rest.meta.map((meta: GraphQLData<IMenuMeta>) => {
-        const { __typename, ...rest } = meta;
-        return rest;
-      });
-      const result = ejs.render(template[templateFormat], {
-        menu: {
-          ...rest,
+    const { name } = menu;
+    const meta = menu.meta.map((meta: GraphQLData<IMenuMeta>) => {
+      const { __typename, ...rest } = meta;
+      return rest;
+    });
+    renderMenuTemplate({
+      variables: {
+        input: {
+          name,
+          meta,
+          template: template[templateFormat],
+          templateFormat,
           items,
         },
-      });
-      if (templateFormat === EnumTemplateFormat.JSON) {
-        setTemplateResult(JSON.stringify(JSON.parse(result), null, 2));
-        return;
-      }
-      setTemplateResult(result);
-    } catch (error) {
-      /* empty */
-    }
-  }, [template, templateFormat, data]);
+      },
+      onCompleted: (data: any) => {
+        if (data) {
+          setTemplateResult(data.renderMenuTemplate);
+        }
+      },
+      onError: error => {
+        console.error(error);
+      },
+    });
+  }, [template, templateFormat, data, renderMenuTemplate]);
 
   const onChangeTemplateFormat = React.useCallback(event => {
     setTemplateFormat(event.target.value);
@@ -169,27 +199,11 @@ export const EditTemplateMenu = () => {
   );
 
   const resetDefaultTemplate = React.useCallback(() => {
-    switch (templateFormat) {
-      case EnumTemplateFormat.JSON:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuInitialTemplate.JSON,
-        });
-        break;
-      case EnumTemplateFormat.XML:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuInitialTemplate.XML,
-        });
-        break;
-      case EnumTemplateFormat.PLAIN:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuInitialTemplate.PLAIN,
-        });
-        break;
-    }
-  }, [template, templateFormat]);
+    setTemplate({
+      ...template,
+      [templateFormat]: defaultTemplate[templateFormat],
+    });
+  }, [template, templateFormat, defaultTemplate]);
 
   const onBackClickHandler = () => {
     navigate('../');
@@ -320,7 +334,7 @@ export const EditTemplateMenu = () => {
                   <Trans i18nKey="menuItem.editTemplate.templateFormat.description">
                     X{' '}
                     <Link
-                      href="https://ejs.co/"
+                      href="https://handlebarsjs.com/"
                       rel="noopener noreferrer"
                       target="_blank"
                       underline="always"

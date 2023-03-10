@@ -37,6 +37,11 @@ meta {
 }
 template
 templateFormat
+defaultTemplate {
+  json
+  xml
+  plain
+}
 items {
   id
   label
@@ -46,6 +51,11 @@ items {
   menuId
   templateFormat
   template
+  defaultTemplate {
+    json
+    xml
+    plain
+  }
   enabled
   startPublication
   endPublication
@@ -130,6 +140,21 @@ export default class MenuService {
       menu(id: $id) {
         ${ALL_MENU_PROPERTIES}
       }
+    }
+  `;
+
+  static RENDER_MENU_TEMPLATE: DocumentNode = gql`
+    query RenderMenuTemplate($input: RenderMenuTemplateInput!) {
+      renderMenuTemplate(renderMenuTemplateInput: $input)
+    }
+  `;
+
+  static RENDER_MENU_ITEM_TEMPLATE: DocumentNode = gql`
+    query RenderMenuItemTemplate(
+      $item: RenderMenuItemTemplateInput!
+      $menu: RenderMenuTemplateInput!
+    ) {
+      renderMenuItemTemplate(renderMenuItemTemplateInput: $item, renderMenuTemplateInput: $menu)
     }
   `;
 }
