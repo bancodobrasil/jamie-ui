@@ -11,6 +11,11 @@ export default class MenuItemService {
         parentId
         template
         templateFormat
+        defaultTemplate {
+          json
+          xml
+          plain
+        }
         enabled
         startPublication
         endPublication

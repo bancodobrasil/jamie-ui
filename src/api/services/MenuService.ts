@@ -37,6 +37,11 @@ meta {
 }
 template
 templateFormat
+defaultTemplate {
+  json
+  xml
+  plain
+}
 items {
   id
   label
@@ -46,6 +51,11 @@ items {
   menuId
   templateFormat
   template
+  defaultTemplate {
+    json
+    xml
+    plain
+  }
   enabled
   startPublication
   endPublication

@@ -12,7 +12,6 @@ import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import CodeViewer from '../../../components/CodeViewer';
-import MenuItemInitialTemplate from '../../../utils/template/MenuItemInitialTemplate';
 import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem, IMenuMeta } from '../../../types';
 import MenuService from '../../../api/services/MenuService';
 import {
@@ -31,10 +30,15 @@ export const EditTemplateItems = () => {
   const { t } = useTranslation();
 
   const [templateFormat, setTemplateFormat] = React.useState(EnumTemplateFormat.JSON);
+  const [defaultTemplate, setDefaultTemplate] = React.useState({
+    [EnumTemplateFormat.JSON]: '',
+    [EnumTemplateFormat.XML]: '',
+    [EnumTemplateFormat.PLAIN]: '',
+  });
   const [template, setTemplate] = React.useState({
-    [EnumTemplateFormat.JSON]: MenuItemInitialTemplate.JSON,
-    [EnumTemplateFormat.XML]: MenuItemInitialTemplate.XML,
-    [EnumTemplateFormat.PLAIN]: MenuItemInitialTemplate.PLAIN,
+    [EnumTemplateFormat.JSON]: '',
+    [EnumTemplateFormat.XML]: '',
+    [EnumTemplateFormat.PLAIN]: '',
   });
   const [templateResult, setTemplateResult] = React.useState('');
   const [loadedInitialTemplate, setLoadedInitialTemplate] = React.useState(false);
@@ -89,13 +93,13 @@ export const EditTemplateItems = () => {
   React.useEffect(() => {
     if (!data || loadedInitialTemplate) return;
     const item = data.menuItem;
+    setDefaultTemplate(item.defaultTemplate);
     if (item.templateFormat) setTemplateFormat(item.templateFormat);
     else if (item.menu.templateFormat) setTemplateFormat(item.menu.templateFormat);
-    if (item.template)
-      setTemplate({
-        ...template,
-        [item.templateFormat]: item.template,
-      });
+    setTemplate({
+      ...item.defaultTemplate,
+      [item.templateFormat]: item.template,
+    });
     setLoadedInitialTemplate(true);
   }, [data, loadedInitialTemplate, template]);
 
@@ -188,27 +192,11 @@ export const EditTemplateItems = () => {
   );
 
   const resetDefaultTemplate = React.useCallback(() => {
-    switch (templateFormat) {
-      case EnumTemplateFormat.JSON:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuItemInitialTemplate.JSON,
-        });
-        break;
-      case EnumTemplateFormat.XML:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuItemInitialTemplate.XML,
-        });
-        break;
-      case EnumTemplateFormat.PLAIN:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuItemInitialTemplate.PLAIN,
-        });
-        break;
-    }
-  }, [template, templateFormat]);
+    setTemplate({
+      ...template,
+      [templateFormat]: defaultTemplate[templateFormat],
+    });
+  }, [template, templateFormat, defaultTemplate]);
 
   const onBackClickHandler = () => {
     navigate('../');

@@ -13,7 +13,6 @@ import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import CodeViewer from '../../../components/CodeViewer';
 import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem, IMenuMeta } from '../../../types';
-import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
 import {
   ActionTypes,
   NotificationContext,
@@ -30,10 +29,15 @@ export const EditTemplateMenu = () => {
   const { t } = useTranslation();
 
   const [templateFormat, setTemplateFormat] = React.useState(EnumTemplateFormat.JSON);
+  const [defaultTemplate, setDefaultTemplate] = React.useState({
+    [EnumTemplateFormat.JSON]: '',
+    [EnumTemplateFormat.XML]: '',
+    [EnumTemplateFormat.PLAIN]: '',
+  });
   const [template, setTemplate] = React.useState({
-    [EnumTemplateFormat.JSON]: MenuInitialTemplate.JSON,
-    [EnumTemplateFormat.XML]: MenuInitialTemplate.XML,
-    [EnumTemplateFormat.PLAIN]: MenuInitialTemplate.PLAIN,
+    [EnumTemplateFormat.JSON]: '',
+    [EnumTemplateFormat.XML]: '',
+    [EnumTemplateFormat.PLAIN]: '',
   });
   const [templateResult, setTemplateResult] = React.useState('');
   const [loadedInitialTemplate, setLoadedInitialTemplate] = React.useState(false);
@@ -77,12 +81,12 @@ export const EditTemplateMenu = () => {
   React.useEffect(() => {
     if (!data || loadedInitialTemplate) return;
     const { menu }: { menu: IMenu } = data;
+    setDefaultTemplate(menu.defaultTemplate);
     if (menu.templateFormat) setTemplateFormat(menu.templateFormat);
-    if (menu.template)
-      setTemplate({
-        ...template,
-        [menu.templateFormat]: menu.template,
-      });
+    setTemplate({
+      ...menu.defaultTemplate,
+      [menu.templateFormat]: menu.template,
+    });
     setLoadedInitialTemplate(true);
   }, [data, loadedInitialTemplate, template]);
 
@@ -195,27 +199,11 @@ export const EditTemplateMenu = () => {
   );
 
   const resetDefaultTemplate = React.useCallback(() => {
-    switch (templateFormat) {
-      case EnumTemplateFormat.JSON:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuInitialTemplate.JSON,
-        });
-        break;
-      case EnumTemplateFormat.XML:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuInitialTemplate.XML,
-        });
-        break;
-      case EnumTemplateFormat.PLAIN:
-        setTemplate({
-          ...template,
-          [templateFormat]: MenuInitialTemplate.PLAIN,
-        });
-        break;
-    }
-  }, [template, templateFormat]);
+    setTemplate({
+      ...template,
+      [templateFormat]: defaultTemplate[templateFormat],
+    });
+  }, [template, templateFormat, defaultTemplate]);
 
   const onBackClickHandler = () => {
     navigate('../');

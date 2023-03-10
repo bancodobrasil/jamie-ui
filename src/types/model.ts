@@ -9,6 +9,11 @@ export interface IMenu {
   items: IMenuItem[];
   template?: string;
   templateFormat?: EnumTemplateFormat;
+  defaultTemplate?: {
+    [EnumTemplateFormat.JSON]: string;
+    [EnumTemplateFormat.XML]: string;
+    [EnumTemplateFormat.PLAIN]: string;
+  };
 }
 
 export interface IMenuItem {
@@ -25,6 +30,11 @@ export interface IMenuItem {
   menu?: IMenu;
   template?: string;
   templateFormat?: EnumTemplateFormat;
+  defaultTemplate?: {
+    [EnumTemplateFormat.JSON]: string;
+    [EnumTemplateFormat.XML]: string;
+    [EnumTemplateFormat.PLAIN]: string;
+  };
 }
 
 export enum MenuMetaType {
