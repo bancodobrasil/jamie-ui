@@ -2,7 +2,6 @@ export default class MenuInitialTemplate {
   public static JSON = `{{#with menu}}
 {{#jsonFormatter spaces=2}}
 {
-  "id": {{id}},
   "name": "{{name}}",
   "meta": {{{json meta}}},
   "items": {{{renderItemsJSON items}}}
@@ -11,7 +10,7 @@ export default class MenuInitialTemplate {
 {{/with}}`;
 
   public static XML = `{{#with menu}}
-<menu id="{{id}}" name="{{name}}" {{~#unless (and (length meta) (length items))}}/>{{else}}>
+<menu name="{{name}}" {{~#unless (and (length meta) (length items))}}/>{{else}}>
   {{~#each meta as |meta|}}
   {{~#if meta.enabled}}
 
@@ -25,7 +24,6 @@ export default class MenuInitialTemplate {
 {{/with}}`;
 
   public static PLAIN = `{{#with menu}}
-id = {{id}};
 name = "{{name}}";
 meta = {{{json meta spaces=2}}};
 items = {{{json items spaces=2}}};
