@@ -1,11 +1,10 @@
 import React from 'react';
 import { Box, Button, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
-import Handlebars from 'handlebars/dist/handlebars';
 import { json } from '@codemirror/lang-json';
 import { xml } from '@codemirror/lang-xml';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
@@ -13,21 +12,13 @@ import MenuService from '../../../api/services/MenuService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import CodeViewer from '../../../components/CodeViewer';
-import {
-  EnumTemplateFormat,
-  GraphQLData,
-  IMenu,
-  IMenuItem,
-  IMenuItemMeta,
-  IMenuMeta,
-} from '../../../types';
+import { EnumTemplateFormat, GraphQLData, IMenu, IMenuItem, IMenuMeta } from '../../../types';
 import MenuInitialTemplate from '../../../utils/template/MenuInitialTemplate';
 import {
   ActionTypes,
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import TemplateHelpers from '../../../utils/template/TemplateHelpers';
 
 export const EditTemplateMenu = () => {
   const { dispatch } = React.useContext(NotificationContext);
@@ -69,6 +60,20 @@ export const EditTemplateMenu = () => {
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
+  const [renderMenuTemplate] = useLazyQuery(MenuService.RENDER_MENU_TEMPLATE, {
+    defaultOptions: {
+      variables: {
+        input: {
+          name: data?.menu.name,
+          template: template[templateFormat],
+          templateFormat,
+          meta: data?.menu.meta,
+          items: data?.menu.items,
+        },
+      },
+    },
+  });
+
   React.useEffect(() => {
     if (!data || loadedInitialTemplate) return;
     const { menu }: { menu: IMenu } = data;
@@ -83,48 +88,36 @@ export const EditTemplateMenu = () => {
 
   React.useEffect(() => {
     if (!data) return;
-    Handlebars.registerHelper(TemplateHelpers.logicOperators);
-    Handlebars.registerHelper('length', TemplateHelpers.getLength);
-    Handlebars.registerHelper('json', TemplateHelpers.json);
-    Handlebars.registerHelper('jsonFormatter', TemplateHelpers.jsonFormatter);
-    Handlebars.registerHelper('renderItemsJSON', TemplateHelpers.renderItemsJSON);
-    Handlebars.registerHelper('renderItemsXML', TemplateHelpers.renderItemsXML);
     const { menu }: { menu: GraphQLData<IMenu> } = data;
     let items: IMenuItem[] = menu.items || [];
-    const getItemMeta = (meta: IMenuItemMeta): Record<string, unknown> => {
-      const result: Record<string, unknown> = {};
-      if (!meta) return result;
-      menu.meta?.forEach((item: IMenuMeta) => {
-        if (item.enabled && meta[item.id]) {
-          result[item.name] = meta[item.id];
-        }
-      });
-      return result;
-    };
     const getChildren = (parent: IMenuItem): IMenuItem[] => {
       const children = items
         .filter(item => item.parentId === parent.id)
         .map((item: GraphQLData<IMenuItem>) => {
-          const { __typename, template, templateFormat, ...rest } = item;
-          const meta = getItemMeta(rest.meta);
-          let formattedTemplate = template;
-          if (template) {
-            formattedTemplate = Handlebars.compile(template)({
-              ...rest,
-              meta,
-              children: getChildren(item),
-              templateFormat,
-            });
-            if (templateFormat === EnumTemplateFormat.JSON) {
-              formattedTemplate = JSON.parse(formattedTemplate);
-            }
-          }
-          return {
-            ...rest,
-            meta,
-            children: getChildren(item),
-            template: formattedTemplate,
+          const {
+            id,
+            label,
+            order,
+            template,
             templateFormat,
+            meta,
+            parentId,
+            enabled,
+            startPublication,
+            endPublication,
+          } = item;
+          return {
+            id,
+            label,
+            order,
+            template,
+            templateFormat,
+            meta,
+            parentId,
+            enabled,
+            startPublication,
+            endPublication,
+            children: getChildren(item),
           };
         })
         .sort((a, b) => a.order - b.order);
@@ -133,51 +126,59 @@ export const EditTemplateMenu = () => {
     items =
       items
         .map((item: GraphQLData<IMenuItem>) => {
-          const { __typename, template, templateFormat, ...rest } = item;
-          const meta = getItemMeta(rest.meta);
-          let formattedTemplate = template;
-          if (template) {
-            formattedTemplate = Handlebars.compile(template)({
-              ...rest,
-              meta,
-              children: getChildren(item),
-              templateFormat,
-            });
-            if (templateFormat === EnumTemplateFormat.JSON) {
-              formattedTemplate = JSON.parse(formattedTemplate);
-            }
-          }
-          return {
-            ...rest,
-            meta,
-            children: getChildren(item),
-            template: formattedTemplate,
+          const {
+            id,
+            label,
+            order,
+            template,
             templateFormat,
+            meta,
+            parentId,
+            enabled,
+            startPublication,
+            endPublication,
+          } = item;
+          return {
+            id,
+            label,
+            order,
+            template,
+            templateFormat,
+            meta,
+            parentId,
+            enabled,
+            startPublication,
+            endPublication,
+            children: getChildren(item),
           };
         })
         .filter(item => !item.parentId)
         .sort((a, b) => a.order - b.order) || [];
-    try {
-      const { __typename, template: menuTemplate, ...rest } = menu;
-      rest.meta = rest.meta.map((meta: GraphQLData<IMenuMeta>) => {
-        const { __typename, ...rest } = meta;
-        return rest;
-      });
-      const result = Handlebars.compile(template[templateFormat])({
-        menu: {
-          ...rest,
+    const { name } = menu;
+    const meta = menu.meta.map((meta: GraphQLData<IMenuMeta>) => {
+      const { __typename, ...rest } = meta;
+      return rest;
+    });
+    renderMenuTemplate({
+      variables: {
+        input: {
+          name,
+          meta,
+          template: template[templateFormat],
+          templateFormat,
           items,
         },
-      });
-      if (templateFormat === EnumTemplateFormat.JSON) {
-        setTemplateResult(result);
-        return;
-      }
-      setTemplateResult(result);
-    } catch (error) {
-      // empty
-    }
-  }, [template, templateFormat, data]);
+      },
+      onCompleted: (data: any) => {
+        if (data) {
+          setTemplateResult(data.renderMenuTemplate);
+        }
+      },
+      onError: error => {
+        console.error(error);
+      },
+    });
+  }, [template, templateFormat, data, renderMenuTemplate]);
 
   const onChangeTemplateFormat = React.useCallback(event => {
     setTemplateFormat(event.target.value);
