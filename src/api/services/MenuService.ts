@@ -138,4 +138,13 @@ export default class MenuService {
       renderMenuTemplate(renderMenuTemplateInput: $input)
     }
   `;
+
+  static RENDER_MENU_ITEM_TEMPLATE: DocumentNode = gql`
+    query RenderMenuItemTemplate(
+      $item: RenderMenuItemTemplateInput!
+      $menu: RenderMenuTemplateInput!
+    ) {
+      renderMenuItemTemplate(renderMenuItemTemplateInput: $item, renderMenuTemplateInput: $menu)
+    }
+  `;
 }
