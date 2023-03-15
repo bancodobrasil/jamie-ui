@@ -1,6 +1,6 @@
 @top JsonText { value }
 
-value { True | False | Null | Number | String | Object | Array | EjsOutput }
+value { True | False | Null | Number | String | Object | Array | handlebarsExpression }
 
 String { string }
 Object { "{" list<Property>? "}" }
@@ -9,18 +9,62 @@ Array  { "[" list<value>? "]" }
 Property { PropertyName ":" value }
 PropertyName { string }
 
-// EJS output (not working yet)
+handlebarsExpression { Expression | BlockExpression | PartialBlockExpression | InlinePartialExpression | EscapedExpression }
+
+HashValue { value | Context | SubExpression }
+HashArgument { HashArgumentProperty "=" HashValue }
+ExpressionContent { HelperOrContext (Context | SubExpression | HashArgument*)? }
+
+blockExpressionEnd { HTMLEscapedExpressionClose value* BlockExpressionEnd HelperOrContext HTMLEscapedExpressionClose }
+
+SubExpression { SubExpressionOpen ExpressionContent SubExpressionClose }
+
+Expression { OpeningExpression (ExpressionContent | SubExpression) ClosingExpression }
+BlockExpression { BlockExpressionOpen ExpressionContent BlockParameters? blockExpressionEnd }
+PartialBlockExpression { PartialBlockExpressionOpen (ExpressionContent | SubExpression) blockExpressionEnd }
+InlinePartialExpression { InlinePartialExpressionOpen HelperOrContext string  blockExpressionEnd }
+EscapedExpression { "\\" Expression }
+
 @skip {} {
-  EjsOutput { output | '"' output '"' }
-  output { "<%=" JavascriptExpression tagClose }
+  Comment { "{{!" (CommentContent | commentNewLine)* commentEnd }
 }
 
 @local tokens {
-  tagClose { "%" $[_\-]? ">" }
-  @else JavascriptExpression
+  commentEnd { HTMLEscapedExpressionClose }
+  commentNewLine { "\n" }
+  @else CommentContent
+}
+
+@skip {} {
+  BlockParameters { "as" space+ pipe space* BlockParameterName (space+ BlockParameterName)* space* pipe }
+}
+
+@local tokens {
+  pipe { "|" }
+  space { whitespace }
+  @else BlockParameterName
 }
 
 @tokens {
+  OpeningExpression { HTMLEscapedExpressionOpen | RawExpressionOpen | RawBlockExpressionOpen | PartialExpressionOpen }
+  ClosingExpression { HTMLEscapedExpressionClose | RawExpressionClose | RawBlockExpressionClose }
+
+  HTMLEscapedExpressionOpen[closedBy=HTMLEscapedExpressionClose] { "{{" "~"? }
+  RawExpressionOpen[closedBy=RawBlockExpressionClose] { "{{{" }
+  RawBlockExpressionOpen[closedBy=RawBlockExpressionClose] { "{{{{" }
+  PartialExpressionOpen[closedBy=HTMLEscapedExpressionClose] { HTMLEscapedExpressionOpen ">" }
+  BlockExpressionOpen[closedBy=HTMLEscapedExpressionClose] { HTMLEscapedExpressionOpen "#" }
+  BlockExpressionEnd[closedBy=HTMLEscapedExpressionClose] { HTMLEscapedExpressionOpen "/" }
+  PartialBlockExpressionOpen[closedBy=HTMLEscapedExpressionClose] { BlockExpressionOpen ">" }
+  InlinePartialExpressionOpen[closedBy=HTMLEscapedExpressionClose] { BlockExpressionOpen "*" }
+
+  HTMLEscapedExpressionClose[openedBy=HTMLEscapedExpressionOpen] { "~"? "}}" ","? }
+  RawExpressionClose[openedBy=RawExpressionOpen] { "}}}" ","? }
+  RawBlockExpressionClose[openedBy=RawBlockExpressionOpen] { "}}}}" }
+
+  SubExpressionOpen { "(" }
+  SubExpressionClose { ")" }
+
   True  { "true" }
   False { "false" }
   Null  { "null" }
@@ -35,14 +79,19 @@ PropertyName { string }
   esc  { $["\\\/bfnrt] | "u" hex hex hex hex }
   hex  { $[0-9a-fA-F] }
 
-  whitespace { $[ \n\r\t] }
+  whitespace[@export] { $[ \n\r\t] }
 
   "{" "}" "[" "]"
+
+  "="
+  "as"
 }
 
-@precedence { value, empty }
+@skip { whitespace | Comment }
+list<item> { item ("," item)* }
 
-@skip { whitespace }
-list<item> { (!value item | !empty "") ("," (!value item | !empty ""))* }
+@context trackShiftTerm from "./tokens"
+
+@external tokens expressionToken from "./tokens" { Context, HelperOrContext, HashArgumentProperty }
 
 @detectDelim

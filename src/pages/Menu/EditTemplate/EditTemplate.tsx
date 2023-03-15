@@ -5,8 +5,8 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
-import { json } from '@codemirror/lang-json';
 import { xml } from '@codemirror/lang-xml';
+import { jsonHandlebars } from '../../../utils/codemirror/json';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';
 import Loading from '../../../components/Loading';
@@ -42,18 +42,18 @@ export const EditTemplateMenu = () => {
   const [templateResult, setTemplateResult] = React.useState('');
   const [loadedInitialTemplate, setLoadedInitialTemplate] = React.useState(false);
 
-  const [language, setLanguage] = React.useState(json);
+  const [language, setLanguage] = React.useState(jsonHandlebars);
 
   React.useEffect(() => {
     switch (templateFormat) {
       case EnumTemplateFormat.JSON:
-        setLanguage(json);
+        setLanguage(jsonHandlebars);
         break;
       case EnumTemplateFormat.XML:
         setLanguage(xml());
         break;
       case EnumTemplateFormat.PLAIN:
-        setLanguage(json);
+        setLanguage(jsonHandlebars);
         break;
     }
   }, [templateFormat]);
