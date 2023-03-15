@@ -9,7 +9,7 @@ import {
 import { styleTags, tags as t } from '@lezer/highlight';
 import { parser } from './xml.grammar.js';
 
-export const xmlEjsLanguage = LRLanguage.define({
+export const xmlHandlebarsLanguage = LRLanguage.define({
   parser: parser.configure({
     props: [
       indentNodeProp.add({
@@ -47,8 +47,29 @@ export const xmlEjsLanguage = LRLanguage.define({
         ProcessingInst: t.processingInstruction,
         DoctypeDecl: t.documentMeta,
         Cdata: t.special(t.string),
+        String: t.string,
+        Number: t.number,
+        'True False': t.bool,
+        Null: t.null,
+        'OpeningExpression BlockExpressionOpen BlockExpressionEnd PartialBlockExpressionOpen InlinePartialExpressionOpen':
+          t.controlOperator,
+        'ClosingExpression HTMLEscapedExpressionClose RawExpressionClose RawBlockExpressionClose':
+          t.controlOperator,
+        'SubExpressionOpen SubExpressionClose': t.paren,
+        HelperOrContext: t.special(t.variableName),
+        Context: t.special(t.variableName),
+        HashArgumentProperty: t.special(t.propertyName),
+        HashValue: t.special(t.string),
+        BlockParameterName: t.special(t.variableName),
+        TemplateComment: t.lineComment,
+        as: t.definitionKeyword,
       }),
     ],
+    // wrap: parseMixed(node => {
+    //   const { name } = node.type;
+    //   console.log(name, node.from, node.to);
+    //   return null;
+    // }),
   }),
   languageData: {
     commentTokens: { block: { open: '<!--', close: '-->' } },
@@ -56,6 +77,6 @@ export const xmlEjsLanguage = LRLanguage.define({
   },
 });
 
-export function xmlEjs() {
-  return new LanguageSupport(xmlEjsLanguage, xml().support);
+export function xmlHandlebars() {
+  return new LanguageSupport(xmlHandlebarsLanguage, xml().support);
 }

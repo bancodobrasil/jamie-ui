@@ -5,8 +5,8 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
-import { xml } from '@codemirror/lang-xml';
 import { jsonHandlebars } from '../../../utils/codemirror/json';
+import { xmlHandlebars } from '../../../utils/codemirror/xml';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';
 import Loading from '../../../components/Loading';
@@ -50,7 +50,7 @@ export const EditTemplateMenu = () => {
         setLanguage(jsonHandlebars);
         break;
       case EnumTemplateFormat.XML:
-        setLanguage(xml());
+        setLanguage(xmlHandlebars());
         break;
       case EnumTemplateFormat.PLAIN:
         setLanguage(jsonHandlebars);
