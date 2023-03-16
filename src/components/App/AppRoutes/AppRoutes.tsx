@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
+import { ApolloProvider } from '@apollo/client';
 import { NotificationProvider } from '../../../contexts/NotificationContext';
 import { ListMenu } from '../../../pages/Menu/List';
 import { EditTemplateItems, ItemsPreview } from '../../../pages/Menu/Items';
@@ -15,9 +16,11 @@ import Layout from '../../Layout';
 import RestoreRevision from '../../../pages/Menu/Revisions/Restore';
 import CreateRevision from '../../../pages/Menu/Revisions/Create';
 import PublishRevision from '../../../pages/Menu/Revisions/Publish';
+import ApiClient from '../../../api';
 
 export const AppRoutes = () => {
   const { initialized, keycloak } = useKeycloak();
+  const [hasMounted, setHasMounted] = React.useState(false);
 
   React.useEffect(() => {
     if (!initialized || !keycloak) return;
@@ -29,38 +32,42 @@ export const AppRoutes = () => {
     };
     // Force refresh token
     keycloak.updateToken(-1);
+    ApiClient.setup(keycloak.token);
+    setHasMounted(true);
     return () => {
       if (keycloak) keycloak.onTokenExpired = undefined;
     };
   }, [initialized, keycloak, keycloak?.authenticated]);
 
   const renderRoutes = () => {
-    if (!initialized) {
+    if (!initialized || !hasMounted) {
       return <Loading />;
     }
     return (
-      <NotificationProvider>
-        <Routes>
-          <Route path="*" element={<NotFound />} />
-          <Route index element={<Navigate to="/menus" replace />} />
-          <Route path="menus" element={<ProtectedRoute />}>
-            <Route index element={<ListMenu />} />
-            <Route path=":id">
-              <Route index element={<ShowMenu />} />
-              <Route path="edit" element={<EditMenu />} />
-              <Route path="editTemplate" element={<EditTemplateMenu />} />
-              <Route path="items">
-                <Route index element={<ItemsPreview />} />
-                <Route path=":itemId" element={<EditTemplateItems />} />
+      <ApolloProvider client={ApiClient.client}>
+        <NotificationProvider>
+          <Routes>
+            <Route path="*" element={<NotFound />} />
+            <Route index element={<Navigate to="/menus" replace />} />
+            <Route path="menus" element={<ProtectedRoute />}>
+              <Route index element={<ListMenu />} />
+              <Route path=":id">
+                <Route index element={<ShowMenu />} />
+                <Route path="edit" element={<EditMenu />} />
+                <Route path="editTemplate" element={<EditTemplateMenu />} />
+                <Route path="items">
+                  <Route index element={<ItemsPreview />} />
+                  <Route path=":itemId" element={<EditTemplateItems />} />
+                </Route>
+                <Route path="restoreVersion" element={<RestoreRevision />} />
+                <Route path="closeVersion" element={<CreateRevision />} />
+                <Route path="publishVersion" element={<PublishRevision />} />
               </Route>
-              <Route path="restoreVersion" element={<RestoreRevision />} />
-              <Route path="closeVersion" element={<CreateRevision />} />
-              <Route path="publishVersion" element={<PublishRevision />} />
+              <Route path="create" element={<CreateMenu />} />
             </Route>
-            <Route path="create" element={<CreateMenu />} />
-          </Route>
-        </Routes>
-      </NotificationProvider>
+          </Routes>
+        </NotificationProvider>
+      </ApolloProvider>
     );
   };
 
