@@ -10,294 +10,19 @@ import {
   TableContainer,
   TableRow,
   TableCell,
-  IconButton,
   TablePagination,
-  Collapse,
-  Divider,
 } from '@mui/material';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { DateTime } from 'luxon';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
-import { Edge, EnumInputAction, IMenu, IMenuPendency } from '../../../types';
-import CodeViewer from '../../../components/CodeViewer';
-import { IUpdateMenuItemInput, IUpdateMenuMetaInput } from '../../../types/input';
+import { Edge, IMenuPendency } from '../../../types';
+import { PendencyTableRow } from '../../../components/Menu/Pendencies';
 
 const PENDENCY_LIST_DEFAULT_PAGE_SIZE = 10;
-
-const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPendency }) => {
-  const { i18n, t } = useTranslation();
-
-  const getActionColor = (action: EnumInputAction) => {
-    switch (action) {
-      case EnumInputAction.CREATE:
-        return 'success.main';
-      case EnumInputAction.UPDATE:
-        return 'warning.main';
-      case EnumInputAction.DELETE:
-        return 'error.main';
-      default:
-        return 'text.primary';
-    }
-  };
-
-  const renderItemMeta = (meta: Record<string, unknown>) =>
-    Object.keys(meta).map((key, index) => {
-      const value = meta[key];
-      return (
-        <React.Fragment key={index}>
-          {index > 0 && <Divider sx={{ my: '1rem', mx: '1rem' }} />}
-          <Typography>
-            <b>{key}:</b> {value}
-          </Typography>
-        </React.Fragment>
-      );
-    });
-
-  const renderItem = (menu: IMenu, item: IUpdateMenuItemInput) => {
-    const order = item.order || menu.items.find(i => i.id === item.id)?.order;
-    const actionColor = getActionColor(item.action);
-    return (
-      <Box className="flex flex-row">
-        <Typography variant="h4" component="h4" sx={{ mr: '1rem' }}>
-          #{order}
-        </Typography>
-        <Box className="flex flex-col space-y-1">
-          <Box className="flex flex-row space-x-1.5">
-            <Typography>
-              <b>{t('inputAction.title')}</b>
-            </Typography>
-            <Typography color={actionColor}>{t(`inputAction.actions.${item.action}`)}</Typography>
-          </Box>
-          {item.label && (
-            <Typography>
-              <b>{t('menuItem.fields.label')}</b>: {item.label}
-            </Typography>
-          )}
-          {item.order && (
-            <Typography>
-              <b>{t('menuItem.fields.order')}</b>: {item.order}
-            </Typography>
-          )}
-          {item.enabled !== undefined && (
-            <Typography>
-              <b>{t('menuItem.fields.enabled')}</b>:{' '}
-              {item.enabled ? t('common.yes') : t('common.no')}
-            </Typography>
-          )}
-          {item.startPublication && (
-            <Typography>
-              <b>{t('menuItem.fields.startPublication')}</b>:{' '}
-              {DateTime.fromISO(item.startPublication)
-                .setLocale(i18n.language)
-                .toLocaleString(DateTime.DATETIME_FULL)}
-            </Typography>
-          )}
-          {item.endPublication && (
-            <Typography>
-              <b>{t('menuItem.fields.endPublication')}</b>:{' '}
-              {DateTime.fromISO(item.endPublication)
-                .setLocale(i18n.language)
-                .toLocaleString(DateTime.DATETIME_FULL)}
-            </Typography>
-          )}
-          {item.templateFormat && (
-            <Typography>
-              <b>{t('menuItem.fields.templateFormat.title')}</b>:{' '}
-              {t(`menuItem.fields.templateFormat.formats.${item.templateFormat}`)}
-            </Typography>
-          )}
-          {item.template && (
-            <Box className="flex flex-col space-y-2">
-              <Typography>
-                <b>{t('menuItem.fields.template')}</b>:
-              </Typography>
-              <CodeViewer code={item.template} language="handlebars" />
-            </Box>
-          )}
-          {item.meta && Object.keys(item.meta).length > 0 && (
-            <Box className="flex flex-col space-y-1">
-              <Typography variant="h6" component="h6">
-                <b>{t('menu.fields.meta.title', { count: Object.keys(item.meta).length })}</b>:
-              </Typography>
-              <Box className="flex flex-col space-y-1 mx-4">{renderItemMeta(item.meta)}</Box>
-            </Box>
-          )}
-          {item.children && item.children.length > 0 && (
-            <Box className="flex flex-col space-y-1">
-              <Typography variant="h6" component="h6">
-                <b>{t('menuItem.fields.children')}</b>:
-              </Typography>
-              {item.children.map((child, index) => (
-                <React.Fragment key={index}>
-                  {index > 0 && <Divider sx={{ my: '1rem', mx: '1rem' }} />}
-                  <Box className="flex flex-col space-y-1 mx-4">{renderItem(menu, child)}</Box>
-                </React.Fragment>
-              ))}
-            </Box>
-          )}
-        </Box>
-      </Box>
-    );
-  };
-
-  const renderMeta = (menu: IMenu, meta: IUpdateMenuMetaInput) => {
-    const order = meta.order || menu.meta.find(m => m.id === meta.id)?.order;
-    const actionColor = getActionColor(meta.action);
-    return (
-      <Box className="flex flex-row">
-        <Typography variant="h4" component="h4" sx={{ mr: '1rem' }}>
-          #{order}
-        </Typography>
-        <Box className="flex flex-col space-y-1">
-          <Box className="flex flex-row space-x-1.5">
-            <Typography>
-              <b>{t('inputAction.title')}</b>:
-            </Typography>
-            <Typography
-              sx={{
-                color: actionColor,
-              }}
-            >
-              {t(`inputAction.actions.${meta.action}`)}
-            </Typography>
-          </Box>
-          {meta.name && (
-            <Typography>
-              <b>{t('menu.fields.meta.name')}</b>: {meta.name}
-            </Typography>
-          )}
-          {meta.type && (
-            <Typography>
-              <b>{t('menu.fields.meta.type.title', { count: 1 })}</b>:{' '}
-              {t(`menu.fields.meta.type.${meta.type}`)}
-            </Typography>
-          )}
-          {meta.enabled !== undefined && (
-            <Typography>
-              <b>{t('menu.fields.meta.enabled')}</b>:{' '}
-              {meta.enabled ? t('common.yes') : t('common.no')}
-            </Typography>
-          )}
-          {meta.required !== undefined && (
-            <Typography>
-              <b>{t('menu.fields.meta.required')}</b>:{' '}
-              {meta.required ? t('common.yes') : t('common.no')}
-            </Typography>
-          )}
-          {meta.defaultValue && (
-            <Typography>
-              <b>{t('menu.fields.meta.defaultValue')}</b>: {meta.defaultValue}
-            </Typography>
-          )}
-        </Box>
-      </Box>
-    );
-  };
-
-  return (
-    <Box className="space-y-2">
-      {pendency.input.name && (
-        <Box className="flex flex-row space-x-1.5">
-          <Typography>
-            <b>{t('menu.fields.name')}</b>:
-          </Typography>
-          <Typography>{pendency.input.name}</Typography>
-        </Box>
-      )}
-      {pendency.input.templateFormat && (
-        <Box className="flex flex-row space-x-1.5">
-          <Typography>
-            <b>{t('menu.fields.templateFormat.title')}</b>:
-          </Typography>
-          <Typography>
-            {t(`menu.fields.templateFormat.formats.${pendency.input.templateFormat}`)}
-          </Typography>
-        </Box>
-      )}
-      {pendency.input.template && (
-        <Box className="flex flex-col space-y-2">
-          <Typography>
-            <b>{t('menu.fields.template')}</b>:
-          </Typography>
-          <CodeViewer code={pendency.input.template} language="handlebars" />
-        </Box>
-      )}
-      {pendency.input.meta && pendency.input.meta.length > 0 && (
-        <Box className="flex flex-col">
-          <Typography variant="h6" component="h6" sx={{ mb: '0.5rem' }}>
-            <b>{t('menu.fields.meta.title', { count: pendency.input.meta.length })}</b>
-          </Typography>
-          {pendency.input.meta.map((meta, index) => (
-            <React.Fragment key={index}>
-              {index > 0 && <Divider sx={{ my: '1rem', mx: '1rem' }} />}
-              <Box className="flex flex-col space-y-1 mx-4">{renderMeta(menu, meta)}</Box>
-            </React.Fragment>
-          ))}
-        </Box>
-      )}
-      {pendency.input.items && pendency.input.items.length > 0 && (
-        <Box className="flex flex-col">
-          <Typography variant="h6" component="h6" sx={{ mb: '0.5rem' }}>
-            <b>{t('menu.fields.items')}</b>
-          </Typography>
-          {pendency.input.items.map((item, index) => (
-            <React.Fragment key={index}>
-              {index > 0 && <Divider sx={{ my: '1rem', mx: '1rem' }} />}
-              <Box className="flex flex-col space-y-1 mx-4">{renderItem(menu, item)}</Box>
-            </React.Fragment>
-          ))}
-        </Box>
-      )}
-    </Box>
-  );
-};
-
-interface RowProps {
-  menu: IMenu;
-  pendency: IMenuPendency;
-}
-
-const Row = ({ menu, pendency, ...props }: RowProps) => {
-  const { i18n, t } = useTranslation();
-  const [open, setOpen] = React.useState(false);
-
-  return (
-    <React.Fragment {...props}>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset !important' } }}>
-        <TableCell>
-          <IconButton aria-label="row" size="small" onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {DateTime.fromISO(pendency.createdAt)
-            .setLocale(i18n.language)
-            .toLocaleString(DateTime.DATETIME_FULL)}
-        </TableCell>
-        <TableCell>{pendency.submittedBy.username}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ padding: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ px: '16px', pb: '16px' }}>
-              <Typography variant="h5" component="h5" sx={{ mb: '0.5rem' }}>
-                {t('menu.fields.pendency.input')}
-              </Typography>
-              <PendencyChanges menu={menu} pendency={pendency} />
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-};
 
 const ListPendencies = () => {
   const { t } = useTranslation();
@@ -438,7 +163,11 @@ const ListPendencies = () => {
                 </TableHead>
                 <TableBody>
                   {pendencies.map(pendency => (
-                    <Row key={pendency.id} pendency={pendency} menu={getMenuQuery.data?.menu} />
+                    <PendencyTableRow
+                      key={pendency.id}
+                      pendency={pendency}
+                      menu={getMenuQuery.data?.menu}
+                    />
                   ))}
                 </TableBody>
               </Table>
