@@ -3,6 +3,7 @@ import { DocumentNode, gql } from '@apollo/client';
 export const ALL_MENU_PROPERTIES = `
 id
 name
+mustDeferChanges
 createdAt
 updatedAt
 version

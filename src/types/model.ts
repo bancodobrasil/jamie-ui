@@ -5,6 +5,7 @@ import { EnumTemplateFormat } from './template';
 export interface IMenu {
   id: number;
   name: string;
+  mustDeferChanges: boolean;
   meta: IMenuMeta[];
   items: IMenuItem[];
   template?: string;
