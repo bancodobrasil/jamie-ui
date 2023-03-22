@@ -204,6 +204,14 @@ export const ShowMenu = () => {
             <b>{data?.menu.publishedRevision?.description || '-'}</b>
           </Typography>
         </Box>
+        <Box className="space-x-1.5 flex flex-row items-center">
+          <Typography variant="h5" component="h5" className="mb-2">
+            {t('menu.fields.mustDeferChanges')}?
+          </Typography>
+          <Typography variant="body1" component="p">
+            <b>{data?.menu.mustDeferChanges ? t('common.yes') : t('common.no')}</b>
+          </Typography>
+        </Box>
       </Box>
       <Divider />
       <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
