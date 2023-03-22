@@ -12,6 +12,9 @@ export default class ApiClient {
           MenuItem: {
             keyFields: ['id', 'menuId'],
           },
+          MenuPendency: {
+            keyFields: ['id', 'menuId'],
+          },
         },
       }),
       headers: {
