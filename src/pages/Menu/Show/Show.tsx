@@ -75,6 +75,10 @@ export const ShowMenu = () => {
     }
   };
 
+  const onPendenciesClickHandler = () => {
+    navigate('pendencies');
+  };
+
   const onRestoreRevisionClickHandler = () => {
     navigate('restoreVersion');
   };
@@ -246,6 +250,14 @@ export const ShowMenu = () => {
             disabled={loadingDelete}
           >
             {t('menu.show.actions.delete')}
+          </Button>
+          <Button
+            variant="outlined"
+            color="warning"
+            onClick={onPendenciesClickHandler}
+            disabled={loadingDelete}
+          >
+            {t('menu.show.actions.pendencies')}
           </Button>
         </Box>
         <Divider />

@@ -237,6 +237,7 @@
         "editTemplate": "Editar Template",
         "editItems": "Editar Itens",
         "delete": "Deletar",
+        "pendencies": "Pendências",
         "createRevision": "Fechar Versão",
         "publishRevision": "Publicar Versão",
         "restoreRevision": "Restaurar Versão"
