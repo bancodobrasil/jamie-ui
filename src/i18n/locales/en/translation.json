@@ -133,6 +133,14 @@
     "description": "The page you are looking for does not exist",
     "button": "Back to home"
   },
+  "inputAction": {
+    "title": "Action",
+    "actions": {
+      "CREATE": "Create",
+      "UPDATE": "Update",
+      "DELETE": "Delete"
+    }
+  },
   "menu": {
     "title_one": "Menu",
     "title_other": "Menus",

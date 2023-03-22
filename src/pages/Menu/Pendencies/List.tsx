@@ -13,6 +13,7 @@ import {
   IconButton,
   TablePagination,
   Collapse,
+  Divider,
 } from '@mui/material';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
@@ -24,16 +25,94 @@ import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
-import { Edge, IMenu, IMenuPendency } from '../../../types';
+import { Edge, EnumInputAction, IMenu, IMenuPendency } from '../../../types';
 import CodeViewer from '../../../components/CodeViewer';
+import { IUpdateMenuMetaInput } from '../../../types/input';
 
 const PENDENCY_LIST_DEFAULT_PAGE_SIZE = 10;
 
 const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPendency }) => {
   const { t } = useTranslation();
 
+  const renderMeta = (menu: IMenu, meta: IUpdateMenuMetaInput) => {
+    const order = meta.order || menu.meta.find(m => m.id === meta.id)?.order;
+    let actionColor;
+    switch (meta.action) {
+      case EnumInputAction.CREATE:
+        actionColor = 'success.main';
+        break;
+      case EnumInputAction.UPDATE:
+        actionColor = 'warning.main';
+        break;
+      case EnumInputAction.DELETE:
+        actionColor = 'error.main';
+        break;
+      default:
+        actionColor = 'text.primary';
+    }
+    return (
+      <Box className="flex flex-row">
+        <Typography variant="h4" component="h4" sx={{ mr: '1rem' }}>
+          #{order}
+        </Typography>
+        <Box className="flex flex-col space-y-1">
+          <Box className="flex flex-row space-x-1.5">
+            <Typography>
+              <b>{t('inputAction.title')}</b>:
+            </Typography>
+            <Typography
+              sx={{
+                color: actionColor,
+              }}
+            >
+              {t(`inputAction.actions.${meta.action}`)}
+            </Typography>
+          </Box>
+          {meta.name && (
+            <Box>
+              <Typography>
+                <b>{t('menu.fields.meta.name')}</b>: {meta.name}
+              </Typography>
+            </Box>
+          )}
+          {meta.type && (
+            <Box>
+              <Typography>
+                <b>{t('menu.fields.meta.type.title', { count: 1 })}</b>:{' '}
+                {t(`menu.fields.meta.type.${meta.type}`)}
+              </Typography>
+            </Box>
+          )}
+          {meta.enabled !== undefined && (
+            <Box>
+              <Typography>
+                <b>{t('menu.fields.meta.enabled')}</b>:{' '}
+                {meta.enabled ? t('common.yes') : t('common.no')}
+              </Typography>
+            </Box>
+          )}
+          {meta.required !== undefined && (
+            <Box>
+              <Typography>
+                <b>{t('menu.fields.meta.required')}</b>:{' '}
+                {meta.required ? t('common.yes') : t('common.no')}
+              </Typography>
+            </Box>
+          )}
+          {meta.defaultValue && (
+            <Box>
+              <Typography>
+                <b>{t('menu.fields.meta.defaultValue')}</b>: {meta.defaultValue}
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      </Box>
+    );
+  };
+
   return (
-    <Box className="space-y-1">
+    <Box className="space-y-2">
       {pendency.input.name && (
         <Box className="flex flex-row space-x-1.5">
           <Typography>
@@ -60,23 +139,41 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
           <CodeViewer code={pendency.input.template} language="handlebars" />
         </Box>
       )}
+      {pendency.input.meta && pendency.input.meta.length > 0 && (
+        <Box className="flex flex-col">
+          <Typography variant="h6" component="h6" sx={{ mb: '0.5rem' }}>
+            <b>{t('menu.fields.meta.title', { count: pendency.input.meta.length })}</b>
+          </Typography>
+          {pendency.input.meta.map((meta, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <Divider sx={{ my: '1rem', mx: '1rem' }} />}
+              <Box className="flex flex-col space-y-1 mx-4">{renderMeta(menu, meta)}</Box>
+            </React.Fragment>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 };
 
-const Row = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPendency }) => {
+interface RowProps {
+  menu: IMenu;
+  pendency: IMenuPendency;
+}
+
+const Row = ({ menu, pendency, ...props }: RowProps) => {
   const { i18n, t } = useTranslation();
   const [open, setOpen] = React.useState(false);
 
   return (
-    <>
-      <TableRow>
+    <React.Fragment {...props}>
+      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
           <IconButton aria-label="row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>
+        <TableCell component="th" scope="row">
           {DateTime.fromISO(pendency.createdAt)
             .setLocale(i18n.language)
             .toLocaleString(DateTime.DATETIME_FULL)}
@@ -87,7 +184,7 @@ const Row = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPendency }) => {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
+              <Typography variant="h5" component="h5" sx={{ mb: '1rem' }}>
                 {t('menu.fields.pendency.input')}
               </Typography>
               <PendencyChanges menu={menu} pendency={pendency} />
@@ -95,7 +192,7 @@ const Row = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPendency }) => {
           </Collapse>
         </TableCell>
       </TableRow>
-    </>
+    </React.Fragment>
   );
 };
 

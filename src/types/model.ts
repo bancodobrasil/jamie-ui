@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import { EnumInputAction } from './common';
+import { IUpdateMenuInput } from './input';
 import { EnumTemplateFormat } from './template';
 
 export interface IMenu {
@@ -100,6 +101,6 @@ export interface IMenuPendency {
   id: number;
   menuId: number;
   submittedBy: IKeycloakUser;
-  input: any;
+  input: IUpdateMenuInput;
   createdAt: string;
 }

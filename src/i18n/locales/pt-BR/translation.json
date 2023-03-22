@@ -133,6 +133,14 @@
     "description": "A página que você está procurando não existe ou foi removida.",
     "button": "Voltar para o início"
   },
+  "inputAction": {
+    "title": "Ação",
+    "actions": {
+      "CREATE": "Criação",
+      "UPDATE": "Atualização",
+      "DELETE": "Deleção"
+    }
+  },
   "menu": {
     "title_one": "Menu",
     "title_other": "Menus",
