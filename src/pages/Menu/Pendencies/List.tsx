@@ -153,12 +153,13 @@ const ListPendencies = () => {
           </Typography>
           <Paper sx={{ width: '100%' }}>
             <TableContainer>
-              <Table aria-label="collapsible table" sx={{ tableLayout: 'auto', width: '30rem' }}>
+              <Table aria-label="collapsible table" sx={{ tableLayout: 'auto', width: '35rem' }}>
                 <TableHead>
                   <TableRow>
                     <TableCell />
                     <TableCell>{t('menu.fields.pendency.createdAt')}</TableCell>
                     <TableCell>{t('menu.fields.pendency.submittedBy')}</TableCell>
+                    <TableCell align="center">{t('menu.pendencies.actions.title')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

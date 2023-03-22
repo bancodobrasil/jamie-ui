@@ -264,7 +264,12 @@
     },
     "pendencies": {
       "title": "Pendências",
-      "description": "As pendências abaixo devem ser resolvidas:"
+      "description": "As pendências abaixo devem ser resolvidas:",
+      "actions": {
+        "title": "Ações",
+        "accept": "Aceitar",
+        "reject": "Rejeitar"
+      }
     }
   },
   "menuItem": {

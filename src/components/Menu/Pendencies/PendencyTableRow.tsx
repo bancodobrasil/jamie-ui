@@ -4,6 +4,8 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { DateTime } from 'luxon';
 import { Box, Divider, TableRow, Typography, TableCell, IconButton, Collapse } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { EnumInputAction, IMenu, IMenuPendency } from '../../../types';
 import CodeViewer from '../../CodeViewer';
 import { IUpdateMenuItemInput, IUpdateMenuMetaInput } from '../../../types/input';
@@ -259,6 +261,24 @@ export const PendencyTableRow = ({ menu, pendency, ...props }: PedencyTableRowPr
             .toLocaleString(DateTime.DATETIME_FULL)}
         </TableCell>
         <TableCell>{pendency.submittedBy.username}</TableCell>
+        <TableCell align="center">
+          <IconButton
+            aria-label={t('menu.pendencies.actions.accept')}
+            size="small"
+            color="success"
+            title={t('menu.pendencies.actions.accept')}
+          >
+            <ThumbUpOffAltIcon />
+          </IconButton>
+          <IconButton
+            aria-label={t('menu.pendencies.actions.reject')}
+            size="small"
+            color="error"
+            title={t('menu.pendencies.actions.reject')}
+          >
+            <ThumbDownOffAltIcon />
+          </IconButton>
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ padding: 0 }} colSpan={6}>
