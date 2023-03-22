@@ -17,6 +17,7 @@ import RestoreRevision from '../../../pages/Menu/Revisions/Restore';
 import CreateRevision from '../../../pages/Menu/Revisions/Create';
 import PublishRevision from '../../../pages/Menu/Revisions/Publish';
 import ApiClient from '../../../api';
+import ListPendencies from '../../../pages/Menu/Pendencies/List';
 
 export const AppRoutes = () => {
   const { initialized, keycloak } = useKeycloak();
@@ -62,6 +63,7 @@ export const AppRoutes = () => {
                 <Route path="restoreVersion" element={<RestoreRevision />} />
                 <Route path="closeVersion" element={<CreateRevision />} />
                 <Route path="publishVersion" element={<PublishRevision />} />
+                <Route path="pendencies" element={<ListPendencies />} />
               </Route>
               <Route path="create" element={<CreateMenu />} />
             </Route>

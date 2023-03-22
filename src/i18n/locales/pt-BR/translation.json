@@ -245,6 +245,10 @@
       "messages": {
         "confirmDelete": "Tem certeza que deseja deletar esse menu?"
       }
+    },
+    "pendencies": {
+      "title": "Pendências",
+      "description": "As pendências abaixo devem ser resolvidas:"
     }
   },
   "menuItem": {
