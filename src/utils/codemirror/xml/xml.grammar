@@ -1,7 +1,6 @@
 @top Document { (entity | DoctypeDecl)+ }
 
 entity {
-  Text |
   EntityReference |
   CharacterReference |
   Cdata |
@@ -9,8 +8,11 @@ entity {
   Comment |
   ProcessingInst |
   MismatchedCloseTag |
-  incompleteStartCloseTag
+  incompleteStartCloseTag |
+  space |
+  value
 }
+
 
 Element {
   OpenTag entity* (CloseTag | MissingCloseTag) |
@@ -45,9 +47,51 @@ ProcessingInst { "<?" piContent* "?>" }
 
 Cdata { cdataStart cdataContent* "]]>" }
 
-@context elementContext from "./tokens.js"
+@skip {space} {
+  handlebarsExpression { Expression | BlockExpression | PartialBlockExpression | InlinePartialExpression | EscapedExpression }
+  value { True | False | Null | Number | String | handlebarsExpression }
+  HashValue { value | Context | SubExpression }
+  HashArgument { HashArgumentProperty Is HashValue }
+  SubExpression { SubExpressionOpen ExpressionContent SubExpressionClose }
+  ExpressionContent { HelperOrContext (Context | SubExpression)? HashArgument* }
+  Expression { OpeningExpression (ExpressionContent | SubExpression) ClosingExpression }
+  BlockExpression { BlockExpressionOpen ExpressionContent BlockParameters? blockExpressionEnd }
+  PartialBlockExpression { PartialBlockExpressionOpen (ExpressionContent | SubExpression) blockExpressionEnd }
+  InlinePartialExpression { InlinePartialExpressionOpen HelperOrContext String blockExpressionEnd }
+  blockExpressionEnd { HTMLEscapedExpressionClose value* BlockExpressionEnd HelperOrContext HTMLEscapedExpressionClose }
+  EscapedExpression { "\\" Expression }
+}
 
-@external tokens startTag from "./tokens.js" {
+@skip {} {
+  TemplateComment { "{{!" (TemplateCommentContent | commentNewLine)* commentEnd }
+}
+@skip {} {
+  String {
+    doubleQuote (stringContentDouble | Escape)* (doubleQuote | "\n") |
+    singleQuote (stringContentSingle | Escape)* (singleQuote | "\n")
+  }
+}
+@skip { TemplateComment }
+
+@local tokens {
+  commentEnd { HTMLEscapedExpressionClose }
+  commentNewLine { "\n" }
+  @else TemplateCommentContent
+}
+
+@skip {} {
+  BlockParameters { "as" whitespace+ pipe whitespace* BlockParameterName (whitespace+ BlockParameterName)* whitespace* pipe }
+}
+
+@local tokens {
+  pipe { "|" }
+  whitespace { @whitespace }
+  @else BlockParameterName
+}
+
+@context elementContext from "./tokens"
+
+@external tokens startTag from "./tokens" {
   StartTag[closedBy="SelfCloseEndTag EndTag"]
   StartCloseTag
   MissingCloseTag
@@ -55,11 +99,30 @@ Cdata { cdataStart cdataContent* "]]>" }
   incompleteStartCloseTag[@name=StartCloseTag]
 }
 
-@external tokens commentContent from "./tokens.js" { commentContent }
-@external tokens piContent from "./tokens.js" { piContent }
-@external tokens cdataContent from "./tokens.js" { cdataContent }
+@external tokens commentContent from "./tokens" { commentContent }
+@external tokens piContent from "./tokens" { piContent }
+@external tokens cdataContent from "./tokens" { cdataContent }
 
 @tokens {
+  OpeningExpression { HTMLEscapedExpressionOpen | RawExpressionOpen | RawBlockExpressionOpen | PartialExpressionOpen }
+  ClosingExpression { HTMLEscapedExpressionClose | RawExpressionClose | RawBlockExpressionClose }
+
+  HTMLEscapedExpressionOpen[closedBy=HTMLEscapedExpressionClose] { "{{" "~"? }
+  RawExpressionOpen[closedBy=RawBlockExpressionClose] { "{{{" }
+  RawBlockExpressionOpen[closedBy=RawBlockExpressionClose] { "{{{{" }
+  PartialExpressionOpen[closedBy=HTMLEscapedExpressionClose] { HTMLEscapedExpressionOpen ">" }
+  BlockExpressionOpen[closedBy=HTMLEscapedExpressionClose] { HTMLEscapedExpressionOpen "#" }
+  BlockExpressionEnd[closedBy=HTMLEscapedExpressionClose] { HTMLEscapedExpressionOpen "/" }
+  PartialBlockExpressionOpen[closedBy=HTMLEscapedExpressionClose] { BlockExpressionOpen ">" }
+  InlinePartialExpressionOpen[closedBy=HTMLEscapedExpressionClose] { BlockExpressionOpen "*" }
+
+  HTMLEscapedExpressionClose[openedBy=HTMLEscapedExpressionOpen] { "~"? "}}" ","? }
+  RawExpressionClose[openedBy=RawExpressionOpen] { "}}}" ","? }
+  RawBlockExpressionClose[openedBy=RawBlockExpressionOpen] { "}}}}" }
+
+  SubExpressionOpen { "(" }
+  SubExpressionClose { ")" }
+
   EndTag[openedBy="StartTag StartCloseTag"] { ">" }
 
   SelfCloseEndTag[openedBy=StartTag] { "/>" }
@@ -80,7 +143,7 @@ Cdata { cdataStart cdataContent* "]]>" }
 
   AttributeName { identifier }
 
-  attributeContent { !["&]+ }
+  attributeContent { !["&{]+ }
 
   Is { "=" }
 
@@ -88,13 +151,40 @@ Cdata { cdataStart cdataContent* "]]>" }
 
   CharacterReference { "&#" ![; ]+ ";" }
 
-  Text { ![<&]+ }
-
   DoctypeDecl { "<!" ("doctype" | "DOCTYPE") ![>]* ">" }
 
   cdataStart { "<![" ("cdata" | "CDATA") "[" }
 
   space { (" " | "\t" | "\r" | "\n")+ }
+
+  True  { "true" }
+  False { "false" }
+  Null  { "null" }
+
+  singleQuote[@name=Quote] { "'" }
+  doubleQuote[@name=Quote] { '"' }
+
+  stringContentSingle { ![\\\n']+ }
+  stringContentDouble { ![\\\n"]+ }
+
+  Number { '-'? int frac? exp?  }
+  int  { '0' | $[1-9] @digit* }
+  frac { '.' @digit+ }
+  exp  { $[eE] $[+\-]? @digit+ }
+
+  hex  { $[0-9a-fA-F] }
+  Escape {
+    "\\" ("x" hex hex | "u" ("{" hex+ "}" | hex hex hex hex) | ![xu])
+  }
+
+
+  "as"
+}
+
+@external tokens expressionTokens from "./tokens" {
+  Context
+  HelperOrContext
+  HashArgumentProperty
 }
 
 @detectDelim

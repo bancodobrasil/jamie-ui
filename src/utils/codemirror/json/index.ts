@@ -10,7 +10,7 @@ import {
 import { styleTags, tags as t } from '@lezer/highlight';
 import { parser } from './json.grammar.js';
 
-export const jsonEjsLanguage = LRLanguage.define({
+export const jsonHandlebarsLanguage = LRLanguage.define({
   parser: parser.configure({
     props: [
       indentNodeProp.add({
@@ -29,8 +29,25 @@ export const jsonEjsLanguage = LRLanguage.define({
         ',': t.separator,
         '[ ]': t.squareBracket,
         '{ }': t.brace,
+        'OpeningExpression BlockExpressionOpen BlockExpressionEnd PartialBlockExpressionOpen InlinePartialExpressionOpen':
+          t.special(t.brace),
+        'ClosingExpression HTMLEscapedExpressionClose RawExpressionClose RawBlockExpressionClose':
+          t.special(t.brace),
+        'SubExpressionOpen SubExpressionClose': t.paren,
+        HelperOrContext: t.special(t.variableName),
+        Context: t.variableName,
+        HashArgumentProperty: t.variableName,
+        HashValue: t.special(t.string),
+        BlockParameterName: t.variableName,
+        TemplateComment: t.lineComment,
+        as: t.definitionKeyword,
       }),
     ],
+    // wrap: parseMixed(node => {
+    //   const { name } = node.type;
+    //   console.log(name, node.from, node.to);
+    //   return null;
+    // }),
   }),
   languageData: {
     closeBrackets: { brackets: ['[', '{', '"'] },
@@ -38,6 +55,6 @@ export const jsonEjsLanguage = LRLanguage.define({
   },
 });
 
-export function jsonEjs() {
-  return new LanguageSupport(jsonEjsLanguage, json().support);
+export function jsonHandlebars() {
+  return new LanguageSupport(jsonHandlebarsLanguage, json().support);
 }

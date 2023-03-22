@@ -4,9 +4,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
-import { dracula } from '@uiw/codemirror-theme-dracula';
-import { json } from '@codemirror/lang-json';
-import { xml } from '@codemirror/lang-xml';
+import { draculaInit } from '@uiw/codemirror-theme-dracula';
+import { tags } from '@lezer/highlight';
+import { jsonHandlebars } from '../../../utils/codemirror/json';
+import { xmlHandlebars } from '../../../utils/codemirror/xml';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuItemService from '../../../api/services/MenuItemService';
 import Loading from '../../../components/Loading';
@@ -43,18 +44,18 @@ export const EditTemplateItems = () => {
   const [templateResult, setTemplateResult] = React.useState('');
   const [loadedInitialTemplate, setLoadedInitialTemplate] = React.useState(false);
 
-  const [language, setLanguage] = React.useState(json);
+  const [language, setLanguage] = React.useState(jsonHandlebars);
 
   React.useEffect(() => {
     switch (templateFormat) {
       case EnumTemplateFormat.JSON:
-        setLanguage(json);
+        setLanguage(jsonHandlebars);
         break;
       case EnumTemplateFormat.XML:
-        setLanguage(xml());
+        setLanguage(xmlHandlebars());
         break;
       case EnumTemplateFormat.PLAIN:
-        setLanguage(json);
+        setLanguage(jsonHandlebars);
         break;
     }
   }, [templateFormat]);
@@ -176,6 +177,22 @@ export const EditTemplateItems = () => {
       console.error(error);
     }
   }, [template, templateFormat, data, itemId, renderMenuItemTemplate]);
+
+  const dracula = React.useMemo(
+    () =>
+      draculaInit({
+        styles: [
+          { tag: tags.variableName, color: '#ffd599' },
+          { tag: tags.special(tags.variableName), color: '#e47f0c' },
+          { tag: tags.special(tags.brace), color: '#ffd599' },
+          { tag: tags.definitionKeyword, color: '#e47f0c' },
+          { tag: tags.string, color: '#0ab20d' },
+          { tag: tags.number, color: '#7ab0e6' },
+          { tag: tags.bool, color: '#7ab0e6' },
+        ],
+      }),
+    [],
+  );
 
   const onChangeTemplateFormat = React.useCallback(event => {
     setTemplateFormat(event.target.value);
