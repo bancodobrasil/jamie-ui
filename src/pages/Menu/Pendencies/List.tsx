@@ -41,6 +41,16 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
           <Typography>{pendency.input.name}</Typography>
         </Box>
       )}
+      {pendency.input.templateFormat && (
+        <Box className="flex flex-row space-x-1.5">
+          <Typography>
+            <b>{t('menu.fields.templateFormat.title')}</b>:
+          </Typography>
+          <Typography>
+            {t(`menu.fields.templateFormat.formats.${pendency.input.templateFormat}`)}
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };
