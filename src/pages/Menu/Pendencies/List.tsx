@@ -167,7 +167,7 @@ const Row = ({ menu, pendency, ...props }: RowProps) => {
 
   return (
     <React.Fragment {...props}>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableRow sx={{ '& > *': { borderBottom: 'unset !important' } }}>
         <TableCell>
           <IconButton aria-label="row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -181,10 +181,10 @@ const Row = ({ menu, pendency, ...props }: RowProps) => {
         <TableCell>{pendency.submittedBy.username}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ padding: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h5" component="h5" sx={{ mb: '1rem' }}>
+            <Box sx={{ px: '16px', pb: '16px' }}>
+              <Typography variant="h5" component="h5" sx={{ mb: '0.5rem' }}>
                 {t('menu.fields.pendency.input')}
               </Typography>
               <PendencyChanges menu={menu} pendency={pendency} />
