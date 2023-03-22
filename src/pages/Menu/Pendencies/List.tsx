@@ -25,6 +25,7 @@ import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
 import { Edge, IMenu, IMenuPendency } from '../../../types';
+import CodeViewer from '../../../components/CodeViewer';
 
 const PENDENCY_LIST_DEFAULT_PAGE_SIZE = 10;
 
@@ -32,7 +33,7 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
   const { t } = useTranslation();
 
   return (
-    <Box>
+    <Box className="space-y-1">
       {pendency.input.name && (
         <Box className="flex flex-row space-x-1.5">
           <Typography>
@@ -49,6 +50,14 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
           <Typography>
             {t(`menu.fields.templateFormat.formats.${pendency.input.templateFormat}`)}
           </Typography>
+        </Box>
+      )}
+      {pendency.input.template && (
+        <Box className="flex flex-col space-y-2">
+          <Typography>
+            <b>{t('menu.fields.template')}</b>:
+          </Typography>
+          <CodeViewer code={pendency.input.template} language="handlebars" />
         </Box>
       )}
     </Box>
