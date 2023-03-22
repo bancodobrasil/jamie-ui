@@ -13,8 +13,10 @@ export interface IUpdateMenuItemInput {
   order?: number;
   meta?: Record<string, unknown>;
   enabled?: boolean;
-  startPublication?: Date;
-  endPublication?: Date;
+  startPublication?: string;
+  endPublication?: string;
+  template?: string;
+  templateFormat?: EnumTemplateFormat;
   children?: IUpdateMenuItemInput[];
 }
 
