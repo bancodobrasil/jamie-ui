@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.token.handlebars {
+  & > .token.block {
+    display: inline-block;
+  }
+}

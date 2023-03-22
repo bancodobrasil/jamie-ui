@@ -189,6 +189,15 @@ const theme = language =>
             },
           },
         },
+        MuiTable: {
+          styleOverrides: {
+            root: {
+              '& .MuiTableCell-root': {
+                borderColor: '#E0E0E0;',
+              },
+            },
+          },
+        },
       },
     },
     ...localizedTheme(language),

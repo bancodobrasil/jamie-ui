@@ -43,7 +43,8 @@
       "createdAt": "Created At",
       "updatedAt": "Updated At",
       "version": "Version"
-    }
+    },
+    "field": "Field"
   },
   "buttons": {
     "cancel": "Cancel",
@@ -132,12 +133,21 @@
     "description": "The page you are looking for does not exist",
     "button": "Back to home"
   },
+  "inputAction": {
+    "title": "Action",
+    "actions": {
+      "CREATE": "Create",
+      "UPDATE": "Update",
+      "DELETE": "Delete"
+    }
+  },
   "menu": {
     "title_one": "Menu",
     "title_other": "Menus",
     "of": "Menu's $t(menu.fields.{{field}})",
     "fields": {
       "name": "Name",
+      "mustDeferChanges": "Mandatory deferral",
       "items": "Items",
       "template": "Template",
       "templateFormat": {
@@ -174,7 +184,14 @@
         "snapshot": "Snapshot"
       },
       "currentRevision": "Current Version",
-      "publishedRevision": "Published Version"
+      "publishedRevision": "Published Version",
+      "pendency": {
+        "title_one": "Pendency",
+        "title_other": "Pendencies",
+        "submittedBy": "Submitted By",
+        "input": "Changes",
+        "createdAt": "Created At"
+      }
     },
     "preview": {
       "title": "Edit Items",
@@ -236,12 +253,26 @@
         "editTemplate": "Edit Template",
         "editItems": "Edit Items",
         "delete": "Delete",
+        "pendencies": "Pendencies",
         "createRevision": "Close Version",
         "publishRevision": "Publish Version",
         "restoreRevision": "Restore Version"
       },
       "messages": {
         "confirmDelete": "Are you sure you want to delete this menu?"
+      }
+    },
+    "pendencies": {
+      "title": "Pendencies",
+      "description": "The following pendencies must be resolved:",
+      "actions": {
+        "title": "Actions",
+        "accept": "Accept",
+        "reject": "Reject"
+      },
+      "notifications": {
+        "acceptSuccess": "Pendency accepted successfully",
+        "rejectSuccess": "Pendency rejected successfully"
       }
     }
   },

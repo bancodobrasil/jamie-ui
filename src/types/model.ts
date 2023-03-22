@@ -1,10 +1,11 @@
-import { DateTime } from 'luxon';
 import { EnumInputAction } from './common';
+import { IUpdateMenuInput } from './input';
 import { EnumTemplateFormat } from './template';
 
 export interface IMenu {
   id: number;
   name: string;
+  mustDeferChanges: boolean;
   meta: IMenuMeta[];
   items: IMenuItem[];
   template?: string;
@@ -14,8 +15,8 @@ export interface IMenu {
     [EnumTemplateFormat.XML]: string;
     [EnumTemplateFormat.PLAIN]: string;
   };
-  createdAt?: DateTime;
-  updatedAt?: DateTime;
+  createdAt?: string;
+  updatedAt?: string;
   version?: number;
 }
 
@@ -25,8 +26,8 @@ export interface IMenuItem {
   order: number;
   meta: IMenuItemMeta;
   enabled: boolean;
-  startPublication?: DateTime;
-  endPublication?: DateTime;
+  startPublication?: string;
+  endPublication?: string;
   children?: IMenuItem[];
   parent?: Omit<IMenuItem, 'children'>;
   parentId?: number;
@@ -39,8 +40,8 @@ export interface IMenuItem {
     [EnumTemplateFormat.PLAIN]: string;
   };
   menuId?: number;
-  createdAt?: DateTime;
-  updatedAt?: DateTime;
+  createdAt?: string;
+  updatedAt?: string;
   version?: number;
 }
 
@@ -50,7 +51,7 @@ export enum MenuMetaType {
   BOOLEAN = 'boolean',
   DATE = 'date',
   // TIME = 'time',
-  // DATETIME = 'datetime',
+  // string = 'string',
   // SELECT = 'select',
   // RADIO = 'radio',
   // CHECKBOX = 'checkbox',
@@ -85,4 +86,20 @@ export interface IMenuMetaWithErrors extends IMenuMeta {
 
 export interface IMenuItemMeta {
   [key: string]: unknown;
+}
+
+export interface IKeycloakUser {
+  id: string;
+  username: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+export interface IMenuPendency {
+  id: number;
+  menuId: number;
+  submittedBy: IKeycloakUser;
+  input: IUpdateMenuInput;
+  createdAt: string;
 }

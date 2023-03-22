@@ -33,6 +33,8 @@ export const EditMenu = () => {
   const [name, setName] = React.useState<string>('');
   const [nameError, setNameError] = React.useState<string>('');
 
+  const [mustDeferChanges, setMustDeferChanges] = React.useState<boolean>(false);
+
   const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
   const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
@@ -42,6 +44,7 @@ export const EditMenu = () => {
   useEffect(() => {
     if (loaded || !data) return;
     setName(data.menu.name);
+    setMustDeferChanges(data.menu.mustDeferChanges);
     setMetaWithErrors(
       data?.menu.meta
         .map(m => {
@@ -78,8 +81,9 @@ export const EditMenu = () => {
         }
         return rest;
       });
+    const updatedName = name !== data.menu.name ? name : undefined;
     updateMenu({
-      variables: { menu: { id: Number(id), name, meta } },
+      variables: { menu: { id: Number(id), name: updatedName, mustDeferChanges, meta } },
       onCompleted: data => {
         setLoadingSubmit(false);
         dispatch({
@@ -142,6 +146,8 @@ export const EditMenu = () => {
         setName={setName}
         nameError={nameError}
         setNameError={setNameError}
+        mustDeferChanges={mustDeferChanges}
+        setMustDeferChanges={setMustDeferChanges}
         meta={metaWithErrors}
         setMeta={setMetaWithErrors}
         loadingSubmit={loadingSubmit}

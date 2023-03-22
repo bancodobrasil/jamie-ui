@@ -3,6 +3,7 @@ import { DocumentNode, gql } from '@apollo/client';
 export const ALL_MENU_PROPERTIES = `
 id
 name
+mustDeferChanges
 createdAt
 updatedAt
 version
@@ -133,6 +134,56 @@ export default class MenuService {
   static REMOVE_MENU: DocumentNode = gql`
     mutation RemoveMenu($id: Int!) {
       removeMenu(id: $id)
+    }
+  `;
+
+  static LIST_MENU_PENDENCIES: DocumentNode = gql`
+    query ListMenuPendencies(
+      $menuId: Int!
+      $first: Int
+      $after: String
+      $last: Int
+      $before: String
+    ) {
+      pendencies(menuId: $menuId, first: $first, after: $after, last: $last, before: $before) {
+        edges {
+          node {
+            id
+            menuId
+            submittedBy {
+              id
+              username
+              email
+              firstName
+              lastName
+            }
+            input
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
+      }
+    }
+  `;
+
+  static APPROVE_PENDENCY: DocumentNode = gql`
+    mutation ApprovePendency($id: Int! $menuId: Int!) {
+      approvePendency(id: $id, menuId: $menuId) {
+        ${ALL_MENU_PROPERTIES}
+      }
+    }
+  `;
+
+  static DECLINE_PENDENCY: DocumentNode = gql`
+    mutation DeclinePendency($id: Int!, $menuId: Int!) {
+      declinePendency(id: $id, menuId: $menuId)
     }
   `;
 

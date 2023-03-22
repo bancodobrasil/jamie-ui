@@ -43,7 +43,8 @@
       "createdAt": "Criado em",
       "updatedAt": "Atualizado em",
       "version": "Versão"
-    }
+    },
+    "field": "Campo"
   },
   "buttons": {
     "cancel": "Cancelar",
@@ -132,12 +133,21 @@
     "description": "A página que você está procurando não existe ou foi removida.",
     "button": "Voltar para o início"
   },
+  "inputAction": {
+    "title": "Ação",
+    "actions": {
+      "CREATE": "Criação",
+      "UPDATE": "Atualização",
+      "DELETE": "Deleção"
+    }
+  },
   "menu": {
     "title_one": "Menu",
     "title_other": "Menus",
     "of": "$t(menu.fields.{{field}}) do Menu",
     "fields": {
       "name": "Nome",
+      "mustDeferChanges": "Deferimento obrigatório",
       "items": "Itens",
       "template": "Template",
       "templateFormat": {
@@ -174,7 +184,14 @@
         "snapshot": "Snapshot"
       },
       "currentRevision": "Versão Atual",
-      "publishedRevision": "Versão Publicada"
+      "publishedRevision": "Versão Publicada",
+      "pendency": {
+        "title_one": "Pendência",
+        "title_other": "Pendências",
+        "submittedBy": "Enviado por",
+        "input": "Alterações",
+        "createdAt": "Criada em"
+      }
     },
     "preview": {
       "title": "Editar Itens",
@@ -236,12 +253,26 @@
         "editTemplate": "Editar Template",
         "editItems": "Editar Itens",
         "delete": "Deletar",
+        "pendencies": "Pendências",
         "createRevision": "Fechar Versão",
         "publishRevision": "Publicar Versão",
         "restoreRevision": "Restaurar Versão"
       },
       "messages": {
         "confirmDelete": "Tem certeza que deseja deletar esse menu?"
+      }
+    },
+    "pendencies": {
+      "title": "Pendências",
+      "description": "As pendências abaixo devem ser resolvidas:",
+      "actions": {
+        "title": "Ações",
+        "accept": "Aceitar",
+        "reject": "Rejeitar"
+      },
+      "notifications": {
+        "acceptSuccess": "Pendência aceita com sucesso",
+        "rejectSuccess": "Pendência rejeitada com sucesso"
       }
     }
   },
