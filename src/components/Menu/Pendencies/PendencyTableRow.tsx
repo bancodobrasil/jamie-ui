@@ -41,13 +41,17 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
 
   const renderItem = (menu: IMenu, item: IUpdateMenuItemInput, index: number) => {
     const order = item.order || menu.items.find(i => i.id === item.id)?.order || index + 1;
+    const label = menu.items.find(i => i.id === item.id)?.label || item.label;
     const actionColor = getActionColor(item.action);
     return (
-      <Box className="flex flex-row">
-        <Typography variant="h4" component="h4" sx={{ mr: '1rem' }}>
-          #{order}
-        </Typography>
-        <Box className="flex flex-col space-y-1">
+      <Box className="flex flex-col">
+        <Box className="flex flex-row items-center min-w-fit">
+          <Typography variant="h4" component="h4" sx={{ mr: '0.5rem' }}>
+            #{order}
+          </Typography>
+          <Typography sx={{ minWidth: 'fit-content', mr: '1rem' }}>{label}</Typography>
+        </Box>
+        <Box className="flex flex-col space-y-1 mx-[2.2rem]">
           <Box className="flex flex-row space-x-1.5">
             <Typography>
               <b>{t('inputAction.title')}</b>
