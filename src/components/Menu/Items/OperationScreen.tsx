@@ -147,10 +147,12 @@ export const OperationScreen = ({
             endPublication = null;
           }
           let label;
-          if (rest.label && (original?.label !== rest.label || !original?.label))
+          if (action === EnumInputAction.CREATE) label = rest.label;
+          else if (rest.label && (original?.label !== rest.label || !original?.label))
             label = rest.label;
           let order;
-          if (rest.order && (original?.order !== rest.order || !original?.order))
+          if (action === EnumInputAction.CREATE) order = rest.order;
+          else if (rest.order && (original?.order !== rest.order || !original?.order))
             order = rest.order;
           let enabled = action === EnumInputAction.CREATE ? true : undefined;
           if (rest.enabled && (original?.enabled !== rest.enabled || !original?.enabled))

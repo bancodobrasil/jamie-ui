@@ -39,8 +39,8 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
       );
     });
 
-  const renderItem = (menu: IMenu, item: IUpdateMenuItemInput) => {
-    const order = item.order || menu.items.find(i => i.id === item.id)?.order;
+  const renderItem = (menu: IMenu, item: IUpdateMenuItemInput, index: number) => {
+    const order = item.order || menu.items.find(i => i.id === item.id)?.order || index + 1;
     const actionColor = getActionColor(item.action);
     return (
       <Box className="flex flex-row">
@@ -116,7 +116,9 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
               {item.children.map((child, index) => (
                 <React.Fragment key={index}>
                   {index > 0 && <Divider sx={{ my: '1rem', mx: '1rem' }} />}
-                  <Box className="flex flex-col space-y-1 mx-4">{renderItem(menu, child)}</Box>
+                  <Box className="flex flex-col space-y-1 mx-4">
+                    {renderItem(menu, child, index)}
+                  </Box>
                 </React.Fragment>
               ))}
             </Box>
@@ -229,7 +231,7 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
           {pendency.input.items.map((item, index) => (
             <React.Fragment key={index}>
               {index > 0 && <Divider sx={{ my: '1rem', mx: '1rem' }} />}
-              <Box className="flex flex-col space-y-1 mx-4">{renderItem(menu, item)}</Box>
+              <Box className="flex flex-col space-y-1 mx-4">{renderItem(menu, item, index)}</Box>
             </React.Fragment>
           ))}
         </Box>
