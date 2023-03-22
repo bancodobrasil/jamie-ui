@@ -134,13 +134,17 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
 
   const renderMeta = (menu: IMenu, meta: IUpdateMenuMetaInput) => {
     const order = meta.order || menu.meta.find(m => m.id === meta.id)?.order;
+    const name = menu.meta.find(m => m.id === meta.id)?.name || meta.name;
     const actionColor = getActionColor(meta.action);
     return (
-      <Box className="flex flex-row">
-        <Typography variant="h4" component="h4" sx={{ mr: '1rem' }}>
-          #{order}
-        </Typography>
-        <Box className="flex flex-col space-y-1">
+      <Box className="flex flex-col">
+        <Box className="flex flex-row items-center min-w-fit">
+          <Typography variant="h4" component="h4" sx={{ mr: '0.5rem' }}>
+            #{order}
+          </Typography>
+          <Typography sx={{ minWidth: 'fit-content', mr: '1rem' }}>{name}</Typography>
+        </Box>
+        <Box className="flex flex-col space-y-1 mx-[2.2rem]">
           <Box className="flex flex-row space-x-1.5">
             <Typography>
               <b>{t('inputAction.title')}</b>:
