@@ -145,7 +145,7 @@ export default class MenuService {
       $last: Int
       $before: String
     ) {
-      pendencies(id: $id) {
+      pendencies(menuId: $menuId, first: $first, after: $after, last: $last, before: $before) {
         edges {
           node {
             id

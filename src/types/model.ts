@@ -87,3 +87,19 @@ export interface IMenuMetaWithErrors extends IMenuMeta {
 export interface IMenuItemMeta {
   [key: string]: unknown;
 }
+
+export interface IKeycloakUser {
+  id: string;
+  username: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+export interface IMenuPendency {
+  id: number;
+  menuId: number;
+  submittedBy: IKeycloakUser;
+  input: any;
+  createdAt: string;
+}

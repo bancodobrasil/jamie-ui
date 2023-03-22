@@ -175,7 +175,14 @@
         "snapshot": "Snapshot"
       },
       "currentRevision": "Versão Atual",
-      "publishedRevision": "Versão Publicada"
+      "publishedRevision": "Versão Publicada",
+      "pendency": {
+        "title_one": "Pendência",
+        "title_other": "Pendências",
+        "submittedBy": "Enviado por",
+        "input": "Alterações",
+        "createdAt": "Criada em"
+      }
     },
     "preview": {
       "title": "Editar Itens",
