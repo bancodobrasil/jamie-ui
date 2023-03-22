@@ -269,6 +269,10 @@
         "title": "Actions",
         "accept": "Accept",
         "reject": "Reject"
+      },
+      "notifications": {
+        "acceptSuccess": "Pendency accepted successfully",
+        "rejectSuccess": "Pendency rejected successfully"
       }
     }
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   Box,
   Paper,
@@ -21,10 +21,17 @@ import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
 import { Edge, IMenuPendency } from '../../../types';
 import { PendencyTableRow } from '../../../components/Menu/Pendencies';
+import {
+  ActionTypes,
+  NotificationContext,
+  openDefaultErrorNotification,
+} from '../../../contexts/NotificationContext';
 
 const PENDENCY_LIST_DEFAULT_PAGE_SIZE = 10;
 
 const ListPendencies = () => {
+  const { dispatch } = React.useContext(NotificationContext);
+
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -48,6 +55,49 @@ const ListPendencies = () => {
 
   const [fetched, setFetched] = React.useState<boolean>(false);
   const [pendencies, setPendencies] = React.useState<IMenuPendency[]>([]);
+
+  const [acceptPendency] = useMutation(MenuService.APPROVE_PENDENCY);
+  const [rejectPendency] = useMutation(MenuService.DECLINE_PENDENCY);
+
+  const [loadingSubmit, setLoadingSubmit] = React.useState(false);
+
+  const onAcceptPendency = (pendencyId: number) => {
+    setLoadingSubmit(true);
+    acceptPendency({
+      variables: { id: pendencyId, menuId: Number(id) },
+      onCompleted: data => {
+        setLoadingSubmit(false);
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('menu.pendencies.notifications.acceptSuccess')}!`,
+        });
+        listPendenciesQuery.refetch({ first: pageSize, after: '', last: 0, before: '' });
+      },
+      onError: error => {
+        setLoadingSubmit(false);
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
+  };
+
+  const onRejectPendency = (pendencyId: number) => {
+    setLoadingSubmit(true);
+    rejectPendency({
+      variables: { id: pendencyId, menuId: Number(id) },
+      onCompleted: data => {
+        setLoadingSubmit(false);
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('menu.pendencies.notifications.rejectSuccess')}!`,
+        });
+        listPendenciesQuery.refetch({ first: pageSize, after: '', last: 0, before: '' });
+      },
+      onError: error => {
+        setLoadingSubmit(false);
+        openDefaultErrorNotification(error, dispatch);
+      },
+    });
+  };
 
   React.useEffect(() => {
     if (!listPendenciesQuery.data) return;
@@ -168,6 +218,9 @@ const ListPendencies = () => {
                       key={pendency.id}
                       pendency={pendency}
                       menu={getMenuQuery.data?.menu}
+                      acceptPendency={onAcceptPendency}
+                      rejectPendency={onRejectPendency}
+                      loadingSubmit={loadingSubmit}
                     />
                   ))}
                 </TableBody>

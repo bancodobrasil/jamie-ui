@@ -269,6 +269,10 @@
         "title": "Ações",
         "accept": "Aceitar",
         "reject": "Rejeitar"
+      },
+      "notifications": {
+        "acceptSuccess": "Pendência aceita com sucesso",
+        "rejectSuccess": "Pendência rejeitada com sucesso"
       }
     }
   },

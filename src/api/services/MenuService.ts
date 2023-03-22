@@ -173,6 +173,20 @@ export default class MenuService {
     }
   `;
 
+  static APPROVE_PENDENCY: DocumentNode = gql`
+    mutation ApprovePendency($id: Int! $menuId: Int!) {
+      approvePendency(id: $id, menuId: $menuId) {
+        ${ALL_MENU_PROPERTIES}
+      }
+    }
+  `;
+
+  static DECLINE_PENDENCY: DocumentNode = gql`
+    mutation DeclinePendency($id: Int!, $menuId: Int!) {
+      declinePendency(id: $id, menuId: $menuId)
+    }
+  `;
+
   static GET_MENU_REVISIONS: DocumentNode = gql`
     query GetMenuRevisions($id: Int!) {
       menu(id: $id) {

@@ -241,9 +241,19 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
 interface PedencyTableRowProps {
   menu: IMenu;
   pendency: IMenuPendency;
+  acceptPendency: (pendencyId: number) => void;
+  rejectPendency: (pendencyId: number) => void;
+  loadingSubmit: boolean;
 }
 
-export const PendencyTableRow = ({ menu, pendency, ...props }: PedencyTableRowProps) => {
+export const PendencyTableRow = ({
+  menu,
+  pendency,
+  acceptPendency,
+  rejectPendency,
+  loadingSubmit,
+  ...props
+}: PedencyTableRowProps) => {
   const { i18n, t } = useTranslation();
   const [open, setOpen] = React.useState(false);
 
@@ -267,6 +277,8 @@ export const PendencyTableRow = ({ menu, pendency, ...props }: PedencyTableRowPr
             size="small"
             color="success"
             title={t('menu.pendencies.actions.accept')}
+            disabled={loadingSubmit}
+            onClick={() => acceptPendency(pendency.id)}
           >
             <ThumbUpOffAltIcon />
           </IconButton>
@@ -275,6 +287,8 @@ export const PendencyTableRow = ({ menu, pendency, ...props }: PedencyTableRowPr
             size="small"
             color="error"
             title={t('menu.pendencies.actions.reject')}
+            disabled={loadingSubmit}
+            onClick={() => rejectPendency(pendency.id)}
           >
             <ThumbDownOffAltIcon />
           </IconButton>
