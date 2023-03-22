@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
+import { DateTime } from 'luxon';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
 import {
@@ -61,9 +62,22 @@ export const ItemsPreview = () => {
         .filter(item => item.parentId === parent.id)
         .map(item => {
           const { __typename, ...rest } = item;
-          return {
+          const startPublication = rest.startPublication
+            ? DateTime.fromISO(rest.startPublication)
+            : undefined;
+          const endPublication = rest.endPublication
+            ? DateTime.fromISO(rest.endPublication)
+            : undefined;
+          const children = getChildren(item);
+          const node = {
             ...rest,
-            children: getChildren(item),
+            startPublication,
+            endPublication,
+            children,
+          };
+          return {
+            ...node,
+            original: node,
           };
         })
         .sort((a, b) => a.order - b.order);
@@ -73,10 +87,24 @@ export const ItemsPreview = () => {
       items
         .map(item => {
           const { __typename, ...rest } = item;
-          return {
+          const startPublication = rest.startPublication
+            ? DateTime.fromISO(rest.startPublication)
+            : undefined;
+          const endPublication = rest.endPublication
+            ? DateTime.fromISO(rest.endPublication)
+            : undefined;
+          const parentId = item.parentId || 0;
+          const children = getChildren(item);
+          const node = {
             ...rest,
-            parentId: item.parentId || 0,
-            children: getChildren(item),
+            startPublication,
+            endPublication,
+            parentId,
+            children,
+          };
+          return {
+            ...node,
+            original: node,
           };
         })
         .filter(item => !item.parentId)

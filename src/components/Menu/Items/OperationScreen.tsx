@@ -110,24 +110,56 @@ export const OperationScreen = ({
             version,
             menuId,
             defaultTemplate,
+            action,
             ...rest
           } = node;
           const meta = Object.keys(rest.meta).reduce((acc, key) => {
+            const name = data.menu.meta.find(meta => meta.id === Number(key))?.name || key;
             const meta = rest.meta[key];
-            if (meta == null || meta === '') {
+            const originalMeta = original?.meta[key] || original?.meta[name];
+            if (meta == null || meta === '' || meta === originalMeta) {
               return acc;
             }
             return {
               ...acc,
-              [key]: meta,
+              [name]: meta,
             };
           }, {});
-          const startPublication = rest.startPublication?.isValid
-            ? rest.startPublication.toISO()
-            : null;
-          const endPublication = rest.endPublication?.isValid ? rest.endPublication.toISO() : null;
+          let startPublication;
+          if (rest.startPublication) {
+            if (
+              (original?.startPublication !== rest.startPublication ||
+                !original?.startPublication) &&
+              rest.startPublication.isValid
+            )
+              startPublication = rest.startPublication.toISO();
+          } else {
+            startPublication = null;
+          }
+          let endPublication;
+          if (rest.endPublication) {
+            if (
+              (original?.endPublication !== rest.endPublication || !original?.endPublication) &&
+              rest.endPublication.isValid
+            )
+              endPublication = rest.endPublication.toISO();
+          } else {
+            endPublication = null;
+          }
+          let label;
+          if (rest.label && (original?.label !== rest.label || !original?.label))
+            label = rest.label;
+          let order;
+          if (rest.order && (original?.order !== rest.order || !original?.order))
+            order = rest.order;
+          let enabled = action === EnumInputAction.CREATE ? true : undefined;
+          if (rest.enabled && (original?.enabled !== rest.enabled || !original?.enabled))
+            enabled = rest.enabled;
           return {
-            ...rest,
+            action,
+            label,
+            order,
+            enabled,
             startPublication,
             endPublication,
             meta,

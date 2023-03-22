@@ -81,8 +81,9 @@ export const EditMenu = () => {
         }
         return rest;
       });
+    const updatedName = name !== data.menu.name ? name : undefined;
     updateMenu({
-      variables: { menu: { id: Number(id), name, mustDeferChanges, meta } },
+      variables: { menu: { id: Number(id), name: updatedName, mustDeferChanges, meta } },
       onCompleted: data => {
         setLoadingSubmit(false);
         dispatch({
