@@ -43,7 +43,8 @@
       "createdAt": "Criado em",
       "updatedAt": "Atualizado em",
       "version": "Versão"
-    }
+    },
+    "field": "Campo"
   },
   "buttons": {
     "cancel": "Cancelar",

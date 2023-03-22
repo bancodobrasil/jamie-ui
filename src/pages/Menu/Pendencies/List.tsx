@@ -12,6 +12,7 @@ import {
   TableCell,
   IconButton,
   TablePagination,
+  Collapse,
 } from '@mui/material';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
@@ -23,28 +24,59 @@ import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
-import { Edge, IMenuPendency } from '../../../types';
+import { Edge, IMenu, IMenuPendency } from '../../../types';
 
 const PENDENCY_LIST_DEFAULT_PAGE_SIZE = 10;
 
-const Row = ({ pendency }: { pendency: IMenuPendency }) => {
-  const { i18n } = useTranslation();
+const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPendency }) => {
+  const { t } = useTranslation();
+
+  return (
+    <Box>
+      {pendency.input.name && (
+        <Box className="flex flex-row space-x-1.5">
+          <Typography>
+            <b>{t('menu.fields.name')}</b>:
+          </Typography>
+          <Typography>{pendency.input.name}</Typography>
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+const Row = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPendency }) => {
+  const { i18n, t } = useTranslation();
   const [open, setOpen] = React.useState(false);
 
   return (
-    <TableRow>
-      <TableCell>
-        <IconButton aria-label="row" size="small" onClick={() => setOpen(!open)}>
-          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        </IconButton>
-      </TableCell>
-      <TableCell>
-        {DateTime.fromISO(pendency.createdAt)
-          .setLocale(i18n.language)
-          .toLocaleString(DateTime.DATETIME_FULL)}
-      </TableCell>
-      <TableCell>{pendency.submittedBy.username}</TableCell>
-    </TableRow>
+    <>
+      <TableRow>
+        <TableCell>
+          <IconButton aria-label="row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell>
+          {DateTime.fromISO(pendency.createdAt)
+            .setLocale(i18n.language)
+            .toLocaleString(DateTime.DATETIME_FULL)}
+        </TableCell>
+        <TableCell>{pendency.submittedBy.username}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                {t('menu.fields.pendency.input')}
+              </Typography>
+              <PendencyChanges menu={menu} pendency={pendency} />
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
   );
 };
 
@@ -187,7 +219,7 @@ const ListPendencies = () => {
                 </TableHead>
                 <TableBody>
                   {pendencies.map(pendency => (
-                    <Row key={pendency.id} pendency={pendency} />
+                    <Row key={pendency.id} pendency={pendency} menu={getMenuQuery.data?.menu} />
                   ))}
                 </TableBody>
               </Table>
