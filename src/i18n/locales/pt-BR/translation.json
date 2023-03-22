@@ -138,6 +138,7 @@
     "of": "$t(menu.fields.{{field}}) do Menu",
     "fields": {
       "name": "Nome",
+      "mustDeferChanges": "Deferimento obrigatório",
       "items": "Itens",
       "template": "Template",
       "templateFormat": {

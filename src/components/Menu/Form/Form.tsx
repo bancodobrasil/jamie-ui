@@ -55,6 +55,8 @@ interface Props {
   setName: (name: string) => void;
   nameError: string;
   setNameError: (nameError: string) => void;
+  mustDeferChanges: boolean;
+  setMustDeferChanges: (mustDeferChanges: boolean) => void;
   meta: IMenuMetaWithErrors[];
   setMeta: (meta: IMenuMetaWithErrors[]) => void;
   loadingSubmit: boolean;
@@ -68,6 +70,8 @@ export const MenuForm = ({
   setName,
   nameError,
   setNameError,
+  mustDeferChanges,
+  setMustDeferChanges,
   meta,
   setMeta,
   loadingSubmit,
@@ -423,7 +427,7 @@ export const MenuForm = ({
     ));
   return (
     <Form onSubmit={handleFormSubmit}>
-      <Box sx={{ flex: '0 1 auto' }}>
+      <Box sx={{ flex: '0 1 auto', flexDirection: 'column' }}>
         <TextField
           id="name"
           label={t('menu.of', { field: 'name' })}
@@ -449,7 +453,23 @@ export const MenuForm = ({
           helperText={nameError}
           sx={{ width: '16rem' }}
         />
-        <Typography variant="h3" sx={{ mt: '2rem' }}>
+        <Box sx={{ mt: '1rem' }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                id="mustDeferChanges"
+                checked={mustDeferChanges}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const { checked } = e.target;
+                  setMustDeferChanges(checked);
+                }}
+                color="primary"
+              />
+            }
+            label={t('menu.fields.mustDeferChanges')}
+          />
+        </Box>
+        <Typography variant="h3" sx={{ mt: '1rem' }}>
           {t('menu.fields.meta.title', { count: 2 })}
         </Typography>
       </Box>

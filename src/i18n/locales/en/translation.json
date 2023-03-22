@@ -138,6 +138,7 @@
     "of": "Menu's $t(menu.fields.{{field}})",
     "fields": {
       "name": "Name",
+      "mustDeferChanges": "Mandatory deferral",
       "items": "Items",
       "template": "Template",
       "templateFormat": {

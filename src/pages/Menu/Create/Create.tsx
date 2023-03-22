@@ -24,6 +24,8 @@ export const CreateMenu = () => {
   const [name, setName] = React.useState<string>('');
   const [nameError, setNameError] = React.useState<string>('');
 
+  const [mustDeferChanges, setMustDeferChanges] = React.useState<boolean>(false);
+
   const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
   const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
@@ -44,7 +46,7 @@ export const CreateMenu = () => {
       return rest;
     });
     createMenu({
-      variables: { menu: { name, meta } },
+      variables: { menu: { name, mustDeferChanges, meta } },
       onCompleted: data => {
         setLoadingSubmit(false);
         dispatch({
@@ -86,6 +88,8 @@ export const CreateMenu = () => {
         setName={setName}
         nameError={nameError}
         setNameError={setNameError}
+        mustDeferChanges={mustDeferChanges}
+        setMustDeferChanges={setMustDeferChanges}
         meta={metaWithErrors}
         setMeta={setMetaWithErrors}
         loadingSubmit={loadingSubmit}
