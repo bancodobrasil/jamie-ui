@@ -137,6 +137,42 @@ export default class MenuService {
     }
   `;
 
+  static LIST_MENU_PENDENCIES: DocumentNode = gql`
+    query ListMenuPendencies(
+      $menuId: Int!
+      $first: Int
+      $after: String
+      $last: Int
+      $before: String
+    ) {
+      pendencies(id: $id) {
+        edges {
+          node {
+            id
+            menuId
+            submittedBy {
+              id
+              username
+              email
+              firstName
+              lastName
+            }
+            input
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
+      }
+    }
+  `;
+
   static GET_MENU_REVISIONS: DocumentNode = gql`
     query GetMenuRevisions($id: Int!) {
       menu(id: $id) {
