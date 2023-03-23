@@ -44,7 +44,8 @@
       "updatedAt": "Atualizado em",
       "version": "Versão"
     },
-    "field": "Campo"
+    "field": "Campo",
+    "entity": "Entidade"
   },
   "buttons": {
     "cancel": "Cancelar",
@@ -94,6 +95,50 @@
       "UnhandledError": {
         "title": "Erro desconhecido",
         "message": "Ocorreu um problema inesperado."
+      },
+      "GraphQLClientError": {
+        "code": {
+          "UNAUTHORIZED": {
+            "title": "Não autorizado",
+            "message": "Você não tem permissão para acessar este recurso."
+          },
+          "FORBIDDEN": {
+            "title": "Proibido",
+            "message": "Você não tem permissão para acessar este recurso."
+          },
+          "NOT_FOUND": {
+            "title": "Não encontrado",
+            "message": "O recurso que você está procurando não existe."
+          },
+          "BAD_USER_INPUT": {
+            "title": "Entrada inválida",
+            "message": "Os dados que você inseriu são inválidos."
+          },
+          "CONFLICT": {
+            "title": "Conflito",
+            "message": "Os dados que você inseriu são inválidos."
+          },
+          "GRAPHQL_VALIDATION_FAILED": {
+            "title": "Falha na validação",
+            "message": "Os dados que você inseriu são inválidos."
+          },
+          "ENTITY_NOT_FOUND": {
+            "title": "{{entity}} não encontrado",
+            "message": "O {{entity}} com o ID {{id}} não existe."
+          },
+          "INTERNAL_SERVER_ERROR": {
+            "title": "Erro interno do servidor",
+            "message": "Ocorreu um problema inesperado."
+          },
+          "BAD_REQUEST": {
+            "title": "Requisição inválida",
+            "message": "Ocorreu um problema inesperado."
+          },
+          "UNKNOWN": {
+            "title": "Erro desconhecido (código: {{code}})",
+            "message": "Ocorreu um problema inesperado."
+          }
+        }
       }
     },
     "createSuccess_male": "{{resource}} criado com sucesso",

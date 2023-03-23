@@ -44,7 +44,8 @@
       "updatedAt": "Updated At",
       "version": "Version"
     },
-    "field": "Field"
+    "field": "Field",
+    "entity": "Entity"
   },
   "buttons": {
     "cancel": "Cancel",
@@ -94,6 +95,50 @@
       "UnhandledError": {
         "title": "Unknown error",
         "message": "An unexpected problem has occurred."
+      },
+      "GraphQLClientError": {
+        "code": {
+          "UNAUTHORIZED": {
+            "title": "Unauthorized",
+            "message": "You do not have permission to access this resource."
+          },
+          "FORBIDDEN": {
+            "title": "Forbidden",
+            "message": "You do not have permission to access this resource."
+          },
+          "NOT_FOUND": {
+            "title": "Not found",
+            "message": "The resource you are looking for does not exist."
+          },
+          "BAD_USER_INPUT": {
+            "title": "Bad user input",
+            "message": "The data you entered is invalid."
+          },
+          "CONFLICT": {
+            "title": "Conflict",
+            "message": "The data you entered is invalid."
+          },
+          "GRAPHQL_VALIDATION_FAILED": {
+            "title": "Validation failed",
+            "message": "The data you entered is invalid."
+          },
+          "ENTITY_NOT_FOUND": {
+            "title": "{{entity}} not found",
+            "message": "The {{entity}} with ID {{id}} does not exist."
+          },
+          "INTERNAL_SERVER_ERROR": {
+            "title": "Internal server error",
+            "message": "An unexpected problem has occurred."
+          },
+          "BAD_REQUEST": {
+            "title": "Bad request",
+            "message": "An unexpected problem has occurred."
+          },
+          "UNKNOWN": {
+            "title": "Unknown error (code: {{code}})",
+            "message": "An unexpected problem has occurred."
+          }
+        }
       }
     },
     "createSuccess_male": "{{resource}} created successfully",

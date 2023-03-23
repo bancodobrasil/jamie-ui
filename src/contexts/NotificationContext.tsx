@@ -10,7 +10,8 @@ import {
   AlertProps,
   AlertTitle,
 } from '@mui/material';
-import { BaseError, APIError, UnhandledError } from '../api/errors';
+import { ApolloError } from '@apollo/client';
+import { BaseError, APIError, UnhandledError, GraphQLClientError } from '../api/errors';
 
 type State = {
   isOpen: boolean;
@@ -191,7 +192,18 @@ const openDefaultErrorNotification = (error: unknown, dispatch: React.Dispatch<A
   let processedError;
   if (axios.isAxiosError(error)) {
     processedError = new APIError(error.response.status);
-  } else {
+  } else if (error instanceof ApolloError) {
+    if (error.networkError) {
+      const networkError = error.networkError as any;
+      if (networkError.statusCode) {
+        processedError = new APIError(networkError.statusCode);
+      }
+    } else if (error.graphQLErrors) {
+      const graphQLError = error.graphQLErrors[0];
+      processedError = new GraphQLClientError(graphQLError);
+    }
+  }
+  if (!processedError) {
     console.error(error);
     processedError = new UnhandledError(error);
   }
