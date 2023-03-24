@@ -251,14 +251,16 @@ export const ShowMenu = () => {
           >
             {t('menu.show.actions.delete')}
           </Button>
-          <Button
-            variant="outlined"
-            color="warning"
-            onClick={onPendenciesClickHandler}
-            disabled={loadingDelete}
-          >
-            {t('menu.show.actions.pendencies')}
-          </Button>
+          {data?.menu.mustDeferChanges && (
+            <Button
+              variant="outlined"
+              color="warning"
+              onClick={onPendenciesClickHandler}
+              disabled={loadingDelete}
+            >
+              {t('menu.show.actions.pendencies')}
+            </Button>
+          )}
         </Box>
         <Divider />
         <Box className="flex justify-center space-x-8">
