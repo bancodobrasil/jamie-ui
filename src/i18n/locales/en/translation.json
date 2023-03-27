@@ -141,6 +141,10 @@
           "UNKNOWN": {
             "title": "Unknown error (code: {{code}})",
             "message": "An unexpected problem has occurred."
+          },
+          "BAD_TEMPLATE_FORMAT": {
+            "title": "Invalid template format",
+            "message": "Check if the template is in the correct format."
           }
         }
       }
