@@ -102,6 +102,10 @@
             "title": "Unauthorized",
             "message": "You do not have permission to access this resource."
           },
+          "UNAUTHENTICATED": {
+            "title": "Unauthenticated",
+            "message": "You must be logged in to access this resource."
+          },
           "FORBIDDEN": {
             "title": "Forbidden",
             "message": "You do not have permission to access this resource."

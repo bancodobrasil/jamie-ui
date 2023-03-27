@@ -102,6 +102,10 @@
             "title": "Não autorizado",
             "message": "Você não tem permissão para acessar este recurso."
           },
+          "UNAUTHENTICATED": {
+            "title": "Não autenticado",
+            "message": "Você precisa fazer login para acessar este recurso."
+          },
           "FORBIDDEN": {
             "title": "Proibido",
             "message": "Você não tem permissão para acessar este recurso."
