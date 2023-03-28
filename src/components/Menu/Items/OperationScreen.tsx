@@ -509,6 +509,17 @@ export const OperationScreen = ({
           >
             {t('menu.preview.actions.title')}
           </Typography>
+          {!selected && (
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: 'error.main',
+                mb: '1rem',
+              }}
+            >
+              {t('menu.preview.errors.noItemSelected')}
+            </Typography>
+          )}
           <Box
             sx={{
               my: '2rem',

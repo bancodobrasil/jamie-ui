@@ -272,6 +272,9 @@
       },
       "buttons": {
         "selectParent": "Selecionar Item Pai"
+      },
+      "errors": {
+        "noItemSelected": "Nenhum item selecionado"
       }
     },
     "list": {

@@ -272,6 +272,9 @@
       },
       "buttons": {
         "selectParent": "Select Parent"
+      },
+      "errors": {
+        "noItemSelected": "No item selected"
       }
     },
     "list": {
