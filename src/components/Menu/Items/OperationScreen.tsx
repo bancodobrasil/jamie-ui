@@ -96,7 +96,7 @@ export const OperationScreen = ({
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
-  const handleUpdate = () => {
+  const handleUpdate = async (): Promise<void> => {
     const formatNodes = (nodes: INode[]) =>
       nodes
         .map(node => {
@@ -179,7 +179,7 @@ export const OperationScreen = ({
       };
     });
 
-    updateMenu({
+    await updateMenu({
       variables: { menu: { id: Number(id), items } },
       onCompleted: data => {
         dispatch({
@@ -189,17 +189,29 @@ export const OperationScreen = ({
             context: 'male',
           })}!`,
         });
+        switch (editingNode.action) {
+          case EnumInputAction.CREATE:
+          case EnumInputAction.DELETE:
+            setSelected('');
+            break;
+          case EnumInputAction.UPDATE:
+            setSelected(editingNode.id.toString());
+            break;
+        }
         setUpdatedMenu(data.updateMenu);
         setOperationScreen(EnumInputActionScreen.SELECTING_ACTION);
         setEditingNode(emptyEditingNode);
+        return Promise.resolve();
       },
       onError: error => {
         openDefaultErrorNotification(error, dispatch);
+        return Promise.reject();
       },
     });
+    return Promise.resolve();
   };
 
-  const handleInsertSubmit = (e: React.FormEvent) => {
+  const handleInsertSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -220,7 +232,11 @@ export const OperationScreen = ({
       return;
     }
 
-    handleUpdate();
+    try {
+      await handleUpdate();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
@@ -243,7 +259,22 @@ export const OperationScreen = ({
       setLabelError(tmpLabelError);
     }
 
-    handleUpdate();
+    try {
+      await handleUpdate();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      await handleUpdate();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleActionChange = React.useCallback(
@@ -491,6 +522,7 @@ export const OperationScreen = ({
               sx={{ color: 'green' }}
               variant="outlined"
               color="success"
+              disabled={!selected}
               onClick={() => handleActionChange(EnumInputActionScreen.INSERT)}
             >
               <AddIcon />
@@ -501,7 +533,7 @@ export const OperationScreen = ({
                   fontSize: '0.75rem',
                   lineHeight: '0.75rem',
                   letterSpacing: '0.18px',
-                  color: 'green',
+                  color: selected ? 'green' : 'grey',
                   ml: '0.5rem',
                 }}
               >
@@ -523,7 +555,7 @@ export const OperationScreen = ({
                   fontSize: '0.75rem',
                   lineHeight: '0.75rem',
                   letterSpacing: '0.18px',
-                  color: selected ? 'orange' : 'grey',
+                  color: selected && selected !== '0' ? 'orange' : 'grey',
                   ml: '0.5rem',
                 }}
               >
@@ -545,7 +577,7 @@ export const OperationScreen = ({
                   fontSize: '0.75rem',
                   lineHeight: '0.75rem',
                   letterSpacing: '0.18px',
-                  color: selected ? 'red' : 'grey',
+                  color: selected && selected !== '0' ? 'red' : 'grey',
                   ml: '0.5rem',
                 }}
               >
@@ -567,7 +599,7 @@ export const OperationScreen = ({
                 fontSize: '0.75rem',
                 lineHeight: '0.75rem',
                 letterSpacing: '0.18px',
-                color: 'black',
+                color: selected && selected !== '0' ? 'black' : 'grey',
                 ml: '0.5rem',
               }}
             >
@@ -1237,7 +1269,7 @@ export const OperationScreen = ({
               variant="contained"
               color="success"
               sx={{ mt: '2rem', mr: '1rem' }}
-              onClick={handleUpdate}
+              onClick={handleDeleteSubmit}
             >
               {t('buttons.save')}
             </Button>
