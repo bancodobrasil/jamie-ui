@@ -74,14 +74,16 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
     const fromTemplate = from || '';
     const templateDiff = codeDiff(fromTemplate, to);
     return (
-      <Accordion>
-        <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
-          {t('common.viewChanges')}
-        </AccordionSummary>
-        <AccordionDetails>
-          <CodeViewer code={templateDiff} language="handlebars" diff />
-        </AccordionDetails>
-      </Accordion>
+      <Box className="mt-2">
+        <Accordion>
+          <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
+            {t('common.viewChanges')}
+          </AccordionSummary>
+          <AccordionDetails>
+            <CodeViewer code={templateDiff} language="handlebars" diff />
+          </AccordionDetails>
+        </Accordion>
+      </Box>
     );
   };
 
