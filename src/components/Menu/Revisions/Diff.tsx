@@ -1,20 +1,58 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
+import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
+import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Link } from 'react-router-dom';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import { useTranslation } from 'react-i18next';
+import { codeDiff } from '../../../utils/diff/codeDiff';
+import CodeViewer from '../../CodeViewer';
 
 interface Props {
   id: string;
   diff: any;
   snapshot: any;
-  renderTemplateChanges?: (from: any, to: any, linkPath: string) => JSX.Element;
 }
 
-export const MenuRevisionsDiff = ({ id, diff, snapshot, renderTemplateChanges }: Props) => {
+const Accordion = styled((props: AccordionProps) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  '&:not(:last-child)': {
+    borderBottom: 0,
+  },
+  '&:before': {
+    display: 'none',
+  },
+}));
+
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, .05)' : 'rgba(0, 0, 0, .03)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: '1px solid rgba(0, 0, 0, .125)',
+}));
+
+export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
   const { t } = useTranslation();
 
-  const defaultRenderTemplateChanges = (from: any, to: any, linkPath: string) => {
+  const renderTemplateChanges = (from: any, to: any, linkPath: string) => {
     if (to === undefined || (from === undefined && to === null))
       return (
         <Typography variant="body1" component="p">
@@ -33,14 +71,19 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot, renderTemplateChanges }:
           {t('common.changed', { context: 'male' })}
         </Typography>
       );
+    const fromTemplate = from || '';
+    const templateDiff = codeDiff(fromTemplate, to);
     return (
-      <Typography variant="body1" component="span" sx={{ textDecorationLine: 'underline' }}>
-        <Link to={linkPath}>{t('common.viewChanges')}</Link>
-      </Typography>
+      <Accordion>
+        <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
+          {t('common.viewChanges')}
+        </AccordionSummary>
+        <AccordionDetails>
+          <CodeViewer code={templateDiff} language="handlebars" diff />
+        </AccordionDetails>
+      </Accordion>
     );
   };
-
-  renderTemplateChanges = renderTemplateChanges || defaultRenderTemplateChanges;
 
   const renderChanges = (from?: any, to?: any) => {
     if (to === undefined || (from === undefined && to === null) || from === to)
