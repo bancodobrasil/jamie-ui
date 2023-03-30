@@ -38,7 +38,7 @@ export const codeDiff = (oldCode: string, newCode: string): string => {
           break;
         }
       }
-      diff.push(`+ ${oldLines[i]}`);
+      diff.push(`+ ${newLines[i]}`);
       k = i + 1;
       for (let j = newIndex + 1; j < newLines.length; j++) {
         if (k >= oldLines.length) break;
