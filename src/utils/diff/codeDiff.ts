@@ -14,37 +14,48 @@ export const codeDiff = (oldCode: string, newCode: string): string => {
   let oldIndex = 0;
   let newIndex = 0;
   for (let i = 0; i < max; i++) {
-    if (i >= oldLines.length) {
-      for (let j = i; j < newLines.length; j++) {
+    if (!oldLines.length || i >= oldLines.length) {
+      for (let j = newIndex; j < newLines.length; j++) {
         diff.push(`+ ${newLines[j]}`);
       }
       break;
     } else if (i >= newLines.length) {
-      for (let j = i; j < oldLines.length; j++) {
+      for (let j = oldIndex; j < oldLines.length; j++) {
         diff.push(`- ${oldLines[j]}`);
       }
       break;
     }
     if (lineChanged(newIndex, oldIndex)) {
       diff.push(`- ${oldLines[i]}`);
+      let k = i + 1;
       for (let j = oldIndex + 1; j < oldLines.length; j++) {
-        if (lineChanged(i, j)) {
+        if (k >= newLines.length) break;
+        if (lineChanged(k, j)) {
           diff.push(`- ${oldLines[j]}`);
+          oldIndex = j;
+          k++;
+        } else {
+          break;
         }
-        oldIndex = j;
       }
+      diff.push(`+ ${oldLines[i]}`);
+      k = i + 1;
       for (let j = newIndex + 1; j < newLines.length; j++) {
-        if (lineChanged(j, i)) {
+        if (k >= oldLines.length) break;
+        if (lineChanged(j, k)) {
           diff.push(`+ ${newLines[j]}`);
+          oldIndex = j;
+          k++;
+        } else {
+          break;
         }
-        newIndex = j;
       }
       i = Math.max(oldIndex, newIndex);
     } else {
       diff.push(`  ${oldLines[i]}`);
     }
-    if (oldIndex >= oldLines.length - 1) oldIndex++;
-    if (newIndex >= newLines.length - 1) newIndex++;
+    if (oldIndex <= oldLines.length - 1) oldIndex++;
+    if (newIndex <= newLines.length - 1) newIndex++;
   }
   return diff.join('\n');
 };
