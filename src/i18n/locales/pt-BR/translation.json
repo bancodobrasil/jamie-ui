@@ -102,6 +102,10 @@
             "title": "Não autorizado",
             "message": "Você não tem permissão para acessar este recurso."
           },
+          "UNAUTHENTICATED": {
+            "title": "Não autenticado",
+            "message": "Você precisa fazer login para acessar este recurso."
+          },
           "FORBIDDEN": {
             "title": "Proibido",
             "message": "Você não tem permissão para acessar este recurso."
@@ -137,6 +141,10 @@
           "UNKNOWN": {
             "title": "Erro desconhecido (código: {{code}})",
             "message": "Ocorreu um problema inesperado."
+          },
+          "BAD_TEMPLATE_FORMAT": {
+            "title": "Formato de template inválido",
+            "message": "Verifique se o template está no formato correto."
           }
         }
       }
@@ -264,6 +272,9 @@
       },
       "buttons": {
         "selectParent": "Selecionar Item Pai"
+      },
+      "errors": {
+        "noItemSelected": "Nenhum item selecionado"
       }
     },
     "list": {

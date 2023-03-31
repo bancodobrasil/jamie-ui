@@ -29,12 +29,28 @@ export const AppRoutes = () => {
       keycloak.onTokenExpired = undefined;
     }
     keycloak.onTokenExpired = () => {
-      keycloak.updateToken(5);
+      keycloak
+        .updateToken(5)
+        .then(refreshed => {
+          if (refreshed) {
+            ApiClient.setup(keycloak.token);
+          }
+        })
+        .catch(() => {
+          ApiClient.setup(keycloak.token);
+        });
     };
     // Force refresh token
-    keycloak.updateToken(-1);
-    ApiClient.setup(keycloak.token);
-    setHasMounted(true);
+    keycloak
+      .updateToken(-1)
+      .then(refreshed => {
+        ApiClient.setup(keycloak.token);
+        setHasMounted(true);
+      })
+      .catch(() => {
+        ApiClient.setup(keycloak.token);
+        setHasMounted(true);
+      });
     return () => {
       if (keycloak) keycloak.onTokenExpired = undefined;
     };

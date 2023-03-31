@@ -9,9 +9,20 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { EnumInputAction, IMenu, IMenuPendency } from '../../../types';
 import CodeViewer from '../../CodeViewer';
 import { IUpdateMenuItemInput, IUpdateMenuMetaInput } from '../../../types/input';
+import { codeDiff } from '../../../utils/diff/codeDiff';
 
 const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPendency }) => {
   const { i18n, t } = useTranslation();
+
+  const templateDiff = React.useMemo(() => {
+    if (pendency.input.template) {
+      const oldTemplate =
+        menu.template ||
+        menu.defaultTemplate?.[pendency.input.templateFormat || menu.templateFormat];
+      return codeDiff(oldTemplate, pendency.input.template);
+    }
+    return '';
+  }, [menu, pendency]);
 
   const getActionColor = (action: EnumInputAction) => {
     switch (action) {
@@ -43,6 +54,18 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
     const order = item.order || menu.items.find(i => i.id === item.id)?.order || index + 1;
     const label = menu.items.find(i => i.id === item.id)?.label || item.label;
     const actionColor = getActionColor(item.action);
+    let templateDiff = '';
+    if (item.template) {
+      const oldItem = menu.items.find(i => i.id === item.id);
+      const oldTemplate =
+        oldItem.template ||
+        oldItem.defaultTemplate[
+          item.templateFormat || oldItem.templateFormat || menu.templateFormat
+        ];
+      if (oldTemplate) {
+        templateDiff = codeDiff(oldTemplate, item.template);
+      }
+    }
     return (
       <Box className="flex flex-col">
         <Box className="flex flex-row items-center min-w-fit">
@@ -101,7 +124,7 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
               <Typography>
                 <b>{t('menuItem.fields.template')}</b>:
               </Typography>
-              <CodeViewer code={item.template} language="handlebars" />
+              <CodeViewer code={templateDiff} language="handlebars" diff />
             </Box>
           )}
           {item.meta && Object.keys(item.meta).length > 0 && (
@@ -215,7 +238,7 @@ const PendencyChanges = ({ menu, pendency }: { menu: IMenu; pendency: IMenuPende
           <Typography>
             <b>{t('menu.fields.template')}</b>:
           </Typography>
-          <CodeViewer code={pendency.input.template} language="handlebars" />
+          <CodeViewer code={templateDiff} language="handlebars" diff />
         </Box>
       )}
       {pendency.input.meta && pendency.input.meta.length > 0 && (

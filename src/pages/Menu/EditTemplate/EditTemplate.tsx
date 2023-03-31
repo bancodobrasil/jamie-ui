@@ -180,10 +180,11 @@ export const EditTemplateMenu = () => {
         }
       },
       onError: error => {
+        openDefaultErrorNotification(error, dispatch);
         console.error(error);
       },
     });
-  }, [template, templateFormat, data, renderMenuTemplate]);
+  }, [template, templateFormat, data, renderMenuTemplate, dispatch]);
 
   const dracula = React.useMemo(
     () =>

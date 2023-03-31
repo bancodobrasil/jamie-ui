@@ -170,13 +170,14 @@ export const EditTemplateItems = () => {
           }
         },
         onError: error => {
+          openDefaultErrorNotification(error, dispatch);
           console.error(error);
         },
       });
     } catch (error) {
       console.error(error);
     }
-  }, [template, templateFormat, data, itemId, renderMenuItemTemplate]);
+  }, [template, templateFormat, data, itemId, renderMenuItemTemplate, dispatch]);
 
   const dracula = React.useMemo(
     () =>

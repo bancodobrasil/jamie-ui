@@ -15,8 +15,8 @@
   ],
   "plugins": [
     ["prismjs", {
-      "languages": ["json", "markup", "markup-templating", "handlebars"],
-      "plugins": ["line-numbers"],
+      "languages": ["json", "markup", "markup-templating", "handlebars", "diff"],
+      "plugins": ["line-numbers", "diff"],
       "css": true
     }]
   ]

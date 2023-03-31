@@ -102,6 +102,10 @@
             "title": "Unauthorized",
             "message": "You do not have permission to access this resource."
           },
+          "UNAUTHENTICATED": {
+            "title": "Unauthenticated",
+            "message": "You must be logged in to access this resource."
+          },
           "FORBIDDEN": {
             "title": "Forbidden",
             "message": "You do not have permission to access this resource."
@@ -137,6 +141,10 @@
           "UNKNOWN": {
             "title": "Unknown error (code: {{code}})",
             "message": "An unexpected problem has occurred."
+          },
+          "BAD_TEMPLATE_FORMAT": {
+            "title": "Invalid template format",
+            "message": "Check if the template is in the correct format."
           }
         }
       }
@@ -264,6 +272,9 @@
       },
       "buttons": {
         "selectParent": "Select Parent"
+      },
+      "errors": {
+        "noItemSelected": "No item selected"
       }
     },
     "list": {
