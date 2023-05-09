@@ -117,15 +117,20 @@ const RestoreRevision = () => {
         return { ...current, children: setUpdatedItems(current.children, item.children) };
       });
     const updatedItems = setUpdatedItems(snapshot.items, menu.items);
-    snapshot.items = [...(snapshot.items || []), ...(updatedItems || [])].filter(
-      (item, index, arr) => {
-        if (item === null) return true;
-        return arr.findIndex(i => i?.id === item.id) === index;
-      },
-    );
+
+    if (selectedRevision.createdAt > data.menu.currentRevision.createdAt) {
+      snapshot.items = [...(snapshot.items || []), ...(updatedItems || [])];
+    } else {
+      snapshot.items = [...(updatedItems || []), ...(snapshot.items || [])];
+    }
+
+    snapshot.items = snapshot.items.filter((item, index, arr) => {
+      if (item === null) return true;
+      return arr.findIndex(i => i?.id === item.id) === index;
+    });
     const diff = menuRevisionDiff(menu, snapshot);
     return diff;
-  }, [menu, selectedRevision, getChildren]);
+  }, [menu, selectedRevision, getChildren, data]);
 
   const renderMenuRevisions = () => {
     if (!data?.menu.revisions?.length) return null;

@@ -128,7 +128,8 @@ const CreateRevision = () => {
       });
     let currentItems = [...menu.items];
     const updatedItems = setUpdatedItems(snapshot.items, currentItems);
-    currentItems = [...(updatedItems || []), ...(currentItems || [])].filter((item, index, arr) => {
+    currentItems = [...(currentItems || []), ...(updatedItems || [])];
+    currentItems = currentItems.filter((item, index, arr) => {
       if (item === null) return true;
       return arr.findIndex(i => i?.id === item.id) === index;
     });
