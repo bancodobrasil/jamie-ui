@@ -346,7 +346,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
               break;
             }
             children = getChildren(parentId, items[i].children);
-            if (children) break;
+            if (children && children.length > 0) break;
           }
           return children || [];
         };
@@ -369,7 +369,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
           return (
             <Box className="flex flex-col my-2" key={index}>
               <Typography variant="h5" component="h5">
-                {to.order || from.order}. {to.label || from.label}
+                {to.order || from?.order}. {to.label || from?.label}
               </Typography>
               <Typography variant="body1" component="p" sx={{ ml: '1rem', color: 'success.main' }}>
                 {t('common.added', { context: 'male' })}
