@@ -24,21 +24,21 @@ server {
     access_log off;
   }
 
-  location /metrics {
-    resolver ${NGINX_EXPORTER_RESOLVER};
+  #location /metrics {
+  #  resolver ${NGINX_EXPORTER_RESOLVER};
+   
+  #  set $upstream_nginx_exporter ${NGINX_EXPORTER_URL};
 
-    set $upstream_nginx_exporter ${NGINX_EXPORTER_URL};
+  #  proxy_ssl_verify off;
+  #  proxy_pass $upstream_nginx_exporter;
 
-    proxy_ssl_verify off;
-    proxy_pass $upstream_nginx_exporter;
+  #  # Basic Auth
+  #  # jamie_ui:Jamie@2023
+  #  auth_basic "Restricted";
+  #  auth_basic_user_file /etc/nginx/.htpasswd;
 
-    # Basic Auth
-    # jamie_ui:Jamie@2023
-    auth_basic "Restricted";
-    auth_basic_user_file /etc/nginx/.htpasswd;
-
-    access_log off;
-  }
+  #  access_log off;
+  #}
 
   location / {
     try_files $uri $uri/ = /index.html;
