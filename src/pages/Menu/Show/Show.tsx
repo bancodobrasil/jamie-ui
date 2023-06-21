@@ -14,6 +14,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
+import { JAMIE_FEATURE_CONDITIONS } from '../../../constants';
 
 export const ShowMenu = () => {
   const { t, i18n } = useTranslation();
@@ -124,6 +125,21 @@ export const ShowMenu = () => {
         </Box>
       ));
   };
+
+  const renderHasConditions = () => {
+    if (!JAMIE_FEATURE_CONDITIONS) return null;
+    return (
+      <Box className="space-x-1.5 flex flex-row items-center">
+        <Typography variant="h5" component="h5" className="mb-2">
+          {t('menu.fields.hasConditions')}?
+        </Typography>
+        <Typography variant="body1" component="p">
+          <b>{data?.menu.hasConditions ? t('common.yes') : t('common.no')}</b>
+        </Typography>
+      </Box>
+    );
+  };
+
   if (loading) return <Loading />;
 
   if (error)
@@ -216,6 +232,7 @@ export const ShowMenu = () => {
             <b>{data?.menu.mustDeferChanges ? t('common.yes') : t('common.no')}</b>
           </Typography>
         </Box>
+        {renderHasConditions()}
       </Box>
       <Divider />
       <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
