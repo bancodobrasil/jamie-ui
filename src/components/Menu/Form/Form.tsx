@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
-import { MENU_VALIDATION } from '../../../constants';
+import { JAMIE_FEATURE_CONDITIONS, MENU_VALIDATION } from '../../../constants';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../types';
 import './styles.css';
 
@@ -429,6 +429,30 @@ export const MenuForm = ({
         )}
       </Draggable>
     ));
+
+  const renderHasConditionCheckbox = () => {
+    if (!JAMIE_FEATURE_CONDITIONS) return null;
+    return (
+      <Box sx={{ mt: '1rem' }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              id="hasConditions"
+              checked={hasConditions}
+              disabled={action === FormAction.UPDATE}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const { checked } = e.target;
+                setHasConditions(checked);
+              }}
+              color="primary"
+            />
+          }
+          label={`${t('menu.fields.hasConditions')}?`}
+        />
+      </Box>
+    );
+  };
+
   return (
     <Form onSubmit={handleFormSubmit}>
       <Box sx={{ flex: '0 1 auto', flexDirection: 'column' }}>
@@ -473,6 +497,7 @@ export const MenuForm = ({
             label={t('menu.fields.mustDeferChanges')}
           />
         </Box>
+        {renderHasConditionCheckbox()}
         <Typography variant="h3" sx={{ mt: '1rem' }}>
           {t('menu.fields.meta.title', { count: 2 })}
         </Typography>

@@ -201,6 +201,7 @@
     "fields": {
       "name": "Name",
       "mustDeferChanges": "Mandatory deferral",
+      "hasConditions": "Has Conditions",
       "items": "Items",
       "template": "Template",
       "templateFormat": {

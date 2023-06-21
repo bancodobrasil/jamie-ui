@@ -201,6 +201,7 @@
     "fields": {
       "name": "Nome",
       "mustDeferChanges": "Deferimento obrigatório",
+      "hasConditions": "Tem Condições",
       "items": "Itens",
       "template": "Template",
       "templateFormat": {
