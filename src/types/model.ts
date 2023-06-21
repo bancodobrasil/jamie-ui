@@ -23,6 +23,7 @@ export interface IMenu {
 
 export interface IMenuItem {
   id: number;
+  menuId?: number;
   label: string;
   order: number;
   meta: IMenuItemMeta;
@@ -40,7 +41,9 @@ export interface IMenuItem {
     [EnumTemplateFormat.XML]: string;
     [EnumTemplateFormat.PLAIN]: string;
   };
-  menuId?: number;
+  features?: string;
+  parameters?: string;
+  rules?: string;
   createdAt?: string;
   updatedAt?: string;
   version?: number;

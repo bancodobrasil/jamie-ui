@@ -487,6 +487,75 @@ export const OperationScreen = ({
       ));
   };
 
+  const renderConditions = () => {
+    if (!data.menu.hasConditions) return null;
+    return (
+      <Box sx={{ mt: '2rem', width: '100%' }}>
+        <Typography
+          variant="h3"
+          sx={{
+            fontWeight: 700,
+            fontSize: '2rem',
+            lineHeight: '2rem',
+            letterSpacing: '0.18px',
+            textAlign: 'center',
+            width: '100%',
+          }}
+        >
+          {t('menu.preview.conditions.title')}
+        </Typography>
+        <TextField
+          type="text"
+          label="Features"
+          multiline
+          minRows={3}
+          InputLabelProps={{ shrink: true }}
+          value={editingNode.features}
+          onChange={e => {
+            setLabelError('');
+            setEditingNode({ ...editingNode, features: e.target.value });
+          }}
+          sx={{
+            mt: '2rem',
+            width: '100%',
+          }}
+        />
+        <TextField
+          type="text"
+          label="Parameters"
+          multiline
+          minRows={3}
+          InputLabelProps={{ shrink: true }}
+          value={editingNode.parameters}
+          onChange={e => {
+            setLabelError('');
+            setEditingNode({ ...editingNode, parameters: e.target.value });
+          }}
+          sx={{
+            mt: '2rem',
+            width: '100%',
+          }}
+        />
+        <TextField
+          type="text"
+          label="Rules"
+          multiline
+          minRows={3}
+          InputLabelProps={{ shrink: true }}
+          value={editingNode.rules}
+          onChange={e => {
+            setLabelError('');
+            setEditingNode({ ...editingNode, rules: e.target.value });
+          }}
+          sx={{
+            mt: '2rem',
+            width: '100%',
+          }}
+        />
+      </Box>
+    );
+  };
+
   switch (operationScreen) {
     case EnumInputActionScreen.SELECTING_ACTION:
       return (
@@ -912,6 +981,7 @@ export const OperationScreen = ({
               <Divider sx={{ mt: '1.5rem' }} />
             </Box>
           )}
+          {renderConditions()}
           <Box
             sx={{
               display: 'flex',
