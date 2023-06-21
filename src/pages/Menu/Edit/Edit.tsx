@@ -35,6 +35,8 @@ export const EditMenu = () => {
 
   const [mustDeferChanges, setMustDeferChanges] = React.useState<boolean>(false);
 
+  const [hasConditions, setHasConditions] = React.useState<boolean>(false);
+
   const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
   const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
@@ -45,6 +47,7 @@ export const EditMenu = () => {
     if (loaded || !data) return;
     setName(data.menu.name);
     setMustDeferChanges(data.menu.mustDeferChanges);
+    setHasConditions(data.menu.hasConditions);
     setMetaWithErrors(
       data?.menu.meta
         .map(m => {
@@ -148,6 +151,8 @@ export const EditMenu = () => {
         setNameError={setNameError}
         mustDeferChanges={mustDeferChanges}
         setMustDeferChanges={setMustDeferChanges}
+        hasConditions={hasConditions}
+        setHasConditions={setHasConditions}
         meta={metaWithErrors}
         setMeta={setMetaWithErrors}
         loadingSubmit={loadingSubmit}

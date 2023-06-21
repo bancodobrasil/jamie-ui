@@ -6,6 +6,7 @@ export interface IMenu {
   id: number;
   name: string;
   mustDeferChanges: boolean;
+  hasConditions: boolean;
   meta: IMenuMeta[];
   items: IMenuItem[];
   template?: string;

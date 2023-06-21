@@ -59,6 +59,8 @@ interface Props {
   setMustDeferChanges: (mustDeferChanges: boolean) => void;
   meta: IMenuMetaWithErrors[];
   setMeta: (meta: IMenuMetaWithErrors[]) => void;
+  hasConditions: boolean;
+  setHasConditions: (hasConditions: boolean) => void;
   loadingSubmit: boolean;
   onSubmit: () => void;
   onBack: () => void;
@@ -74,6 +76,8 @@ export const MenuForm = ({
   setMustDeferChanges,
   meta,
   setMeta,
+  hasConditions,
+  setHasConditions,
   loadingSubmit,
   onSubmit,
   onBack,

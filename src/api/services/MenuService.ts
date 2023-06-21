@@ -4,6 +4,7 @@ export const ALL_MENU_PROPERTIES = `
 id
 name
 mustDeferChanges
+hasConditions
 createdAt
 updatedAt
 version
