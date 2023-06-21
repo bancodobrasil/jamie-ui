@@ -65,6 +65,9 @@ items {
   createdAt
   updatedAt
   version
+  features
+  parameters
+  rules
 }
 `;
 

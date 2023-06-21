@@ -111,6 +111,9 @@ export const OperationScreen = ({
             menuId,
             defaultTemplate,
             action,
+            features,
+            parameters,
+            rules,
             ...rest
           } = node;
           let meta = Object.keys(rest.meta).reduce((acc, key) => {
@@ -166,6 +169,9 @@ export const OperationScreen = ({
             startPublication,
             endPublication,
             meta,
+            features,
+            parameters,
+            rules,
             children: children && formatNodes(children),
             id: id === -1 ? undefined : id,
           };
@@ -491,19 +497,7 @@ export const OperationScreen = ({
     if (!data.menu.hasConditions) return null;
     return (
       <Box sx={{ mt: '2rem', width: '100%' }}>
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 700,
-            fontSize: '2rem',
-            lineHeight: '2rem',
-            letterSpacing: '0.18px',
-            textAlign: 'center',
-            width: '100%',
-          }}
-        >
-          {t('menu.preview.conditions.title')}
-        </Typography>
+        <Typography variant="h3">{t('menu.preview.inputs.conditions.title')}</Typography>
         <TextField
           type="text"
           label="Features"
@@ -1275,6 +1269,7 @@ export const OperationScreen = ({
               <Divider sx={{ mt: '1.5rem' }} />
             </Box>
           )}
+          {renderConditions()}
           <Box
             sx={{
               display: 'flex',
