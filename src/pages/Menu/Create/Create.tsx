@@ -32,6 +32,8 @@ export const CreateMenu = () => {
 
   const [hasConditions, setHasConditions] = React.useState<boolean>(false);
 
+  const [parameters, setParameters] = React.useState<string>();
+
   const [createMenu] = useMutation(MenuService.CREATE_MENU);
 
   const onBackClickHandler = () => {
@@ -48,7 +50,7 @@ export const CreateMenu = () => {
       return rest;
     });
     createMenu({
-      variables: { menu: { name, mustDeferChanges, meta, hasConditions } },
+      variables: { menu: { name, mustDeferChanges, meta, hasConditions, parameters } },
       onCompleted: data => {
         setLoadingSubmit(false);
         dispatch({
@@ -96,6 +98,8 @@ export const CreateMenu = () => {
         setMeta={setMetaWithErrors}
         hasConditions={hasConditions}
         setHasConditions={setHasConditions}
+        parameters={parameters}
+        setParameters={setParameters}
         loadingSubmit={loadingSubmit}
         onSubmit={onSubmit}
         onBack={onBackClickHandler}

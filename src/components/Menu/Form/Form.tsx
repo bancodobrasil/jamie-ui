@@ -61,6 +61,8 @@ interface Props {
   setMeta: (meta: IMenuMetaWithErrors[]) => void;
   hasConditions: boolean;
   setHasConditions: (hasConditions: boolean) => void;
+  parameters: string;
+  setParameters: (parameters: string) => void;
   loadingSubmit: boolean;
   onSubmit: () => void;
   onBack: () => void;
@@ -77,6 +79,8 @@ export const MenuForm = ({
   meta,
   setMeta,
   hasConditions,
+  parameters,
+  setParameters,
   setHasConditions,
   loadingSubmit,
   onSubmit,
