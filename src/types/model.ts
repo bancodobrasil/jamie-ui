@@ -7,6 +7,7 @@ export interface IMenu {
   name: string;
   mustDeferChanges: boolean;
   hasConditions: boolean;
+  parameters?: string;
   meta: IMenuMeta[];
   items: IMenuItem[];
   template?: string;
@@ -41,8 +42,6 @@ export interface IMenuItem {
     [EnumTemplateFormat.XML]: string;
     [EnumTemplateFormat.PLAIN]: string;
   };
-  features?: string;
-  parameters?: string;
   rules?: string;
   createdAt?: string;
   updatedAt?: string;

@@ -111,8 +111,6 @@ export const OperationScreen = ({
             menuId,
             defaultTemplate,
             action,
-            features,
-            parameters,
             rules,
             ...rest
           } = node;
@@ -169,8 +167,6 @@ export const OperationScreen = ({
             startPublication,
             endPublication,
             meta,
-            features,
-            parameters,
             rules,
             children: children && formatNodes(children),
             id: id === -1 ? undefined : id,
@@ -498,38 +494,6 @@ export const OperationScreen = ({
     return (
       <Box sx={{ mt: '2rem', width: '100%' }}>
         <Typography variant="h3">{t('menu.preview.inputs.conditions.title')}</Typography>
-        <TextField
-          type="text"
-          label="Features"
-          multiline
-          minRows={3}
-          InputLabelProps={{ shrink: true }}
-          value={editingNode.features}
-          onChange={e => {
-            setLabelError('');
-            setEditingNode({ ...editingNode, features: e.target.value });
-          }}
-          sx={{
-            mt: '2rem',
-            width: '100%',
-          }}
-        />
-        <TextField
-          type="text"
-          label="Parameters"
-          multiline
-          minRows={3}
-          InputLabelProps={{ shrink: true }}
-          value={editingNode.parameters}
-          onChange={e => {
-            setLabelError('');
-            setEditingNode({ ...editingNode, parameters: e.target.value });
-          }}
-          sx={{
-            mt: '2rem',
-            width: '100%',
-          }}
-        />
         <TextField
           type="text"
           label="Rules"

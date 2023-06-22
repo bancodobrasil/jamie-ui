@@ -5,6 +5,7 @@ id
 name
 mustDeferChanges
 hasConditions
+parameters
 createdAt
 updatedAt
 version
@@ -65,8 +66,6 @@ items {
   createdAt
   updatedAt
   version
-  features
-  parameters
   rules
 }
 `;
