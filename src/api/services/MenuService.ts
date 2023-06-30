@@ -4,6 +4,8 @@ export const ALL_MENU_PROPERTIES = `
 id
 name
 mustDeferChanges
+hasConditions
+parameters
 createdAt
 updatedAt
 version
@@ -64,6 +66,7 @@ items {
   createdAt
   updatedAt
   version
+  rules
 }
 `;
 

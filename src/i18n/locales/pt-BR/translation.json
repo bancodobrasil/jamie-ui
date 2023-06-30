@@ -201,6 +201,7 @@
     "fields": {
       "name": "Nome",
       "mustDeferChanges": "Deferimento obrigatório",
+      "hasConditions": "Tem Condições",
       "items": "Itens",
       "template": "Template",
       "templateFormat": {
@@ -268,6 +269,9 @@
         },
         "meta": {
           "placeholder": "Digite o valor do {{meta}}..."
+        },
+        "conditions": {
+          "title": "Condições"
         }
       },
       "buttons": {

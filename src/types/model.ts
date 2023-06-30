@@ -6,6 +6,8 @@ export interface IMenu {
   id: number;
   name: string;
   mustDeferChanges: boolean;
+  hasConditions: boolean;
+  parameters?: string;
   meta: IMenuMeta[];
   items: IMenuItem[];
   template?: string;
@@ -22,6 +24,7 @@ export interface IMenu {
 
 export interface IMenuItem {
   id: number;
+  menuId?: number;
   label: string;
   order: number;
   meta: IMenuItemMeta;
@@ -39,7 +42,7 @@ export interface IMenuItem {
     [EnumTemplateFormat.XML]: string;
     [EnumTemplateFormat.PLAIN]: string;
   };
-  menuId?: number;
+  rules?: string;
   createdAt?: string;
   updatedAt?: string;
   version?: number;

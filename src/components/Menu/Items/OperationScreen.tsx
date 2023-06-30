@@ -111,6 +111,7 @@ export const OperationScreen = ({
             menuId,
             defaultTemplate,
             action,
+            rules,
             ...rest
           } = node;
           let meta = Object.keys(rest.meta).reduce((acc, key) => {
@@ -166,6 +167,7 @@ export const OperationScreen = ({
             startPublication,
             endPublication,
             meta,
+            rules,
             children: children && formatNodes(children),
             id: id === -1 ? undefined : id,
           };
@@ -485,6 +487,31 @@ export const OperationScreen = ({
           {renderInput(meta)}
         </Box>
       ));
+  };
+
+  const renderConditions = () => {
+    if (!data.menu.hasConditions) return null;
+    return (
+      <Box sx={{ mt: '2rem', width: '100%' }}>
+        <Typography variant="h3">{t('menu.preview.inputs.conditions.title')}</Typography>
+        <TextField
+          type="text"
+          label="Rules"
+          multiline
+          minRows={3}
+          InputLabelProps={{ shrink: true }}
+          value={editingNode.rules}
+          onChange={e => {
+            setLabelError('');
+            setEditingNode({ ...editingNode, rules: e.target.value });
+          }}
+          sx={{
+            mt: '2rem',
+            width: '100%',
+          }}
+        />
+      </Box>
+    );
   };
 
   switch (operationScreen) {
@@ -912,6 +939,7 @@ export const OperationScreen = ({
               <Divider sx={{ mt: '1.5rem' }} />
             </Box>
           )}
+          {renderConditions()}
           <Box
             sx={{
               display: 'flex',
@@ -1205,6 +1233,7 @@ export const OperationScreen = ({
               <Divider sx={{ mt: '1.5rem' }} />
             </Box>
           )}
+          {renderConditions()}
           <Box
             sx={{
               display: 'flex',

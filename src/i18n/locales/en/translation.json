@@ -201,6 +201,7 @@
     "fields": {
       "name": "Name",
       "mustDeferChanges": "Mandatory deferral",
+      "hasConditions": "Has Conditions",
       "items": "Items",
       "template": "Template",
       "templateFormat": {
@@ -268,6 +269,9 @@
         },
         "meta": {
           "placeholder": "Enter the menu item's {{meta}}..."
+        },
+        "conditions": {
+          "title": "Conditions"
         }
       },
       "buttons": {
