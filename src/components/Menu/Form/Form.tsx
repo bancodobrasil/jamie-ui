@@ -79,9 +79,9 @@ export const MenuForm = ({
   meta,
   setMeta,
   hasConditions,
+  setHasConditions,
   parameters,
   setParameters,
-  setHasConditions,
   loadingSubmit,
   onSubmit,
   onBack,
@@ -457,6 +457,28 @@ export const MenuForm = ({
     );
   };
 
+  const renderParameters = () => {
+    if (!hasConditions) return null;
+    return (
+      <TextField
+        id="parameters"
+        label="Parameters"
+        multiline
+        minRows={3}
+        value={parameters}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const { value } = e.target;
+          setParameters(value);
+        }}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        sx={{ width: '16rem' }}
+        className="bg-white"
+      />
+    );
+  };
+
   return (
     <Form onSubmit={handleFormSubmit}>
       <Box sx={{ flex: '0 1 auto', flexDirection: 'column' }}>
@@ -502,6 +524,7 @@ export const MenuForm = ({
           />
         </Box>
         {renderHasConditionCheckbox()}
+        {renderParameters()}
         <Typography variant="h3" sx={{ mt: '1rem' }}>
           {t('menu.fields.meta.title', { count: 2 })}
         </Typography>
