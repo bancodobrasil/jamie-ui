@@ -149,7 +149,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
   };
 
   const renderMeta = () => {
-    if (!diff?.meta)
+    if (!diff?.meta || Object.keys(diff.meta).length === 0)
       return (
         <Typography variant="body1" component="p">
           {t('common.noChanges')}
@@ -273,6 +273,7 @@ export const MenuRevisionsDiff = ({ id, diff, snapshot }: Props) => {
         );
       }
       if (field === 'meta') {
+        if (!to[field] || Object.keys(to[field]).length === 0) return null;
         return (
           <Box className="flex flex-col my-1 ml-4" key={field}>
             <Typography variant="body1" component="span">

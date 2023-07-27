@@ -355,7 +355,8 @@
       },
       "enabled": "Habilitado",
       "startPublication": "Data de Início de Publicação",
-      "endPublication": "Data de Fim de Publicação"
+      "endPublication": "Data de Fim de Publicação",
+      "rules": "Condições"
     },
     "editTemplate": {
       "title": "Editar Template",
