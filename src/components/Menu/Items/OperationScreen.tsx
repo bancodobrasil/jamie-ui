@@ -114,19 +114,22 @@ export const OperationScreen = ({
             rules,
             ...rest
           } = node;
-          let meta = Object.keys(rest.meta).reduce((acc, key) => {
-            const name = data.menu.meta.find(meta => meta.id === Number(key))?.name || key;
-            const meta = rest.meta[key];
-            const originalMeta = original?.meta[key] || original?.meta[name];
-            if (meta == null || meta === '' || meta === originalMeta) {
-              return acc;
-            }
-            return {
-              ...acc,
-              [name]: meta,
-            };
-          }, {});
-          if (Object.keys(meta).length === 0) meta = undefined;
+          let meta;
+          if (rest.meta) {
+            meta = Object.keys(rest.meta).reduce((acc, key) => {
+              const name = data.menu.meta.find(meta => meta.id === Number(key))?.name || key;
+              const meta = rest.meta[key];
+              const originalMeta = original?.meta[key] || original?.meta[name];
+              if (meta == null || meta === '' || meta === originalMeta) {
+                return acc;
+              }
+              return {
+                ...acc,
+                [name]: meta,
+              };
+            }, {});
+            if (Object.keys(meta).length === 0) meta = undefined;
+          }
           let startPublication;
           if (rest.startPublication) {
             if (
@@ -930,7 +933,7 @@ export const OperationScreen = ({
             </LocalizationProvider>
           </Box>
           <Divider sx={{ mt: '2rem' }} />
-          {data?.menu.meta?.length && (
+          {data?.menu.meta?.length > 0 && (
             <Box sx={{ mt: '1.5rem' }}>
               <Typography variant="h3">
                 {t('menu.fields.meta.title', { count: data.menu.meta.length })}
@@ -1224,7 +1227,7 @@ export const OperationScreen = ({
             </LocalizationProvider>
           </Box>
           <Divider sx={{ mt: '2rem' }} />
-          {data?.menu.meta?.length && (
+          {data?.menu.meta?.length > 0 && (
             <Box sx={{ mt: '1.5rem' }}>
               <Typography variant="h3">
                 {t('menu.fields.meta.title', { count: data.menu.meta.length })}
