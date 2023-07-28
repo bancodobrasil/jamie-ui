@@ -933,7 +933,7 @@ export const OperationScreen = ({
             </LocalizationProvider>
           </Box>
           <Divider sx={{ mt: '2rem' }} />
-          {data?.menu.meta?.length && (
+          {data?.menu.meta?.length > 0 && (
             <Box sx={{ mt: '1.5rem' }}>
               <Typography variant="h3">
                 {t('menu.fields.meta.title', { count: data.menu.meta.length })}
@@ -1227,7 +1227,7 @@ export const OperationScreen = ({
             </LocalizationProvider>
           </Box>
           <Divider sx={{ mt: '2rem' }} />
-          {data?.menu.meta?.length && (
+          {data?.menu.meta?.length > 0 && (
             <Box sx={{ mt: '1.5rem' }}>
               <Typography variant="h3">
                 {t('menu.fields.meta.title', { count: data.menu.meta.length })}
