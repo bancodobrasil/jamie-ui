@@ -136,7 +136,7 @@ Preencha os campos com os seguintes dados:
 No menu lateral, cliente en **Users**, em seguida clique em **Add user**, como na imagem a seguir:
 
 
-![Tela inicial Keycloa](img/users.png)
+![Tela inicial Keycloak](img/users.png)
 
 Em **Username** digite um nome de usuário que você deseja, e habilite **Email verified**, não é necessário adicionar seu e-mail, apenas se você quiser.
 

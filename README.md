@@ -78,3 +78,88 @@ Fill in the fields with the following data:
     **Enable(ON)**:
     - Standard Flow
     - Direct Access Grants
+
+### Jamie API Client Configuration
+
+Fill in the fields with the following data:
+
+1. **Client ID**: jamie-api
+
+2. Under **ACCESS Settings**, input:
+    - **Root URL**: 
+        - http://localhost:3001/*
+
+    - **Home URL**: 
+        - http://localhost:3001/*
+
+    - **Admin URL**:    
+        - http://localhost:3001
+
+3. In **Capability Config**,
+
+    **Enable(ON)**:
+    - Client Authentication
+    - Authorization
+    
+    **Uncheck**:
+    - Standard Flow
+    - Direct Access Grants
+
+### Realm Roles Configuration
+
+Now, we need to configure the Realm Roles. We will create 4 realm roles (reader, editor, manager, admin [optional]). In the side menu, click on **Realm Roles**, which will open a screen similar to the one below. Then, click on **Create Role**.
+
+![Realm Role](img/realm-roles.png)
+
+Fill in the fields with the following data:
+
+#### Reader
+1. **Role name**: reader
+2. Save
+
+#### Editor
+1. **Role name**: editor
+2. Under **Action**, click **Add associated roles**, then click on the `reader` role we created, and click **Assign**
+3. Save
+
+#### Manager
+1. **Role name**: editor
+2. Under **Action**, click **Add associated roles**, then click on the `reader` and `editor` roles we created, and click **Assign**
+3. Save
+
+#### Admin
+1. **Role name**: editor
+2. Under **Action**, click **Add associated roles**, then click on the `reader`, `editor`, and `manager` roles we created, and click **Assign**
+3. Save
+
+### User Configuration
+
+On the side menu, click on **Users**, then click on **Add user**, as shown in the following image:
+
+![Tela inicial Keycloak](img/users.png)
+
+In **Username**, enter a username of your choice, and enable **Email verified**. Adding your email is optional.
+
+Next, click on **Credentials** and then **Set password**.
+
+![Set Password](img/set-password.png)
+
+Enter the password and password confirmation, and disable the **Temporary** field. Then, click on **Role mapping**, located next to **Credentials**. After that, click on `admin` and then **Assign**.
+
+This way, when you log into Jamie, you will need to enter the username and password you have set up.
+
+### Environment Configuration
+
+Next, make a copy of the `.env.development` file, renaming it to just `.env`. Configure the `JAMIE_API_BASE_URL` variable as follows:
+
+```
+JAMIE_API_BASE_URL=http://localhost:5000
+```
+
+### Jamie API
+
+Next, follow the instructions in the [Jamie API README](https://github.com/bancodobrasil/jamie-api) to proceed.
+
+## Running 
+
+Now that everything is set up, simply open your Jamie UI project's terminal and type `yarn start`. This will load the page locally at `localhost:3000`.
