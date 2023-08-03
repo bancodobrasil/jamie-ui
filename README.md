@@ -124,9 +124,22 @@ Preencha os campos com os seguintes dados:
 3. Salve
 
 
+### Configuração de Usuário
+
+No menu lateral, cliente en **Users**, em seguida clique em **Add user**, como na imagem a seguir:
 
 
+![Tela inicial Keycloa](img/users.png)
 
+Em **Username** digite um nome de usuário que você deseja, e habilite **Email verified**, não é necessário adicionar seu e-mail, apenas se você quiser.
+
+Em seguida, clique em **Credentials** e **Set password**.
+
+![Set Password](img/set-password.png)
+
+Preencha a senha e a confirmação da senha e desabilite o campo de **Temporary**. Em seguida, clique em **Role mapping**, que está ao lado de **Credencials**. Em seguida clique em `admin` e em **Assign**.
+
+Com isso, quando entrar no Jamie será necessário colocar o usuário e a senha que você cadastrou.
 
 
 ------
