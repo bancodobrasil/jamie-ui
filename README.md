@@ -96,6 +96,35 @@ Preencha os campos com os seguintes dados:
     - Standart flow
     - Direct aceess grants
 
+### Configuração Realm Roles
+
+Agora precisaremos configurar os Realm Roles, serão criados 4 realms roles (reader, editor, manager, admin [opcional]). No menu lateral clique em **Realm Roles**, em seguida abrirá uma tela semelhante a seguir, e clique em **Create Role**.
+
+![Realm Role](img/realm-roles.png)
+
+Preencha os campos com os seguintes dados:
+
+#### Reader
+1. **Role name**: reader
+2. Salve
+
+#### Editor
+1. **Role name**: editor
+2. Em **Action** clique em **Add associated roles**, em seguida clique no role do `reader`, que criamos, e em **Assing**
+3. Salve
+
+#### Manager
+1. **Role name**: editor
+2. Em **Action** clique em **Add associated roles**, em seguida clique no role do `reader` e `editor`, que criamos, e em **Assing**
+3. Salve
+
+#### Admin
+1. **Role name**: editor
+2. Em **Action** clique em **Add associated roles**, em seguida clique no role do `reader`, `editor` e `manager`, que criamos, e em **Assing**
+3. Salve
+
+
+
 
 
 
