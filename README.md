@@ -36,18 +36,67 @@ Em seguida no menu lateral clique em **Clients** e abrirá uma tela semelhante a
 
 ![Tela inicial Keycloa](img/clients-menu.png)
 
-Clique em **Create Client**, iremos criar dois clientes, um para a UI e outro para API.
+Clique em **Create Client**, iremos criar dois clientes, um para a Jamie UI e outro para Jamie API.
 
-### Jamie UI
+### Configuração Client Jamie UI
 Preencha os campos com os seguintes dados:
  
-- **Client ID**: jamie
+1. **Client ID**: jamie
 
-- **Name**: Jamie UI
+2. **Name**: Jamie UI
 
-Em **ACCESS Settings** coloque:
-- **Valid Redirect URIs**: http://localhost:80/* http://localhost:3000/*
-http://localhost/*
+3. Em **ACCESS Settings** coloque:
+    - **Valid Redirect URIs**: 
+        - http://localhost:80/* 
+        - http://localhost:3000/*
+        - http://localhost/*
+
+    - **Valid post logout redurect URIs**: 
+        - http://localhost:80/* 
+        - http://localhost:3000/*
+        - http://localhost/*
+
+    - **Web origins**: 
+        - http://localhost:80
+        - http://localhost:3000
+        - http://localhost
+
+4. Em **Capability config**
+
+    **Desmarque**:
+    - Client authentication
+    - Authorization
+    
+    **Habilite(ON)**:
+    - Standart flow
+    - Direct aceess grants
+
+### Configuração Client Jamie API
+Preencha os campos com os seguintes dados:
+ 
+1. **Client ID**: jamie-api
+
+2. Em **ACCESS Settings** coloque:
+    - **Root URL**: 
+        - http://localhost:3001/*
+
+    - **Home URL**: 
+        - http://localhost:3001/*
+
+    - **Admin URL**:    
+        - http://localhost:3001
+
+3. Em **Capability config**
+
+    **Habilite(ON)**:
+    - Client authentication
+    - Authorization
+    
+    **Desmarque**:
+    - Standart flow
+    - Direct aceess grants
+
+
 
 
 
