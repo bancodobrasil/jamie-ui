@@ -141,8 +141,24 @@ Preencha a senha e a confirmação da senha e desabilite o campo de **Temporary*
 
 Com isso, quando entrar no Jamie será necessário colocar o usuário e a senha que você cadastrou.
 
+### Configuração de Ambiente
 
-------
+Em seguida faça uma cópia do arquivo `.env.development`, deixando ele apenas ficar com o nome de `.env`. Configure a variável `JAMIE_API_BASE_URL` semelhante a seguir:
+
+    JAMIE_API_BASE_URL=http://localhost:5000
+
+
+### Jamie API
+
+Em seguida, faça os processos do README do [Jamie API](https://github.com/bancodobrasil/jamie-api).
+
+
+### Executando 
+
+Agora temos tudo configurado, basta entrar no terminal do projeto do Jamie UI e digitar `yarn start` ele carregará a página localmente em `localhost:3000`.
+
+
+<!--- 
 - subir docker compose do jamie ui
 `docker compose up -d`
 
@@ -167,9 +183,6 @@ Com isso, quando entrar no Jamie será necessário colocar o usuário e a senha 
         JAMIE_API_BASE_URL=http://localhost:5000
 
 - subir jamie-api
-<!-- colocar link do github do jamie api -->
+<!-- colocar link do github do jamie api 
 `docker compose up -d`
-
--
-
- <!-- A seguir, para rodar o projeto digite `yarn start` ele carregará a página localmente em `localhost:3000`.-->
+--->
