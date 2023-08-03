@@ -27,17 +27,21 @@ Após terem sido baixadas todas as dependências, será necessário configurar o
 Clique em `Administration Console`, abrirá uma tela de login, digite na tela
 username: `admin` e password: `admin`. Se iniciará uma tela semelhante a a seguir:
 
+    Username: admin
+    Password: admin
+
+
 ![Tela inicial Keycloa](img/keycloak-logado.png)
 
 Após isso, você precisará criar o `realm`. Para fazer isso, clique na área demarcada em vermelho na imagem. Sob a seção "Master", você encontrará a opção para criar um novo Realm. Ao abrir essa opção, a tela apresentará:
 
-![Tela inicial Keycloa](img/criando-realm.png)
+![Criando Realm](img/criando-realm.png)
 
 Em **Realm name** digite `jamie`, em seguida clique em create. Na tela inicil do keycloak, no mesmo lugar em que foi clicado para criar um Realm aparecerá o Realm jamie que acabamos de criar, entre nele. 
 
 Em seguida no menu lateral clique em **Clients** e abrirá uma tela semelhante a seguir:
 
-![Tela inicial Keycloa](img/clients-menu.png)
+![Tela inicial Keycloak](img/clients-menu.png)
 
 Clique em **Create Client**, iremos criar dois clientes, um para a Jamie UI e outro para Jamie API.
 
