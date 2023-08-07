@@ -1,4 +1,6 @@
-# Jamie UI [![About_en](https://github.com/yammadev/flag-icons/blob/master/png/BR.png?raw=true)](https://github.com/bancodobrasil/jamie-ui/blob/develop/README-PTBR.md)
+# Jamie UI 
+
+README in Portuguese here [![About_en](https://github.com/yammadev/flag-icons/blob/master/png/BR.png?raw=true)](https://github.com/bancodobrasil/jamie-ui/blob/develop/README-PTBR.md) !
 
 ## Dependencies
 
