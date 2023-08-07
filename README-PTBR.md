@@ -1,7 +1,5 @@
 # Jamie UI 
 
-README em Inglês aqui  [![About_en](https://github.com/yammadev/flag-icons/blob/master/png/US.png?raw=true)](https://github.com/bancodobrasil/jamie-ui/blob/develop/README.md) !
-
 ## Dependências
 
 Para executar o projeto Jamie UI em sua máquina, é necessário configurar algumas dependências. Certifique-se de que você possui os seguintes pré-requisitos:
