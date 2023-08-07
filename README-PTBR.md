@@ -1,6 +1,6 @@
 # Jamie UI 
 
-Leia em Inglês aqui  [![About_en](https://github.com/yammadev/flag-icons/blob/master/png/US.png?raw=true)](https://github.com/bancodobrasil/jamie-ui/blob/develop/README.md) !
+README em Inglês aqui  [![About_en](https://github.com/yammadev/flag-icons/blob/master/png/US.png?raw=true)](https://github.com/bancodobrasil/jamie-ui/blob/develop/README.md) !
 
 ## Dependências
 
