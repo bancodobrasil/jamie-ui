@@ -8,7 +8,7 @@ import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
-import { MenuForm } from '../../../components/Menu/Form';
+import { FormBasicInfo } from '../../../components/Menu/Forms/BasicInfo';
 import {
   ActionTypes,
   NotificationContext,
@@ -149,7 +149,7 @@ export const EditMenu = () => {
         </Typography>
         <Divider />
       </Box>
-      <MenuForm
+      <FormBasicInfo
         name={name}
         setName={setName}
         nameError={nameError}

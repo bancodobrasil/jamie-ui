@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
-import { MenuForm } from '../../../components/Menu/Form';
+import { FormBasicInfo } from '../../../components/Menu/Forms/BasicInfo';
 import {
   ActionTypes,
   NotificationContext,
@@ -87,7 +87,7 @@ export const CreateMenu = () => {
         </Typography>
         <Divider />
       </Box>
-      <MenuForm
+      <FormBasicInfo
         name={name}
         setName={setName}
         nameError={nameError}

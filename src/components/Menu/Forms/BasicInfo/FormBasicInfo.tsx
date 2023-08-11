@@ -26,8 +26,8 @@ import { useTranslation } from 'react-i18next';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
-import { JAMIE_FEATURE_CONDITIONS, MENU_VALIDATION } from '../../../constants';
-import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../types';
+import { JAMIE_FEATURE_CONDITIONS, MENU_VALIDATION } from '../../../../constants';
+import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import './styles.css';
 
 const Form = styled('form')({
@@ -69,7 +69,7 @@ interface Props {
   action: FormAction;
 }
 
-export const MenuForm = ({
+export const FormBasicInfo = ({
   name,
   setName,
   nameError,
