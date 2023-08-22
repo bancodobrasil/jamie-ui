@@ -160,8 +160,6 @@ export const EditMenu = () => {
         setHasConditions={setHasConditions}
         parameters={parameters}
         setParameters={setParameters}
-        meta={metaWithErrors}
-        setMeta={setMetaWithErrors}
         loadingSubmit={loadingSubmit}
         onSubmit={onSubmit}
         onBack={onBackClickHandler}

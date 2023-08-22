@@ -12,7 +12,7 @@ import {
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
-import { FormAction, IMenuMetaWithErrors } from '../../../types';
+import { FormAction } from '../../../types';
 
 export const CreateMenu = () => {
   const { t } = useTranslation();
@@ -25,8 +25,6 @@ export const CreateMenu = () => {
   const [nameError, setNameError] = React.useState<string>('');
 
   const [mustDeferChanges, setMustDeferChanges] = React.useState<boolean>(false);
-
-  const [metaWithErrors, setMetaWithErrors] = React.useState<IMenuMetaWithErrors[]>([]);
 
   const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
 
@@ -42,15 +40,8 @@ export const CreateMenu = () => {
 
   const onSubmit = () => {
     setLoadingSubmit(true);
-    const meta = metaWithErrors.map(m => {
-      const { errors, ...rest } = m;
-      rest.defaultValue === '' && delete rest.defaultValue;
-      rest.id && delete rest.id;
-      rest.action && delete rest.action;
-      return rest;
-    });
     createMenu({
-      variables: { menu: { name, mustDeferChanges, meta, hasConditions, parameters } },
+      variables: { menu: { name, mustDeferChanges, hasConditions, parameters } },
       onCompleted: data => {
         setLoadingSubmit(false);
         dispatch({
@@ -94,8 +85,6 @@ export const CreateMenu = () => {
         setNameError={setNameError}
         mustDeferChanges={mustDeferChanges}
         setMustDeferChanges={setMustDeferChanges}
-        meta={metaWithErrors}
-        setMeta={setMetaWithErrors}
         hasConditions={hasConditions}
         setHasConditions={setHasConditions}
         parameters={parameters}
