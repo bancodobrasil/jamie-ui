@@ -21,10 +21,10 @@ import { FormAttributes } from '../../../components/Menu/Forms/Attributes/FormAt
 import { ItemsPreview } from '../Items';
 import { EditTemplateMenu } from '../EditTemplate';
 
-const TAB_BASIC_INFO = '1';
-const TAB_ITEMS = '2';
-const TAB_ATTRIBUTES = '3';
-const TAB_TEMPLATE = '4';
+export const TAB_BASIC_INFO = '1';
+export const TAB_ITEMS = '2';
+export const TAB_ATTRIBUTES = '3';
+export const TAB_TEMPLATE = '4';
 
 export const EditMenu = () => {
   const { t } = useTranslation();
@@ -147,7 +147,7 @@ export const EditMenu = () => {
   if (loading || !loaded) return <Loading />;
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box data-testid="menu-edit" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Helmet>
         <title>{t('menu.edit.title')}</title>
       </Helmet>
@@ -173,10 +173,22 @@ export const EditMenu = () => {
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={onTabChange} aria-label="Menu tabs">
-              <Tab label={t('menu.edit.tabs.basicInfo')} value={TAB_BASIC_INFO} />
-              <Tab label={t('menu.edit.tabs.items')} value={TAB_ITEMS} />
-              <Tab label={t('menu.edit.tabs.attributes')} value={TAB_ATTRIBUTES} />
-              <Tab label={t('menu.edit.tabs.template')} value={TAB_TEMPLATE} />
+              <Tab
+                data-testid={TAB_BASIC_INFO}
+                label={t('menu.edit.tabs.basicInfo')}
+                value={TAB_BASIC_INFO}
+              />
+              <Tab data-testid={TAB_ITEMS} label={t('menu.edit.tabs.items')} value={TAB_ITEMS} />
+              <Tab
+                data-testid={TAB_ATTRIBUTES}
+                label={t('menu.edit.tabs.attributes')}
+                value={TAB_ATTRIBUTES}
+              />
+              <Tab
+                data-testid={TAB_TEMPLATE}
+                label={t('menu.edit.tabs.template')}
+                value={TAB_TEMPLATE}
+              />
             </TabList>
           </Box>
           <TabPanel value={TAB_BASIC_INFO}>
