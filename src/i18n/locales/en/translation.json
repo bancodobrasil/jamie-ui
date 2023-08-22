@@ -304,6 +304,12 @@
           "type": "Enter the menu metadata's type...",
           "defaultValue": "Enter the menu metadata's default value..."
         }
+      },
+      "tabs": {
+        "basicInfo": "Basic Info",
+        "items": "Menu Items",
+        "attributes": "Metadata",
+        "template": "Template"
       }
     },
     "show": {

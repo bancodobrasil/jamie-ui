@@ -304,6 +304,12 @@
           "type": "Digite o tipo do metadado...",
           "defaultValue": "Digite o valor padrão do metadado..."
         }
+      },
+      "tabs": {
+        "basicInfo": "Informações Básicas",
+        "items": "Itens do Menu",
+        "attributes": "Atributos",
+        "template": "Template"
       }
     },
     "show": {
