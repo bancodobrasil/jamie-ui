@@ -2,13 +2,12 @@ import React from 'react';
 import { Box, Button, FormControl, Link, MenuItem, Select, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import { draculaInit } from '@uiw/codemirror-theme-dracula';
 import { tags } from '@lezer/highlight';
 import { jsonHandlebars } from '../../../utils/codemirror/json';
 import { xmlHandlebars } from '../../../utils/codemirror/xml';
-import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import MenuService from '../../../api/services/MenuService';
 import Loading from '../../../components/Loading';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
@@ -24,8 +23,6 @@ export const EditTemplateMenu = () => {
   const { dispatch } = React.useContext(NotificationContext);
 
   const { id } = useParams();
-
-  const navigate = useNavigate();
 
   const { t } = useTranslation();
 
@@ -223,10 +220,6 @@ export const EditTemplateMenu = () => {
     });
   }, [template, templateFormat, defaultTemplate]);
 
-  const onBackClickHandler = () => {
-    navigate('../');
-  };
-
   const onSaveClickHandler = () => {
     updateMenu({
       variables: {
@@ -283,14 +276,6 @@ export const EditTemplateMenu = () => {
 
   return (
     <Box>
-      <AppBreadcrumbs
-        items={[
-          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menu.name, navigateTo: '../' },
-          { label: t('menuItem.editTemplate.title') },
-        ]}
-        onBack={onBackClickHandler}
-      />
       <Box
         sx={{
           width: '100%',

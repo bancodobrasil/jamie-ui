@@ -1,16 +1,16 @@
+import React from 'react';
 import {
   Box,
   Button,
+  FormControlLabel,
+  Select,
+  TextField,
   Checkbox,
   FormControl,
-  FormControlLabel,
   InputLabel,
-  MenuItem,
-  Select,
   SelectChangeEvent,
+  MenuItem,
   styled,
-  TextField,
-  Typography,
 } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import {
@@ -21,14 +21,12 @@ import {
   DroppableProvided,
   DroppableStateSnapshot,
 } from 'react-beautiful-dnd';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
-import { JAMIE_FEATURE_CONDITIONS, MENU_VALIDATION } from '../../../constants';
-import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../types';
-import './styles.css';
+import { useTranslation } from 'react-i18next';
+import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
+import { MENU_VALIDATION } from '../../../../constants';
 
 const Form = styled('form')({
   flex: '1 1 auto',
@@ -51,65 +49,18 @@ const reorder: { <T>(list: T[], startIndex: number, endIndex: number): T[] } = (
 };
 
 interface Props {
-  name: string;
-  setName: (name: string) => void;
-  nameError: string;
-  setNameError: (nameError: string) => void;
-  mustDeferChanges: boolean;
-  setMustDeferChanges: (mustDeferChanges: boolean) => void;
-  meta: IMenuMetaWithErrors[];
+  meta: IMenuMetaWithErrors[]; // meta == attributes
   setMeta: (meta: IMenuMetaWithErrors[]) => void;
-  hasConditions: boolean;
-  setHasConditions: (hasConditions: boolean) => void;
-  parameters: string;
-  setParameters: (parameters: string) => void;
   loadingSubmit: boolean;
   onSubmit: () => void;
   onBack: () => void;
   action: FormAction;
 }
 
-export const MenuForm = ({
-  name,
-  setName,
-  nameError,
-  setNameError,
-  mustDeferChanges,
-  setMustDeferChanges,
-  meta,
-  setMeta,
-  hasConditions,
-  setHasConditions,
-  parameters,
-  setParameters,
-  loadingSubmit,
-  onSubmit,
-  onBack,
-  action,
-}: Props) => {
+export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack, action }: Props) {
   const { t, i18n } = useTranslation();
 
   const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    let tmpNameError = '';
-    if (name.length < MENU_VALIDATION.NAME_MIN_LENGTH) {
-      tmpNameError = t('form.validation.min', {
-        field: t('menu.fields.name'),
-        min: MENU_VALIDATION.NAME_MIN_LENGTH,
-      });
-    } else if (name.length > MENU_VALIDATION.NAME_MAX_LENGTH) {
-      tmpNameError = t('form.validation.max', {
-        field: t('menu.fields.name'),
-        max: MENU_VALIDATION.NAME_MAX_LENGTH,
-      });
-    }
-    if (tmpNameError) {
-      setNameError(tmpNameError);
-      return;
-    }
-
     let metaHasError = false;
 
     meta.forEach((m, i) => {
@@ -434,117 +385,26 @@ export const MenuForm = ({
       </Draggable>
     ));
 
-  const renderHasConditionCheckbox = () => {
-    if (!JAMIE_FEATURE_CONDITIONS) return null;
-    return (
-      <Box sx={{ mt: '1rem' }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              id="hasConditions"
-              checked={hasConditions}
-              disabled={action === FormAction.UPDATE}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const { checked } = e.target;
-                setHasConditions(checked);
-              }}
-              color="primary"
-            />
-          }
-          label={`${t('menu.fields.hasConditions')}?`}
-        />
-      </Box>
-    );
-  };
-
-  const renderParameters = () => {
-    if (!hasConditions) return null;
-    return (
-      <TextField
-        id="parameters"
-        label="Parameters"
-        multiline
-        minRows={3}
-        value={parameters}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const { value } = e.target;
-          setParameters(value);
-        }}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        sx={{ width: '16rem' }}
-        className="bg-white"
-      />
-    );
-  };
-
   return (
     <Form onSubmit={handleFormSubmit}>
-      <Box sx={{ flex: '0 1 auto', flexDirection: 'column' }}>
-        <TextField
-          id="name"
-          label={t('menu.of', { field: 'name' })}
-          placeholder={
-            action === FormAction.CREATE
-              ? t('menu.create.placeholders.name')
-              : t('menu.edit.placeholders.name')
-          }
-          required
-          value={name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const { value } = e.target;
-            setNameError('');
-            setName(value);
-          }}
-          inputProps={{
-            maxLength: MENU_VALIDATION.NAME_MAX_LENGTH,
-          }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          error={!!nameError}
-          helperText={nameError}
-          sx={{ width: '16rem' }}
-        />
-        <Box sx={{ mt: '1rem' }}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                id="mustDeferChanges"
-                checked={mustDeferChanges}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const { checked } = e.target;
-                  setMustDeferChanges(checked);
-                }}
-                color="primary"
-              />
-            }
-            label={t('menu.fields.mustDeferChanges')}
-          />
-        </Box>
-        {renderHasConditionCheckbox()}
-        {renderParameters()}
-        <Typography variant="h3" sx={{ mt: '1rem' }}>
-          {t('menu.fields.meta.title', { count: 2 })}
-        </Typography>
+      <Box>
+        {meta.length > 0 && (
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided, snapshot) => (
+                <div
+                  className="flex flex-col flex-initial mt-8 space-y-4 w-fit pr-4 overflow-y-auto"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {renderMeta(provided, snapshot)}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        )}
       </Box>
-      {meta.length > 0 && (
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <div
-                className="flex flex-col flex-initial mt-8 space-y-4 w-fit pr-4 overflow-y-auto"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {renderMeta(provided, snapshot)}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      )}
       <Box sx={{ flex: '0 1 auto' }}>
         <Box sx={{ mt: '2rem' }}>
           <Button
@@ -604,4 +464,4 @@ export const MenuForm = ({
       </Box>
     </Form>
   );
-};
+}

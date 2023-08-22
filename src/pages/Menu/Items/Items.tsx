@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
@@ -15,7 +15,6 @@ import {
   IMenuItem,
   INode,
 } from '../../../types';
-import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { NodeTreeView, OperationScreen } from '../../../components/Menu/Items';
 
@@ -43,7 +42,6 @@ const emptyEditingNode: IEditingNode = {
 export const ItemsPreview = () => {
   const { t } = useTranslation();
 
-  const navigate = useNavigate();
   const { id } = useParams();
 
   const { loading, error, data } = useQuery(MenuService.GET_MENU, {
@@ -312,10 +310,6 @@ export const ItemsPreview = () => {
     return nodesPreview;
   }, []);
 
-  const onBackClickHandler = () => {
-    navigate('../');
-  };
-
   if (loading) return <Loading />;
 
   if (error)
@@ -338,14 +332,6 @@ export const ItemsPreview = () => {
 
   return (
     <Box>
-      <AppBreadcrumbs
-        items={[
-          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menu.name, navigateTo: '../' },
-          { label: t('menu.preview.title') },
-        ]}
-        onBack={onBackClickHandler}
-      />
       <Box
         sx={{
           width: '100%',

@@ -1,8 +1,8 @@
-import { Box, Breadcrumbs, IconButton, Link, Typography } from '@mui/material';
+import { Box, Breadcrumbs, Link, Typography } from '@mui/material';
 import React from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link as RouterLink } from 'react-router-dom';
 
+// TODO: Remove onBack prop on new UI
 export interface AppBreadcrumbsProps {
   items: { label: string; navigateTo?: string }[];
   onBack?: () => void;
@@ -22,10 +22,6 @@ const BreadcrumbsSeparator = ({ disabled = false }: { disabled?: boolean }): JSX
 );
 
 export const AppBreadcrumbs = ({ items, onBack }: AppBreadcrumbsProps): JSX.Element => {
-  const navigate = useNavigate();
-  const onBackClickHandler = () => {
-    navigate('../');
-  };
   const renderItems = () => {
     const disabledColor = '#BFC3CA';
     return items.map(({ label, navigateTo }, index) => {
@@ -73,10 +69,6 @@ export const AppBreadcrumbs = ({ items, onBack }: AppBreadcrumbsProps): JSX.Elem
         mt: '2rem',
       }}
     >
-      <IconButton onClick={onBack || onBackClickHandler} size="small">
-        <ArrowBackIcon fontSize="small" color="primary" />
-      </IconButton>
-
       <Breadcrumbs
         aria-label="breadcrumb"
         sx={{

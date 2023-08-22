@@ -1,20 +1,30 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Typography, Tab, IconButton } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import Loading from '../../../components/Loading';
-import { MenuForm } from '../../../components/Menu/Form';
+import { FormBasicInfo } from '../../../components/Menu/Forms/BasicInfo';
 import {
   ActionTypes,
   NotificationContext,
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors } from '../../../types';
+import { FormAttributes } from '../../../components/Menu/Forms/Attributes/FormAttributes';
+import { ItemsPreview } from '../Items';
+import { EditTemplateMenu } from '../EditTemplate';
+
+export const TAB_BASIC_INFO = '1';
+export const TAB_ITEMS = '2';
+export const TAB_ATTRIBUTES = '3';
+export const TAB_TEMPLATE = '4';
 
 export const EditMenu = () => {
   const { t } = useTranslation();
@@ -45,6 +55,8 @@ export const EditMenu = () => {
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
+  const [tab, setTab] = React.useState<string>(TAB_ITEMS);
+
   useEffect(() => {
     if (loaded || !data) return;
     setName(data.menu.name);
@@ -62,6 +74,10 @@ export const EditMenu = () => {
     );
     setLoaded(true);
   }, [loaded, data]);
+
+  const onTabChange = (event: React.SyntheticEvent, newTab: string) => {
+    setTab(newTab);
+  };
 
   const onBackClickHandler = () => {
     navigate('../');
@@ -131,7 +147,7 @@ export const EditMenu = () => {
   if (loading || !loaded) return <Loading />;
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box data-testid="menu-edit" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Helmet>
         <title>{t('menu.edit.title')}</title>
       </Helmet>
@@ -144,29 +160,73 @@ export const EditMenu = () => {
           ]}
           onBack={onBackClickHandler}
         />
-        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-          {t('menu.edit.title')}
-        </Typography>
-        <Divider />
+        <Box className="flex flex-row space-x-1 items-center my-4">
+          <IconButton onClick={onBackClickHandler} size="small">
+            <ArrowBackIcon fontSize="small" color="primary" />
+          </IconButton>
+          <Typography variant="h3" component="h1">
+            {t('menu.edit.title')}
+          </Typography>
+        </Box>
       </Box>
-      <MenuForm
-        name={name}
-        setName={setName}
-        nameError={nameError}
-        setNameError={setNameError}
-        mustDeferChanges={mustDeferChanges}
-        setMustDeferChanges={setMustDeferChanges}
-        hasConditions={hasConditions}
-        setHasConditions={setHasConditions}
-        parameters={parameters}
-        setParameters={setParameters}
-        meta={metaWithErrors}
-        setMeta={setMetaWithErrors}
-        loadingSubmit={loadingSubmit}
-        onSubmit={onSubmit}
-        onBack={onBackClickHandler}
-        action={FormAction.UPDATE}
-      />
+      <Box sx={{ width: '100%' }}>
+        <TabContext value={tab}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <TabList onChange={onTabChange} aria-label="Menu tabs">
+              <Tab
+                data-testid="tab-basic-info"
+                label={t('menu.edit.tabs.basicInfo')}
+                value={TAB_BASIC_INFO}
+              />
+              <Tab data-testid="tab-items" label={t('menu.edit.tabs.items')} value={TAB_ITEMS} />
+              <Tab
+                data-testid="tab-attributes"
+                label={t('menu.edit.tabs.attributes')}
+                value={TAB_ATTRIBUTES}
+              />
+              <Tab
+                data-testid="tab-template"
+                label={t('menu.edit.tabs.template')}
+                value={TAB_TEMPLATE}
+              />
+            </TabList>
+          </Box>
+          <TabPanel value={TAB_BASIC_INFO}>
+            <FormBasicInfo
+              name={name}
+              setName={setName}
+              nameError={nameError}
+              setNameError={setNameError}
+              mustDeferChanges={mustDeferChanges}
+              setMustDeferChanges={setMustDeferChanges}
+              hasConditions={hasConditions}
+              setHasConditions={setHasConditions}
+              parameters={parameters}
+              setParameters={setParameters}
+              loadingSubmit={loadingSubmit}
+              onSubmit={onSubmit}
+              onBack={onBackClickHandler}
+              action={FormAction.UPDATE}
+            />
+          </TabPanel>
+          <TabPanel value={TAB_ITEMS}>
+            <ItemsPreview />
+          </TabPanel>
+          <TabPanel value={TAB_ATTRIBUTES}>
+            <FormAttributes
+              meta={metaWithErrors}
+              setMeta={setMetaWithErrors}
+              loadingSubmit={loadingSubmit}
+              onSubmit={onSubmit}
+              onBack={onBackClickHandler}
+              action={FormAction.UPDATE}
+            />
+          </TabPanel>
+          <TabPanel value={TAB_TEMPLATE}>
+            <EditTemplateMenu />
+          </TabPanel>
+        </TabContext>
+      </Box>
     </Box>
   );
 };
