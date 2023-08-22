@@ -58,7 +58,7 @@ export const Nav = () => {
     if (keycloak?.authenticated) {
       return (
         <Box>
-          <Button onClick={onLogoutClickHandler}>Logout</Button>
+          <Button sx={{ backgroundColor: '#ffffff',}} onClick={onLogoutClickHandler}>Logout</Button>
         </Box>
       );
     }
@@ -77,12 +77,13 @@ export const Nav = () => {
         alignItems: 'center',
         px: '2rem',
         minHeight: '5rem',
+        backgroundColor: 'black',
       }}
       className="shadow"
     >
-      <Box>
+      <Box >
         <Link to="/">
-          <Typography variant="h6" component="h6" sx={{ fontSize: '1.5rem' }}>
+          <Typography variant="h6" component="h6" sx={{ fontSize: '1.5rem', color: 'white'}}>
             Jamie
           </Typography>
         </Link>
@@ -91,7 +92,6 @@ export const Nav = () => {
         sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center' }}
         className="space-x-4"
       >
-        {renderLanguageSwitcher()}
         {renderLoginButton()}
       </Box>
     </Box>
