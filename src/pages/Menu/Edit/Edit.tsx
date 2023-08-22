@@ -174,18 +174,18 @@ export const EditMenu = () => {
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={onTabChange} aria-label="Menu tabs">
               <Tab
-                data-testid={TAB_BASIC_INFO}
+                data-testid="tab-basic-info"
                 label={t('menu.edit.tabs.basicInfo')}
                 value={TAB_BASIC_INFO}
               />
-              <Tab data-testid={TAB_ITEMS} label={t('menu.edit.tabs.items')} value={TAB_ITEMS} />
+              <Tab data-testid="tab-items" label={t('menu.edit.tabs.items')} value={TAB_ITEMS} />
               <Tab
-                data-testid={TAB_ATTRIBUTES}
+                data-testid="tab-attributes"
                 label={t('menu.edit.tabs.attributes')}
                 value={TAB_ATTRIBUTES}
               />
               <Tab
-                data-testid={TAB_TEMPLATE}
+                data-testid="tab-template"
                 label={t('menu.edit.tabs.template')}
                 value={TAB_TEMPLATE}
               />
