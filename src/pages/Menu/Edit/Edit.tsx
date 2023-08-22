@@ -17,6 +17,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors } from '../../../types';
+import { FormAttributes } from '../../../components/Menu/Forms/Attributes/FormAttributes';
 
 const TAB_BASIC_INFO = '1';
 const TAB_ITEMS = '2';
@@ -195,7 +196,16 @@ export const EditMenu = () => {
             />
           </TabPanel>
           <TabPanel value={TAB_ITEMS}>Items</TabPanel>
-          <TabPanel value={TAB_ATTRIBUTES}>Attributes</TabPanel>
+          <TabPanel value={TAB_ATTRIBUTES}>
+            <FormAttributes
+              meta={metaWithErrors}
+              setMeta={setMetaWithErrors}
+              loadingSubmit={loadingSubmit}
+              onSubmit={onSubmit}
+              onBack={onBackClickHandler}
+              action={FormAction.UPDATE}
+            />
+          </TabPanel>
           <TabPanel value={TAB_TEMPLATE}>Template</TabPanel>
         </TabContext>
       </Box>
