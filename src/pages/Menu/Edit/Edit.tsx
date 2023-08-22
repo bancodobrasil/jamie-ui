@@ -19,6 +19,7 @@ import {
 import { EnumInputAction, FormAction, IMenuMetaWithErrors } from '../../../types';
 import { FormAttributes } from '../../../components/Menu/Forms/Attributes/FormAttributes';
 import { ItemsPreview } from '../Items';
+import { EditTemplateMenu } from '../EditTemplate';
 
 const TAB_BASIC_INFO = '1';
 const TAB_ITEMS = '2';
@@ -209,7 +210,9 @@ export const EditMenu = () => {
               action={FormAction.UPDATE}
             />
           </TabPanel>
-          <TabPanel value={TAB_TEMPLATE}>Template</TabPanel>
+          <TabPanel value={TAB_TEMPLATE}>
+            <EditTemplateMenu />
+          </TabPanel>
         </TabContext>
       </Box>
     </Box>
