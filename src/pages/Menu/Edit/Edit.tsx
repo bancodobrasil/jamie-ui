@@ -1,10 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, Divider, Typography, Tab } from '@mui/material';
+import { Box, Typography, Tab, IconButton } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
@@ -156,10 +157,14 @@ export const EditMenu = () => {
           ]}
           onBack={onBackClickHandler}
         />
-        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-          {t('menu.edit.title')}
-        </Typography>
-        <Divider />
+        <Box className="flex flex-row space-x-1 items-center my-4">
+          <IconButton onClick={onBackClickHandler} size="small">
+            <ArrowBackIcon fontSize="small" color="primary" />
+          </IconButton>
+          <Typography variant="h3" component="h1">
+            {t('menu.edit.title')}
+          </Typography>
+        </Box>
       </Box>
       <Box sx={{ width: '100%' }}>
         <TabContext value={tab}>
