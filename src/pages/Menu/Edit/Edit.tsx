@@ -18,6 +18,7 @@ import {
 } from '../../../contexts/NotificationContext';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors } from '../../../types';
 import { FormAttributes } from '../../../components/Menu/Forms/Attributes/FormAttributes';
+import { ItemsPreview } from '../Items';
 
 const TAB_BASIC_INFO = '1';
 const TAB_ITEMS = '2';
@@ -53,7 +54,7 @@ export const EditMenu = () => {
 
   const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
-  const [tab, setTab] = React.useState<string>(TAB_BASIC_INFO);
+  const [tab, setTab] = React.useState<string>(TAB_ITEMS);
 
   useEffect(() => {
     if (loaded || !data) return;
@@ -195,7 +196,9 @@ export const EditMenu = () => {
               action={FormAction.UPDATE}
             />
           </TabPanel>
-          <TabPanel value={TAB_ITEMS}>Items</TabPanel>
+          <TabPanel value={TAB_ITEMS}>
+            <ItemsPreview />
+          </TabPanel>
           <TabPanel value={TAB_ATTRIBUTES}>
             <FormAttributes
               meta={metaWithErrors}
