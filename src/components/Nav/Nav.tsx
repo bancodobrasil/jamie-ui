@@ -58,13 +58,24 @@ export const Nav = () => {
     if (keycloak?.authenticated) {
       return (
         <Box>
-          <Button sx={{ backgroundColor: '#ffffff',}} onClick={onLogoutClickHandler}>Logout</Button>
+          <Button sx={{
+          backgroundColor: '#ffffff',          
+          transition: 'background-color 0.3s, color 0.3s', // Adiciona uma transição suave
+          '&:hover': {
+            backgroundColor: '#e4e4e4', // Cor de fundo quando o mouse está sobre o botão
+          },
+        }} onClick={onLogoutClickHandler}>Logout</Button>
         </Box>
       );
     }
     return (
       <Box>
-        <Button onClick={onLoginClickHandler}>Login</Button>
+        <Button sx={{ 
+          backgroundColor: '#ffffff', // cor de fundo do botão         
+          transition: 'background-color 0.3s, color 0.3s', // Adiciona uma transição suave
+          '&:hover': {
+            backgroundColor: '#e4e4e4'} // Cor de fundo quando o mouse está sobre o botão
+          }} onClick={onLoginClickHandler}>Login</Button>
       </Box>
     );
   };
@@ -83,7 +94,7 @@ export const Nav = () => {
     >
       <Box >
         <Link to="/">
-          <Typography variant="h6" component="h6" sx={{ fontSize: '1.5rem', color: 'white'}}>
+          <Typography variant="h6" component="h6" sx={{ fontSize: '2rem', color: 'white'}}>
             Jamie
           </Typography>
         </Link>
