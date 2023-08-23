@@ -285,7 +285,7 @@
       "title": "Menus"
     },
     "create": {
-      "title": "Create Menu",
+      "title": "New menu",
       "placeholders": {
         "name": "Enter the menu's name...",
         "meta": {
