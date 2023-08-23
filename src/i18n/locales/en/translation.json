@@ -200,7 +200,7 @@
     "of": "Menu's $t(menu.fields.{{field}})",
     "fields": {
       "name": "Name",
-      "mustDeferChanges": "Mandatory deferral",
+      "mustDeferChanges": "Mandatory approval",
       "hasConditions": "Has Conditions",
       "items": "Items",
       "template": "Template",
