@@ -54,15 +54,19 @@ export const Nav = () => {
     keycloak?.login({ redirectUri: `${JAMIE_UI_BASE_URL}${location.pathname}` });
   };
 
+/* The `renderLoginButton` function is responsible for rendering the login button based on the
+authentication status of the user. */
   const renderLoginButton = () => {
     if (keycloak?.authenticated) {
       return (
         <Box>
           <Button sx={{
-          backgroundColor: '#ffffff',          
+          backgroundColor: '#ffffff',  
+          maxHeight: '2rem', 
+          maxWidth: '6rem',       
           transition: 'background-color 0.3s, color 0.3s', // Adiciona uma transição suave
           '&:hover': {
-            backgroundColor: '#e4e4e4', // Cor de fundo quando o mouse está sobre o botão
+            backgroundColor: '#e4e4e4', // background color when mouse is over button
           },
         }} onClick={onLogoutClickHandler}>Logout</Button>
         </Box>
@@ -71,15 +75,18 @@ export const Nav = () => {
     return (
       <Box>
         <Button sx={{ 
-          backgroundColor: '#ffffff', // cor de fundo do botão         
-          transition: 'background-color 0.3s, color 0.3s', // Adiciona uma transição suave
+          backgroundColor: '#ffffff',          
+          maxHeight: '2rem', 
+          maxWidth: '6rem', 
+          transition: 'background-color 0.3s, color 0.3s', // add soft transition
           '&:hover': {
-            backgroundColor: '#e4e4e4'} // Cor de fundo quando o mouse está sobre o botão
+            backgroundColor: '#e4e4e4'} // background color when mouse is over button
           }} onClick={onLoginClickHandler}>Login</Button>
       </Box>
     );
   };
 
+/* Return a element that represents the navigation bar component. */
   return (
     <Box
       component="nav"
@@ -87,14 +94,14 @@ export const Nav = () => {
         display: 'flex',
         alignItems: 'center',
         px: '2rem',
-        minHeight: '5rem',
+        minHeight: '3rem',
         backgroundColor: 'black',
       }}
       className="shadow"
     >
       <Box >
         <Link to="/">
-          <Typography variant="h6" component="h6" sx={{ fontSize: '2rem', color: 'white'}}>
+          <Typography variant="h6" component="h6" sx={{ fontSize: '1.25rem', color: 'white'}}>
             Jamie
           </Typography>
         </Link>
