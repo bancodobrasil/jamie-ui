@@ -148,40 +148,52 @@ export const FormBasicInfo = ({
         <Box id="belowNameField" sx={{ width: '31rem', height:'1.25rem', padding: '12px 16px', opacity:'60%',fontSize: '13px',}}>
         {t('menu.fields.belowNameField')}
         </Box>
-        <Box sx={{ mt: '4rem'}}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                id="mustDeferChanges"
-                checked={mustDeferChanges}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const { checked } = e.target;
-                  setMustDeferChanges(checked);
-                }}
-                color="primary"
-              />
-            }
-            label={t('menu.fields.hasConditions')}
-          />
-          <Box id="belowDeferChanges" sx={{ width: '28.2rem', height:'1.12rem', opacity:'50%', fontSize: '13px', color:'#6C7077'}}>
-            {t('menu.fields.belowConditions')}.
-          </Box>
-          <FormControlLabel
-            control={
-              <Checkbox
-                id="mustDeferChanges"
-                checked={mustDeferChanges}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const { checked } = e.target;
-                  setMustDeferChanges(checked);
-                }}
-                color="primary"
-              />
-            }
-            label={t('menu.fields.mustDeferChanges')}
-          />
-          <Box id="belowDeferChanges" sx={{ width: '28.2rem', height:'1.12rem', opacity:'50%', fontSize: '13px', color:'#6C7077'}}>
-          {t('menu.fields.belowDeferChanges')}.
+        <Box sx={{ mt: '1.5rem', width: '28.25rem', height:'2.63rem' }}>
+          <Box >
+            <FormControlLabel
+              control={
+                <Checkbox
+                  id="mustDeferChanges"
+                  checked={mustDeferChanges}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const { checked } = e.target;
+                    setMustDeferChanges(checked);
+                  }}
+                  color="primary"
+                />
+              }
+              label={t('menu.fields.hasConditions')}
+            />
+            <Box 
+              id="belowDeferChanges" 
+              sx={{ //height:'1.12rem', 
+                letterSpacing:'50%', 
+                fontSize: '13px', 
+                color:'#6C7077', 
+                marginLeft:'2rem',
+                //marginTop: '0.1px' 
+              }}>
+              {t('menu.fields.belowConditions')}.
+            </Box>
+        </Box>
+          <Box sx={{ mt: '1.5rem', width: '28.25rem', height:'2.63rem' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  id="mustDeferChanges"
+                  checked={mustDeferChanges}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const { checked } = e.target;
+                    setMustDeferChanges(checked);
+                  }}
+                  color="primary"
+                />
+              }
+              label={t('menu.fields.mustDeferChanges')}
+            />
+            <Box id="belowDeferChanges" sx={{ width: '28.2rem', height:'1.12rem',letterSpacing:'50%', fontSize: '13px', color:'#6C7077',  marginLeft:'2rem'}}>
+            {t('menu.fields.belowDeferChanges')}.
+            </Box>
           </Box>
         </Box>
         {renderHasConditionCheckbox()}
