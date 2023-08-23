@@ -143,9 +143,12 @@ export const FormBasicInfo = ({
           }}
           error={!!nameError}
           helperText={nameError}
-          sx={{ width: '16rem' }}
+          sx={{ width: '33.2rem', height:'3rem'}}
         />
-        <Box sx={{ mt: '1rem' }}>
+        <Box id="belowNameField" sx={{ width: '31rem', height:'1.25rem', padding: '12px 16px', opacity:'60%',fontSize: '13px',}}>
+        {t('menu.fields.belowNameField')}
+        </Box>
+        <Box sx={{ mt: '4rem'}}>
           <FormControlLabel
             control={
               <Checkbox
@@ -160,6 +163,9 @@ export const FormBasicInfo = ({
             }
             label={t('menu.fields.mustDeferChanges')}
           />
+          <Box id="belowDeferChanges" sx={{ width: '28.2rem', height:'1.12rem', opacity:'50%', fontSize: '13px', color:'#6C7077'}}>
+          {t('menu.fields.belowDeferChanges')}.
+          </Box>
         </Box>
         {renderHasConditionCheckbox()}
         {renderParameters()}

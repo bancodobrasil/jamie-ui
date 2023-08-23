@@ -200,7 +200,9 @@
     "of": "$t(menu.fields.{{field}}) do Menu",
     "fields": {
       "name": "Nome",
+      "belowNameField":"Esse nome só aparecerá no Jamie",
       "mustDeferChanges": "Aprovação obrigatória",
+      "belowDeferChanges": "As publicações precisam ser aprovadas por outra pessoa",
       "hasConditions": "Tem Condições",
       "items": "Itens",
       "template": "Template",

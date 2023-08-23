@@ -200,7 +200,9 @@
     "of": "Menu's $t(menu.fields.{{field}})",
     "fields": {
       "name": "Name",
+      "belowNameField":"This name will only appear for Jamie",
       "mustDeferChanges": "Mandatory approval",
+      "belowDeferChanges":"The posts need to be approved by another person",
       "hasConditions": "Has Conditions",
       "items": "Items",
       "template": "Template",
