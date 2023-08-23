@@ -203,7 +203,8 @@
       "belowNameField":"This name will only appear for Jamie",
       "mustDeferChanges": "Mandatory approval",
       "belowDeferChanges":"The posts need to be approved by another person",
-      "hasConditions": "Has Conditions",
+      "hasConditions": "Conditions on menu items",
+      "belowConditions": "Allows customizing which end users will see each menu item",
       "items": "Items",
       "template": "Template",
       "templateFormat": {

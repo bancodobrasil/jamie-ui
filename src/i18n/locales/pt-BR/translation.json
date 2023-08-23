@@ -203,7 +203,8 @@
       "belowNameField":"Esse nome só aparecerá no Jamie",
       "mustDeferChanges": "Aprovação obrigatória",
       "belowDeferChanges": "As publicações precisam ser aprovadas por outra pessoa",
-      "hasConditions": "Tem Condições",
+      "hasConditions": "Condições nos itens de menu",
+      "belowConditions": "Permite personalizar quais usuários finais verão cada item de menu",
       "items": "Itens",
       "template": "Template",
       "templateFormat": {
