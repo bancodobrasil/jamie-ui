@@ -64,7 +64,7 @@ authentication status of the user. */
           backgroundColor: '#ffffff',  
           maxHeight: '2rem', 
           maxWidth: '6rem',       
-          transition: 'background-color 0.3s, color 0.3s', // Adiciona uma transição suave
+          transition: 'background-color 0.3s, color 0.3s', // add soft transition
           '&:hover': {
             backgroundColor: '#e4e4e4', // background color when mouse is over button
           },
