@@ -45,6 +45,8 @@ export const EditMenu = () => {
 
   const [mustDeferChanges, setMustDeferChanges] = React.useState<boolean>(false);
 
+  const [mustCheckBoxConditions, setCheckBoxConditions] = React.useState<boolean>(false);
+
   const [hasConditions, setHasConditions] = React.useState<boolean>(false);
 
   const [parameters, setParameters] = React.useState<string>();
@@ -199,6 +201,8 @@ export const EditMenu = () => {
               setNameError={setNameError}
               mustDeferChanges={mustDeferChanges}
               setMustDeferChanges={setMustDeferChanges}
+              mustCheckBoxConditions={mustCheckBoxConditions}
+              setCheckBoxConditions={setCheckBoxConditions}
               hasConditions={hasConditions}
               setHasConditions={setHasConditions}
               parameters={parameters}
