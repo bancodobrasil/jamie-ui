@@ -231,46 +231,51 @@ export const FormBasicInfo = ({
             {renderParameters()}
           </Box>
         </Box>
-        </Form>  
-        <Container>
-            <Box sx={{ flex: '0 1 auto' }}>
-              <Box
+      </Form>
+      <Container>
+        <Box sx={{ flex: '0 1 auto' }}>
+          <Box
+            sx={{
+              flex: 1,
+              //direction: row,
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+              }}
+            >
+              <Button
+                variant="contained"
+                disabled={loadingSubmit}
+                onClick={onBack}
                 sx={{
-                  flex: 1,
-                  //direction: row,
-                  justifyContent: 'flex-end',
-                  alignItems: 'flex-end',
+                  marginRight: '16px',
+                  backgroundColor: '#ffffff',
+                  color: '#d51b05',
+                  '&:hover': {
+                    backgroundColor: '#f0f0f0', // Cor de fundo mais escura ao passar o mouse
+                  },
                 }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end', // Alinha os itens no canto direito horizontalmente
-                    alignItems: 'flex-end', // Alinha os itens no canto inferior verticalmente
-                    marginTop: '16px', // Adiciona um espaçamento superior
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="tertiary"
-                    disabled={loadingSubmit}
-                    onClick={onBack}
-                    sx={{ marginRight: '16px' }} // Adiciona um espaçamento entre os botões
-                  >
-                    {t('buttons.cancel')}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    disabled={loadingSubmit}
-                  >
-                    {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')}
-                  </Button>
-                </Box>
-              </Box>
+                {t('buttons.cancel')}
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={loadingSubmit}
+              >
+                {action === FormAction.CREATE ? t('menu.create.button') : t('menu.edit.title')}
+              </Button>
             </Box>
-          </Container>
+          </Box>
+        </Box>
+      </Container>
     </Grid>
   );
 };
