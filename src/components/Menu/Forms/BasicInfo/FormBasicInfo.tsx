@@ -162,7 +162,7 @@ export const FormBasicInfo = ({
                   color="primary"
                 />
               }
-              label={t('menu.fields.hasConditions')}
+              label={<span style={{ fontWeight: 'bold' }}>{t('menu.fields.hasConditions')}</span>}
             />
             <Box 
               id="belowDeferChanges" 
@@ -171,7 +171,6 @@ export const FormBasicInfo = ({
                 fontSize: '13px', 
                 color:'#6C7077', 
                 marginLeft:'2rem',
-                //marginTop: '0.1px' 
               }}>
               {t('menu.fields.belowConditions')}.
             </Box>
@@ -189,7 +188,7 @@ export const FormBasicInfo = ({
                   color="primary"
                 />
               }
-              label={t('menu.fields.mustDeferChanges')}
+              label={<span style={{ fontWeight: 'bold' }}>{t('menu.fields.mustDeferChanges')}</span>}
             />
             <Box id="belowDeferChanges" sx={{ width: '28.2rem', height:'1.12rem',letterSpacing:'50%', fontSize: '13px', color:'#6C7077',  marginLeft:'2rem'}}>
             {t('menu.fields.belowDeferChanges')}.
