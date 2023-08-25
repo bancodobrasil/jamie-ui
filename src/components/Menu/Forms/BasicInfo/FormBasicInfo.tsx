@@ -232,14 +232,16 @@ export const FormBasicInfo = ({
           </Box>
         </Box>
       </Form>
-      <Container>
-        <Box sx={{ flex: '0 1 auto' }}>
+      <Box sx={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
+            }}>
+        <Box /*sx={{ flex: '0 1 auto'}} */>
           <Box
             sx={{
               flex: 1,
-              //direction: row,
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
+              width: '33.25rem',
             }}
           >
             <Box
@@ -275,7 +277,7 @@ export const FormBasicInfo = ({
             </Box>
           </Box>
         </Box>
-      </Container>
+      </Box>
     </Grid>
   );
 };
