@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { JAMIE_FEATURE_CONDITIONS, MENU_VALIDATION } from '../../../../constants';
 import { FormAction } from '../../../../types';
 import './styles.css';
-import Grid from '@mui/material/Grid';
-import { Container } from '@mui/system';
+
 const Form = styled('form')({
   flex: '1 1 auto',
   display: 'flex',
@@ -22,7 +21,7 @@ interface Props {
   mustDeferChanges: boolean;
   setMustDeferChanges: (mustDeferChanges: boolean) => void;
   mustCheckBoxConditions: boolean;
-  setCheckBoxConditions: (hasConditions: boolean) => void;
+  setCheckBoxConditions: (mustCheckBoxConditions: boolean) => void;
   hasConditions: boolean;
   setHasConditions: (hasConditions: boolean) => void;
   parameters: string;
