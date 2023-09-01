@@ -124,7 +124,6 @@ export const FormBasicInfo = ({
 
   // Draw the menu
   return (
-    <Box >
       <Form onSubmit={handleFormSubmit}>
         <Box sx={{ flex: '0 1 auto', flexDirection: 'column',height: '20rem' }}>
           <TextField
@@ -224,13 +223,12 @@ export const FormBasicInfo = ({
                 >
                   {t('menu.fields.belowDeferChanges')}.
                 </Box>
+                {renderHasConditionCheckbox()}
+                {renderParameters()}
               </Box>
             </Box>
-            {renderHasConditionCheckbox()}
-            {renderParameters()}
           </Box>
         </Box>
-      </Form>
       <Box sx={{
               flex: 1,
               justifyContent: 'flex-end',
@@ -266,17 +264,19 @@ export const FormBasicInfo = ({
                 {t('buttons.cancel')}
               </Button>
               <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={loadingSubmit}
-              >
-                {action === FormAction.CREATE ? t('menu.create.button') : t('menu.edit.title')}
-              </Button>
+              variant="contained"
+              color="primary"
+              type="submit"
+              disabled={loadingSubmit}
+              sx={{
+                marginLeft: '16px',
+              }}
+            >
+              {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')}
+            </Button>
             </Box>
           </Box>
-        </Box>
-      </Box>
-   // </Box>
+        </Box>  
+  </Form>
   );
 };
