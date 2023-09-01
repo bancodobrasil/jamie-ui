@@ -122,6 +122,11 @@ export const FormBasicInfo = ({
     );
   };
 
+  const nameErrorOrLabel = () => {
+    if (nameError) return nameError
+    return t('menu.fields.belowNameField')
+  }
+
   // Draw the menu
   return (
       <Form onSubmit={handleFormSubmit}>
@@ -148,22 +153,10 @@ export const FormBasicInfo = ({
               shrink: true,
             }}
             error={!!nameError}
-            helperText={nameError}
+            helperText={nameErrorOrLabel()}
             sx={{ width: '33.2rem', height: '3rem' }}
           />
-          <Box
-            id="belowNameField"
-            sx={{
-              width: '31rem',
-              height: '1.25rem',
-              padding: '20px 16px',
-              opacity: '60%',
-              fontSize: '13px',
-            }}
-          >
-            {t('menu.fields.belowNameField')}
-          </Box>
-          <Box sx={{ mt: '1.5rem', width: '28.25rem', height: '2.63rem' }}>
+          <Box sx={{ mt: '2.5rem', width: '28.25rem', height: '2.63rem' }}>
             <Box>
               <FormControlLabel
                 control={
