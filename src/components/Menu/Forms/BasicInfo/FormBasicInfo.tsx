@@ -156,7 +156,7 @@ export const FormBasicInfo = ({
             sx={{
               width: '31rem',
               height: '1.25rem',
-              padding: '12px 16px',
+              padding: '20px 16px',
               opacity: '60%',
               fontSize: '13px',
             }}
