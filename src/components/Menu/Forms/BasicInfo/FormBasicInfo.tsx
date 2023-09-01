@@ -183,6 +183,7 @@ export const FormBasicInfo = ({
                 id="belowDeferChanges"
                 sx={{
                   //height:'1.12rem',
+                  marginTop: '-12px',
                   letterSpacing: '50%',
                   fontSize: '13px',
                   color: '#6C7077',
@@ -213,8 +214,7 @@ export const FormBasicInfo = ({
                 <Box
                   id="belowDeferChanges"
                   sx={{
-                    //width: '28.2rem',
-                    //height: '1.12rem',
+                    marginTop: '-12px',
                     letterSpacing: '50%',
                     fontSize: '13px',
                     color: '#6C7077',
