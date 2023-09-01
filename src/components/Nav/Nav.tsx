@@ -60,15 +60,7 @@ authentication status of the user. */
     if (keycloak?.authenticated) {
       return (
         <Box>
-          <Button sx={{
-          backgroundColor: '#ffffff',  
-          maxHeight: '2rem', 
-          maxWidth: '6rem',       
-          transition: 'background-color 0.3s, color 0.3s', // add soft transition
-          '&:hover': {
-            backgroundColor: '#e4e4e4', // background color when mouse is over button
-          },
-        }} onClick={onLogoutClickHandler}>Logout</Button>
+          <Button variant="text" color="secondary" onClick={onLogoutClickHandler}>Logout</Button>
         </Box>
       );
     }
