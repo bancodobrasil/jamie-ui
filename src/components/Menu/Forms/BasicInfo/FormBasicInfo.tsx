@@ -20,8 +20,6 @@ interface Props {
   setNameError: (nameError: string) => void;
   mustDeferChanges: boolean;
   setMustDeferChanges: (mustDeferChanges: boolean) => void;
-  mustCheckBoxConditions: boolean;
-  setCheckBoxConditions: (mustCheckBoxConditions: boolean) => void;
   hasConditions: boolean;
   setHasConditions: (hasConditions: boolean) => void;
   parameters: string;
@@ -39,8 +37,6 @@ export const FormBasicInfo = ({
   setNameError,
   mustDeferChanges,
   setMustDeferChanges,
-  mustCheckBoxConditions,
-  setCheckBoxConditions,
   hasConditions,
   setHasConditions,
   parameters,
@@ -79,13 +75,12 @@ export const FormBasicInfo = ({
   const renderHasConditionCheckbox = () => {
     if (!JAMIE_FEATURE_CONDITIONS) return null;
     return (
-      <Box sx={{ mt: '1rem' }}>
+      <Box>
         <FormControlLabel
           control={
             <Checkbox
-              id="hasConditions"
+              id="mustCheckBoxConditions"
               checked={hasConditions}
-              disabled={action === FormAction.UPDATE}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const { checked } = e.target;
                 setHasConditions(checked);
@@ -93,12 +88,24 @@ export const FormBasicInfo = ({
               color="primary"
             />
           }
-          label={`${t('menu.fields.hasConditions')}?`}
+          label={<span style={{ fontWeight: 'bold' }}>{t('menu.fields.hasConditions')}</span>}
         />
+        <Box
+          id="belowDeferChanges"
+          sx={{
+            // height:'1.12rem',
+            marginTop: '-12px',
+            letterSpacing: '50%',
+            fontSize: '13px',
+            color: '#6C7077',
+            marginLeft: '2rem',
+          }}
+        >
+          {t('menu.fields.belowConditions')}.
+        </Box>
       </Box>
     );
   };
-
   //
   const renderParameters = () => {
     if (!hasConditions) return null;
@@ -116,66 +123,69 @@ export const FormBasicInfo = ({
         InputLabelProps={{
           shrink: true,
         }}
-        sx={{ width: '16rem' }}
+        sx={{ width: '16rem', my: '1.5rem' }}
         className="bg-white"
       />
     );
   };
 
   const nameErrorOrLabel = () => {
-    if (nameError) return nameError
-    return t('menu.fields.belowNameField')
-  }
+    if (nameError) return nameError;
+    return t('menu.fields.belowNameField');
+  };
 
   // Draw the menu
   return (
-      <Form onSubmit={handleFormSubmit}>
-        <Box sx={{ flex: '0 1 auto', flexDirection: 'column',height: '20rem' }}>
-          <TextField
-            id="name"
-            label={t('menu.of', { field: 'name' })}
-            placeholder={
-              action === FormAction.CREATE
-                ? t('menu.create.placeholders.name')
-                : t('menu.edit.placeholders.name')
-            }
-            required
-            value={name}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const { value } = e.target;
-              setNameError('');
-              setName(value);
-            }}
-            inputProps={{
-              maxLength: MENU_VALIDATION.NAME_MAX_LENGTH,
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            error={!!nameError}
-            helperText={nameErrorOrLabel()}
-            sx={{ width: '33.2rem', height: '3rem' }}
-          />
-          <Box sx={{ mt: '2.5rem', width: '28.25rem', height: '2.63rem' }}>
-            <Box>
+    <Form onSubmit={handleFormSubmit}>
+      <Box sx={{ flex: '0 1 auto', flexDirection: 'column', height: '20rem' }}>
+        <TextField
+          id="name"
+          label={t('menu.of', { field: 'name' })}
+          placeholder={
+            action === FormAction.CREATE
+              ? t('menu.create.placeholders.name')
+              : t('menu.edit.placeholders.name')
+          }
+          required
+          value={name}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const { value } = e.target;
+            setNameError('');
+            setName(value);
+          }}
+          inputProps={{
+            maxLength: MENU_VALIDATION.NAME_MAX_LENGTH,
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          error={!!nameError}
+          helperText={nameErrorOrLabel()}
+          sx={{ width: '33.2rem', height: '3rem' }}
+        />
+        <Box sx={{ mt: '2.5rem', width: '28.25rem', height: '2.63rem' }}>
+          {renderHasConditionCheckbox()}
+          <Box>
+            <Box sx={{ mt: '1.5rem', width: '28.25rem', height: '2.63rem' }}>
               <FormControlLabel
                 control={
                   <Checkbox
-                    id="mustCheckBoxConditions"
-                    checked={mustCheckBoxConditions}
+                    id="mustDeferChanges"
+                    checked={mustDeferChanges}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const { checked } = e.target;
-                      setCheckBoxConditions(checked);
+                      setMustDeferChanges(checked);
                     }}
                     color="primary"
                   />
                 }
-                label={<span style={{ fontWeight: 'bold' }}>{t('menu.fields.hasConditions')}</span>}
+                label={
+                  <span style={{ fontWeight: 'bold' }}>{t('menu.fields.mustDeferChanges')}</span>
+                }
               />
               <Box
                 id="belowDeferChanges"
                 sx={{
-                  //height:'1.12rem',
                   marginTop: '-12px',
                   letterSpacing: '50%',
                   fontSize: '13px',
@@ -183,80 +193,50 @@ export const FormBasicInfo = ({
                   marginLeft: '2rem',
                 }}
               >
-                {t('menu.fields.belowConditions')}.
-              </Box>
-            </Box>
-            <Box>
-              <Box sx={{ mt: '1.5rem', width: '28.25rem', height: '2.63rem' }}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      id="mustDeferChanges"
-                      checked={mustDeferChanges}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const { checked } = e.target;
-                        setMustDeferChanges(checked);
-                      }}
-                      color="primary"
-                    />
-                  }
-                  label={
-                    <span style={{ fontWeight: 'bold' }}>{t('menu.fields.mustDeferChanges')}</span>
-                  }
-                />
-                <Box
-                  id="belowDeferChanges"
-                  sx={{
-                    marginTop: '-12px',
-                    letterSpacing: '50%',
-                    fontSize: '13px',
-                    color: '#6C7077',
-                    marginLeft: '2rem',
-                  }}
-                >
-                  {t('menu.fields.belowDeferChanges')}.
-                </Box>
-                {renderHasConditionCheckbox()}
-                {renderParameters()}
+                {t('menu.fields.belowDeferChanges')}.
               </Box>
             </Box>
           </Box>
         </Box>
-      <Box sx={{
-              flex: 1,
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
-            }}>
+      </Box>
+      {renderParameters()}
+      <Box
+        sx={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
+        }}
+      >
         <Box />
+        <Box
+          sx={{
+            flex: 1,
+            width: '33.25rem',
+          }}
+        >
           <Box
             sx={{
-              flex: 1,
-              width: '33.25rem',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
             }}
           >
-            <Box
+            <Button
+              variant="contained"
+              disabled={loadingSubmit}
+              onClick={onBack}
               sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'flex-end',
+                marginRight: '16px',
+                backgroundColor: '#ffffff',
+                color: '#d51b05',
+                '&:hover': {
+                  backgroundColor: '#f0f0f0', // Cor de fundo mais escura ao passar o mouse
+                },
               }}
             >
-              <Button
-                variant="contained"
-                disabled={loadingSubmit}
-                onClick={onBack}
-                sx={{
-                  marginRight: '16px',
-                  backgroundColor: '#ffffff',
-                  color: '#d51b05',
-                  '&:hover': {
-                    backgroundColor: '#f0f0f0', // Cor de fundo mais escura ao passar o mouse
-                  },
-                }}
-              >
-                {t('buttons.cancel')}
-              </Button>
-              <Button
+              {t('buttons.cancel')}
+            </Button>
+            <Button
               variant="contained"
               color="primary"
               type="submit"
@@ -267,9 +247,9 @@ export const FormBasicInfo = ({
             >
               {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')}
             </Button>
-            </Box>
           </Box>
-        </Box>  
-  </Form>
+        </Box>
+      </Box>
+    </Form>
   );
 };

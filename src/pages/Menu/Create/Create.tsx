@@ -26,8 +26,6 @@ export const CreateMenu = () => {
 
   const [mustDeferChanges, setMustDeferChanges] = React.useState<boolean>(false);
 
-  const [mustCheckBoxConditions, setCheckBoxConditions] = React.useState<boolean>(false);
-
   const [loadingSubmit, setLoadingSubmit] = React.useState<boolean>(false);
 
   const [hasConditions, setHasConditions] = React.useState<boolean>(false);
@@ -87,8 +85,6 @@ export const CreateMenu = () => {
         setNameError={setNameError}
         mustDeferChanges={mustDeferChanges}
         setMustDeferChanges={setMustDeferChanges}
-        mustCheckBoxConditions={mustCheckBoxConditions}
-        setCheckBoxConditions={setCheckBoxConditions}
         hasConditions={hasConditions}
         setHasConditions={setHasConditions}
         parameters={parameters}
