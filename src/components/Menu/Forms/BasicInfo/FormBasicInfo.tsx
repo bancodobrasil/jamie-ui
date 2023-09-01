@@ -125,9 +125,9 @@ export const FormBasicInfo = ({
 
   // Draw the menu
   return (
-    <Grid xs={8} container direction="column" justifyContent="center" alignItems="baseline">
+    <Box >
       <Form onSubmit={handleFormSubmit}>
-        <Box sx={{ flex: '0 1 auto', flexDirection: 'column' }}>
+        <Box sx={{ flex: '0 1 auto', flexDirection: 'column',height: '20rem' }}>
           <TextField
             id="name"
             label={t('menu.of', { field: 'name' })}
@@ -237,7 +237,7 @@ export const FormBasicInfo = ({
               justifyContent: 'flex-end',
               alignItems: 'flex-end',
             }}>
-        <Box /*sx={{ flex: '0 1 auto'}} */>
+        <Box />
           <Box
             sx={{
               flex: 1,
@@ -278,6 +278,6 @@ export const FormBasicInfo = ({
           </Box>
         </Box>
       </Box>
-    </Grid>
+   // </Box>
   );
 };
