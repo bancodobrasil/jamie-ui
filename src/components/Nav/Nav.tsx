@@ -54,21 +54,31 @@ export const Nav = () => {
     keycloak?.login({ redirectUri: `${JAMIE_UI_BASE_URL}${location.pathname}` });
   };
 
+/* The `renderLoginButton` function is responsible for rendering the login button based on the
+authentication status of the user. */
   const renderLoginButton = () => {
     if (keycloak?.authenticated) {
       return (
         <Box>
-          <Button onClick={onLogoutClickHandler}>Logout</Button>
+          <Button variant="text" color="secondary" onClick={onLogoutClickHandler}>Logout</Button>
         </Box>
       );
     }
     return (
       <Box>
-        <Button onClick={onLoginClickHandler}>Login</Button>
+        <Button sx={{ 
+          backgroundColor: '#ffffff',          
+          maxHeight: '2rem', 
+          maxWidth: '6rem', 
+          transition: 'background-color 0.3s, color 0.3s', // add soft transition
+          '&:hover': {
+            backgroundColor: '#e4e4e4'} // background color when mouse is over button
+          }} onClick={onLoginClickHandler}>Login</Button>
       </Box>
     );
   };
 
+/* Return a element that represents the navigation bar component. */
   return (
     <Box
       component="nav"
@@ -76,13 +86,14 @@ export const Nav = () => {
         display: 'flex',
         alignItems: 'center',
         px: '2rem',
-        minHeight: '5rem',
+        minHeight: '3rem',
+        backgroundColor: 'black',
       }}
       className="shadow"
     >
-      <Box>
+      <Box >
         <Link to="/">
-          <Typography variant="h6" component="h6" sx={{ fontSize: '1.5rem' }}>
+          <Typography variant="h6" component="h6" sx={{ fontSize: '1.25rem', color: 'white'}}>
             Jamie
           </Typography>
         </Link>
@@ -91,7 +102,6 @@ export const Nav = () => {
         sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center' }}
         className="space-x-4"
       >
-        {renderLanguageSwitcher()}
         {renderLoginButton()}
       </Box>
     </Box>
