@@ -239,7 +239,7 @@ export const ShowMenu = () => {
         {t('menu.fields.meta.title', { count: 2 })}
       </Typography>
       <Box sx={{ mb: '1rem' }} className="space-y-4">
-        {data?.menu.meta.length > 0 ? (
+        {data?.menu.meta && data?.menu.meta.length > 0 ? (
           renderMeta()
         ) : (
           <p className="text-gray-500">{t('common.noData')}</p>
