@@ -10,9 +10,13 @@ services:
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: password
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+    #   timeout: 20s
+    #   retries: 10
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: ghcr.io/bancodobrasil/jamie-auth-service:0.1.0-rc1
     volumes:
       - ./keycloak/themes:/opt/keycloak/themes
     environment:
