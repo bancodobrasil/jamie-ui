@@ -213,10 +213,10 @@
         }
       },
       "meta": {
-        "title_one": "Metadado",
-        "title_other": "Metadados",
-        "of": "$t(menu.fields.meta.{{field}}) do Metadado",
-        "add": "Adicionar Metadado",
+        "title_one": "Atributo",
+        "title_other": "Atributos",
+        "of": "$t(menu.fields.meta.{{field}}) do Atributo",
+        "add": "Adicionar Atributo",
         "name": "Nome",
         "required": "Obrigatório",
         "enabled": "Habilitado",
@@ -289,9 +289,9 @@
       "placeholders": {
         "name": "Digite o nome do menu...",
         "meta": {
-          "name": "Digite o nome do metadado...",
-          "type": "Digite o tipo do metadado...",
-          "defaultValue": "Digite o valor padrão do metadado..."
+          "name": "Digite o nome do atributo...",
+          "type": "Digite o tipo do atributo...",
+          "defaultValue": "Digite o valor padrão do atributo..."
         }
       }
     },
@@ -300,9 +300,9 @@
       "placeholders": {
         "name": "Digite o nome do menu...",
         "meta": {
-          "name": "Digite o nome do metadado...",
-          "type": "Digite o tipo do metadado...",
-          "defaultValue": "Digite o valor padrão do metadado..."
+          "name": "Digite o nome do atributo...",
+          "type": "Digite o tipo do atributo...",
+          "defaultValue": "Digite o valor padrão do atributo..."
         }
       },
       "tabs": {
@@ -388,7 +388,7 @@
             "type": "number"
           },
           "meta": {
-            "description": "Metadados do Item de Menu",
+            "description": "Atributos do Item de Menu",
             "type": "Record<string, string | number | boolean | Date>"
           },
           "children": {
