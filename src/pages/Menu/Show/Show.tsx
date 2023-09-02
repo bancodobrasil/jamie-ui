@@ -254,12 +254,12 @@ export const ShowMenu = () => {
           <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
             {t('menu.show.actions.edit')}
           </Button>
-          <Button variant="outlined" onClick={onEditTemplateClickHandler} disabled={loadingDelete}>
+          {/* <Button variant="outlined" onClick={onEditTemplateClickHandler} disabled={loadingDelete}>
             {t('menu.show.actions.editTemplate')}
-          </Button>
-          <Button variant="outlined" onClick={onEditItemsClickHandler} disabled={loadingDelete}>
+          </Button> */}
+          {/* <Button variant="outlined" onClick={onEditItemsClickHandler} disabled={loadingDelete}>
             {t('menu.show.actions.editItems')}
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             color="error"
@@ -278,9 +278,9 @@ export const ShowMenu = () => {
               {t('menu.show.actions.pendencies')}
             </Button>
           )}
-        </Box>
+        {/* </Box>
         <Divider />
-        <Box className="flex justify-center space-x-8">
+        <Box className="flex justify-center space-x-8"> */}
           <Button
             variant="outlined"
             color="warning"
