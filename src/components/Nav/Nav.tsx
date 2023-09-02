@@ -7,11 +7,13 @@ import {
   SelectChangeEvent,
   Typography,
   Button,
+  Menu,
 } from '@mui/material';
 import { useKeycloak } from '@react-keycloak/web';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
+import LanguageIcon from '@mui/icons-material/Language';
 import { JAMIE_UI_BASE_URL } from '../../constants';
 
 export const Nav = () => {
@@ -22,28 +24,57 @@ export const Nav = () => {
   const { t, i18n } = useTranslation();
 
   const [language, setLanguage] = useState<string>(i18n.resolvedLanguage);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleLanguageChange = (event: SelectChangeEvent) => {
-    const lng = event.target.value as string;
-    i18n.changeLanguage(lng);
-    setLanguage(lng);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLanguageChange = (event: React.MouseEvent<HTMLElement>, newLanguage: string) => {
+    i18n.changeLanguage(newLanguage);
+    setLanguage(newLanguage);
+    setAnchorEl(null);
   };
 
   const renderLanguageSwitcher = () => (
-    <FormControl sx={{ minWidth: 160 }}>
-      <InputLabel id="demo-simple-select-label">{t('language.title')}</InputLabel>
-      <Select
-        variant="standard"
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={language}
-        label={t('language.title')}
-        onChange={handleLanguageChange}
+    <Box sx={{ flex: 1, width: '2.7rem' }}>
+      <Button
+        onClick={handleMenuClick}
+        variant="text"
+        id="language-button"
+        startIcon={
+          <LanguageIcon
+            sx={{
+              color: '#38879c',
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'center',
+              mr: '10px',
+            }}
+          />
+        }
+      />
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        id="language-menu"
       >
-        <MenuItem value="en">English</MenuItem>
-        <MenuItem value="pt-BR">Português Brasileiro</MenuItem>
-      </Select>
-    </FormControl>
+        <MenuItem onClick={event => handleLanguageChange(event, 'en')} selected={language === 'en'}>
+          English
+        </MenuItem>
+        <MenuItem
+          onClick={event => handleLanguageChange(event, 'pt-BR')}
+          selected={language === 'pt-BR'}
+        >
+          Português Brasileiro
+        </MenuItem>
+      </Menu>
+    </Box>
   );
 
   const onLogoutClickHandler = () => {
@@ -54,21 +85,28 @@ export const Nav = () => {
     keycloak?.login({ redirectUri: `${JAMIE_UI_BASE_URL}${location.pathname}` });
   };
 
+  /* The `renderLoginButton` function is responsible for rendering the login button based on the
+authentication status of the user. */
   const renderLoginButton = () => {
     if (keycloak?.authenticated) {
       return (
         <Box>
-          <Button onClick={onLogoutClickHandler}>Logout</Button>
+          <Button variant="text" color="secondary" onClick={onLogoutClickHandler}>
+            Logout
+          </Button>
         </Box>
       );
     }
     return (
       <Box>
-        <Button onClick={onLoginClickHandler}>Login</Button>
+        <Button variant="text" color="secondary" onClick={onLoginClickHandler}>
+          Login
+        </Button>
       </Box>
     );
   };
 
+  /* Return a element that represents the navigation bar component. */
   return (
     <Box
       component="nav"
@@ -76,13 +114,14 @@ export const Nav = () => {
         display: 'flex',
         alignItems: 'center',
         px: '2rem',
-        minHeight: '5rem',
+        minHeight: '3rem',
+        backgroundColor: 'black',
       }}
       className="shadow"
     >
       <Box>
         <Link to="/">
-          <Typography variant="h6" component="h6" sx={{ fontSize: '1.5rem' }}>
+          <Typography variant="h6" component="h6" sx={{ fontSize: '1.25rem', color: 'white' }}>
             Jamie
           </Typography>
         </Link>
@@ -91,7 +130,7 @@ export const Nav = () => {
         sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1, alignItems: 'center' }}
         className="space-x-4"
       >
-        {renderLanguageSwitcher()}
+        <Box>{renderLanguageSwitcher()}</Box>
         {renderLoginButton()}
       </Box>
     </Box>
