@@ -61,6 +61,9 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
   const { t, i18n } = useTranslation();
 
   const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     let metaHasError = false;
 
     meta.forEach((m, i) => {
@@ -457,7 +460,8 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                 marginLeft: '16px',
               }}
             >
-              {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')}
+              {t('buttons.save')}
+              {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
             </Button>
           </Box>
         </Box>
