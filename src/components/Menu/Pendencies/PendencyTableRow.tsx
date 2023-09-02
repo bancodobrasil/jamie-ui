@@ -298,7 +298,7 @@ export const PendencyTableRow = ({
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component={(<th/>).type} scope="row">
           {DateTime.fromISO(pendency.createdAt)
             .setLocale(i18n.language)
             .toLocaleString(DateTime.DATETIME_FULL)}
