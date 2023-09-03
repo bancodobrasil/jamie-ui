@@ -157,7 +157,7 @@ export const EditTemplateMenu = () => {
         .filter(item => !item.parentId)
         .sort((a, b) => a.order - b.order) || [];
     const { name } = menu;
-    const meta = menu.meta.map((meta: GraphQLData<IMenuMeta>) => {
+    const meta = (menu.meta || []).map((meta: GraphQLData<IMenuMeta>) => {
       const { __typename, ...rest } = meta;
       return rest;
     });
