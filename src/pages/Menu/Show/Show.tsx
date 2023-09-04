@@ -235,7 +235,7 @@ export const ShowMenu = () => {
         {renderHasConditions()}
       </Box>
       <Divider />
-      <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
+      {/* <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
         {t('menu.fields.meta.title', { count: 2 })}
       </Typography>
       <Box sx={{ mb: '1rem' }} className="space-y-4">
@@ -245,7 +245,7 @@ export const ShowMenu = () => {
           <p className="text-gray-500">{t('common.noData')}</p>
         )}
       </Box>
-      <Divider />
+      <Divider /> */}
       <Box className="flex flex-col space-y-4 py-4 w-fit">
         <Typography variant="h2" component="h2">
           {t('menu.show.actions.title')}:
@@ -278,7 +278,7 @@ export const ShowMenu = () => {
               {t('menu.show.actions.pendencies')}
             </Button>
           )}
-        {/* </Box>
+          {/* </Box>
         <Divider />
         <Box className="flex justify-center space-x-8"> */}
           <Button
