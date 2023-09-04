@@ -391,7 +391,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
   return (
     <Form onSubmit={handleFormSubmit}>
       <Box>
-        {meta.length > 0 && (
+        {meta?.length > 0 && (
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
