@@ -287,7 +287,7 @@ export const EditTemplateMenu = () => {
           overflow: 'hidden',
         }}
       >
-        <Typography
+        {/* <Typography
           variant="h1"
           component="h1"
           sx={{
@@ -299,7 +299,7 @@ export const EditTemplateMenu = () => {
           }}
         >
           {t('menuItem.editTemplate.title')}
-        </Typography>
+        </Typography> */}
         <Box
           sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'space-between' }}
         >
