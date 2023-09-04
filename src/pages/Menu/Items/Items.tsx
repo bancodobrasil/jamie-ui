@@ -341,7 +341,7 @@ export const ItemsPreview = () => {
           alignItems: 'center',
         }}
       >
-        <Typography
+        {/* <Typography
           variant="h1"
           sx={{
             fontWeight: 700,
@@ -352,7 +352,7 @@ export const ItemsPreview = () => {
           }}
         >
           {data?.menu.name}
-        </Typography>
+        </Typography> */}
         <Box
           sx={{
             display: 'flex',
