@@ -62,10 +62,8 @@ export const ItemsPreview = () => {
           const { __typename, ...rest } = item;
           const startPublication = rest.startPublication
             ? DateTime.fromISO(rest.startPublication)
-            : undefined;
-          const endPublication = rest.endPublication
-            ? DateTime.fromISO(rest.endPublication)
-            : undefined;
+            : null;
+          const endPublication = rest.endPublication ? DateTime.fromISO(rest.endPublication) : null;
           const children = getChildren(item);
           const node = {
             ...rest,
@@ -87,10 +85,8 @@ export const ItemsPreview = () => {
           const { __typename, ...rest } = item;
           const startPublication = rest.startPublication
             ? DateTime.fromISO(rest.startPublication)
-            : undefined;
-          const endPublication = rest.endPublication
-            ? DateTime.fromISO(rest.endPublication)
-            : undefined;
+            : null;
+          const endPublication = rest.endPublication ? DateTime.fromISO(rest.endPublication) : null;
           const parentId = item.parentId || 0;
           const children = getChildren(item);
           const node = {
@@ -371,7 +367,7 @@ export const ItemsPreview = () => {
               width: '100%',
             }}
           >
-            <Box
+            {/* <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -394,7 +390,7 @@ export const ItemsPreview = () => {
               >
                 {t('menu.preview.root')}
               </Typography>
-            </Box>
+            </Box> */}
             <NodeTreeView
               nodes={nodes}
               editingNode={editingNode}

@@ -331,7 +331,7 @@ export const OperationScreen = ({
             return;
           }
           data?.menu.meta?.forEach(m => {
-            const defaultValue = (selectedNode.meta||{})[m.id] || m.defaultValue;
+            const defaultValue = (selectedNode.meta || {})[m.id] || m.defaultValue;
             switch (m.type) {
               case MenuMetaType.TEXT:
               case MenuMetaType.NUMBER:
