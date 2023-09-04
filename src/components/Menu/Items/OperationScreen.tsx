@@ -297,7 +297,7 @@ export const OperationScreen = ({
           setEditingNode(emptyEditingNode);
           break;
         case EnumInputActionScreen.INSERT:
-          (data?.menu.meta || []).forEach(m => {
+          data?.menu.meta?.forEach(m => {
             switch (m.type) {
               case MenuMetaType.TEXT:
               case MenuMetaType.NUMBER:
@@ -330,7 +330,7 @@ export const OperationScreen = ({
             !selectedNode && setSelected('');
             return;
           }
-          (data?.menu.meta || []).forEach(m => {
+          data?.menu.meta?.forEach(m => {
             const defaultValue = (selectedNode.meta||{})[m.id] || m.defaultValue;
             switch (m.type) {
               case MenuMetaType.TEXT:

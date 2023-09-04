@@ -64,8 +64,7 @@ export const EditMenu = () => {
     setHasConditions(data.menu.hasConditions);
     setParameters(data.menu.parameters);
     setMetaWithErrors(
-      (data?.menu.meta || [])
-        .map(m => {
+      data?.menu.meta?.map(m => {
           const { __typename, ...rest } = m;
           if (!rest.defaultValue) rest.defaultValue = '';
           return { ...rest, errors: {} };
