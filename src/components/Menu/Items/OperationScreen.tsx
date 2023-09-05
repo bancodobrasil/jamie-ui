@@ -537,6 +537,7 @@ export const OperationScreen = ({
               lineHeight: '2rem',
               letterSpacing: '0.18px',
               mb: '1rem',
+              mt: '1rem',
             }}
           >
             {t('menu.preview.actions.title')}
@@ -659,7 +660,6 @@ export const OperationScreen = ({
             sx={{
               fontWeight: 700,
               fontSize: '2rem',
-              marginTop: '2rem',
               lineHeight: '2rem',
               letterSpacing: '0.18px',
               textAlign: 'center',
