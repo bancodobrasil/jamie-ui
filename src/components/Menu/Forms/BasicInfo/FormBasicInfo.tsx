@@ -232,6 +232,7 @@ export const FormBasicInfo = ({
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'flex-end',
+              height: '10rem',
             }}
           >
             <Button
