@@ -199,6 +199,7 @@
     "title_other": "Menus",
     "of": "$t(menu.fields.{{field}}) do Menu",
     "fields": {
+      "uuid": "UUID",
       "name": "Nome",
       "mustDeferChanges": "Deferimento obrigatório",
       "hasConditions": "Tem Condições",

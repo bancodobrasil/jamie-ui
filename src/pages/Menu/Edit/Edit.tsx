@@ -41,6 +41,9 @@ export const EditMenu = () => {
   const [loaded, setLoaded] = React.useState<boolean>(false);
 
   const [name, setName] = React.useState<string>('');
+
+  const [uuid, setUUID] = React.useState<string>('');
+
   const [nameError, setNameError] = React.useState<string>('');
 
   const [mustDeferChanges, setMustDeferChanges] = React.useState<boolean>(false);
@@ -61,6 +64,7 @@ export const EditMenu = () => {
 
   useEffect(() => {
     if (loaded || !data) return;
+    setUUID(data.menu.uuid);
     setName(data.menu.name);
     setMustDeferChanges(data.menu.mustDeferChanges);
     setHasConditions(data.menu.hasConditions);
@@ -284,6 +288,7 @@ export const EditMenu = () => {
           </Box>
           <TabPanel value={TAB_BASIC_INFO} sx={{ p: '0px' }}>
             <FormBasicInfo
+              uuid={uuid}
               name={name}
               setName={setName}
               nameError={nameError}

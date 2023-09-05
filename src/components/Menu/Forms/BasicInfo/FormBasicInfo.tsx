@@ -14,6 +14,7 @@ const Form = styled('form')({
 });
 
 interface Props {
+  uuid?: string;
   name: string;
   setName: (name: string) => void;
   nameError: string;
@@ -31,6 +32,7 @@ interface Props {
 }
 
 export const FormBasicInfo = ({
+  uuid,
   name,
   setName,
   nameError,
@@ -119,6 +121,17 @@ export const FormBasicInfo = ({
 
   return (
     <Form onSubmit={handleFormSubmit}>
+      {action === FormAction.UPDATE && (
+        <Box sx={{ flex: '0 1 auto', flexDirection: 'column', mb: '1rem' }}>
+          <TextField
+            id="uuid"
+            label={t('menu.of', { field: 'uuid' })}
+            disabled
+            value={uuid}
+            sx={{ width: '30rem' }}
+          />
+        </Box>
+      )}
       <Box sx={{ flex: '0 1 auto', flexDirection: 'column' }}>
         <TextField
           id="name"
