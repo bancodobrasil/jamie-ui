@@ -245,7 +245,7 @@ const RestoreRevision = () => {
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menu.name, navigateTo: '../' },
+          { label: data?.menu.name, navigateTo: '../edit' },
           { label: t('menuRevision.restore.title') },
         ]}
         onBack={onBackClickHandler}
