@@ -659,6 +659,7 @@ export const OperationScreen = ({
             sx={{
               fontWeight: 700,
               fontSize: '2rem',
+              marginTop: '2rem',
               lineHeight: '2rem',
               letterSpacing: '0.18px',
               textAlign: 'center',

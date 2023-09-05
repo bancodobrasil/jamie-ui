@@ -39,7 +39,7 @@ export const NodeTreeView = ({
         margin: '3px 0px',
         backgroundColor: '#fff',
         borderRadius: '4px',
-        padding: '11px 10px 12px 20px',
+        padding: '12px 0px 13px 25px',
       };
 
       return nodes.map(node => {
