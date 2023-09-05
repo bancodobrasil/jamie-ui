@@ -161,7 +161,7 @@ const PublishRevision = () => {
           type: ActionTypes.OPEN_NOTIFICATION,
           message: `${t('menuRevision.publish.notification.success')}!`,
         });
-        navigate(`/menus/${id}`);
+        navigate(`/menus/${id}/edit`);
       },
       onError: error => {
         setLoadingSubmit(false);
