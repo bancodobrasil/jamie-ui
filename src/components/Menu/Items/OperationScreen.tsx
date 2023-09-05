@@ -664,6 +664,7 @@ export const OperationScreen = ({
               letterSpacing: '0.18px',
               textAlign: 'center',
               width: '100%',
+              mt: '1rem',
             }}
           >
             {t('menu.preview.actions.insert')}
@@ -984,6 +985,7 @@ export const OperationScreen = ({
               letterSpacing: '0.18px',
               textAlign: 'center',
               width: '100%',
+              mt: '1rem',
             }}
           >
             {t('menu.preview.actions.edit')}
