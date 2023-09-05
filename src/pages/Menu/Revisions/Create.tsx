@@ -182,7 +182,7 @@ const CreateRevision = () => {
             context: 'male',
           })}!`,
         });
-        navigate(`/menus/${id}`);
+        navigate(`/menus/${id}/edit`);
       },
       onError: error => {
         setLoadingSubmit(false);
