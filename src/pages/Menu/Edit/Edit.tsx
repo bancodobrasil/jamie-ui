@@ -282,7 +282,7 @@ export const EditMenu = () => {
               />
             </TabList>
           </Box>
-          <TabPanel value={TAB_BASIC_INFO}>
+          <TabPanel value={TAB_BASIC_INFO} sx={{ p: '0px' }}>
             <FormBasicInfo
               name={name}
               setName={setName}
@@ -300,10 +300,10 @@ export const EditMenu = () => {
               action={FormAction.UPDATE}
             />
           </TabPanel>
-          <TabPanel value={TAB_ITEMS}>
+          <TabPanel value={TAB_ITEMS} sx={{ p: '0px' }}>
             <ItemsPreview />
           </TabPanel>
-          <TabPanel value={TAB_ATTRIBUTES}>
+          <TabPanel value={TAB_ATTRIBUTES} sx={{ p: '0px' }}>
             <FormAttributes
               meta={metaWithErrors}
               setMeta={setMetaWithErrors}
@@ -313,7 +313,7 @@ export const EditMenu = () => {
               action={FormAction.UPDATE}
             />
           </TabPanel>
-          <TabPanel value={TAB_TEMPLATE}>
+          <TabPanel value={TAB_TEMPLATE} sx={{ p: '0px' }}>
             <EditTemplateMenu />
           </TabPanel>
         </TabContext>
