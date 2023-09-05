@@ -33,8 +33,16 @@ export const NodeTreeView = ({
   };
 
   const renderNodes = React.useCallback(
-    (nodes: INode[]) =>
-      nodes.map(node => {
+    (nodes: INode[]) => {
+      const baseSX = {
+        border: '1px solid #eaeaec',
+        margin: '3px 0px',
+        backgroundColor: '#fff',
+        borderRadius: '4px',
+        padding: '11px 10px 12px 20px',
+      };
+
+      return nodes.map(node => {
         let color = 'black';
         const fontWeight = node.id === editingNode.id ? 'bold' : 'normal';
         switch (node.action) {
@@ -56,6 +64,7 @@ export const NodeTreeView = ({
               label={node.label}
               sx={{
                 '& > .MuiTreeItem-content  > .MuiTreeItem-label': {
+                  ...baseSX,
                   color,
                   fontWeight,
                 },
@@ -72,18 +81,28 @@ export const NodeTreeView = ({
             label={node.label}
             sx={{
               '& .MuiTreeItem-content .MuiTreeItem-label': {
+                ...baseSX,
                 color,
                 fontWeight,
               },
             }}
           />
         );
-      }),
+      });
+    },
     [editingNode.id],
   );
 
   return (
-    <Box sx={{ width: '100%', height: '100%', border: '1px solid black', p: '1rem' }}>
+    <Box
+      sx={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#f4f5f7',
+        p: '1rem',
+        overflowY: 'auto',
+      }}
+    >
       <TreeView
         defaultExpandIcon={<ExpandMoreIcon />}
         defaultCollapseIcon={<ExpandLessIcon />}

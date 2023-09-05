@@ -403,7 +403,12 @@ export const ItemsPreview = () => {
           </Box>
 
           <div
-            style={{ width: '1px', height: '100%', border: '1px solid black', margin: '0 50px' }}
+            style={{
+              width: '1px',
+              height: '100%',
+              border: '1px solid #eaeaec',
+              margin: '0 50px 0 0',
+            }}
           />
 
           <OperationScreen
