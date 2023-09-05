@@ -215,6 +215,7 @@
       "meta": {
         "title_one": "Atributo",
         "title_other": "Atributos",
+        "description": "Os atributos aparecerão como campos de formulário na aba itens do menu e não serão visíveis para o usuário final.",
         "of": "$t(menu.fields.meta.{{field}}) do Atributo",
         "add": "Adicionar Atributo",
         "name": "Nome",
