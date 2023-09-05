@@ -199,6 +199,7 @@
     "title_other": "Menus",
     "of": "Menu's $t(menu.fields.{{field}})",
     "fields": {
+      "uuid": "UUID",
       "name": "Name",
       "mustDeferChanges": "Mandatory deferral",
       "hasConditions": "Has Conditions",
@@ -443,7 +444,6 @@
     },
     "publish": {
       "title": "Publish Menu Version",
-
       "selectRevision": "Select a menu version to publish",
       "reviewChanges": {
         "title": "Review Changes",

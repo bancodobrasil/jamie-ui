@@ -2,6 +2,7 @@ import { DocumentNode, gql } from '@apollo/client';
 
 export const ALL_MENU_PROPERTIES = `
 id
+uuid
 name
 mustDeferChanges
 hasConditions
