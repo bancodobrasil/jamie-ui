@@ -87,7 +87,7 @@ const RestoreRevision = () => {
         children: getChildren(snapshot.items || [], item),
       }))
       .filter(item => !item.parentId);
-    const updatedMeta = menu.meta?.map((item: any, index: number) => {
+    const updatedMeta = (menu.meta || []).map((item: any, index: number) => {
       const current = snapshot.meta?.[index];
       if (!current || item.id !== current.id || item.type !== current.type) {
         const updatedItem = snapshot.meta?.find(i => i.id === item.id && i.type === item.type);

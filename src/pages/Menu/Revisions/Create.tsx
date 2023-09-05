@@ -97,7 +97,7 @@ const CreateRevision = () => {
   const menuDiff: any = React.useMemo(() => {
     if (!menu) return null;
     if (!menu.currentRevision) return menu;
-    let currentMeta = [...menu.meta];
+    let currentMeta = [...(menu.meta || [])];
     const { snapshot } = menu.currentRevision;
     const updatedMeta = snapshot.meta?.map((item: any, index: number) => {
       const current = currentMeta?.[index];
