@@ -286,7 +286,7 @@ export const EditTemplateItems = () => {
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
           { label: data?.menuItem.menu.name, navigateTo: '../../' },
-          { label: t('menu.preview.title'), navigateTo: '../' },
+          { label: t('menu.preview.title'), navigateTo: '../edit' },
           { label: data?.menuItem.label },
         ]}
         onBack={onBackClickHandler}

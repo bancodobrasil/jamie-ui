@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, Typography, Tab, IconButton } from '@mui/material';
+import { Box, Typography, Tab, IconButton, Button } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
@@ -57,6 +57,8 @@ export const EditMenu = () => {
 
   const [tab, setTab] = React.useState<string>(TAB_ITEMS);
 
+  const [removeMenu, { loading: loadingDelete }] = useMutation(MenuService.REMOVE_MENU);
+
   useEffect(() => {
     if (loaded || !data) return;
     setName(data.menu.name);
@@ -64,7 +66,8 @@ export const EditMenu = () => {
     setHasConditions(data.menu.hasConditions);
     setParameters(data.menu.parameters);
     setMetaWithErrors(
-      data?.menu.meta?.map(m => {
+      data?.menu.meta
+        ?.map(m => {
           const { __typename, ...rest } = m;
           if (!rest.defaultValue) rest.defaultValue = '';
           return { ...rest, errors: {} };
@@ -78,8 +81,47 @@ export const EditMenu = () => {
     setTab(newTab);
   };
 
+  const onDeleteClickHandler = () => {
+    // eslint-disable-next-line no-restricted-globals, no-alert
+    const confirmed = confirm(t('menu.show.messages.confirmDelete'));
+    if (confirmed) {
+      removeMenu({
+        variables: { id: Number(id) },
+        onCompleted: data => {
+          dispatch({
+            type: ActionTypes.OPEN_NOTIFICATION,
+            message: `${t('notification.deleteSuccess', {
+              resource: t('menu.title', { count: 1 }),
+              context: 'male',
+            })}!`,
+          });
+          navigate('/');
+        },
+        onError: error => {
+          openDefaultErrorNotification(error, dispatch);
+        },
+      });
+    }
+  };
+
+  const onPendenciesClickHandler = () => {
+    navigate('../pendencies');
+  };
+
+  const onRestoreRevisionClickHandler = () => {
+    navigate('../restoreVersion');
+  };
+
+  const onCreateRevisionClickHandler = () => {
+    navigate('../closeVersion');
+  };
+
+  const onPublishRevisionClickHandler = () => {
+    navigate('../publishVersion');
+  };
+
   const onBackClickHandler = () => {
-    navigate('../');
+    navigate('/');
   };
 
   const onSubmit = () => {
@@ -116,7 +158,7 @@ export const EditMenu = () => {
             context: 'male',
           })}!`,
         });
-        navigate(`/menus/${data.updateMenu.id}`, { state: { refetch: true } });
+        navigate(`/menus/${data.updateMenu.id}/edit`, { state: { refetch: true } });
       },
       onError: error => {
         setLoadingSubmit(false);
@@ -154,8 +196,7 @@ export const EditMenu = () => {
         <AppBreadcrumbs
           items={[
             { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-            { label: data?.menu.name, navigateTo: '../' },
-            { label: t('menu.edit.title') },
+            { label: data?.menu.name },
           ]}
           onBack={onBackClickHandler}
         />
@@ -166,6 +207,57 @@ export const EditMenu = () => {
           <Typography variant="h3" component="h1">
             {t('menu.edit.title')}
           </Typography>
+          <Box
+            className="space-x-4"
+            sx={{
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={onDeleteClickHandler}
+              disabled={loadingDelete}
+            >
+              {t('menu.show.actions.delete')}
+            </Button>
+            {data?.menu.mustDeferChanges && (
+              <Button
+                variant="outlined"
+                color="warning"
+                onClick={onPendenciesClickHandler}
+                disabled={loadingDelete}
+              >
+                {t('menu.show.actions.pendencies')}
+              </Button>
+            )}
+            <Button
+              variant="outlined"
+              color="warning"
+              onClick={onRestoreRevisionClickHandler}
+              disabled={loadingDelete}
+            >
+              {t('menu.show.actions.restoreRevision')}
+            </Button>
+            <Button
+              variant="outlined"
+              color="success"
+              onClick={onCreateRevisionClickHandler}
+              disabled={loadingDelete}
+            >
+              {t('menu.show.actions.createRevision')}
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={onPublishRevisionClickHandler}
+              disabled={loadingDelete}
+            >
+              {t('menu.show.actions.publishRevision')}
+            </Button>
+          </Box>
         </Box>
       </Box>
       <Box sx={{ width: '100%' }}>
