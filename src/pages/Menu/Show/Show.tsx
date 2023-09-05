@@ -235,17 +235,17 @@ export const ShowMenu = () => {
         {renderHasConditions()}
       </Box>
       <Divider />
-      <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
+      {/* <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
         {t('menu.fields.meta.title', { count: 2 })}
       </Typography>
       <Box sx={{ mb: '1rem' }} className="space-y-4">
-        {data?.menu.meta.length > 0 ? (
+        {data?.menu.meta && data?.menu.meta.length > 0 ? (
           renderMeta()
         ) : (
           <p className="text-gray-500">{t('common.noData')}</p>
         )}
       </Box>
-      <Divider />
+      <Divider /> */}
       <Box className="flex flex-col space-y-4 py-4 w-fit">
         <Typography variant="h2" component="h2">
           {t('menu.show.actions.title')}:
@@ -254,12 +254,12 @@ export const ShowMenu = () => {
           <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
             {t('menu.show.actions.edit')}
           </Button>
-          <Button variant="outlined" onClick={onEditTemplateClickHandler} disabled={loadingDelete}>
+          {/* <Button variant="outlined" onClick={onEditTemplateClickHandler} disabled={loadingDelete}>
             {t('menu.show.actions.editTemplate')}
-          </Button>
-          <Button variant="outlined" onClick={onEditItemsClickHandler} disabled={loadingDelete}>
+          </Button> */}
+          {/* <Button variant="outlined" onClick={onEditItemsClickHandler} disabled={loadingDelete}>
             {t('menu.show.actions.editItems')}
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             color="error"
@@ -278,9 +278,9 @@ export const ShowMenu = () => {
               {t('menu.show.actions.pendencies')}
             </Button>
           )}
-        </Box>
+          {/* </Box>
         <Divider />
-        <Box className="flex justify-center space-x-8">
+        <Box className="flex justify-center space-x-8"> */}
           <Button
             variant="outlined"
             color="warning"

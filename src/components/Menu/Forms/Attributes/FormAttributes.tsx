@@ -5,6 +5,7 @@ import {
   FormControlLabel,
   Select,
   TextField,
+  Typography,
   Checkbox,
   FormControl,
   InputLabel,
@@ -61,6 +62,9 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
   const { t, i18n } = useTranslation();
 
   const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     let metaHasError = false;
 
     meta.forEach((m, i) => {
@@ -387,8 +391,34 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
   return (
     <Form onSubmit={handleFormSubmit}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          flex: 1,
+        }}
+      >
+        <Typography variant="body1" component="p">
+          {t('menu.fields.meta.description')}
+        </Typography>
+        {/* <Typography variant="body1" component="p" sx={{ mt: '0.5rem' }}>
+          <Trans i18nKey="menuItem.editTemplate.templateFormat.description">
+            X{' '}
+            <Link
+              href="https://handlebarsjs.com/"
+              rel="noopener noreferrer"
+              target="_blank"
+              underline="always"
+            >
+              Y
+            </Link>{' '}
+            Z
+          </Trans>
+        </Typography> */}
+      </Box>
       <Box>
-        {meta.length > 0 && (
+        {meta?.length > 0 && (
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
@@ -457,7 +487,8 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                 marginLeft: '16px',
               }}
             >
-              {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')}
+              {t('buttons.save')}
+              {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
             </Button>
           </Box>
         </Box>

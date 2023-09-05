@@ -161,7 +161,7 @@ const PublishRevision = () => {
           type: ActionTypes.OPEN_NOTIFICATION,
           message: `${t('menuRevision.publish.notification.success')}!`,
         });
-        navigate(`/menus/${id}`);
+        navigate(`/menus/${id}/edit`);
       },
       onError: error => {
         setLoadingSubmit(false);
@@ -259,7 +259,7 @@ const PublishRevision = () => {
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menu.name, navigateTo: '../' },
+          { label: data?.menu.name, navigateTo: '../edit' },
           { label: t('menuRevision.publish.title') },
         ]}
         onBack={onBackClickHandler}

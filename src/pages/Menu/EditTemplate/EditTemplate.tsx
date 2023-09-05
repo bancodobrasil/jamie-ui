@@ -157,7 +157,7 @@ export const EditTemplateMenu = () => {
         .filter(item => !item.parentId)
         .sort((a, b) => a.order - b.order) || [];
     const { name } = menu;
-    const meta = menu.meta.map((meta: GraphQLData<IMenuMeta>) => {
+    const meta = (menu.meta || []).map((meta: GraphQLData<IMenuMeta>) => {
       const { __typename, ...rest } = meta;
       return rest;
     });
@@ -287,7 +287,7 @@ export const EditTemplateMenu = () => {
           overflow: 'hidden',
         }}
       >
-        <Typography
+        {/* <Typography
           variant="h1"
           component="h1"
           sx={{
@@ -299,7 +299,7 @@ export const EditTemplateMenu = () => {
           }}
         >
           {t('menuItem.editTemplate.title')}
-        </Typography>
+        </Typography> */}
         <Box
           sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'space-between' }}
         >

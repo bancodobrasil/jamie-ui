@@ -199,6 +199,7 @@
     "title_other": "Menus",
     "of": "Menu's $t(menu.fields.{{field}})",
     "fields": {
+      "uuid": "UUID",
       "name": "Name",
       "belowNameField":"This name will only appear for Jamie",
       "mustDeferChanges": "Mandatory approval",
@@ -447,7 +448,6 @@
     },
     "publish": {
       "title": "Publish Menu Version",
-
       "selectRevision": "Select a menu version to publish",
       "reviewChanges": {
         "title": "Review Changes",

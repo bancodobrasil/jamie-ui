@@ -199,6 +199,7 @@
     "title_other": "Menus",
     "of": "$t(menu.fields.{{field}}) do Menu",
     "fields": {
+      "uuid": "UUID",
       "name": "Nome",
       "belowNameField":"Esse nome só aparecerá no Jamie",
       "mustDeferChanges": "Aprovação obrigatória",
@@ -216,10 +217,11 @@
         }
       },
       "meta": {
-        "title_one": "Metadado",
-        "title_other": "Metadados",
-        "of": "$t(menu.fields.meta.{{field}}) do Metadado",
-        "add": "Adicionar Metadado",
+        "title_one": "Atributo",
+        "title_other": "Atributos",
+        "description": "Os atributos aparecerão como campos de formulário na aba itens do menu e não serão visíveis para o usuário final.",
+        "of": "$t(menu.fields.meta.{{field}}) do Atributo",
+        "add": "Adicionar Atributo",
         "name": "Nome",
         "required": "Obrigatório",
         "enabled": "Habilitado",
@@ -293,9 +295,9 @@
       "placeholders": {
         "name": "Digite o nome do menu...",
         "meta": {
-          "name": "Digite o nome do metadado...",
-          "type": "Digite o tipo do metadado...",
-          "defaultValue": "Digite o valor padrão do metadado..."
+          "name": "Digite o nome do atributo...",
+          "type": "Digite o tipo do atributo...",
+          "defaultValue": "Digite o valor padrão do atributo..."
         }
       }
     },
@@ -304,9 +306,9 @@
       "placeholders": {
         "name": "Digite o nome do menu...",
         "meta": {
-          "name": "Digite o nome do metadado...",
-          "type": "Digite o tipo do metadado...",
-          "defaultValue": "Digite o valor padrão do metadado..."
+          "name": "Digite o nome do atributo...",
+          "type": "Digite o tipo do atributo...",
+          "defaultValue": "Digite o valor padrão do atributo..."
         }
       },
       "tabs": {
@@ -392,7 +394,7 @@
             "type": "number"
           },
           "meta": {
-            "description": "Metadados do Item de Menu",
+            "description": "Atributos do Item de Menu",
             "type": "Record<string, string | number | boolean | Date>"
           },
           "children": {

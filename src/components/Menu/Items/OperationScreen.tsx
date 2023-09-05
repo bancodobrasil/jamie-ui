@@ -119,7 +119,8 @@ export const OperationScreen = ({
             meta = Object.keys(rest.meta).reduce((acc, key) => {
               const name = data.menu.meta.find(meta => meta.id === Number(key))?.name || key;
               const meta = rest.meta[key];
-              const originalMeta = original?.meta[key] || original?.meta[name];
+              const originalMetaMap = original?.meta || {};
+              const originalMeta = originalMetaMap[key] || originalMetaMap[name];
               if (meta == null || meta === '' || meta === originalMeta) {
                 return acc;
               }
@@ -296,7 +297,7 @@ export const OperationScreen = ({
           setEditingNode(emptyEditingNode);
           break;
         case EnumInputActionScreen.INSERT:
-          data?.menu.meta.forEach(m => {
+          data?.menu.meta?.forEach(m => {
             switch (m.type) {
               case MenuMetaType.TEXT:
               case MenuMetaType.NUMBER:
@@ -329,8 +330,8 @@ export const OperationScreen = ({
             !selectedNode && setSelected('');
             return;
           }
-          data?.menu.meta.forEach(m => {
-            const defaultValue = selectedNode.meta[m.id] || m.defaultValue;
+          data?.menu.meta?.forEach(m => {
+            const defaultValue = (selectedNode.meta || {})[m.id] || m.defaultValue;
             switch (m.type) {
               case MenuMetaType.TEXT:
               case MenuMetaType.NUMBER:
@@ -536,6 +537,7 @@ export const OperationScreen = ({
               lineHeight: '2rem',
               letterSpacing: '0.18px',
               mb: '1rem',
+              mt: '1rem',
             }}
           >
             {t('menu.preview.actions.title')}
@@ -662,6 +664,7 @@ export const OperationScreen = ({
               letterSpacing: '0.18px',
               textAlign: 'center',
               width: '100%',
+              mt: '1rem',
             }}
           >
             {t('menu.preview.actions.insert')}
@@ -982,6 +985,7 @@ export const OperationScreen = ({
               letterSpacing: '0.18px',
               textAlign: 'center',
               width: '100%',
+              mt: '1rem',
             }}
           >
             {t('menu.preview.actions.edit')}

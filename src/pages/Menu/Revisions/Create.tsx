@@ -97,7 +97,7 @@ const CreateRevision = () => {
   const menuDiff: any = React.useMemo(() => {
     if (!menu) return null;
     if (!menu.currentRevision) return menu;
-    let currentMeta = [...menu.meta];
+    let currentMeta = [...(menu.meta || [])];
     const { snapshot } = menu.currentRevision;
     const updatedMeta = snapshot.meta?.map((item: any, index: number) => {
       const current = currentMeta?.[index];
@@ -182,7 +182,7 @@ const CreateRevision = () => {
             context: 'male',
           })}!`,
         });
-        navigate(`/menus/${id}`);
+        navigate(`/menus/${id}/edit`);
       },
       onError: error => {
         setLoadingSubmit(false);
@@ -219,7 +219,7 @@ const CreateRevision = () => {
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menu.name, navigateTo: '../' },
+          { label: data?.menu.name, navigateTo: '../edit' },
           { label: t('menuRevision.create.title') },
         ]}
         onBack={onBackClickHandler}

@@ -1,8 +1,9 @@
-version: '3.5'
+version: '3.8'
 
 services:
   mysql:
-    image: mysql:8-debian
+    container_name: mysql
+    image: mysql:5.7
     volumes:
       - mysql_data:/var/lib/mysql
     environment:
@@ -10,9 +11,13 @@ services:
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: ghcr.io/bancodobrasil/jamie-auth-service:0.1.0-rc1
     volumes:
       - ./keycloak/themes:/opt/keycloak/themes
     environment:
@@ -27,7 +32,8 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     command: start-dev
 
 volumes:

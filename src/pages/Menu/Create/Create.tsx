@@ -51,7 +51,7 @@ export const CreateMenu = () => {
             context: 'male',
           })}!`,
         });
-        navigate(`/menus/${data.createMenu.id}`);
+        navigate(`/menus/${data.createMenu.id}/edit`);
       },
       onError: error => {
         setLoadingSubmit(false);

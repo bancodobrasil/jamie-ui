@@ -87,7 +87,7 @@ const RestoreRevision = () => {
         children: getChildren(snapshot.items || [], item),
       }))
       .filter(item => !item.parentId);
-    const updatedMeta = menu.meta?.map((item: any, index: number) => {
+    const updatedMeta = (menu.meta || []).map((item: any, index: number) => {
       const current = snapshot.meta?.[index];
       if (!current || item.id !== current.id || item.type !== current.type) {
         const updatedItem = snapshot.meta?.find(i => i.id === item.id && i.type === item.type);
@@ -154,7 +154,7 @@ const RestoreRevision = () => {
           type: ActionTypes.OPEN_NOTIFICATION,
           message: `${t('menuRevision.restore.notification.success')}!`,
         });
-        navigate(`/menus/${id}`);
+        navigate(`/menus/${id}/edit`);
       },
       onError: error => {
         setLoadingSubmit(false);
@@ -245,7 +245,7 @@ const RestoreRevision = () => {
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menu.name, navigateTo: '../' },
+          { label: data?.menu.name, navigateTo: '../edit' },
           { label: t('menuRevision.restore.title') },
         ]}
         onBack={onBackClickHandler}

@@ -184,7 +184,7 @@ const ListPendencies = () => {
       <AppBreadcrumbs
         items={[
           { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: getMenuQuery.data?.menu.name, navigateTo: '../' },
+          { label: getMenuQuery.data?.menu.name, navigateTo: '../edit' },
           { label: t('menu.pendencies.title') },
         ]}
         onBack={onBackClickHandler}

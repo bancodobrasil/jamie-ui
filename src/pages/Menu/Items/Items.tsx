@@ -62,10 +62,8 @@ export const ItemsPreview = () => {
           const { __typename, ...rest } = item;
           const startPublication = rest.startPublication
             ? DateTime.fromISO(rest.startPublication)
-            : undefined;
-          const endPublication = rest.endPublication
-            ? DateTime.fromISO(rest.endPublication)
-            : undefined;
+            : null;
+          const endPublication = rest.endPublication ? DateTime.fromISO(rest.endPublication) : null;
           const children = getChildren(item);
           const node = {
             ...rest,
@@ -87,10 +85,8 @@ export const ItemsPreview = () => {
           const { __typename, ...rest } = item;
           const startPublication = rest.startPublication
             ? DateTime.fromISO(rest.startPublication)
-            : undefined;
-          const endPublication = rest.endPublication
-            ? DateTime.fromISO(rest.endPublication)
-            : undefined;
+            : null;
+          const endPublication = rest.endPublication ? DateTime.fromISO(rest.endPublication) : null;
           const parentId = item.parentId || 0;
           const children = getChildren(item);
           const node = {
@@ -341,7 +337,7 @@ export const ItemsPreview = () => {
           alignItems: 'center',
         }}
       >
-        <Typography
+        {/* <Typography
           variant="h1"
           sx={{
             fontWeight: 700,
@@ -352,7 +348,7 @@ export const ItemsPreview = () => {
           }}
         >
           {data?.menu.name}
-        </Typography>
+        </Typography> */}
         <Box
           sx={{
             display: 'flex',
@@ -371,7 +367,7 @@ export const ItemsPreview = () => {
               width: '100%',
             }}
           >
-            <Box
+            {/* <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -394,7 +390,7 @@ export const ItemsPreview = () => {
               >
                 {t('menu.preview.root')}
               </Typography>
-            </Box>
+            </Box> */}
             <NodeTreeView
               nodes={nodes}
               editingNode={editingNode}
@@ -407,7 +403,12 @@ export const ItemsPreview = () => {
           </Box>
 
           <div
-            style={{ width: '1px', height: '100%', border: '1px solid black', margin: '0 50px' }}
+            style={{
+              width: '1px',
+              height: '100%',
+              border: '1px solid #eaeaec',
+              margin: '0 50px 0 0',
+            }}
           />
 
           <OperationScreen

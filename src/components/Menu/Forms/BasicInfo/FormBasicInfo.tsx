@@ -14,6 +14,7 @@ const Form = styled('form')({
 });
 
 interface Props {
+  uuid?: string;
   name: string;
   setName: (name: string) => void;
   nameError: string;
@@ -31,6 +32,7 @@ interface Props {
 }
 
 export const FormBasicInfo = ({
+  uuid,
   name,
   setName,
   nameError,
@@ -137,7 +139,18 @@ export const FormBasicInfo = ({
   // Draw the menu
   return (
     <Form onSubmit={handleFormSubmit}>
-      <Box sx={{ flex: '0 1 auto', flexDirection: 'column', height: '20rem' }}>
+      {action === FormAction.UPDATE && (
+        <Box sx={{ flex: '0 1 auto', flexDirection: 'column', mb: '1rem', height: '20rem' }}>
+          <TextField
+            id="uuid"
+            label={t('menu.of', { field: 'uuid' })}
+            disabled
+            value={uuid}
+            sx={{ width: '30rem' }}
+          />
+        </Box>
+      )}
+      <Box sx={{ flex: '0 1 auto', flexDirection: 'column' }}>
         <TextField
           id="name"
           label={t('menu.of', { field: 'name' })}

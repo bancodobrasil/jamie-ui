@@ -159,7 +159,7 @@ export const ListMenu = () => {
 
   const onSelectionModelChangeHandler = (selectionModel: GridSelectionModel) => {
     if (selectionModel.length > 0) {
-      navigate(`${selectionModel[0].toString()}`);
+      navigate(`${selectionModel[0].toString()}/edit`);
     }
   };
 
