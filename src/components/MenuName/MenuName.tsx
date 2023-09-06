@@ -3,7 +3,10 @@ import React from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const MenuName = ({ onClick, menuName }) => (
-  <Box className="flex flex-row space-x-1 items-center my-4">
+  <Box
+    className="flex flex-row space-x-1 items-center my-4"
+    sx={{ minWidth: '10rem', height: '1.5rem', paddingTop: '2.3rem' }}
+  >
     <IconButton onClick={onClick} size="small">
       <ArrowBackIcon fontSize="small" color="primary" />
     </IconButton>
