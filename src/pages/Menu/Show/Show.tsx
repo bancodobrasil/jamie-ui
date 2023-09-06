@@ -15,6 +15,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { JAMIE_FEATURE_CONDITIONS } from '../../../constants';
+import BackButton from '../../../components/BackButton';
 
 export const ShowMenu = () => {
   const { t, i18n } = useTranslation();
@@ -25,6 +26,10 @@ export const ShowMenu = () => {
 
   const onBackClickHandler = () => {
     navigate('/');
+  };
+
+  const onBackButtonHandler = () => {
+    navigate('../edit');
   };
 
   const { dispatch } = React.useContext(NotificationContext);
@@ -172,9 +177,12 @@ export const ShowMenu = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-        {data?.menu.name}
-      </Typography>
+      <Box className="flex flex-row space-x-1 items-center my-4">
+        <BackButton onClick={onBackButtonHandler} />
+        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
+          {data?.menu.name}
+        </Typography>
+      </Box>
       <Box sx={{ mb: '1rem' }} className="space-y-4">
         <Box className="space-y-1">
           <Typography variant="h5" component="h5" className="mb-2">
