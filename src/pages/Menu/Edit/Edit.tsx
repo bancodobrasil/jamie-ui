@@ -206,10 +206,7 @@ export const EditMenu = () => {
           onBack={onBackClickHandler}
         />
         <Box className="flex flex-row space-x-1 items-center my-4">
-          <BackButton onClick={onBackClickHandler} />
-          <Typography variant="h3" component="h1">
-            {t('menu.edit.title')}
-          </Typography>
+          <BackButton onClick={onBackClickHandler} menuName={t('menu.edit.title')} />
           <Box
             className="space-x-4"
             sx={{

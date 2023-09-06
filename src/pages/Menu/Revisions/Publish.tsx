@@ -269,11 +269,8 @@ const PublishRevision = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <Box className="flex flex-row space-x-1 items-center my-4">
-        <BackButton onClick={onBackButtonHandler} />
-        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-          {t('menuRevision.publish.title')}
-        </Typography>
+      <Box>
+        <BackButton onClick={onBackButtonHandler} menuName={t('menuRevision.publish.title')} />
       </Box>
       <FormControl sx={{ width: '16rem', mb: '1rem' }} className="bg-white">
         <InputLabel id="selectedRevision-label">

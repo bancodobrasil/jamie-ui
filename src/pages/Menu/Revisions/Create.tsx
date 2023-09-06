@@ -228,13 +228,7 @@ const CreateRevision = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <Box className="flex flex-row space-x-1 items-center my-4">
-        <BackButton onClick={onBackButtonHandler} />
-
-        <Typography variant="h1" component="h1" sx={{ my: '1rem' }}>
-          {t('menuRevision.create.title')}
-        </Typography>
-      </Box>
+      <BackButton onClick={onBackButtonHandler} menuName={t('menuRevision.create.title')} />
       <Typography variant="h2" component="h2" sx={{ my: '0.5rem' }}>
         {t('menuRevision.create.reviewChanges.title')}
       </Typography>

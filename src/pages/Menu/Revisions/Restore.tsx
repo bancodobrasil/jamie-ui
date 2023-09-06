@@ -255,12 +255,7 @@ const RestoreRevision = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <Box className="flex flex-row space-x-1 items-center my-4">
-        <BackButton onClick={onBackButtonHandler} />
-        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-          {t('menuRevision.restore.title')}
-        </Typography>
-      </Box>
+      <BackButton onClick={onBackButtonHandler} menuName={t('menuRevision.restore.title')} />
       <FormControl sx={{ width: '16rem', mb: '1rem' }} className="bg-white">
         <InputLabel id="selectedRevision-label">
           {t('menu.of', { field: 'revision.title_one' })}

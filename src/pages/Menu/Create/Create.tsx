@@ -74,12 +74,7 @@ export const CreateMenu = () => {
           ]}
           onBack={onBackClickHandler}
         />
-        <Box className="flex flex-row space-x-1 items-center my-4">
-          <BackButton onClick={onBackClickHandler} />
-          <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-            {t('menu.create.title')}
-          </Typography>
-        </Box>
+        <BackButton onClick={onBackClickHandler} menuName={t('menu.create.title')} />
         <Divider />
       </Box>
       <FormBasicInfo
