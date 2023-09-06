@@ -38,6 +38,10 @@ const RestoreRevision = () => {
     navigate('/');
   };
 
+  const onBackButtonHandler = () => {
+    navigate('../edit');
+  };
+
   const { dispatch } = React.useContext(NotificationContext);
 
   const [selectedRevision, setSelectedRevision] = React.useState(null);
@@ -252,7 +256,7 @@ const RestoreRevision = () => {
         onBack={onBackClickHandler}
       />
       <Box className="flex flex-row space-x-1 items-center my-4">
-        <BackButton onClick={onBackClickHandler} />
+        <BackButton onClick={onBackButtonHandler} />
         <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
           {t('menuRevision.restore.title')}
         </Typography>
