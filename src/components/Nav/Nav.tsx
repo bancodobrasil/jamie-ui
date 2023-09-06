@@ -54,31 +54,39 @@ export const Nav = () => {
     keycloak?.login({ redirectUri: `${JAMIE_UI_BASE_URL}${location.pathname}` });
   };
 
-/* The `renderLoginButton` function is responsible for rendering the login button based on the
+  /* The `renderLoginButton` function is responsible for rendering the login button based on the
 authentication status of the user. */
   const renderLoginButton = () => {
     if (keycloak?.authenticated) {
       return (
         <Box>
-          <Button variant="text" color="secondary" onClick={onLogoutClickHandler}>Logout</Button>
+          <Button variant="text" color="secondary" onClick={onLogoutClickHandler}>
+            Logout
+          </Button>
         </Box>
       );
     }
     return (
       <Box>
-        <Button sx={{ 
-          backgroundColor: '#ffffff',          
-          maxHeight: '2rem', 
-          maxWidth: '6rem', 
-          transition: 'background-color 0.3s, color 0.3s', // add soft transition
-          '&:hover': {
-            backgroundColor: '#e4e4e4'} // background color when mouse is over button
-          }} onClick={onLoginClickHandler}>Login</Button>
+        <Button
+          sx={{
+            backgroundColor: '#ffffff',
+            maxHeight: '2rem',
+            maxWidth: '6rem',
+            transition: 'background-color 0.3s, color 0.3s', // add soft transition
+            '&:hover': {
+              backgroundColor: '#e4e4e4',
+            },
+          }}
+          onClick={onLoginClickHandler}
+        >
+          Login
+        </Button>
       </Box>
     );
   };
 
-/* Return a element that represents the navigation bar component. */
+  /* Return a element that represents the navigation bar component. */
   return (
     <Box
       component="nav"
@@ -91,9 +99,9 @@ authentication status of the user. */
       }}
       className="shadow"
     >
-      <Box >
+      <Box>
         <Link to="/">
-          <Typography variant="h6" component="h6" sx={{ fontSize: '1.25rem', color: 'white'}}>
+          <Typography variant="h6" component="h6" sx={{ fontSize: '1.25rem', color: 'white' }}>
             Jamie
           </Typography>
         </Link>
