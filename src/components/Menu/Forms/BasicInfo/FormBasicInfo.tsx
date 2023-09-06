@@ -140,13 +140,13 @@ export const FormBasicInfo = ({
   return (
     <Form onSubmit={handleFormSubmit}>
       {action === FormAction.UPDATE && (
-        <Box sx={{ flex: '0 1 auto', flexDirection: 'column', mb: '1rem', height: '20rem' }}>
+        <Box sx={{ flex: '0 1 auto', flexDirection: 'column', mb: '1rem', height: '4rem' }}>
           <TextField
             id="uuid"
             label={t('menu.of', { field: 'uuid' })}
             disabled
             value={uuid}
-            sx={{ width: '30rem' }}
+            sx={{ width: '33.2rem' }}
           />
         </Box>
       )}
@@ -218,6 +218,7 @@ export const FormBasicInfo = ({
           flex: 1,
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
+          marginBottom: '3rem',
         }}
       >
         <Box />
@@ -232,7 +233,7 @@ export const FormBasicInfo = ({
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'flex-end',
-              height: '10rem',
+              height: '12rem',
             }}
           >
             <Button
