@@ -85,7 +85,7 @@ export const Nav = () => {
     keycloak?.login({ redirectUri: `${JAMIE_UI_BASE_URL}${location.pathname}` });
   };
 
-/* The `renderLoginButton` function is responsible for rendering the login button based on the
+  /* The `renderLoginButton` function is responsible for rendering the login button based on the
 authentication status of the user. */
   const renderLoginButton = () => {
     if (keycloak?.authenticated) {
@@ -99,6 +99,7 @@ authentication status of the user. */
     }
     return (
       <Box>
+
         <Button variant="text" color="secondary" onClick={onLoginClickHandler}>
           Login
         </Button>
@@ -119,7 +120,7 @@ authentication status of the user. */
       }}
       className="shadow"
     >
-      <Box >
+      <Box>
         <Link to="/">
           <Typography variant="h6" component="h6" sx={{ fontSize: '1.25rem', color: 'white' }}>
             Jamie

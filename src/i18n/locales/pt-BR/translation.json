@@ -201,8 +201,11 @@
     "fields": {
       "uuid": "UUID",
       "name": "Nome",
-      "mustDeferChanges": "Deferimento obrigatório",
-      "hasConditions": "Tem Condições",
+      "belowNameField":"Esse nome só aparecerá no Jamie",
+      "mustDeferChanges": "Aprovação obrigatória",
+      "belowDeferChanges": "As publicações precisam ser aprovadas por outra pessoa",
+      "hasConditions": "Condições nos itens de menu",
+      "belowConditions": "Permite personalizar quais usuários finais verão cada item de menu",
       "items": "Itens",
       "template": "Template",
       "templateFormat": {
@@ -287,7 +290,8 @@
       "title": "Menus"
     },
     "create": {
-      "title": "Criar Menu",
+      "title": "Novo menu",
+      "button": "Salvar menu",
       "placeholders": {
         "name": "Digite o nome do menu...",
         "meta": {

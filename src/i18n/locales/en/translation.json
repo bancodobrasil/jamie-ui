@@ -201,8 +201,11 @@
     "fields": {
       "uuid": "UUID",
       "name": "Name",
-      "mustDeferChanges": "Mandatory deferral",
-      "hasConditions": "Has Conditions",
+      "belowNameField":"This name will only appear for Jamie",
+      "mustDeferChanges": "Mandatory approval",
+      "belowDeferChanges":"The posts need to be approved by another person",
+      "hasConditions": "Conditions on menu items",
+      "belowConditions": "Allows customizing which end users will see each menu item",
       "items": "Items",
       "template": "Template",
       "templateFormat": {
@@ -286,7 +289,8 @@
       "title": "Menus"
     },
     "create": {
-      "title": "Create Menu",
+      "title": "New menu",
+      "button": "Save menu",
       "placeholders": {
         "name": "Enter the menu's name...",
         "meta": {
