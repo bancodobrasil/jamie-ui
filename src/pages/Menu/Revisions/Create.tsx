@@ -17,6 +17,7 @@ import {
 } from '../../../contexts/NotificationContext';
 import { MenuRevisionsDiff } from '../../../components/Menu/Revisions';
 import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
+import BackButton from '../../../components/BackButton';
 
 const CreateRevision = () => {
   const { t } = useTranslation();
@@ -28,6 +29,9 @@ const CreateRevision = () => {
     navigate('/');
   };
 
+  const onBackButtonHandler = () => {
+    navigate('../edit');
+  };
   const { dispatch } = React.useContext(NotificationContext);
 
   const [description, setDescription] = React.useState('');
@@ -224,9 +228,13 @@ const CreateRevision = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <Typography variant="h1" component="h1" sx={{ my: '1rem' }}>
-        {t('menuRevision.create.title')}
-      </Typography>
+      <Box className="flex flex-row space-x-1 items-center my-4">
+        <BackButton onClick={onBackButtonHandler} />
+
+        <Typography variant="h1" component="h1" sx={{ my: '1rem' }}>
+          {t('menuRevision.create.title')}
+        </Typography>
+      </Box>
       <Typography variant="h2" component="h2" sx={{ my: '0.5rem' }}>
         {t('menuRevision.create.reviewChanges.title')}
       </Typography>
