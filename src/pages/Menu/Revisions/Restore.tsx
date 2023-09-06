@@ -26,7 +26,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
-import BackButton from '../../../components/BackButton';
+import MenuName from '../../../components/MenuName';
 
 const RestoreRevision = () => {
   const { t } = useTranslation();
@@ -255,7 +255,7 @@ const RestoreRevision = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <BackButton onClick={onBackButtonHandler} menuName={t('menuRevision.restore.title')} />
+      <MenuName onClick={onBackButtonHandler} menuName={t('menuRevision.restore.title')} />
       <FormControl sx={{ width: '16rem', mb: '1rem' }} className="bg-white">
         <InputLabel id="selectedRevision-label">
           {t('menu.of', { field: 'revision.title_one' })}

@@ -13,7 +13,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { FormAction } from '../../../types';
-import BackButton from '../../../components/BackButton';
+import MenuName from '../../../components/MenuName';
 
 export const CreateMenu = () => {
   const { t } = useTranslation();
@@ -74,7 +74,7 @@ export const CreateMenu = () => {
           ]}
           onBack={onBackClickHandler}
         />
-        <BackButton onClick={onBackClickHandler} menuName={t('menu.create.title')} />
+        <MenuName onClick={onBackClickHandler} menuName={t('menu.create.title')} />
         <Divider />
       </Box>
       <FormBasicInfo

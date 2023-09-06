@@ -2,7 +2,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import React from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const BackButton = ({ onClick, menuName }) => (
+const MenuName = ({ onClick, menuName }) => (
   <Box className="flex flex-row space-x-1 items-center my-4">
     <IconButton onClick={onClick} size="small">
       <ArrowBackIcon fontSize="small" color="primary" />
@@ -13,4 +13,4 @@ const BackButton = ({ onClick, menuName }) => (
   </Box>
 );
 
-export default BackButton;
+export default MenuName;

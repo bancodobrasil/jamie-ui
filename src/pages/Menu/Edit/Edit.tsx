@@ -20,7 +20,7 @@ import { EnumInputAction, FormAction, IMenuMetaWithErrors } from '../../../types
 import { FormAttributes } from '../../../components/Menu/Forms/Attributes/FormAttributes';
 import { ItemsPreview } from '../Items';
 import { EditTemplateMenu } from '../EditTemplate';
-import BackButton from '../../../components/BackButton';
+import MenuName from '../../../components/MenuName';
 
 export const TAB_BASIC_INFO = '1';
 export const TAB_ITEMS = '2';
@@ -206,7 +206,7 @@ export const EditMenu = () => {
           onBack={onBackClickHandler}
         />
         <Box className="flex flex-row space-x-1 items-center my-4">
-          <BackButton onClick={onBackClickHandler} menuName={t('menu.edit.title')} />
+          <MenuName onClick={onBackClickHandler} menuName={t('menu.edit.title')} />
           <Box
             className="space-x-4"
             sx={{
