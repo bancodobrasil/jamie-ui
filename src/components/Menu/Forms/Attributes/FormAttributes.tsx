@@ -13,6 +13,7 @@ import {
   MenuItem,
   styled,
   IconButton,
+  colors,
 } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import {
@@ -438,12 +439,11 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           </DragDropContext>
         )}
       </Box>
-      {/* Button add attributes */}
       <Box sx={{ flex: '0 1 auto' }}>
+        {/* Button that add attributes */}
         <Box sx={{ mt: '2rem' }}>
           <Button
             variant="text"
-            color="primary"
             onClick={() => {
               const updatedMeta = [...meta];
               updatedMeta.push({
@@ -460,12 +460,22 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               setMeta(updatedMeta);
             }}
             startIcon={
-              <AddIcon sx={{ backgroundColor: '#265EFD', color: 'white', borderRadius: '50%' }} />
+              <AddIcon
+                sx={{
+                  backgroundColor: '#265EFD',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '20px',
+                  height: '20px',
+                }}
+              />
             }
+            sx={{ color: '#265EFD', letterSpacing: '0.5%', lineHeight: '18px' }}
           >
             {t('menu.fields.meta.add')}
           </Button>
         </Box>
+        {/* Button that cancel or save the edition */}
         <Box
           sx={{
             flex: 1,
