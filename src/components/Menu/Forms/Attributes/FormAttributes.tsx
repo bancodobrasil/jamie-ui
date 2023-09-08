@@ -12,6 +12,7 @@ import {
   SelectChangeEvent,
   MenuItem,
   styled,
+  IconButton,
 } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import {
@@ -26,6 +27,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
+import AddIcon from '@mui/icons-material/Add';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import { MENU_VALIDATION } from '../../../../constants';
 
@@ -389,6 +391,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
       </Draggable>
     ));
 
+  // Draw Attributes
   return (
     <Form onSubmit={handleFormSubmit}>
       <Box
@@ -435,10 +438,11 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           </DragDropContext>
         )}
       </Box>
+      {/* Button add attributes */}
       <Box sx={{ flex: '0 1 auto' }}>
         <Box sx={{ mt: '2rem' }}>
           <Button
-            variant="contained"
+            variant="text"
             color="primary"
             onClick={() => {
               const updatedMeta = [...meta];
@@ -455,6 +459,9 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               });
               setMeta(updatedMeta);
             }}
+            startIcon={
+              <AddIcon sx={{ backgroundColor: '#265EFD', color: 'white', borderRadius: '50%' }} />
+            }
           >
             {t('menu.fields.meta.add')}
           </Button>
