@@ -260,12 +260,22 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           <Box
             ref={provided.innerRef}
             {...provided.draggableProps}
-            sx={{ opacity: snapshot.isDragging ? 0.5 : 1, display: 'flex', alignItems: 'center' }}
+            sx={{
+              opacity: snapshot.isDragging ? 0.5 : 1,
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}
             className={`border-gray-200 border rounded-md p-4 mb-4 w-fit${
               !m.enabled ? ' bg-gray-200/75' : ''
             }`}
           >
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-start',
+              }}
+            >
               <div {...provided.dragHandleProps}>
                 <DragIndicatorIcon />
               </div>
@@ -452,7 +462,6 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   ref={provided.innerRef}
                 >
                   {renderMeta(provided, snapshot)}
-                  TEXTO
                   {provided.placeholder}
                 </div>
               )}
