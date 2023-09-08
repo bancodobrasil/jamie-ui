@@ -120,6 +120,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     setMeta(updatedMeta);
   };
 
+  /* Draw box of standard value */
   const renderMetaDefaultValue = (m: IMenuMetaWithErrors, index: number) => {
     switch (m.type) {
       case MenuMetaType.TEXT:
@@ -149,7 +150,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             }}
             error={!!m.errors.defaultValue}
             helperText={m.errors.defaultValue}
-            sx={{ width: '16rem' }}
+            sx={{ width: '22.5rem' }}
             className="bg-white"
           />
         );
@@ -180,7 +181,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             }}
             error={!!m.errors.defaultValue}
             helperText={m.errors.defaultValue}
-            sx={{ width: '16rem' }}
+            sx={{ width: '22.5rem' }}
             className="bg-white"
             type="number"
           />
@@ -232,7 +233,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   }}
                   error={!!m.errors.defaultValue}
                   helperText={m.errors.defaultValue}
-                  sx={{ width: '16rem' }}
+                  sx={{ width: '22.5rem' }}
                   className="bg-white"
                   inputProps={{
                     ...params.inputProps,
@@ -335,6 +336,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   <InputLabel id={`meta[${i}].type-label`} sx={{ color: '#022831' }}>
                     {t('menu.fields.meta.type.title', { count: 1 })}
                   </InputLabel>
+                  {/* Possibles types */}
                   <Select
                     labelId={`meta[${i}].type-label`}
                     id={`meta[${i}].type`}
@@ -361,6 +363,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                       }
                     }}
                   >
+                    {/* List of the possibles types */}
                     <MenuItem value={MenuMetaType.TEXT}>
                       {t(`menu.fields.meta.type.${MenuMetaType.TEXT}`)}
                     </MenuItem>
@@ -377,6 +380,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                 </FormControl>
                 {renderMetaDefaultValue(m, i)}
               </Box>
+              {/* Checkboxes */}
               <Box sx={{ display: 'flex' }} className="mt-2 space-x-2">
                 <FormControlLabel
                   control={
