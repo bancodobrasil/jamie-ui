@@ -249,6 +249,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     }
   };
 
+  // Drag and Drop icon
   const renderMeta = (
     droppableProvided: DroppableProvided,
     droppableSnapshot: DroppableStateSnapshot,
@@ -264,12 +265,15 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               !m.enabled ? ' bg-gray-200/75' : ''
             }`}
           >
-            <div {...provided.dragHandleProps}>
-              <DragIndicatorIcon />
-            </div>
-            <span className="text-lg ml-2">{m.order}</span>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <div {...provided.dragHandleProps}>
+                <DragIndicatorIcon />
+              </div>
+              <span className="text-lg ml-2">{m.order}</span>
+            </Box>
             <Box className="ml-8">
               <Box sx={{ display: 'flex' }} className="space-x-2">
+                {/* name field */}
                 <TextField
                   id={`meta[${i}].name`}
                   label={t('menu.fields.meta.name')}
@@ -294,15 +298,31 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   }}
                   InputLabelProps={{
                     shrink: true,
+                    style: { color: '#022831' },
                   }}
                   error={!!m.errors.name}
                   helperText={m.errors.name}
-                  sx={{ width: '16rem' }}
+                  sx={{
+                    width: '22.5rem',
+                    height: '3rem',
+                    borderBlockColor: '#758887',
+                  }}
                   className="bg-white"
                   required
                 />
-                <FormControl sx={{ width: '16rem' }} className="bg-white" required>
-                  <InputLabel id={`meta[${i}].type-label`}>
+                {/* type field */}
+                <FormControl
+                  sx={{
+                    width: '16.25rem',
+                    height: '3rem',
+                    gap: '12px',
+                    borderBlockColor: '#758887',
+                    color: '#022831',
+                  }}
+                  className="bg-white"
+                  required
+                >
+                  <InputLabel id={`meta[${i}].type-label`} sx={{ color: '#022831' }}>
                     {t('menu.fields.meta.type.title', { count: 1 })}
                   </InputLabel>
                   <Select
@@ -432,6 +452,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   ref={provided.innerRef}
                 >
                   {renderMeta(provided, snapshot)}
+                  TEXTO
                   {provided.placeholder}
                 </div>
               )}
