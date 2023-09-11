@@ -4,8 +4,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const PageTitle = ({ onClick, PageTitle }) => (
   <Box
-    className="flex flex-row space-x-1 items-center my-4"
-    sx={{ minWidth: '10rem', height: '1.5rem', paddingTop: '2.3rem' }}
+    className="flex flex-row space-x-1 items-center"
+    sx={{ minWidth: '10rem', height: '1.5rem', marginTop: '2.1rem', marginBottom: '1.4rem' }}
   >
     <IconButton onClick={onClick} size="small">
       <ArrowBackIcon fontSize="small" color="primary" />

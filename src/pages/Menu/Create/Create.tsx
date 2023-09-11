@@ -75,7 +75,6 @@ export const CreateMenu = () => {
           onBack={onBackClickHandler}
         />
         <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.create.title')} />
-        <Divider />
       </Box>
       <FormBasicInfo
         name={name}
