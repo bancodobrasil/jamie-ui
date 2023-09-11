@@ -17,7 +17,7 @@ import {
 } from '../../../contexts/NotificationContext';
 import { MenuRevisionsDiff } from '../../../components/Menu/Revisions';
 import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
-import MenuName from '../../../components/MenuName';
+import PageTitle from '../../../components/PageTitle';
 
 const CreateRevision = () => {
   const { t } = useTranslation();
@@ -228,7 +228,7 @@ const CreateRevision = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <MenuName onClick={onBackButtonHandler} menuName={t('menuRevision.create.title')} />
+      <PageTitle onClick={onBackButtonHandler} PageTitle={t('menuRevision.create.title')} />
       <Typography variant="h2" component="h2" sx={{ my: '0.5rem' }}>
         {t('menuRevision.create.reviewChanges.title')}
       </Typography>

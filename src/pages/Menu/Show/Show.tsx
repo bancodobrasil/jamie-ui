@@ -15,7 +15,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { JAMIE_FEATURE_CONDITIONS } from '../../../constants';
-import MenuName from '../../../components/MenuName';
+import PageTitle from '../../../components/PageTitle';
 
 export const ShowMenu = () => {
   const { t, i18n } = useTranslation();
@@ -178,7 +178,7 @@ export const ShowMenu = () => {
         onBack={onBackClickHandler}
       />
       <Box className="flex flex-row space-x-1 items-center my-4">
-        <MenuName onClick={onBackButtonHandler} menuName={data?.menu.name} />
+        <PageTitle onClick={onBackButtonHandler} PageTitle={data?.menu.name} />
         <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
           {data?.menu.name}
         </Typography>

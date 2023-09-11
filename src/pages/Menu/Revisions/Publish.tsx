@@ -26,7 +26,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
-import MenuName from '../../../components/MenuName';
+import PageTitle from '../../../components/PageTitle';
 
 const PublishRevision = () => {
   const { t } = useTranslation();
@@ -270,7 +270,7 @@ const PublishRevision = () => {
         onBack={onBackClickHandler}
       />
       <Box>
-        <MenuName onClick={onBackButtonHandler} menuName={t('menuRevision.publish.title')} />
+        <PageTitle onClick={onBackButtonHandler} PageTitle={t('menuRevision.publish.title')} />
       </Box>
       <FormControl sx={{ width: '16rem', mb: '1rem' }} className="bg-white">
         <InputLabel id="selectedRevision-label">
