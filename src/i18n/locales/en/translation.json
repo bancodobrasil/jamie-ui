@@ -259,7 +259,8 @@
         "insert": "Insert",
         "edit": "Edit",
         "delete": "Delete",
-        "editTemplate": "Edit Template"
+        "editTemplate": "Edit Template",
+        "insertChild": "Insert Child"
       },
       "parent": "Parent",
       "newItem": "New Item {{order}}",

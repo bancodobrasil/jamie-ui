@@ -260,7 +260,8 @@
         "insert": "Inserir",
         "edit": "Editar",
         "delete": "Deletar",
-        "editTemplate": "Editar Template"
+        "editTemplate": "Editar Template",
+        "insertChild": "Inserir Item Filho"
       },
       "parent": "Item Pai",
       "newItem": "Novo Item {{order}}",

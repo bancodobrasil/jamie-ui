@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, IconButton } from '@mui/material';
+import { Box, Divider, IconButton, ListItemText, Menu, MenuItem, MenuList } from '@mui/material';
 import { TreeItem, TreeView } from '@mui/lab';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useTranslation } from 'react-i18next';
 import { EnumInputAction, IEditingNode, INode } from '../../../types';
 
 interface CustomTreeItemProps {
@@ -24,6 +25,21 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
     padding: '12px 0px 13px 25px',
   };
 
+  const { t } = useTranslation();
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setAnchorEl(event.currentTarget as HTMLElement);
+  };
+  const handleClose = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setAnchorEl(null);
+  };
+
   return (
     <TreeItem
       key={key}
@@ -31,9 +47,35 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
       label={
         <Box className="flex items-center">
           <Box className="flex-1">{label}</Box>
-          <IconButton sx={{ float: 'right', mr: 1 }} size="small">
+          <IconButton sx={{ float: 'right', mr: 1 }} size="small" onClick={handleClick}>
             <MoreVertIcon />
           </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <MenuList>
+              <MenuItem onClick={handleClose}>
+                <ListItemText>{t('menu.preview.actions.insertChild')}</ListItemText>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <ListItemText>{t('menu.preview.actions.editTemplate')}</ListItemText>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>{t('buttons.delete')}</MenuItem>
+            </MenuList>
+          </Menu>
         </Box>
       }
       sx={{
