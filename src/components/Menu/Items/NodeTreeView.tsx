@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { TreeItem, TreeView } from '@mui/lab';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { EnumInputAction, IEditingNode, INode } from '../../../types';
+
+const ArrowDownwardIcon = () => <ArrowForwardIosIcon sx={{ transform: 'rotate(90deg)' }} />;
 
 interface Props {
   nodes: INode[];
@@ -104,8 +105,8 @@ export const NodeTreeView = ({
       }}
     >
       <TreeView
-        defaultExpandIcon={<ExpandMoreIcon />}
-        defaultCollapseIcon={<ExpandLessIcon />}
+        defaultExpandIcon={<ArrowForwardIosIcon />}
+        defaultCollapseIcon={<ArrowDownwardIcon />}
         defaultExpanded={['0']}
         expanded={expanded}
         selected={selected}
