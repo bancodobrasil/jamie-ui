@@ -24,11 +24,13 @@ import {
   DroppableProvided,
   DroppableStateSnapshot,
 } from 'react-beautiful-dnd';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
+import { width } from '@mui/system';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import { MENU_VALIDATION } from '../../../../constants';
 
@@ -280,7 +282,17 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               <div {...provided.dragHandleProps}>
                 <DragIndicatorIcon />
               </div>
-              <span className="text-lg ml-2">{m.order}</span>
+              <span
+                className="text-lg ml-2 font-custom font-roboto"
+                style={{
+                  fontSize: '20px',
+                  letterSpacing: '0.15px',
+                  lineHeight: '24px',
+                  fontWeight: '500',
+                }}
+              >
+                <span className="font-roboto">{t('menu.edit.tabs.attributes')}</span> {m.order}
+              </span>
             </Box>
             <Box className="ml-8">
               <Box sx={{ display: 'flex' }} className="space-x-2">
@@ -419,6 +431,19 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   }
                   label={t('menu.fields.meta.enabled')}
                 />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  justifyContent: 'flex-end',
+                  height: '1.5rem',
+                  // width: '65rem',
+                }}
+              >
+                <Button sx={{ color: '#313338', width: '3rem' }}>
+                  <DeleteIcon sx={{ width: '24px', height: '28px' }} />
+                </Button>
               </Box>
             </Box>
           </Box>
