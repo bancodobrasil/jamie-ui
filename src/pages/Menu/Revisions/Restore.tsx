@@ -26,6 +26,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
+import PageTitle from '../../../components/PageTitle';
 
 const RestoreRevision = () => {
   const { t } = useTranslation();
@@ -35,6 +36,10 @@ const RestoreRevision = () => {
 
   const onBackClickHandler = () => {
     navigate('/');
+  };
+
+  const onBackButtonHandler = () => {
+    navigate('../edit');
   };
 
   const { dispatch } = React.useContext(NotificationContext);
@@ -250,9 +255,7 @@ const RestoreRevision = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-        {t('menuRevision.restore.title')}
-      </Typography>
+      <PageTitle onClick={onBackButtonHandler} PageTitle={t('menuRevision.restore.title')} />
       <FormControl sx={{ width: '16rem', mb: '1rem' }} className="bg-white">
         <InputLabel id="selectedRevision-label">
           {t('menu.of', { field: 'revision.title_one' })}
