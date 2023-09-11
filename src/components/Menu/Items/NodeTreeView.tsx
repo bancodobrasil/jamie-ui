@@ -57,37 +57,21 @@ export const NodeTreeView = ({
             color = 'red';
             break;
         }
-        if (node.children?.length > 0) {
-          return (
-            <TreeItem
-              key={node.id}
-              nodeId={node.id.toString()}
-              label={node.label}
-              sx={{
-                '& > .MuiTreeItem-content': {
-                  ...baseSX,
-                  color,
-                  fontWeight,
-                },
-              }}
-            >
-              {renderNodes(node.children)}
-            </TreeItem>
-          );
-        }
         return (
           <TreeItem
             key={node.id}
             nodeId={node.id.toString()}
             label={node.label}
             sx={{
-              '& .MuiTreeItem-content': {
+              '& > .MuiTreeItem-content': {
                 ...baseSX,
                 color,
                 fontWeight,
               },
             }}
-          />
+          >
+            {node.children?.length > 0 && renderNodes(node.children)}
+          </TreeItem>
         );
       });
     },
