@@ -40,6 +40,13 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
     setAnchorEl(null);
   };
 
+  const handleDelete = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    window.confirm(t('menu.preview.alerts.deleteItem.message'));
+    setAnchorEl(null);
+  };
+
   return (
     <TreeItem
       key={key}
@@ -73,7 +80,7 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
                 <ListItemText>{t('menu.preview.actions.editTemplate')}</ListItemText>
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleClose}>{t('buttons.delete')}</MenuItem>
+              <MenuItem onClick={handleDelete}>{t('buttons.delete')}</MenuItem>
             </MenuList>
           </Menu>
         </Box>

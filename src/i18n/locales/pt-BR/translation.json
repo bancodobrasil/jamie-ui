@@ -285,6 +285,12 @@
       },
       "errors": {
         "noItemSelected": "Nenhum item selecionado"
+      },
+      "alerts": {
+        "deleteItem": {
+          "title": "Deletar Item",
+          "message": "Tem certeza que deseja deletar esse item?"
+        }
       }
     },
     "list": {
