@@ -542,6 +542,8 @@ export const ItemsPreview = () => {
               emptyEditingNode={emptyEditingNode}
               setEditingNode={setEditingNode}
               handleUpdate={handleUpdate}
+              data={data}
+              setOperationScreen={setOperationScreen}
             />
           </Box>
 

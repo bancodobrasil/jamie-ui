@@ -5,7 +5,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { EnumInputAction, IEditingNode, INode } from '../../../types';
+import { EnumInputAction, IEditingNode, INode, MenuMetaType } from '../../../types';
+import { EnumInputActionScreen } from '../../../pages/Menu/Items';
 
 interface CustomTreeItemProps {
   node: INode;
@@ -16,6 +17,8 @@ interface CustomTreeItemProps {
   emptyEditingNode: IEditingNode;
   setEditingNode: (editingNode: IEditingNode) => void;
   handleUpdate: () => Promise<void>;
+  data: any;
+  setOperationScreen: (operationScreen: EnumInputActionScreen) => void;
 }
 
 const CustomTreeItem = ({
@@ -27,8 +30,10 @@ const CustomTreeItem = ({
   emptyEditingNode,
   setEditingNode,
   handleUpdate,
+  data,
+  setOperationScreen,
 }: CustomTreeItemProps) => {
-  const { id, label, children } = node;
+  const { id, label, children, meta } = node;
 
   const baseSX = {
     border: '1px solid #eaeaec',
@@ -95,9 +100,39 @@ const CustomTreeItem = ({
     setAnchorEl(null);
   };
 
+  const onNodeClick = (event: React.SyntheticEvent) => {
+    if (id === 0) {
+      !node && setSelected('');
+      return;
+    }
+    const itemMeta = { ...meta };
+    data?.menu.meta?.forEach(m => {
+      const defaultValue = (meta || {})[m.id] || m.defaultValue;
+      switch (m.type) {
+        case MenuMetaType.TEXT:
+        case MenuMetaType.NUMBER:
+        case MenuMetaType.DATE:
+          itemMeta[m.name] = defaultValue || '';
+          break;
+        case MenuMetaType.BOOLEAN:
+          itemMeta[m.name] = defaultValue || false;
+          break;
+      }
+    });
+    setEditingNode({
+      ...node,
+      meta: itemMeta,
+      action: EnumInputAction.UPDATE,
+      original: node,
+    });
+    setSelected(id.toString());
+    setOperationScreen(EnumInputActionScreen.UPDATE);
+  };
+
   return (
     <TreeItem
       nodeId={id.toString()}
+      onClick={onNodeClick}
       label={
         <Box className="flex items-center">
           <Box className="flex-1" sx={{ color, fontWeight }}>
@@ -160,6 +195,8 @@ interface Props {
   setSelected: (selected: string) => void;
   preview: (nodes: INode[], editingNode: IEditingNode) => INode[];
   handleUpdate: () => Promise<void>;
+  data: any;
+  setOperationScreen: (operationScreen: EnumInputActionScreen) => void;
 }
 
 export const NodeTreeView = ({
@@ -173,6 +210,8 @@ export const NodeTreeView = ({
   setSelected,
   preview,
   handleUpdate,
+  data,
+  setOperationScreen,
 }: Props) => {
   const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
     setExpanded(nodeIds);
@@ -209,10 +248,20 @@ export const NodeTreeView = ({
             emptyEditingNode={emptyEditingNode}
             setEditingNode={setEditingNode}
             handleUpdate={handleUpdate}
+            data={data}
+            setOperationScreen={setOperationScreen}
           />
         );
       }),
-    [editingNode.id, emptyEditingNode, handleUpdate, setEditingNode, setSelected],
+    [
+      editingNode.id,
+      emptyEditingNode,
+      handleUpdate,
+      setEditingNode,
+      setSelected,
+      data,
+      setOperationScreen,
+    ],
   );
 
   return (

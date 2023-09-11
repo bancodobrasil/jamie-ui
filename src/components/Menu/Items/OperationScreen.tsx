@@ -12,7 +12,6 @@ import {
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import { DateTime } from 'luxon';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -306,32 +305,6 @@ export const OperationScreen = ({
           setEditingNode({ ...node, action: EnumInputAction.CREATE, original: node });
           setSelected('-1');
           break;
-        case EnumInputActionScreen.UPDATE:
-          if (!selectedNode || selectedNode.id === 0) {
-            !selectedNode && setSelected('');
-            return;
-          }
-          data?.menu.meta?.forEach(m => {
-            const defaultValue = (selectedNode.meta || {})[m.id] || m.defaultValue;
-            switch (m.type) {
-              case MenuMetaType.TEXT:
-              case MenuMetaType.NUMBER:
-              case MenuMetaType.DATE:
-                meta[m.name] = defaultValue || '';
-                break;
-              case MenuMetaType.BOOLEAN:
-                meta[m.name] = defaultValue || false;
-                break;
-            }
-          });
-          setEditingNode({
-            ...selectedNode,
-            meta,
-            action: EnumInputAction.UPDATE,
-            original: selectedNode,
-          });
-          setSelected(selectedNode.id.toString());
-          break;
       }
       setOperationScreen(action);
     },
@@ -552,28 +525,6 @@ export const OperationScreen = ({
                 }}
               >
                 {t('buttons.insert')}
-              </Typography>
-            </Button>
-            <Button
-              sx={{ color: 'orange' }}
-              variant="outlined"
-              color="warning"
-              disabled={!selected || selected === '0'}
-              onClick={() => handleActionChange(EnumInputActionScreen.UPDATE)}
-            >
-              <EditIcon />
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                  lineHeight: '0.75rem',
-                  letterSpacing: '0.18px',
-                  color: selected && selected !== '0' ? 'orange' : 'grey',
-                  ml: '0.5rem',
-                }}
-              >
-                {t('buttons.edit')}
               </Typography>
             </Button>
           </Box>
