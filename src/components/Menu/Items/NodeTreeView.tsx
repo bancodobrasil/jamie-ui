@@ -1,8 +1,53 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { TreeItem, TreeView } from '@mui/lab';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { EnumInputAction, IEditingNode, INode } from '../../../types';
+
+interface CustomTreeItemProps {
+  key: string | number;
+  node: INode;
+  color: string;
+  fontWeight: string;
+  renderNodes: (nodes: INode[]) => JSX.Element[];
+}
+
+const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTreeItemProps) => {
+  const { id, label, children } = node;
+
+  const baseSX = {
+    border: '1px solid #eaeaec',
+    margin: '3px 0px',
+    backgroundColor: '#fff',
+    borderRadius: '4px',
+    padding: '12px 0px 13px 25px',
+  };
+
+  return (
+    <TreeItem
+      key={key}
+      nodeId={id.toString()}
+      label={
+        <Box className="flex items-center">
+          <Box className="flex-1">{label}</Box>
+          <IconButton sx={{ float: 'right', mr: 1 }} size="small">
+            <MoreVertIcon />
+          </IconButton>
+        </Box>
+      }
+      sx={{
+        '& > .MuiTreeItem-content': {
+          ...baseSX,
+          color,
+          fontWeight,
+        },
+      }}
+    >
+      {children?.length > 0 && renderNodes(children)}
+    </TreeItem>
+  );
+};
 
 const ArrowDownwardIcon = () => <ArrowForwardIosIcon sx={{ transform: 'rotate(90deg)' }} />;
 
@@ -34,16 +79,8 @@ export const NodeTreeView = ({
   };
 
   const renderNodes = React.useCallback(
-    (nodes: INode[]) => {
-      const baseSX = {
-        border: '1px solid #eaeaec',
-        margin: '3px 0px',
-        backgroundColor: '#fff',
-        borderRadius: '4px',
-        padding: '12px 0px 13px 25px',
-      };
-
-      return nodes.map(node => {
+    (nodes: INode[]) =>
+      nodes.map(node => {
         let color = 'black';
         const fontWeight = node.id === editingNode.id ? 'bold' : 'normal';
         switch (node.action) {
@@ -58,23 +95,15 @@ export const NodeTreeView = ({
             break;
         }
         return (
-          <TreeItem
+          <CustomTreeItem
             key={node.id}
-            nodeId={node.id.toString()}
-            label={node.label}
-            sx={{
-              '& > .MuiTreeItem-content': {
-                ...baseSX,
-                color,
-                fontWeight,
-              },
-            }}
-          >
-            {node.children?.length > 0 && renderNodes(node.children)}
-          </TreeItem>
+            node={node}
+            color={color}
+            fontWeight={fontWeight}
+            renderNodes={renderNodes}
+          />
         );
-      });
-    },
+      }),
     [editingNode.id],
   );
 
