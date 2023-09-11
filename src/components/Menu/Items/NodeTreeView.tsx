@@ -63,7 +63,7 @@ export const NodeTreeView = ({
               nodeId={node.id.toString()}
               label={node.label}
               sx={{
-                '& > .MuiTreeItem-content  > .MuiTreeItem-label': {
+                '& > .MuiTreeItem-content': {
                   ...baseSX,
                   color,
                   fontWeight,
@@ -80,7 +80,7 @@ export const NodeTreeView = ({
             nodeId={node.id.toString()}
             label={node.label}
             sx={{
-              '& .MuiTreeItem-content .MuiTreeItem-label': {
+              '& .MuiTreeItem-content': {
                 ...baseSX,
                 color,
                 fontWeight,
