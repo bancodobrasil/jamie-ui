@@ -209,6 +209,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               />
             }
             label={t('menu.fields.meta.defaultValue')}
+            sx={{ width: '22.5rem' }}
           />
         );
       case MenuMetaType.DATE:
@@ -422,14 +423,19 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                       }}
                     />
                   }
-                  // sx={{
-                  //   // fontSize: '20px',
-                  //   fontWeight: '600',
-                  //   lineHeight: '24px',
-                  //   letterSpacing: '0em',
-                  //   textAlign: 'left',
-                  // }}
-                  label={t('menu.fields.meta.required')}
+                  label={
+                    <span
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        lineHeight: '24px',
+                        letterSpacing: '0em',
+                        textAlign: 'left',
+                      }}
+                    >
+                      {t('menu.fields.meta.required')}
+                    </span>
+                  }
                 />
 
                 {/* <FormControlLabel
@@ -460,6 +466,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   lineHeight: '18px',
                   letterSpacing: '0.005em',
                   textAlign: 'left',
+                  marginTop: '-12px',
                 }}
               >
                 {t('menu.fields.meta.description_required')}
