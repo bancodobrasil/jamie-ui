@@ -30,7 +30,7 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
-import { width } from '@mui/system';
+import { fontWeight, letterSpacing, lineHeight, textAlign, width } from '@mui/system';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import { MENU_VALIDATION } from '../../../../constants';
 
@@ -277,6 +277,10 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               sx={{
                 display: 'flex',
                 alignItems: 'flex-start',
+                // position: 'fixed',
+                top: '50%',
+                // left: '46px',
+                marginLeft: '-45rem',
               }}
             >
               <div {...provided.dragHandleProps}>
@@ -289,13 +293,20 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   letterSpacing: '0.15px',
                   lineHeight: '24px',
                   fontWeight: '500',
+                  width: '283px',
+                  height: '24px',
+                  gap: '2px',
+                  marginLeft: '-1px',
                 }}
               >
                 <span className="font-roboto">{t('menu.edit.tabs.attributes')}</span> {m.order}
               </span>
             </Box>
             <Box className="ml-8">
-              <Box sx={{ display: 'flex' }} className="space-x-2">
+              <Box
+                sx={{ display: 'flex', paddingTop: '1.5rem', marginLeft: '-15px' }}
+                className="space-x-2"
+              >
                 {/* name field */}
                 <TextField
                   id={`meta[${i}].name`}
@@ -328,7 +339,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   sx={{
                     width: '22.5rem',
                     height: '3rem',
-                    borderBlockColor: '#758887',
+                    color: '#red',
                   }}
                   className="bg-white"
                   required
@@ -411,9 +422,17 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                       }}
                     />
                   }
+                  // sx={{
+                  //   // fontSize: '20px',
+                  //   fontWeight: '600',
+                  //   lineHeight: '24px',
+                  //   letterSpacing: '0em',
+                  //   textAlign: 'left',
+                  // }}
                   label={t('menu.fields.meta.required')}
                 />
-                <FormControlLabel
+
+                {/* <FormControlLabel
                   control={
                     <Checkbox
                       id={`meta[${i}].enabled`}
@@ -430,7 +449,20 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                     />
                   }
                   label={t('menu.fields.meta.enabled')}
-                />
+                /> */}
+              </Box>
+              <Box
+                sx={{
+                  paddingLeft: '2rem',
+                  color: '#6C7077',
+                  fontSize: '14px',
+                  fontWeight: '450',
+                  lineHeight: '18px',
+                  letterSpacing: '0.005em',
+                  textAlign: 'left',
+                }}
+              >
+                {t('menu.fields.meta.description_required')}
               </Box>
               <Box
                 sx={{

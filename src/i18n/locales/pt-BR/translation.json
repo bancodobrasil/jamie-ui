@@ -224,6 +224,7 @@
         "add": "Adicionar Atributo",
         "name": "Nome",
         "required": "Obrigatório",
+        "description_required": "Esse atributo deve ser preenchido em todos os itens desse menu.",
         "enabled": "Habilitado",
         "defaultValue": "Valor Padrão",
         "type": {
