@@ -4,6 +4,7 @@ import { TreeItem, TreeView } from '@mui/lab';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 import { EnumInputAction, IEditingNode, INode } from '../../../types';
 
 interface CustomTreeItemProps {
@@ -25,6 +26,8 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
     padding: '12px 0px 13px 25px',
   };
 
+  const { id: menuId } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -43,7 +46,15 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
   const handleDelete = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
+    // eslint-disable-next-line no-alert
     window.confirm(t('menu.preview.alerts.deleteItem.message'));
+    setAnchorEl(null);
+  };
+
+  const handleEditTemplate = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    navigate(`/menus/${menuId}/items/${id}`);
     setAnchorEl(null);
   };
 
@@ -76,7 +87,7 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
                 <ListItemText>{t('menu.preview.actions.insertChild')}</ListItemText>
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleEditTemplate}>
                 <ListItemText>{t('menu.preview.actions.editTemplate')}</ListItemText>
               </MenuItem>
               <Divider />
