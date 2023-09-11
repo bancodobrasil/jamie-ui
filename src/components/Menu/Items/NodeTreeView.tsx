@@ -8,14 +8,26 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { EnumInputAction, IEditingNode, INode } from '../../../types';
 
 interface CustomTreeItemProps {
-  key: string | number;
   node: INode;
   color: string;
   fontWeight: string;
   renderNodes: (nodes: INode[]) => JSX.Element[];
+  setSelected: (selected: string) => void;
+  emptyEditingNode: IEditingNode;
+  setEditingNode: (editingNode: IEditingNode) => void;
+  handleUpdate: () => Promise<void>;
 }
 
-const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTreeItemProps) => {
+const CustomTreeItem = ({
+  node,
+  color,
+  fontWeight,
+  renderNodes,
+  setSelected,
+  emptyEditingNode,
+  setEditingNode,
+  handleUpdate,
+}: CustomTreeItemProps) => {
   const { id, label, children } = node;
 
   const baseSX = {
@@ -32,6 +44,8 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+  const [confirmedDelete, setConfirmedDelete] = React.useState(false);
+
   const handleClick = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
@@ -43,13 +57,36 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
     setAnchorEl(null);
   };
 
-  const handleDelete = (event: React.SyntheticEvent) => {
+  const handleDelete = async (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    // eslint-disable-next-line no-alert
-    window.confirm(t('menu.preview.alerts.deleteItem.message'));
+    if (id === 0) {
+      setSelected('');
+      return;
+    }
+    setEditingNode({
+      ...node,
+      action: EnumInputAction.DELETE,
+      original: node,
+    });
     setAnchorEl(null);
+    // eslint-disable-next-line no-promise-executor-return
+    await new Promise(resolve => setTimeout(resolve, 100));
+    // eslint-disable-next-line no-alert
+    const confirmed = window.confirm(t('menu.preview.alerts.deleteItem.message'));
+    if (!confirmed) {
+      setEditingNode(emptyEditingNode);
+      // TODO: not working setSelected after cancel delete
+      setSelected(id.toString());
+    }
+    setConfirmedDelete(confirmed);
   };
+
+  React.useEffect(() => {
+    if (confirmedDelete) {
+      handleUpdate();
+    }
+  }, [confirmedDelete, handleUpdate]);
 
   const handleEditTemplate = (event: React.SyntheticEvent) => {
     event.stopPropagation();
@@ -60,11 +97,12 @@ const CustomTreeItem = ({ key, node, color, fontWeight, renderNodes }: CustomTre
 
   return (
     <TreeItem
-      key={key}
       nodeId={id.toString()}
       label={
         <Box className="flex items-center">
-          <Box className="flex-1">{label}</Box>
+          <Box className="flex-1" sx={{ color, fontWeight }}>
+            {label}
+          </Box>
           <IconButton sx={{ float: 'right', mr: 1 }} size="small" onClick={handleClick}>
             <MoreVertIcon />
           </IconButton>
@@ -113,22 +151,28 @@ const ArrowDownwardIcon = () => <ArrowForwardIosIcon sx={{ transform: 'rotate(90
 
 interface Props {
   nodes: INode[];
+  emptyEditingNode: IEditingNode;
   editingNode: IEditingNode;
+  setEditingNode: (editingNode: IEditingNode) => void;
   expanded: string[];
   setExpanded: (expanded: string[]) => void;
   selected: string;
   setSelected: (selected: string) => void;
   preview: (nodes: INode[], editingNode: IEditingNode) => INode[];
+  handleUpdate: () => Promise<void>;
 }
 
 export const NodeTreeView = ({
   nodes,
+  emptyEditingNode,
   editingNode,
+  setEditingNode,
   expanded,
   setExpanded,
   selected,
   setSelected,
   preview,
+  handleUpdate,
 }: Props) => {
   const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
     setExpanded(nodeIds);
@@ -161,10 +205,14 @@ export const NodeTreeView = ({
             color={color}
             fontWeight={fontWeight}
             renderNodes={renderNodes}
+            setSelected={setSelected}
+            emptyEditingNode={emptyEditingNode}
+            setEditingNode={setEditingNode}
+            handleUpdate={handleUpdate}
           />
         );
       }),
-    [editingNode.id],
+    [editingNode.id, emptyEditingNode, handleUpdate, setEditingNode, setSelected],
   );
 
   return (

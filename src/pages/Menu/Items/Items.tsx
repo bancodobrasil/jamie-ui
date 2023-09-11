@@ -1,9 +1,8 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import WidgetsIcon from '@mui/icons-material/Widgets';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
@@ -17,6 +16,11 @@ import {
 } from '../../../types';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { NodeTreeView, OperationScreen } from '../../../components/Menu/Items';
+import {
+  ActionTypes,
+  NotificationContext,
+  openDefaultErrorNotification,
+} from '../../../contexts/NotificationContext';
 
 const emptyEditingNode: IEditingNode = {
   id: 0,
@@ -39,7 +43,15 @@ const emptyEditingNode: IEditingNode = {
   },
 };
 
+export enum EnumInputActionScreen {
+  SELECTING_ACTION,
+  INSERT,
+  UPDATE,
+}
+
 export const ItemsPreview = () => {
+  const { dispatch } = React.useContext(NotificationContext);
+
   const { t } = useTranslation();
 
   const { id } = useParams();
@@ -47,11 +59,16 @@ export const ItemsPreview = () => {
   const { loading, error, data } = useQuery(MenuService.GET_MENU, {
     variables: { id: Number(id) },
   });
+  const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
   const [updatedMenu, setUpdatedMenu] = useState<IMenu>();
 
   const [expanded, setExpanded] = useState<string[]>(['0']);
   const [selected, setSelected] = useState<string>('0');
+
+  const [operationScreen, setOperationScreen] = React.useState<EnumInputActionScreen>(
+    EnumInputActionScreen.SELECTING_ACTION,
+  );
 
   const nodes = useMemo<INode[]>(() => {
     const items: GraphQLData<IMenuItem>[] = updatedMenu?.items || data?.menu.items || [];
@@ -128,6 +145,129 @@ export const ItemsPreview = () => {
     }
     return undefined;
   }, []);
+
+  const handleUpdate = async (): Promise<void> => {
+    const formatNodes = (nodes: INode[]) =>
+      nodes
+        .map(node => {
+          const {
+            id,
+            children,
+            original,
+            parentId,
+            createdAt,
+            updatedAt,
+            version,
+            menuId,
+            defaultTemplate,
+            action,
+            rules,
+            ...rest
+          } = node;
+          let meta;
+          if (rest.meta) {
+            meta = Object.keys(rest.meta).reduce((acc, key) => {
+              const name = data.menu.meta.find(meta => meta.id === Number(key))?.name || key;
+              const meta = rest.meta[key];
+              const originalMetaMap = original?.meta || {};
+              const originalMeta = originalMetaMap[key] || originalMetaMap[name];
+              if (meta == null || meta === '' || meta === originalMeta) {
+                return acc;
+              }
+              return {
+                ...acc,
+                [name]: meta,
+              };
+            }, {});
+            if (Object.keys(meta).length === 0) meta = undefined;
+          }
+          let startPublication;
+          if (rest.startPublication) {
+            if (
+              (original?.startPublication !== rest.startPublication ||
+                !original?.startPublication) &&
+              rest.startPublication.isValid
+            )
+              startPublication = rest.startPublication.toISO();
+          } else {
+            startPublication = null;
+          }
+          let endPublication;
+          if (rest.endPublication) {
+            if (
+              (original?.endPublication !== rest.endPublication || !original?.endPublication) &&
+              rest.endPublication.isValid
+            )
+              endPublication = rest.endPublication.toISO();
+          } else {
+            endPublication = null;
+          }
+          let label;
+          if (action === EnumInputAction.CREATE) label = rest.label;
+          else if (rest.label && (original?.label !== rest.label || !original?.label))
+            label = rest.label;
+          let order;
+          if (action === EnumInputAction.CREATE) order = rest.order;
+          else if (rest.order && (original?.order !== rest.order || !original?.order))
+            order = rest.order;
+          let enabled = action === EnumInputAction.CREATE ? true : undefined;
+          if (rest.enabled && (original?.enabled !== rest.enabled || !original?.enabled))
+            enabled = rest.enabled;
+          return {
+            action,
+            label,
+            order,
+            enabled,
+            startPublication,
+            endPublication,
+            meta,
+            rules,
+            children: children && formatNodes(children),
+            id: id === -1 ? undefined : id,
+          };
+        })
+        .filter(node => !!node.action);
+
+    const items = formatNodes(preview(nodes, editingNode)[0].children).map(node => {
+      const id = node.id === -1 ? undefined : node.id;
+      return {
+        ...node,
+        id,
+      };
+    });
+
+    await updateMenu({
+      variables: { menu: { id: Number(id), items } },
+      onCompleted: data => {
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('notification.editSuccess', {
+            resource: t('menu.title', { count: 1 }),
+            context: 'male',
+          })}!`,
+        });
+        switch (editingNode.action) {
+          case EnumInputAction.CREATE:
+          case EnumInputAction.DELETE:
+            setEditingNode(emptyEditingNode);
+            setSelected('');
+            break;
+          case EnumInputAction.UPDATE:
+            setSelected(editingNode.id.toString());
+            break;
+        }
+        setUpdatedMenu(data.updateMenu);
+        setOperationScreen(EnumInputActionScreen.SELECTING_ACTION);
+        setEditingNode(emptyEditingNode);
+        return Promise.resolve();
+      },
+      onError: error => {
+        openDefaultErrorNotification(error, dispatch);
+        return Promise.reject();
+      },
+    });
+    return Promise.resolve();
+  };
 
   const preview = useCallback((nodes: INode[], editingNode: IEditingNode): INode[] => {
     if (!editingNode.id) return nodes;
@@ -399,6 +539,9 @@ export const ItemsPreview = () => {
               selected={selected}
               setSelected={setSelected}
               preview={preview}
+              emptyEditingNode={emptyEditingNode}
+              setEditingNode={setEditingNode}
+              handleUpdate={handleUpdate}
             />
           </Box>
 
@@ -425,6 +568,9 @@ export const ItemsPreview = () => {
             findNodeById={findNodeById}
             preview={preview}
             setUpdatedMenu={setUpdatedMenu}
+            operationScreen={operationScreen}
+            setOperationScreen={setOperationScreen}
+            handleUpdate={handleUpdate}
           />
         </Box>
       </Box>

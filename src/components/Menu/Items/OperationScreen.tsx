@@ -13,12 +13,9 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SummarizeOutlinedIcon from '@mui/icons-material/SummarizeOutlined';
 import { DateTime } from 'luxon';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import {
   EnumInputAction,
   IEditingNode,
@@ -34,6 +31,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import MenuService from '../../../api/services/MenuService';
+import { EnumInputActionScreen } from '../../../pages/Menu/Items';
 
 const Form = styled('form')({
   display: 'flex',
@@ -43,13 +41,6 @@ const Form = styled('form')({
   paddingBottom: '1rem',
   overflowY: 'auto',
 });
-
-enum EnumInputActionScreen {
-  SELECTING_ACTION,
-  INSERT,
-  UPDATE,
-  DELETE,
-}
 
 interface Props {
   id: string;
@@ -62,9 +53,12 @@ interface Props {
   setExpanded: (expanded: string[]) => void;
   selected: string;
   setSelected: (selected: string) => void;
+  operationScreen: EnumInputActionScreen;
+  setOperationScreen: (operationScreen: EnumInputActionScreen) => void;
   findNodeById: (nodes: INode[], id: number) => INode | undefined;
   preview: (nodes: INode[], editingNode: IEditingNode) => INode[];
   setUpdatedMenu: (menu: IMenu) => void;
+  handleUpdate: () => Promise<void>;
 }
 
 export const OperationScreen = ({
@@ -77,6 +71,8 @@ export const OperationScreen = ({
   setExpanded,
   selected,
   setSelected,
+  operationScreen,
+  setOperationScreen,
   findNodeById,
   preview,
   setEditingNode,
@@ -84,12 +80,8 @@ export const OperationScreen = ({
 }: Props) => {
   const { dispatch } = React.useContext(NotificationContext);
 
-  const navigate = useNavigate();
   const { i18n, t } = useTranslation();
 
-  const [operationScreen, setOperationScreen] = React.useState<EnumInputActionScreen>(
-    EnumInputActionScreen.SELECTING_ACTION,
-  );
   const [labelError, setLabelError] = React.useState<string>('');
   const [startPublicationError, setStartPublicationError] = React.useState<string>('');
   const [endPublicationError, setEndPublicationError] = React.useState<string>('');
@@ -273,17 +265,6 @@ export const OperationScreen = ({
     }
   };
 
-  const handleDeleteSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    try {
-      await handleUpdate();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleActionChange = React.useCallback(
     (action: EnumInputActionScreen) => {
       const selectedNode = findNodeById(nodes, Number(selected));
@@ -351,18 +332,6 @@ export const OperationScreen = ({
           });
           setSelected(selectedNode.id.toString());
           break;
-        case EnumInputActionScreen.DELETE:
-          if (!selectedNode || selectedNode.id === 0) {
-            !selectedNode && setSelected('');
-            return;
-          }
-          setEditingNode({
-            ...selectedNode,
-            action: EnumInputAction.DELETE,
-            original: selectedNode,
-          });
-          setSelected(selectedNode.id.toString());
-          break;
       }
       setOperationScreen(action);
     },
@@ -377,6 +346,7 @@ export const OperationScreen = ({
       setEditingNode,
       setExpanded,
       setSelected,
+      setOperationScreen,
     ],
   );
 
@@ -606,50 +576,7 @@ export const OperationScreen = ({
                 {t('buttons.edit')}
               </Typography>
             </Button>
-            <Button
-              sx={{ color: 'red' }}
-              variant="outlined"
-              color="error"
-              disabled={!selected || selected === '0'}
-              onClick={() => handleActionChange(EnumInputActionScreen.DELETE)}
-            >
-              <DeleteIcon />
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                  lineHeight: '0.75rem',
-                  letterSpacing: '0.18px',
-                  color: selected && selected !== '0' ? 'red' : 'grey',
-                  ml: '0.5rem',
-                }}
-              >
-                {t('buttons.delete')}
-              </Typography>
-            </Button>
           </Box>
-          <Button
-            variant="outlined"
-            sx={{ mt: '1rem' }}
-            onClick={() => navigate(`${selected}`)}
-            disabled={!selected || selected === '0'}
-          >
-            <SummarizeOutlinedIcon />
-            <Typography
-              variant="subtitle1"
-              sx={{
-                fontWeight: 700,
-                fontSize: '0.75rem',
-                lineHeight: '0.75rem',
-                letterSpacing: '0.18px',
-                color: selected && selected !== '0' ? 'black' : 'grey',
-                ml: '0.5rem',
-              }}
-            >
-              {t('menu.preview.actions.editTemplate')}
-            </Typography>
-          </Button>
         </Box>
       );
     case EnumInputActionScreen.INSERT:
@@ -1267,70 +1194,6 @@ export const OperationScreen = ({
             </Button>
           </Box>
         </Form>
-      );
-    case EnumInputActionScreen.DELETE:
-      return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', pr: '1rem' }}>
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 700,
-              fontSize: '2rem',
-              lineHeight: '2rem',
-              letterSpacing: '0.18px',
-              textAlign: 'center',
-              width: '100%',
-            }}
-          >
-            {t('menu.preview.actions.delete')}
-          </Typography>
-          <TextField
-            type="text"
-            label={t('menu.preview.parent')}
-            value={findNodeById(nodes, editingNode.parentId).label}
-            sx={{
-              width: '100%',
-              mt: '2rem',
-            }}
-            contentEditable={false}
-          />
-          <TextField
-            type="text"
-            label={t('menu.preview.inputs.name.label')}
-            InputLabelProps={{ shrink: true }}
-            value={editingNode.label}
-            placeholder={t('menu.preview.inputs.name.placeholder')}
-            contentEditable={false}
-            sx={{
-              mt: '2rem',
-              width: '100%',
-            }}
-          />
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              width: '100%',
-            }}
-          >
-            <Button
-              variant="contained"
-              color="success"
-              sx={{ mt: '2rem', mr: '1rem' }}
-              onClick={handleDeleteSubmit}
-            >
-              {t('buttons.save')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
-            >
-              {t('buttons.discard')}
-            </Button>
-          </Box>
-        </Box>
       );
     default:
       return null;
