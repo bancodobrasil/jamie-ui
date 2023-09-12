@@ -190,27 +190,41 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
         );
       case MenuMetaType.BOOLEAN:
         return (
-          <FormControlLabel
-            control={
-              <Checkbox
-                id={`meta[${index}].defaultValue`}
-                checked={m.defaultValue === true}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const { checked } = e.target;
-                  const updatedMeta = [...meta];
-                  if (updatedMeta[index].action !== EnumInputAction.CREATE) {
-                    updatedMeta[index].action = EnumInputAction.UPDATE;
-                  }
-                  updatedMeta[index].defaultValue = !!checked;
-                  updatedMeta[index].errors.defaultValue = '';
-                  setMeta(updatedMeta);
-                }}
-                color="primary"
-              />
-            }
-            label={t('menu.fields.meta.defaultValue')}
-            sx={{ width: '22.5rem' }}
-          />
+          // <FormControlLabel
+          //   control={
+          //     <Checkbox
+          //       id={`meta[${index}].defaultValue`}
+          //       checked={m.defaultValue === true}
+          //       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          //         const { checked } = e.target;
+          //         const updatedMeta = [...meta];
+          //         if (updatedMeta[index].action !== EnumInputAction.CREATE) {
+          //           updatedMeta[index].action = EnumInputAction.UPDATE;
+          //         }
+          //         updatedMeta[index].defaultValue = !!checked;
+          //         updatedMeta[index].errors.defaultValue = '';
+          //         setMeta(updatedMeta);
+          //       }}
+          //       color="primary"
+          //     />
+          //   }
+          //   label={t('menu.fields.meta.defaultValue')}
+          //   sx={{ width: '22.5rem' }}
+          // />
+          <FormControl
+            sx={{
+              gap: '12px',
+              borderBlockColor: '#758887',
+              color: '#022831',
+              width: '22.5rem',
+            }}
+          >
+            <InputLabel>Valor Padrão</InputLabel>
+            <Select label="Valor Padrão">
+              <MenuItem value="verdadeiro">Verdadeiro</MenuItem>
+              <MenuItem value="falso">Falso</MenuItem>
+            </Select>
+          </FormControl>
         );
       case MenuMetaType.DATE:
         return (
