@@ -33,10 +33,6 @@ interface Props {
   emptyEditingNode: IEditingNode;
   editingNode: IEditingNode;
   setEditingNode: (editingNode: IEditingNode) => void;
-  expanded: string[];
-  setExpanded: (expanded: string[]) => void;
-  selected: string;
-  setSelected: (selected: string) => void;
   operationScreen: EnumInputActionScreen;
   setOperationScreen: (operationScreen: EnumInputActionScreen) => void;
   findNodeById: (nodes: INode[], id: number) => INode | undefined;
@@ -49,10 +45,6 @@ export const OperationScreen = ({
   nodes,
   editingNode,
   emptyEditingNode,
-  expanded,
-  setExpanded,
-  selected,
-  setSelected,
   operationScreen,
   setOperationScreen,
   findNodeById,
@@ -118,6 +110,11 @@ export const OperationScreen = ({
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleDiscard = () => {
+    setEditingNode(emptyEditingNode);
+    setOperationScreen(EnumInputActionScreen.NONE);
   };
 
   const renderMeta = () => {
@@ -536,12 +533,7 @@ export const OperationScreen = ({
             >
               {t('buttons.save')}
             </Button>
-            <Button
-              variant="contained"
-              color="error"
-              sx={{ mt: '2rem' }}
-              onClick={() => setEditingNode(emptyEditingNode)}
-            >
+            <Button variant="contained" color="error" sx={{ mt: '2rem' }} onClick={handleDiscard}>
               {t('buttons.discard')}
             </Button>
           </Box>
@@ -824,12 +816,7 @@ export const OperationScreen = ({
             >
               {t('buttons.save')}
             </Button>
-            <Button
-              variant="contained"
-              color="error"
-              sx={{ mt: '2rem' }}
-              onClick={() => setEditingNode(emptyEditingNode)}
-            >
+            <Button variant="contained" color="error" sx={{ mt: '2rem' }} onClick={handleDiscard}>
               {t('buttons.discard')}
             </Button>
           </Box>

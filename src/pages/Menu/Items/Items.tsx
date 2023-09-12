@@ -557,32 +557,31 @@ export const ItemsPreview = () => {
               setOperationScreen={setOperationScreen}
             />
           </Box>
+          {operationScreen !== EnumInputActionScreen.NONE ? (
+            <>
+              <div
+                style={{
+                  width: '1px',
+                  height: '100%',
+                  border: '1px solid #eaeaec',
+                  margin: '0 50px 0 0',
+                }}
+              />
 
-          <div
-            style={{
-              width: '1px',
-              height: '100%',
-              border: '1px solid #eaeaec',
-              margin: '0 50px 0 0',
-            }}
-          />
-
-          <OperationScreen
-            id={id}
-            data={data}
-            nodes={nodes}
-            emptyEditingNode={emptyEditingNode}
-            editingNode={editingNode}
-            setEditingNode={setEditingNode}
-            expanded={expanded}
-            setExpanded={setExpanded}
-            selected={selected}
-            setSelected={setSelected}
-            findNodeById={findNodeById}
-            operationScreen={operationScreen}
-            setOperationScreen={setOperationScreen}
-            handleUpdate={handleUpdate}
-          />
+              <OperationScreen
+                id={id}
+                data={data}
+                nodes={nodes}
+                emptyEditingNode={emptyEditingNode}
+                editingNode={editingNode}
+                setEditingNode={setEditingNode}
+                findNodeById={findNodeById}
+                operationScreen={operationScreen}
+                setOperationScreen={setOperationScreen}
+                handleUpdate={handleUpdate}
+              />
+            </>
+          ) : null}
         </Box>
       </Box>
     </Box>
