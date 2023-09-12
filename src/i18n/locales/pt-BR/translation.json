@@ -261,7 +261,8 @@
         "edit": "Editar",
         "delete": "Deletar",
         "editTemplate": "Editar Template",
-        "insertChild": "Inserir Item Filho"
+        "insertChild": "Inserir Item Filho",
+        "insertRoot": "Novo Item de Menu"
       },
       "parent": "Item Pai",
       "newItem": "Novo Item {{order}}",

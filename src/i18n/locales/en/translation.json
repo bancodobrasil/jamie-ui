@@ -260,7 +260,8 @@
         "edit": "Edit",
         "delete": "Delete",
         "editTemplate": "Edit Template",
-        "insertChild": "Insert Child"
+        "insertChild": "Insert Child",
+        "insertRoot": "New Menu Item"
       },
       "parent": "Parent",
       "newItem": "New Item {{order}}",

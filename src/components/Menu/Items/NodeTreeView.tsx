@@ -1,5 +1,14 @@
 import React from 'react';
-import { Box, Divider, IconButton, ListItemText, Menu, MenuItem, MenuList } from '@mui/material';
+import {
+  Box,
+  Divider,
+  IconButton,
+  ListItemText,
+  Menu,
+  MenuItem,
+  MenuList,
+  Typography,
+} from '@mui/material';
 import { TreeItem, TreeView } from '@mui/lab';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -7,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EnumInputAction, IEditingNode, INode, MenuMetaType } from '../../../types';
 import { EnumInputActionScreen } from '../../../pages/Menu/Items';
+import { IconPlus } from '../../Icons/IconPlus';
 
 interface CustomTreeItemProps {
   node: INode;
@@ -43,6 +53,7 @@ const CustomTreeItem = ({
     backgroundColor: '#fff',
     borderRadius: '4px',
     padding: '12px 0px 13px 25px',
+    my: '0.5rem',
   };
 
   const { id: menuId } = useParams();
@@ -257,6 +268,8 @@ export const NodeTreeView = ({
   data,
   setOperationScreen,
 }: Props) => {
+  const { t } = useTranslation();
+
   const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
     setExpanded(nodeIds);
   };
@@ -319,6 +332,17 @@ export const NodeTreeView = ({
         overflowY: 'auto',
       }}
     >
+      <Box
+        className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border my-2"
+        sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
+      >
+        <IconPlus fill="#265EFD" className="mx-4" />
+        <Typography
+          sx={{ flex: 1, position: 'relative', top: '-2px', color: '#265EFD', fontWeight: 'bold' }}
+        >
+          {t('menu.preview.actions.insertRoot')}
+        </Typography>
+      </Box>
       <TreeView
         defaultExpandIcon={<ArrowForwardIosIcon />}
         defaultCollapseIcon={<ArrowDownwardIcon />}
