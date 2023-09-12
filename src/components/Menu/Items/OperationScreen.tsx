@@ -440,10 +440,13 @@ export const OperationScreen = ({
               value={editingNode.order}
               onChange={e => {
                 const parent = findNodeById(nodes, editingNode.parentId);
-                const order = Math.min(
-                  Math.max(Number(e.target.value), 1),
-                  parent.children?.length ? parent.children.length + 1 : 1,
-                );
+                let maxOrder = 1;
+                if (parent?.children?.length) {
+                  maxOrder = parent.children.length + 1;
+                } else if (nodes.length) {
+                  maxOrder = nodes.length + 1;
+                }
+                const order = Math.min(Math.max(Number(e.target.value), 1), maxOrder);
                 if (order === editingNode.order) return;
                 setEditingNode({
                   ...editingNode,
@@ -725,10 +728,13 @@ export const OperationScreen = ({
               value={editingNode.order}
               onChange={e => {
                 const parent = findNodeById(nodes, editingNode.parentId);
-                const order = Math.min(
-                  Math.max(Number(e.target.value), 1),
-                  parent.children?.length ? parent.children.length : 1,
-                );
+                let maxOrder = 1;
+                if (parent?.children?.length) {
+                  maxOrder = parent.children.length;
+                } else if (nodes.length) {
+                  maxOrder = nodes.length;
+                }
+                const order = Math.min(Math.max(Number(e.target.value), 1), maxOrder);
                 if (order === editingNode.order) return;
                 setEditingNode({
                   ...editingNode,

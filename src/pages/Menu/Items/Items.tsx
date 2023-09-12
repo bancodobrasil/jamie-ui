@@ -274,6 +274,109 @@ export const ItemsPreview = () => {
         return { ...child, action: EnumInputAction.DELETE };
       });
     };
+    const reorder = (nodes: INode[]): INode[] => {
+      const siblings = nodes.map(sibling => {
+        if (sibling.id === editingNode.id) {
+          // sibling is editing node
+          // console.log('child is editing node', child);
+          if (sibling.order === editingNode.order) {
+            // sibling is in same position
+            // console.log('sibling is in same position');
+            if (editingNode.action === EnumInputAction.DELETE) {
+              // editing node is DELETE
+              // console.log('editing node is DELETE');
+              // set sibling as DELETE
+              return {
+                ...sibling,
+                action: EnumInputAction.DELETE,
+                children: deleteChildren(sibling),
+              };
+            }
+            // editing node is UPDATE
+            // console.log('editing node is UPDATE');
+            // set sibling as UPDATE
+            return {
+              ...sibling,
+              ...editingNode,
+              action: EnumInputAction.UPDATE,
+            };
+          }
+          // sibling is in different position
+          // console.log('sibling is in different position');
+          // set sibling as UPDATE and set order as editing node order
+          return {
+            ...sibling,
+            ...editingNode,
+            action: EnumInputAction.UPDATE,
+          };
+        }
+        // sibling is not editing node
+        if (sibling.order === editingNode.order) {
+          // sibling is in same position as editing node
+          // console.log('sibling is in same position as editing node', sibling);
+          // set order based on existing node order diff (moving up or down)
+          const diff = editingNode.order - editingNode.original.order;
+          let order = diff >= 0 ? sibling.order - 1 : sibling.order + 1;
+          if (editingNode.action === EnumInputAction.DELETE) {
+            // editing node is DELETE
+            // console.log('editing node is DELETE');
+            // decrease order
+            order = sibling.order - 1;
+          }
+          // set sibling as UPDATE and decrease order
+          return { ...sibling, action: EnumInputAction.UPDATE, order };
+        }
+        if (sibling.order > editingNode.order) {
+          // sibling is after editing node
+          // console.log('sibling is after editing node', sibling);
+          // set sibling as UPDATE
+          let action = EnumInputAction.UPDATE;
+          let { order } = sibling;
+          if (editingNode.action === EnumInputAction.UPDATE) {
+            if (sibling.order < editingNode.original.order) {
+              // sibling order is less than editing node original order
+              // increase sibling order
+              order += 1;
+            } else {
+              // sibling order is greater than editing node original order
+              // keep sibling order as is and set action as undefined
+              action = undefined;
+            }
+          } else if (editingNode.action === EnumInputAction.DELETE) {
+            order -= 1;
+          } else if (editingNode.action === EnumInputAction.CREATE) {
+            order += 1;
+          }
+          return { ...sibling, order, action };
+        }
+        // sibling is before editing node
+        // console.log('sibling is before editing node', sibling);
+        if (
+          editingNode.action === EnumInputAction.UPDATE &&
+          sibling.order > editingNode.original.order
+        ) {
+          // sibling order is greater than editing node original order
+          // decrease sibling order
+          return { ...sibling, action: EnumInputAction.UPDATE, order: sibling.order - 1 };
+        }
+        return sibling;
+      });
+      return siblings;
+    };
+    if (editingNode.parentId === 0) {
+      // editing node is root
+      // console.log('editing node is root');
+      // reordering root
+      let root = reorder(nodes);
+      if (editingNode.action === EnumInputAction.CREATE) {
+        // editing node is CREATE
+        // console.log('editing node is CREATE');
+        // add editing node to root
+        root.splice(editingNode.order - 1, 0, editingNode);
+      }
+      root = root.sort((a, b) => a.order - b.order);
+      return root;
+    }
     nodes.forEach(node => {
       // console.log('current node', node);
       if (node.id === editingNode.id) {
@@ -311,92 +414,10 @@ export const ItemsPreview = () => {
             action: EnumInputAction.UPDATE,
           });
         } else {
-          let children = node.children.map(child => {
-            if (child.id === editingNode.id) {
-              // child is editing node
-              // console.log('child is editing node', child);
-              if (child.order === editingNode.order) {
-                // child is in same position
-                // console.log('child is in same position');
-                if (editingNode.action === EnumInputAction.DELETE) {
-                  // editing node is DELETE
-                  // console.log('editing node is DELETE');
-                  // set child as DELETE
-                  return {
-                    ...child,
-                    action: EnumInputAction.DELETE,
-                    children: deleteChildren(child),
-                  };
-                }
-                // editing node is UPDATE
-                // console.log('editing node is UPDATE');
-                // set child as UPDATE
-                return {
-                  ...child,
-                  ...editingNode,
-                  action: EnumInputAction.UPDATE,
-                };
-              }
-              // child is in different position
-              // console.log('child is in different position');
-              // set child as UPDATE and set order as editing node order
-              return {
-                ...child,
-                ...editingNode,
-                action: EnumInputAction.UPDATE,
-              };
-            }
-            // child is not editing node
-            if (child.order === editingNode.order) {
-              // child is in same position as editing node
-              // console.log('child is in same position as editing node', child);
-              // set order based on existing node order diff (moving up or down)
-              const diff = editingNode.order - editingNode.original.order;
-              let order = diff >= 0 ? child.order - 1 : child.order + 1;
-              if (editingNode.action === EnumInputAction.DELETE) {
-                // editing node is DELETE
-                // console.log('editing node is DELETE');
-                // decrease order
-                order = child.order - 1;
-              }
-              // set child as UPDATE and decrease order
-              return { ...child, action: EnumInputAction.UPDATE, order };
-            }
-            if (child.order > editingNode.order) {
-              // child is after editing node
-              // console.log('child is after editing node', child);
-              // set child as UPDATE
-              let action = EnumInputAction.UPDATE;
-              let { order } = child;
-              if (editingNode.action === EnumInputAction.UPDATE) {
-                if (child.order < editingNode.original.order) {
-                  // child order is less than editing node original order
-                  // increase child order
-                  order += 1;
-                } else {
-                  // child order is greater than editing node original order
-                  // keep child order as is and set action as undefined
-                  action = undefined;
-                }
-              } else if (editingNode.action === EnumInputAction.DELETE) {
-                order -= 1;
-              } else if (editingNode.action === EnumInputAction.CREATE) {
-                order += 1;
-              }
-              return { ...child, order, action };
-            }
-            // child is before editing node
-            // console.log('child is before editing node', child);
-            if (
-              editingNode.action === EnumInputAction.UPDATE &&
-              child.order > editingNode.original.order
-            ) {
-              // child order is greater than editing node original order
-              // decrease child order
-              return { ...child, action: EnumInputAction.UPDATE, order: child.order - 1 };
-            }
-            return child;
-          });
+          // parent has children
+          // console.log('parent has children');
+          // reordering children
+          let children = reorder(node.children);
           if (editingNode.action === EnumInputAction.CREATE) {
             // editing node is CREATE
             // console.log('editing node is CREATE');
@@ -432,7 +453,7 @@ export const ItemsPreview = () => {
         }
       }
     });
-    console.log('nodes preview', nodesPreview, editingNode);
+    // console.log('nodes preview', nodesPreview);
     return nodesPreview;
   }, []);
 
