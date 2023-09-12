@@ -25,11 +25,11 @@ interface CustomTreeItemProps {
   renderNodes: (nodes: INode[]) => JSX.Element[];
   setSelected: (selected: string) => void;
   emptyEditingNode: IEditingNode;
-  editingNode: IEditingNode;
   setEditingNode: (editingNode: IEditingNode) => void;
   handleUpdate: () => Promise<void>;
   data: any;
   setOperationScreen: (operationScreen: EnumInputActionScreen) => void;
+  insertingNodeRef?: (node: HTMLElement) => void;
 }
 
 const CustomTreeItem = ({
@@ -39,11 +39,11 @@ const CustomTreeItem = ({
   renderNodes,
   setSelected,
   emptyEditingNode,
-  editingNode,
   setEditingNode,
   handleUpdate,
   data,
   setOperationScreen,
+  insertingNodeRef,
 }: CustomTreeItemProps) => {
   const { id, label, children, meta } = node;
 
@@ -165,6 +165,7 @@ const CustomTreeItem = ({
 
   return (
     <TreeItem
+      ref={id === -1 ? insertingNodeRef : null}
       nodeId={id.toString()}
       onClick={onNodeClick}
       label={
@@ -268,6 +269,12 @@ export const NodeTreeView = ({
 }: Props) => {
   const { t } = useTranslation();
 
+  const insertingNodeRef = React.useCallback(node => {
+    if (node) {
+      node.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
   const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
     setExpanded(nodeIds);
   };
@@ -301,11 +308,11 @@ export const NodeTreeView = ({
             renderNodes={renderNodes}
             setSelected={setSelected}
             emptyEditingNode={emptyEditingNode}
-            editingNode={editingNode}
             setEditingNode={setEditingNode}
             handleUpdate={handleUpdate}
             data={data}
             setOperationScreen={setOperationScreen}
+            insertingNodeRef={insertingNodeRef}
           />
         );
       }),
@@ -317,6 +324,7 @@ export const NodeTreeView = ({
       setSelected,
       data,
       setOperationScreen,
+      insertingNodeRef,
     ],
   );
 
