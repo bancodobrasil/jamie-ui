@@ -870,16 +870,6 @@ export const OperationScreen = ({
           </Typography>
           <TextField
             type="text"
-            label={t('menu.preview.parent')}
-            value={findNodeById(nodes, editingNode.parentId).label}
-            sx={{
-              width: '100%',
-              mt: '2rem',
-            }}
-            contentEditable={false}
-          />
-          <TextField
-            type="text"
             label={t('menu.preview.inputs.name.label')}
             InputLabelProps={{ shrink: true }}
             value={editingNode.label}

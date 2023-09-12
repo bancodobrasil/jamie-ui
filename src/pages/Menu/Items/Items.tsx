@@ -120,17 +120,8 @@ export const ItemsPreview = () => {
         })
         .filter(item => !item.parentId)
         .sort((a, b) => a.order - b.order) || [];
-    return [
-      {
-        id: 0,
-        label: t('menu.preview.root'),
-        order: 1,
-        enabled: true,
-        children: root,
-        meta: {},
-      },
-    ];
-  }, [updatedMenu, data?.menu, t]);
+    return root;
+  }, [updatedMenu, data?.menu]);
 
   const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
 
