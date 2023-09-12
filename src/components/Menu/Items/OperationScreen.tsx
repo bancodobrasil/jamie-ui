@@ -11,17 +11,9 @@ import {
 } from '@mui/material';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import AddIcon from '@mui/icons-material/Add';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
-import {
-  EnumInputAction,
-  IEditingNode,
-  IMenu,
-  IMenuMeta,
-  INode,
-  MenuMetaType,
-} from '../../../types';
+import { IEditingNode, IMenu, IMenuMeta, INode, MenuMetaType } from '../../../types';
 import { MENU_ITEM_VALIDATION } from '../../../constants';
 import { EnumInputActionScreen } from '../../../pages/Menu/Items';
 
@@ -127,65 +119,6 @@ export const OperationScreen = ({
       console.error(error);
     }
   };
-
-  const handleActionChange = React.useCallback(
-    (action: EnumInputActionScreen) => {
-      const selectedNode = findNodeById(nodes, Number(selected));
-      if (expanded.find(id => id === selectedNode?.id.toString())) {
-        setExpanded([...expanded, selectedNode.id.toString()]);
-      }
-      let node: INode;
-      const meta = {};
-      switch (action) {
-        case EnumInputActionScreen.SELECTING_ACTION:
-          setEditingNode(emptyEditingNode);
-          break;
-        case EnumInputActionScreen.INSERT:
-          data?.menu.meta?.forEach(m => {
-            switch (m.type) {
-              case MenuMetaType.TEXT:
-              case MenuMetaType.NUMBER:
-              case MenuMetaType.DATE:
-                meta[m.name] = m.defaultValue || '';
-                break;
-              case MenuMetaType.BOOLEAN:
-                meta[m.name] = m.defaultValue || false;
-                break;
-            }
-          });
-          node = {
-            id: -1,
-            label: t('menu.preview.newItem', {
-              order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
-            }),
-            order: selectedNode.children?.length ? selectedNode.children.length + 1 : 1,
-            parentId: selectedNode.id,
-            meta,
-            enabled: true,
-            children: [],
-            startPublication: null,
-            endPublication: null,
-          };
-          setEditingNode({ ...node, action: EnumInputAction.CREATE, original: node });
-          setSelected('-1');
-          break;
-      }
-      setOperationScreen(action);
-    },
-    [
-      data,
-      findNodeById,
-      nodes,
-      selected,
-      t,
-      expanded,
-      emptyEditingNode,
-      setEditingNode,
-      setExpanded,
-      setSelected,
-      setOperationScreen,
-    ],
-  );
 
   const renderMeta = () => {
     const renderInput = (meta: IMenuMeta) => {
@@ -326,74 +259,6 @@ export const OperationScreen = ({
   };
 
   switch (operationScreen) {
-    case EnumInputActionScreen.SELECTING_ACTION:
-      return (
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 700,
-              fontSize: '2rem',
-              lineHeight: '2rem',
-              letterSpacing: '0.18px',
-              mb: '1rem',
-              mt: '1rem',
-            }}
-          >
-            {t('menu.preview.actions.title')}
-          </Typography>
-          {!selected && (
-            <Typography
-              variant="subtitle1"
-              sx={{
-                color: 'error.main',
-                mb: '1rem',
-              }}
-            >
-              {t('menu.preview.errors.noItemSelected')}
-            </Typography>
-          )}
-          <Box
-            sx={{
-              my: '2rem',
-              display: 'flex',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              width: '100%',
-            }}
-          >
-            <Button
-              sx={{ color: 'green' }}
-              variant="outlined"
-              color="success"
-              disabled={!selected}
-              onClick={() => handleActionChange(EnumInputActionScreen.INSERT)}
-            >
-              <AddIcon />
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                  lineHeight: '0.75rem',
-                  letterSpacing: '0.18px',
-                  color: selected ? 'green' : 'grey',
-                  ml: '0.5rem',
-                }}
-              >
-                {t('buttons.insert')}
-              </Typography>
-            </Button>
-          </Box>
-        </Box>
-      );
     case EnumInputActionScreen.INSERT:
       return (
         <Form onSubmit={handleInsertSubmit}>
@@ -675,7 +540,7 @@ export const OperationScreen = ({
               variant="contained"
               color="error"
               sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
+              onClick={() => setEditingNode(emptyEditingNode)}
             >
               {t('buttons.discard')}
             </Button>
@@ -963,7 +828,7 @@ export const OperationScreen = ({
               variant="contained"
               color="error"
               sx={{ mt: '2rem' }}
-              onClick={() => handleActionChange(EnumInputActionScreen.SELECTING_ACTION)}
+              onClick={() => setEditingNode(emptyEditingNode)}
             >
               {t('buttons.discard')}
             </Button>

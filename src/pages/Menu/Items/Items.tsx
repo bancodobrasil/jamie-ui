@@ -44,7 +44,7 @@ const emptyEditingNode: IEditingNode = {
 };
 
 export enum EnumInputActionScreen {
-  SELECTING_ACTION,
+  NONE,
   INSERT,
   UPDATE,
 }
@@ -67,7 +67,7 @@ export const ItemsPreview = () => {
   const [selected, setSelected] = useState<string>('0');
 
   const [operationScreen, setOperationScreen] = React.useState<EnumInputActionScreen>(
-    EnumInputActionScreen.SELECTING_ACTION,
+    EnumInputActionScreen.NONE,
   );
 
   const nodes = useMemo<INode[]>(() => {
@@ -248,7 +248,7 @@ export const ItemsPreview = () => {
             break;
         }
         setUpdatedMenu(data.updateMenu);
-        setOperationScreen(EnumInputActionScreen.SELECTING_ACTION);
+        setOperationScreen(EnumInputActionScreen.NONE);
         setEditingNode(emptyEditingNode);
         return Promise.resolve();
       },
