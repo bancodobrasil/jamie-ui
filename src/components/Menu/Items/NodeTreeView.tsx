@@ -51,25 +51,25 @@ const CustomTreeItem = ({
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [contextMenuRef, setContextMenuRef] = React.useState<null | HTMLElement>(null);
 
   const [confirmedDelete, setConfirmedDelete] = React.useState(false);
 
-  const handleClick = (event: React.SyntheticEvent) => {
+  const handleClickContextMenu = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    setAnchorEl(event.currentTarget as HTMLElement);
+    setContextMenuRef(event.currentTarget as HTMLElement);
   };
-  const handleClose = (event: React.SyntheticEvent) => {
+  const handleCloseContextMenu = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    setAnchorEl(null);
+    setContextMenuRef(null);
   };
 
   const handleInsert = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    setAnchorEl(null);
+    setContextMenuRef(null);
     const itemMeta = { ...meta };
     data?.menu.meta?.forEach(m => {
       const defaultValue = (meta || {})[m.id] || m.defaultValue;
@@ -110,7 +110,7 @@ const CustomTreeItem = ({
       action: EnumInputAction.DELETE,
       original: node,
     });
-    setAnchorEl(null);
+    setContextMenuRef(null);
     // eslint-disable-next-line no-promise-executor-return
     await new Promise(resolve => setTimeout(resolve, 100));
     // eslint-disable-next-line no-alert
@@ -133,7 +133,7 @@ const CustomTreeItem = ({
     event.stopPropagation();
     event.preventDefault();
     navigate(`/menus/${menuId}/items/${id}`);
-    setAnchorEl(null);
+    setContextMenuRef(null);
   };
 
   const onNodeClick = (event: React.SyntheticEvent) => {
@@ -172,14 +172,14 @@ const CustomTreeItem = ({
           <Box className="flex-1" sx={{ color, fontWeight }}>
             {label}
           </Box>
-          <IconButton sx={{ float: 'right', mr: 1 }} size="small" onClick={handleClick}>
+          <IconButton sx={{ float: 'right', mr: 1 }} size="small" onClick={handleClickContextMenu}>
             <MoreVertIcon />
           </IconButton>
           <Menu
             id="simple-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
+            anchorEl={contextMenuRef}
+            open={Boolean(contextMenuRef)}
+            onClose={handleCloseContextMenu}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'right',
