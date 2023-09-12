@@ -225,8 +225,21 @@ const CustomTreeItem = ({
           borderRadius: '4px',
           padding: '12px 0px 13px 25px',
           my: '0.5rem',
-          maxWidth: '540px',
         },
+        '& > .Mui-selected': {
+          border: '2px solid #3354FD',
+          backgroundColor: '#fff',
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+          },
+        },
+        '& > .Mui-selected.Mui-focused': {
+          backgroundColor: '#fff',
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+          },
+        },
+        maxWidth: '540px',
       }}
     >
       {children?.length > 0 && renderNodes(children)}
