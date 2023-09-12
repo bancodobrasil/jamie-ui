@@ -47,15 +47,6 @@ const CustomTreeItem = ({
 }: CustomTreeItemProps) => {
   const { id, label, children, meta } = node;
 
-  const baseSX = {
-    border: '1px solid #eaeaec',
-    margin: '3px 0px',
-    backgroundColor: '#fff',
-    borderRadius: '4px',
-    padding: '12px 0px 13px 25px',
-    my: '0.5rem',
-  };
-
   const { id: menuId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -226,9 +217,15 @@ const CustomTreeItem = ({
       }
       sx={{
         '& > .MuiTreeItem-content': {
-          ...baseSX,
           color,
           fontWeight,
+          border: '1px solid #eaeaec',
+          margin: '3px 0px',
+          backgroundColor: '#fff',
+          borderRadius: '4px',
+          padding: '12px 0px 13px 25px',
+          my: '0.5rem',
+          maxWidth: '540px',
         },
       }}
     >
@@ -366,7 +363,13 @@ export const NodeTreeView = ({
     >
       <Box
         className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border my-2"
-        sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)', cursor: 'pointer' } }}
+        sx={{
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            cursor: 'pointer',
+          },
+          maxWidth: '540px',
+        }}
         onClick={handleInsertRoot}
       >
         <IconPlus fill="#265EFD" className="mx-4" />
