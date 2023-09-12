@@ -15,6 +15,7 @@ interface CustomTreeItemProps {
   renderNodes: (nodes: INode[]) => JSX.Element[];
   setSelected: (selected: string) => void;
   emptyEditingNode: IEditingNode;
+  editingNode: IEditingNode;
   setEditingNode: (editingNode: IEditingNode) => void;
   handleUpdate: () => Promise<void>;
   data: any;
@@ -28,6 +29,7 @@ const CustomTreeItem = ({
   renderNodes,
   setSelected,
   emptyEditingNode,
+  editingNode,
   setEditingNode,
   handleUpdate,
   data,
@@ -60,6 +62,42 @@ const CustomTreeItem = ({
     event.stopPropagation();
     event.preventDefault();
     setAnchorEl(null);
+  };
+
+  const handleInsert = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setAnchorEl(null);
+    const itemMeta = { ...meta };
+    data?.menu.meta?.forEach(m => {
+      const defaultValue = (meta || {})[m.id] || m.defaultValue;
+      switch (m.type) {
+        case MenuMetaType.TEXT:
+        case MenuMetaType.NUMBER:
+        case MenuMetaType.DATE:
+          itemMeta[m.name] = defaultValue || '';
+          break;
+        case MenuMetaType.BOOLEAN:
+          itemMeta[m.name] = defaultValue || false;
+          break;
+      }
+    });
+    const itemNode = {
+      id: -1,
+      label: t('menu.preview.newItem', {
+        order: children?.length ? children.length + 1 : 1,
+      }),
+      order: children?.length ? children.length + 1 : 1,
+      parentId: id,
+      meta: itemMeta,
+      enabled: true,
+      children: [],
+      startPublication: null,
+      endPublication: null,
+    };
+    setEditingNode({ ...itemNode, action: EnumInputAction.CREATE, original: itemNode });
+    setSelected('-1');
+    setOperationScreen(EnumInputActionScreen.INSERT);
   };
 
   const handleDelete = async (event: React.SyntheticEvent) => {
@@ -101,8 +139,14 @@ const CustomTreeItem = ({
   };
 
   const onNodeClick = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
     if (id === 0) {
-      !node && setSelected('');
+      setSelected('');
+      return;
+    }
+    if (editingNode.id === -1 || id === -1) {
+      setSelected('-1');
       return;
     }
     const itemMeta = { ...meta };
@@ -156,7 +200,7 @@ const CustomTreeItem = ({
             }}
           >
             <MenuList>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleInsert}>
                 <ListItemText>{t('menu.preview.actions.insertChild')}</ListItemText>
               </MenuItem>
               <Divider />
@@ -246,6 +290,7 @@ export const NodeTreeView = ({
             renderNodes={renderNodes}
             setSelected={setSelected}
             emptyEditingNode={emptyEditingNode}
+            editingNode={editingNode}
             setEditingNode={setEditingNode}
             handleUpdate={handleUpdate}
             data={data}
@@ -254,8 +299,8 @@ export const NodeTreeView = ({
         );
       }),
     [
-      editingNode.id,
       emptyEditingNode,
+      editingNode,
       handleUpdate,
       setEditingNode,
       setSelected,
