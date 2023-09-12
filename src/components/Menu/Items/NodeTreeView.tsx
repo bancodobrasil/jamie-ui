@@ -25,6 +25,7 @@ interface CustomTreeItemProps {
   renderNodes: (nodes: INode[]) => JSX.Element[];
   setSelected: (selected: string) => void;
   emptyEditingNode: IEditingNode;
+  editingNode: IEditingNode;
   setEditingNode: (editingNode: IEditingNode) => void;
   handleUpdate: () => Promise<void>;
   data: any;
@@ -39,6 +40,7 @@ const CustomTreeItem = ({
   renderNodes,
   setSelected,
   emptyEditingNode,
+  editingNode,
   setEditingNode,
   handleUpdate,
   data,
@@ -139,6 +141,10 @@ const CustomTreeItem = ({
   const onNodeClick = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
+    if (editingNode.id === -1) {
+      setSelected('-1');
+      return;
+    }
     const itemMeta = { ...meta };
     data?.menu.meta?.forEach(m => {
       const defaultValue = (meta || {})[m.id] || m.defaultValue;
@@ -308,6 +314,7 @@ export const NodeTreeView = ({
             renderNodes={renderNodes}
             setSelected={setSelected}
             emptyEditingNode={emptyEditingNode}
+            editingNode={editingNode}
             setEditingNode={setEditingNode}
             handleUpdate={handleUpdate}
             data={data}
