@@ -105,10 +105,6 @@ const CustomTreeItem = ({
   const handleDelete = async (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    if (id === 0) {
-      setSelected('');
-      return;
-    }
     setEditingNode({
       ...node,
       action: EnumInputAction.DELETE,
@@ -143,14 +139,6 @@ const CustomTreeItem = ({
   const onNodeClick = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    if (id === 0) {
-      setSelected('');
-      return;
-    }
-    if (editingNode.id === -1 || id === -1) {
-      setSelected('-1');
-      return;
-    }
     const itemMeta = { ...meta };
     data?.menu.meta?.forEach(m => {
       const defaultValue = (meta || {})[m.id] || m.defaultValue;
