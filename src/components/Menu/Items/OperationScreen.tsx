@@ -13,7 +13,6 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import AddIcon from '@mui/icons-material/Add';
 import { DateTime } from 'luxon';
-import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import {
   EnumInputAction,
@@ -24,12 +23,6 @@ import {
   MenuMetaType,
 } from '../../../types';
 import { MENU_ITEM_VALIDATION } from '../../../constants';
-import {
-  ActionTypes,
-  NotificationContext,
-  openDefaultErrorNotification,
-} from '../../../contexts/NotificationContext';
-import MenuService from '../../../api/services/MenuService';
 import { EnumInputActionScreen } from '../../../pages/Menu/Items';
 
 const Form = styled('form')({
@@ -55,8 +48,6 @@ interface Props {
   operationScreen: EnumInputActionScreen;
   setOperationScreen: (operationScreen: EnumInputActionScreen) => void;
   findNodeById: (nodes: INode[], id: number) => INode | undefined;
-  preview: (nodes: INode[], editingNode: IEditingNode) => INode[];
-  setUpdatedMenu: (menu: IMenu) => void;
   handleUpdate: () => Promise<void>;
 }
 
@@ -73,141 +64,14 @@ export const OperationScreen = ({
   operationScreen,
   setOperationScreen,
   findNodeById,
-  preview,
   setEditingNode,
-  setUpdatedMenu,
+  handleUpdate,
 }: Props) => {
-  const { dispatch } = React.useContext(NotificationContext);
-
   const { i18n, t } = useTranslation();
 
   const [labelError, setLabelError] = React.useState<string>('');
   const [startPublicationError, setStartPublicationError] = React.useState<string>('');
   const [endPublicationError, setEndPublicationError] = React.useState<string>('');
-
-  const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
-
-  const handleUpdate = async (): Promise<void> => {
-    const formatNodes = (nodes: INode[]) =>
-      nodes
-        .map(node => {
-          const {
-            id,
-            children,
-            original,
-            parentId,
-            createdAt,
-            updatedAt,
-            version,
-            menuId,
-            defaultTemplate,
-            action,
-            rules,
-            ...rest
-          } = node;
-          let meta;
-          if (rest.meta) {
-            meta = Object.keys(rest.meta).reduce((acc, key) => {
-              const name = data.menu.meta.find(meta => meta.id === Number(key))?.name || key;
-              const meta = rest.meta[key];
-              const originalMetaMap = original?.meta || {};
-              const originalMeta = originalMetaMap[key] || originalMetaMap[name];
-              if (meta == null || meta === '' || meta === originalMeta) {
-                return acc;
-              }
-              return {
-                ...acc,
-                [name]: meta,
-              };
-            }, {});
-            if (Object.keys(meta).length === 0) meta = undefined;
-          }
-          let startPublication;
-          if (rest.startPublication) {
-            if (
-              (original?.startPublication !== rest.startPublication ||
-                !original?.startPublication) &&
-              rest.startPublication.isValid
-            )
-              startPublication = rest.startPublication.toISO();
-          } else {
-            startPublication = null;
-          }
-          let endPublication;
-          if (rest.endPublication) {
-            if (
-              (original?.endPublication !== rest.endPublication || !original?.endPublication) &&
-              rest.endPublication.isValid
-            )
-              endPublication = rest.endPublication.toISO();
-          } else {
-            endPublication = null;
-          }
-          let label;
-          if (action === EnumInputAction.CREATE) label = rest.label;
-          else if (rest.label && (original?.label !== rest.label || !original?.label))
-            label = rest.label;
-          let order;
-          if (action === EnumInputAction.CREATE) order = rest.order;
-          else if (rest.order && (original?.order !== rest.order || !original?.order))
-            order = rest.order;
-          let enabled = action === EnumInputAction.CREATE ? true : undefined;
-          if (rest.enabled && (original?.enabled !== rest.enabled || !original?.enabled))
-            enabled = rest.enabled;
-          return {
-            action,
-            label,
-            order,
-            enabled,
-            startPublication,
-            endPublication,
-            meta,
-            rules,
-            children: children && formatNodes(children),
-            id: id === -1 ? undefined : id,
-          };
-        })
-        .filter(node => !!node.action);
-
-    const items = formatNodes(preview(nodes, editingNode)[0].children).map(node => {
-      const id = node.id === -1 ? undefined : node.id;
-      return {
-        ...node,
-        id,
-      };
-    });
-
-    await updateMenu({
-      variables: { menu: { id: Number(id), items } },
-      onCompleted: data => {
-        dispatch({
-          type: ActionTypes.OPEN_NOTIFICATION,
-          message: `${t('notification.editSuccess', {
-            resource: t('menu.title', { count: 1 }),
-            context: 'male',
-          })}!`,
-        });
-        switch (editingNode.action) {
-          case EnumInputAction.CREATE:
-          case EnumInputAction.DELETE:
-            setSelected('');
-            break;
-          case EnumInputAction.UPDATE:
-            setSelected(editingNode.id.toString());
-            break;
-        }
-        setUpdatedMenu(data.updateMenu);
-        setOperationScreen(EnumInputActionScreen.SELECTING_ACTION);
-        setEditingNode(emptyEditingNode);
-        return Promise.resolve();
-      },
-      onError: error => {
-        openDefaultErrorNotification(error, dispatch);
-        return Promise.reject();
-      },
-    });
-    return Promise.resolve();
-  };
 
   const handleInsertSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -547,42 +411,6 @@ export const OperationScreen = ({
           >
             {t('menu.preview.actions.insert')}
           </Typography>
-          <Box
-            sx={{
-              mt: '2rem',
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <TextField
-              type="text"
-              label={t('menu.preview.parent')}
-              value={findNodeById(nodes, editingNode.parentId).label}
-              sx={{
-                width: '100%',
-              }}
-              contentEditable={false}
-            />
-            <Button
-              variant="outlined"
-              color="primary"
-              sx={{ ml: '0.5rem' }}
-              disabled={nodes.length === 0}
-              onClick={() => {
-                const parent = findNodeById(nodes, Number(selected));
-                const order = parent.children ? parent.children.length + 1 : 1;
-                setEditingNode({
-                  ...editingNode,
-                  parentId: Number(selected),
-                  order,
-                  label: t('menu.preview.newItem', { order }),
-                });
-              }}
-            >
-              {t('menu.preview.buttons.selectParent')}
-            </Button>
-          </Box>
           <TextField
             type="text"
             label={t('menu.preview.inputs.name.label')}

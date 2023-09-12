@@ -322,6 +322,38 @@ export const NodeTreeView = ({
     ],
   );
 
+  const handleInsertRoot = (event: React.SyntheticEvent) => {
+    const meta = {};
+    data?.menu.meta?.forEach(m => {
+      switch (m.type) {
+        case MenuMetaType.TEXT:
+        case MenuMetaType.NUMBER:
+        case MenuMetaType.DATE:
+          meta[m.name] = m.defaultValue || '';
+          break;
+        case MenuMetaType.BOOLEAN:
+          meta[m.name] = m.defaultValue || false;
+          break;
+      }
+    });
+    const node: INode = {
+      id: -1,
+      label: t('menu.preview.newItem', {
+        order: nodes.length ? nodes.length + 1 : 1,
+      }),
+      order: nodes.length ? nodes.length + 1 : 1,
+      parentId: 0,
+      meta,
+      enabled: true,
+      children: [],
+      startPublication: null,
+      endPublication: null,
+    };
+    setEditingNode({ ...node, action: EnumInputAction.CREATE, original: node });
+    setSelected('-1');
+    setOperationScreen(EnumInputActionScreen.INSERT);
+  };
+
   return (
     <Box
       sx={{
@@ -334,7 +366,8 @@ export const NodeTreeView = ({
     >
       <Box
         className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border my-2"
-        sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
+        sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)', cursor: 'pointer' } }}
+        onClick={handleInsertRoot}
       >
         <IconPlus fill="#265EFD" className="mx-4" />
         <Typography

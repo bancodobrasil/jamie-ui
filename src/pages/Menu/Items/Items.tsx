@@ -219,7 +219,7 @@ export const ItemsPreview = () => {
         })
         .filter(node => !!node.action);
 
-    const items = formatNodes(preview(nodes, editingNode)[0].children).map(node => {
+    const items = formatNodes(preview(nodes, editingNode)).map(node => {
       const id = node.id === -1 ? undefined : node.id;
       return {
         ...node,
@@ -262,8 +262,7 @@ export const ItemsPreview = () => {
 
   const preview = useCallback((nodes: INode[], editingNode: IEditingNode): INode[] => {
     if (!editingNode.id) return nodes;
-    if (nodes[0].id === 0 && nodes[0].children?.length === 0)
-      return [{ ...nodes[0], children: [editingNode] }];
+    if (nodes.length === 0) return [editingNode];
     // console.log('nodes', nodes);
     // console.log('editing node', editingNode);
     const nodesPreview: INode[] = [];
@@ -433,7 +432,7 @@ export const ItemsPreview = () => {
         }
       }
     });
-    // console.log('nodes preview', nodesPreview);
+    console.log('nodes preview', nodesPreview, editingNode);
     return nodesPreview;
   }, []);
 
@@ -559,8 +558,6 @@ export const ItemsPreview = () => {
             selected={selected}
             setSelected={setSelected}
             findNodeById={findNodeById}
-            preview={preview}
-            setUpdatedMenu={setUpdatedMenu}
             operationScreen={operationScreen}
             setOperationScreen={setOperationScreen}
             handleUpdate={handleUpdate}
