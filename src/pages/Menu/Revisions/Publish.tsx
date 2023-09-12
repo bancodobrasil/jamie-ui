@@ -26,6 +26,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { menuRevisionDiff } from '../../../utils/diff/menuRevisionDiff';
+import PageTitle from '../../../components/PageTitle';
 
 const PublishRevision = () => {
   const { t } = useTranslation();
@@ -35,6 +36,10 @@ const PublishRevision = () => {
 
   const onBackClickHandler = () => {
     navigate('/');
+  };
+
+  const onBackButtonHandler = () => {
+    navigate('../edit');
   };
 
   const { dispatch } = React.useContext(NotificationContext);
@@ -264,9 +269,9 @@ const PublishRevision = () => {
         ]}
         onBack={onBackClickHandler}
       />
-      <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-        {t('menuRevision.publish.title')}
-      </Typography>
+      <Box>
+        <PageTitle onClick={onBackButtonHandler} PageTitle={t('menuRevision.publish.title')} />
+      </Box>
       <FormControl sx={{ width: '16rem', mb: '1rem' }} className="bg-white">
         <InputLabel id="selectedRevision-label">
           {t('menu.of', { field: 'revision.title_one' })}

@@ -13,6 +13,7 @@ import {
   openDefaultErrorNotification,
 } from '../../../contexts/NotificationContext';
 import { FormAction } from '../../../types';
+import PageTitle from '../../../components/PageTitle';
 
 export const CreateMenu = () => {
   const { t } = useTranslation();
@@ -73,10 +74,7 @@ export const CreateMenu = () => {
           ]}
           onBack={onBackClickHandler}
         />
-        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-          {t('menu.create.title')}
-        </Typography>
-        <Divider />
+        <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.create.title')} />
       </Box>
       <FormBasicInfo
         name={name}
