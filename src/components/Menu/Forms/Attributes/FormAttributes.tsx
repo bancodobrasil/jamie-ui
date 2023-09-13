@@ -603,44 +603,66 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             flexDirection: 'column',
             marginTop: '16px',
             position: 'relative',
-            minHeight: '90rem',
+            height: '5rem',
+            width: '90rem',
           }}
         >
           <Box
             sx={{
               top: '90%',
               transform: 'translateY(-50%)',
-              alignSelf: 'flex-end',
+              // alignSelf: 'flex-end',
               marginTop: '2rem',
-              alignContent: 'flex-end',
-              justifySelf: 'flex-end',
-              justifyContent: 'flex-end',
+              // alignContent: 'flex-end',
+              // justifySelf: 'flex-end',
+              // justifyContent: 'flex-end',
               position: 'fixed',
+              background: 'white',
             }}
             className="fixed-buttons"
           >
-            <Divider sx={{ position: 'relative' }} />
-            <Button
-              variant="contained"
-              color="tertiary"
-              disabled={loadingSubmit}
-              onClick={onBack}
-              sx={{ color: '#D51B06', background: 'F4F5F7' }}
-            >
-              {t('buttons.cancel')}
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={loadingSubmit}
+            <Divider
               sx={{
-                marginLeft: '16px',
+                margin: '1rem',
+                width: '90rem',
+                alignContent: 'flex-end',
+                justifySelf: 'flex-end',
+                justifyContent: 'flex-end',
+                // position: 'fixed',
+              }}
+            />
+            <Box
+              sx={{
+                // margin: '1rem',
+                // width: '80rem',
+                alignContent: 'flex-end',
+                justifySelf: 'flex-end',
+                justifyContent: 'flex-end',
+                // position: 'fixed',
               }}
             >
-              {t('buttons.save')}
-              {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
-            </Button>
+              <Button
+                variant="contained"
+                color="tertiary"
+                disabled={loadingSubmit}
+                onClick={onBack}
+                sx={{ color: '#D51B06', background: 'F4F5F7' }}
+              >
+                {t('buttons.cancel')}
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={loadingSubmit}
+                sx={{
+                  marginLeft: '16px',
+                }}
+              >
+                {t('buttons.save')}
+                {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>
