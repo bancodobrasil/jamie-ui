@@ -604,7 +604,6 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             marginTop: '16px',
             position: 'relative',
             height: '5rem',
-            width: '90rem',
           }}
         >
           <Box
@@ -613,6 +612,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               transform: 'translateY(-50%)',
               // alignSelf: 'flex-end',
               marginTop: '2rem',
+              height: '6.2rem',
               // alignContent: 'flex-end',
               // justifySelf: 'flex-end',
               // justifyContent: 'flex-end',
@@ -623,7 +623,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           >
             <Divider
               sx={{
-                margin: '1rem',
+                marginBottom: '1rem',
                 width: '90rem',
                 alignContent: 'flex-end',
                 justifySelf: 'flex-end',
