@@ -603,21 +603,23 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             flexDirection: 'column',
             marginTop: '16px',
             position: 'relative',
-            alignContent: 'flex-end',
-            justifySelf: 'flex-end',
-            justifyContent: 'flex-end',
+            minHeight: '90rem',
           }}
         >
-          <Divider sx={{ position: 'relative' }} />
           <Box
             sx={{
               top: '90%',
               transform: 'translateY(-50%)',
               alignSelf: 'flex-end',
               marginTop: '2rem',
+              alignContent: 'flex-end',
+              justifySelf: 'flex-end',
+              justifyContent: 'flex-end',
+              position: 'fixed',
             }}
             className="fixed-buttons"
           >
+            <Divider sx={{ position: 'relative' }} />
             <Button
               variant="contained"
               color="tertiary"
