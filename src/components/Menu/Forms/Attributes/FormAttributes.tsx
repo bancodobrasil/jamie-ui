@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -14,6 +14,7 @@ import {
   styled,
   IconButton,
   colors,
+  Divider,
 } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import {
@@ -31,6 +32,7 @@ import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import { fontWeight, letterSpacing, lineHeight, textAlign, width } from '@mui/system';
+import { relative } from 'path';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import { MENU_VALIDATION } from '../../../../constants';
 
@@ -120,6 +122,12 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
       return m;
     });
     setMeta(updatedMeta);
+  };
+
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleChange = event => {
+    setSelectedOption(event.target.value);
   };
 
   /* Draw box of standard value */
@@ -220,7 +228,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             }}
           >
             <InputLabel>Valor Padrão</InputLabel>
-            <Select label="Valor Padrão">
+            <Select label="Valor Padrão" value={selectedOption} onChange={handleChange}>
               <MenuItem value="verdadeiro">Verdadeiro</MenuItem>
               <MenuItem value="falso">Falso</MenuItem>
             </Select>
@@ -594,17 +602,29 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             display: 'flex',
             flexDirection: 'column',
             marginTop: '16px',
+            position: 'relative',
+            alignContent: 'flex-end',
+            justifySelf: 'flex-end',
+            justifyContent: 'flex-end',
           }}
         >
+          <Divider sx={{ position: 'relative' }} />
           <Box
             sx={{
-              margin: '16px',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
+              top: '90%',
+              transform: 'translateY(-50%)',
+              alignSelf: 'flex-end',
+              marginTop: '2rem',
             }}
+            className="fixed-buttons"
           >
-            <Button variant="contained" color="tertiary" disabled={loadingSubmit} onClick={onBack}>
+            <Button
+              variant="contained"
+              color="tertiary"
+              disabled={loadingSubmit}
+              onClick={onBack}
+              sx={{ color: '#D51B06', background: 'F4F5F7' }}
+            >
               {t('buttons.cancel')}
             </Button>
             <Button
