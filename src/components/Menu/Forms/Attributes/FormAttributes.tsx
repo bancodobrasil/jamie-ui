@@ -15,6 +15,7 @@ import {
   IconButton,
   colors,
   Divider,
+  Grid,
 } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import {
@@ -31,7 +32,7 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
-import { fontWeight, letterSpacing, lineHeight, textAlign, width } from '@mui/system';
+import { fontWeight, letterSpacing, lineHeight, minWidth, textAlign, width } from '@mui/system';
 import { relative } from 'path';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import { MENU_VALIDATION } from '../../../../constants';
@@ -561,7 +562,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
       </Box>
       <Box sx={{ flex: '0 1 auto' }}>
         {/* Button that add attributes */}
-        <Box sx={{ mt: '2rem' }}>
+        <Box sx={{ mt: '2rem', marginBottom: '5rem' }}>
           <Button
             variant="text"
             onClick={() => {
@@ -595,75 +596,75 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             {t('menu.fields.meta.add')}
           </Button>
         </Box>
-        {/* Button that cancel or save the edition */}
+      </Box>
+      {/* Button that cancel or save the edition */}
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          marginTop: '16px',
+          position: 'relative',
+          background: 'white',
+        }}
+      >
         <Box
           sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            marginTop: '16px',
-            position: 'relative',
-            height: '5rem',
+            top: '90%',
+            transform: 'translateY(-40%)',
+            marginTop: '2rem',
+            backgroundColor: 'white',
+            position: 'fixed',
+            width: '100%',
+            marginLeft: '-2rem',
+            bottom: '0',
           }}
+          className="fixed-buttons"
         >
-          <Box
+          <Divider
             sx={{
-              top: '90%',
-              transform: 'translateY(-50%)',
-              // alignSelf: 'flex-end',
-              marginTop: '2rem',
-              height: '6.2rem',
-              // alignContent: 'flex-end',
-              // justifySelf: 'flex-end',
-              // justifyContent: 'flex-end',
-              position: 'fixed',
-              background: 'white',
+              marginBottom: '1rem',
+              width: '100%',
+              flexDirection: 'column',
+              right: '0',
+
+              // position: 'fixed',
             }}
-            className="fixed-buttons"
+          />
+          <Grid
+            xs={6}
+            md={4}
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
+              marginRight: '3rem',
+              zIndex: '-10000',
+              backgroundColor: 'white',
+            }}
           >
-            <Divider
+            <Button
+              variant="contained"
+              color="tertiary"
+              disabled={loadingSubmit}
+              onClick={onBack}
+              sx={{ color: '#D51B06', background: 'F4F5F7' }}
+            >
+              {t('buttons.cancel')}
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              disabled={loadingSubmit}
               sx={{
-                marginBottom: '1rem',
-                width: '90rem',
-                alignContent: 'flex-end',
-                justifySelf: 'flex-end',
-                justifyContent: 'flex-end',
-                // position: 'fixed',
-              }}
-            />
-            <Box
-              sx={{
-                // margin: '1rem',
-                // width: '80rem',
-                alignContent: 'flex-end',
-                justifySelf: 'flex-end',
-                justifyContent: 'flex-end',
-                // position: 'fixed',
+                marginLeft: '16px',
               }}
             >
-              <Button
-                variant="contained"
-                color="tertiary"
-                disabled={loadingSubmit}
-                onClick={onBack}
-                sx={{ color: '#D51B06', background: 'F4F5F7' }}
-              >
-                {t('buttons.cancel')}
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={loadingSubmit}
-                sx={{
-                  marginLeft: '16px',
-                }}
-              >
-                {t('buttons.save')}
-                {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
-              </Button>
-            </Box>
-          </Box>
+              {t('buttons.save')}
+              {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
+            </Button>
+          </Grid>
+          <Grid xs={6} md={4} sx={{ backgroundColor: 'white', height: '3rem' }} />
         </Box>
       </Box>
     </Form>
