@@ -225,6 +225,10 @@
         "name": "Nome",
         "required": "Obrigatório",
         "description_required": "Esse atributo deve ser preenchido em todos os itens desse menu.",
+        "dialog_delete_attribute": "Confirma que quer excluir o atributo",
+        "dialog_delete_attribute_description": "Esse atributo poderá afetar os itens do menu. Após excluir, essa ação não pode ser desfeita.",
+        "dialog_delete_attribute_quit": "Desistir",
+        "dialog_delete_attribute_confirm": "Confirmar e Excluir",
         "enabled": "Habilitado",
         "defaultValue": "Valor Padrão",
         "type": {

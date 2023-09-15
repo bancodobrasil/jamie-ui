@@ -219,10 +219,16 @@
       "meta": {
         "title_one": "Metadata",
         "title_other": "Metadata",
+        "description": "The attributes will appear as form fields in the menu items tab and will not be visible to the end user.",
         "of": "Metadata's $t(menu.fields.meta.{{field}})",
         "add": "Add Metadata",
         "name": "Name",
         "required": "Required",
+        "description_required": "This attribute must be filled in for all items in this menu.",
+        "dialog_delete_attribute": "Do you confirm that you want to delete the attribute",
+        "dialog_delete_attribute_description": "This attribute may affect menu items. After deletion, this action cannot be undone.",
+        "dialog_delete_attribute_quit": "Cancel",
+        "dialog_delete_attribute_confirm": "Confirm and delete",
         "enabled": "Enabled",
         "defaultValue": "Default Value",
         "type": {
