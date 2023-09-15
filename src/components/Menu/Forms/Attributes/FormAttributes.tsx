@@ -72,8 +72,9 @@ interface Props {
 }
 
 export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack, action }: Props) {
-  const { t, i18n } = useTranslation();
   const [open, setOpen] = React.useState(false);
+  const [selectedMeta, setSelectedMeta] = React.useState('');
+  const { t, i18n } = useTranslation();
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -281,8 +282,9 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     }
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (metaName: string) => {
     setOpen(true);
+    setSelectedMeta(metaName);
   };
 
   const handleClose = () => {
@@ -516,65 +518,12 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   // width: '65rem',
                 }}
               >
-                <Button sx={{ color: '#313338', width: '3rem' }} onClick={handleClickOpen}>
+                <Button
+                  sx={{ color: '#313338', width: '3rem' }}
+                  onClick={() => handleClickOpen(m.name)}
+                >
                   <DeleteIcon sx={{ width: '24px', height: '28px' }} />
                 </Button>
-
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                  // sx={{ width: '40.5rem', height: '20rem' }}
-                >
-                  <DialogTitle
-                    sx={{ fontSize: '24px', color: '#38879D', letterSpacing: '0.18px' }}
-                    id="alert-dialog-title"
-                  >
-                    {t('menu.fields.meta.dialog_delete_attribute')} {m.name}?
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText
-                      sx={{
-                        fontSize: '16px',
-                        letterSpacing: '0.5px',
-                        lineHeight: '24px',
-                        color: '#758887',
-                      }}
-                      id="alert-dialog-description"
-                    >
-                      {t('menu.fields.meta.dialog_delete_attribute_description')}
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      variant="text"
-                      onClick={handleClose}
-                      sx={{
-                        color: '#38879D',
-                        fontSize: '14px',
-                        letterSpacing: '1.25px',
-                        lineHeight: '16px',
-                      }}
-                    >
-                      {t('menu.fields.meta.dialog_delete_attribute_quit')}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={handleClose}
-                      sx={{
-                        backgroundColor: '#38879D',
-                        color: 'white',
-                        fontSize: '14px',
-                        letterSpacing: '1.25px',
-                        lineHeight: '16px',
-                      }}
-                      autoFocus
-                    >
-                      {t('menu.fields.meta.dialog_delete_attribute_confirm')}
-                    </Button>
-                  </DialogActions>
-                </Dialog>
               </Box>
             </Box>
           </Box>
@@ -714,6 +663,61 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           </Button>
         </Box>
       </Box>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        // sx={{ width: '40.5rem', height: '20rem' }}
+      >
+        <DialogTitle
+          sx={{ fontSize: '24px', color: '#38879D', letterSpacing: '0.18px' }}
+          id="alert-dialog-title"
+        >
+          {t('menu.fields.meta.dialog_delete_attribute')} {selectedMeta}?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            sx={{
+              fontSize: '16px',
+              letterSpacing: '0.5px',
+              lineHeight: '24px',
+              color: '#758887',
+            }}
+            id="alert-dialog-description"
+          >
+            {t('menu.fields.meta.dialog_delete_attribute_description')}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="text"
+            onClick={handleClose}
+            sx={{
+              color: '#38879D',
+              fontSize: '14px',
+              letterSpacing: '1.25px',
+              lineHeight: '16px',
+            }}
+          >
+            {t('menu.fields.meta.dialog_delete_attribute_quit')}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleClose}
+            sx={{
+              backgroundColor: '#38879D',
+              color: 'white',
+              fontSize: '14px',
+              letterSpacing: '1.25px',
+              lineHeight: '16px',
+            }}
+            autoFocus
+          >
+            {t('menu.fields.meta.dialog_delete_attribute_confirm')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Form>
   );
 }
