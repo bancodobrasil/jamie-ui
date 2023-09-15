@@ -678,62 +678,40 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
       >
         <Box
           sx={{
-            top: '90%',
-            transform: 'translateY(-40%)',
-            marginTop: '2rem',
             backgroundColor: 'white',
             position: 'fixed',
             width: '100%',
-            marginLeft: '-2rem',
+            left: '0',
+            // marginLeft: '-2rem',
             bottom: '0',
+            zIndex: '1000',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            display: 'flex',
           }}
           className="fixed-buttons"
         >
-          <Divider
+          <Button
+            variant="contained"
+            color="tertiary"
+            disabled={loadingSubmit}
+            onClick={onBack}
+            sx={{ color: '#D51B06', background: 'F4F5F7' }}
+          >
+            {t('buttons.cancel')}
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={loadingSubmit}
             sx={{
-              marginBottom: '1rem',
-              width: '100%',
-              flexDirection: 'column',
-              right: '0',
-
-              // position: 'fixed',
-            }}
-          />
-          <Grid
-            xs={6}
-            md={4}
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
-              marginRight: '3rem',
-              zIndex: '-10000',
-              backgroundColor: 'white',
+              marginLeft: '16px',
             }}
           >
-            <Button
-              variant="contained"
-              color="tertiary"
-              disabled={loadingSubmit}
-              onClick={onBack}
-              sx={{ color: '#D51B06', background: 'F4F5F7' }}
-            >
-              {t('buttons.cancel')}
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={loadingSubmit}
-              sx={{
-                marginLeft: '16px',
-              }}
-            >
-              {t('buttons.save')}
-              {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
-            </Button>
-          </Grid>
-          <Grid xs={6} md={4} sx={{ backgroundColor: 'white', height: '3rem' }} />
+            {t('buttons.save')}
+            {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
+          </Button>
         </Box>
       </Box>
     </Form>
