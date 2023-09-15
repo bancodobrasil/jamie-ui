@@ -73,7 +73,7 @@ interface Props {
 
 export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack, action }: Props) {
   const [open, setOpen] = React.useState(false);
-  const [selectedMeta, setSelectedMeta] = React.useState('');
+  const [selectedMeta, setSelectedMeta] = React.useState<IMenuMetaWithErrors>(null);
   const { t, i18n } = useTranslation();
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -282,9 +282,9 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     }
   };
 
-  const handleClickOpen = (metaName: string) => {
+  const handleClickOpen = (attribute: IMenuMetaWithErrors) => {
     setOpen(true);
-    setSelectedMeta(metaName);
+    setSelectedMeta(attribute);
   };
 
   const handleClose = () => {
@@ -518,10 +518,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   // width: '65rem',
                 }}
               >
-                <Button
-                  sx={{ color: '#313338', width: '3rem' }}
-                  onClick={() => handleClickOpen(m.name)}
-                >
+                <Button sx={{ color: '#313338', width: '3rem' }} onClick={() => handleClickOpen(m)}>
                   <DeleteIcon sx={{ width: '24px', height: '28px' }} />
                 </Button>
               </Box>
@@ -674,7 +671,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           sx={{ fontSize: '24px', color: '#38879D', letterSpacing: '0.18px' }}
           id="alert-dialog-title"
         >
-          {t('menu.fields.meta.dialog_delete_attribute')} {selectedMeta}?
+          {t('menu.fields.meta.dialog_delete_attribute')} {selectedMeta?.name || ''}?
         </DialogTitle>
         <DialogContent>
           <DialogContentText
