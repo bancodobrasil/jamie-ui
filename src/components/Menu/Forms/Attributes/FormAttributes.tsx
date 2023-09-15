@@ -291,192 +291,211 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     setOpen(false);
   };
 
+  const handleDeleteAttribute = () => {
+    if (!selectedMeta.id) {
+      setMeta(meta.filter(m => m.id !== selectedMeta.id));
+    } else {
+      const updatedMeta = meta.map(m => {
+        if (m.id === selectedMeta.id) {
+          return { ...m, action: EnumInputAction.DELETE };
+        }
+        return m;
+      });
+      setMeta(updatedMeta);
+    }
+    handleClose();
+  };
+
   // Drag and Drop icon
   const renderMeta = (
     droppableProvided: DroppableProvided,
     droppableSnapshot: DroppableStateSnapshot,
   ) =>
-    meta.map((m, i) => (
-      <Draggable key={m.id.toString()} draggableId={m.id.toString()} index={i}>
-        {(provided, snapshot) => (
-          <Box
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            sx={{
-              opacity: snapshot.isDragging ? 0.5 : 1,
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}
-            className={`border-gray-200 border rounded-md p-4 mb-4 w-fit${
-              !m.enabled ? ' bg-gray-200/75' : ''
-            }`}
-          >
+    meta.map((m, i) => {
+      if (m.action === EnumInputAction.DELETE) {
+        return;
+      }
+      return (
+        <Draggable key={m.id.toString()} draggableId={m.id.toString()} index={i}>
+          {(provided, snapshot) => (
             <Box
+              ref={provided.innerRef}
+              {...provided.draggableProps}
               sx={{
+                opacity: snapshot.isDragging ? 0.5 : 1,
                 display: 'flex',
-                alignItems: 'flex-start',
-                // position: 'fixed',
-                top: '50%',
-                // left: '46px',
-                marginLeft: '-45rem',
+                alignItems: 'center',
+                flexDirection: 'column',
               }}
+              className={`border-gray-200 border rounded-md p-4 mb-4 w-fit${
+                !m.enabled ? ' bg-gray-200/75' : ''
+              }`}
             >
-              <div {...provided.dragHandleProps}>
-                <DragIndicatorIcon />
-              </div>
-              <span
-                className="text-lg ml-2 font-custom font-roboto"
-                style={{
-                  fontSize: '20px',
-                  letterSpacing: '0.15px',
-                  lineHeight: '24px',
-                  fontWeight: '500',
-                  width: '283px',
-                  height: '24px',
-                  gap: '2px',
-                  marginLeft: '-1px',
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  // position: 'fixed',
+                  top: '50%',
+                  // left: '46px',
+                  marginLeft: '-45rem',
                 }}
               >
-                <span className="font-roboto">{t('menu.edit.tabs.attributes')}</span> {m.order}
-              </span>
-            </Box>
-            <Box className="ml-8">
-              <Box
-                sx={{ display: 'flex', paddingTop: '1.5rem', marginLeft: '-15px' }}
-                className="space-x-2"
-              >
-                {/* name field */}
-                <TextField
-                  id={`meta[${i}].name`}
-                  label={t('menu.fields.meta.name')}
-                  placeholder={
-                    action === FormAction.CREATE
-                      ? t('menu.create.placeholders.meta.name')
-                      : t('menu.edit.placeholders.meta.name')
-                  }
-                  value={m.name}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const { value } = e.target;
-                    const updatedMeta = [...meta];
-                    if (updatedMeta[i].action !== EnumInputAction.CREATE) {
-                      updatedMeta[i].action = EnumInputAction.UPDATE;
-                    }
-                    updatedMeta[i].name = value;
-                    updatedMeta[i].errors.name = '';
-                    setMeta(updatedMeta);
+                <div {...provided.dragHandleProps}>
+                  <DragIndicatorIcon />
+                </div>
+                <span
+                  className="text-lg ml-2 font-custom font-roboto"
+                  style={{
+                    fontSize: '20px',
+                    letterSpacing: '0.15px',
+                    lineHeight: '24px',
+                    fontWeight: '500',
+                    width: '283px',
+                    height: '24px',
+                    gap: '2px',
+                    marginLeft: '-1px',
                   }}
-                  inputProps={{
-                    maxLength: MENU_VALIDATION.META_NAME_MAX_LENGTH,
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                    style: { color: '#022831' },
-                  }}
-                  error={!!m.errors.name}
-                  helperText={m.errors.name}
-                  sx={{
-                    width: '22.5rem',
-                    height: '3rem',
-                    color: '#red',
-                  }}
-                  className="bg-white"
-                  required
-                />
-                {/* type field */}
-                <FormControl
-                  sx={{
-                    width: '16.25rem',
-                    height: '3rem',
-                    gap: '12px',
-                    borderBlockColor: '#758887',
-                    color: '#022831',
-                  }}
-                  className="bg-white"
-                  required
                 >
-                  <InputLabel id={`meta[${i}].type-label`} sx={{ color: '#022831' }}>
-                    {t('menu.fields.meta.type.title', { count: 1 })}
-                  </InputLabel>
-                  {/* Possibles types */}
-                  <Select
-                    labelId={`meta[${i}].type-label`}
-                    id={`meta[${i}].type`}
-                    value={m.type}
-                    label={t('menu.fields.meta.type.title', { count: 1 })}
-                    disabled={action === FormAction.UPDATE && m.action !== EnumInputAction.CREATE}
-                    onChange={(e: SelectChangeEvent) => {
+                  <span className="font-roboto">{t('menu.edit.tabs.attributes')}</span> {m.order}
+                </span>
+              </Box>
+              <Box className="ml-8">
+                <Box
+                  sx={{ display: 'flex', paddingTop: '1.5rem', marginLeft: '-15px' }}
+                  className="space-x-2"
+                >
+                  {/* name field */}
+                  <TextField
+                    id={`meta[${i}].name`}
+                    label={t('menu.fields.meta.name')}
+                    placeholder={
+                      action === FormAction.CREATE
+                        ? t('menu.create.placeholders.meta.name')
+                        : t('menu.edit.placeholders.meta.name')
+                    }
+                    value={m.name}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const { value } = e.target;
                       const updatedMeta = [...meta];
                       if (updatedMeta[i].action !== EnumInputAction.CREATE) {
                         updatedMeta[i].action = EnumInputAction.UPDATE;
                       }
-                      updatedMeta[i].type = value as MenuMetaType;
+                      updatedMeta[i].name = value;
+                      updatedMeta[i].errors.name = '';
                       setMeta(updatedMeta);
-                      switch (value as MenuMetaType) {
-                        case MenuMetaType.TEXT:
-                        case MenuMetaType.NUMBER:
-                        case MenuMetaType.DATE:
-                          updatedMeta[i].defaultValue = '';
-                          break;
-                        case MenuMetaType.BOOLEAN:
-                          updatedMeta[i].defaultValue = false;
-                          break;
-                      }
                     }}
+                    inputProps={{
+                      maxLength: MENU_VALIDATION.META_NAME_MAX_LENGTH,
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                      style: { color: '#022831' },
+                    }}
+                    error={!!m.errors.name}
+                    helperText={m.errors.name}
+                    sx={{
+                      width: '22.5rem',
+                      height: '3rem',
+                      color: '#red',
+                    }}
+                    className="bg-white"
+                    required
+                  />
+                  {/* type field */}
+                  <FormControl
+                    sx={{
+                      width: '16.25rem',
+                      height: '3rem',
+                      gap: '12px',
+                      borderBlockColor: '#758887',
+                      color: '#022831',
+                    }}
+                    className="bg-white"
+                    required
                   >
-                    {/* List of the possibles types */}
-                    <MenuItem value={MenuMetaType.TEXT}>
-                      {t(`menu.fields.meta.type.${MenuMetaType.TEXT}`)}
-                    </MenuItem>
-                    <MenuItem value={MenuMetaType.NUMBER}>
-                      {t(`menu.fields.meta.type.${MenuMetaType.NUMBER}`)}
-                    </MenuItem>
-                    <MenuItem value={MenuMetaType.BOOLEAN}>
-                      {t(`menu.fields.meta.type.${MenuMetaType.BOOLEAN}`)}
-                    </MenuItem>
-                    <MenuItem value={MenuMetaType.DATE}>
-                      {t(`menu.fields.meta.type.${MenuMetaType.DATE}`)}
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                {renderMetaDefaultValue(m, i)}
-              </Box>
-              {/* Checkboxes */}
-              <Box sx={{ display: 'flex' }} className="mt-2 space-x-2">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      id={`meta[${i}].required`}
-                      checked={m.required || m.type === MenuMetaType.BOOLEAN}
-                      disabled={m.type === MenuMetaType.BOOLEAN}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        const { checked } = event.target;
+                    <InputLabel id={`meta[${i}].type-label`} sx={{ color: '#022831' }}>
+                      {t('menu.fields.meta.type.title', { count: 1 })}
+                    </InputLabel>
+                    {/* Possibles types */}
+                    <Select
+                      labelId={`meta[${i}].type-label`}
+                      id={`meta[${i}].type`}
+                      value={m.type}
+                      label={t('menu.fields.meta.type.title', { count: 1 })}
+                      disabled={action === FormAction.UPDATE && m.action !== EnumInputAction.CREATE}
+                      onChange={(e: SelectChangeEvent) => {
+                        const { value } = e.target;
                         const updatedMeta = [...meta];
                         if (updatedMeta[i].action !== EnumInputAction.CREATE) {
                           updatedMeta[i].action = EnumInputAction.UPDATE;
                         }
-                        updatedMeta[i].required = checked;
+                        updatedMeta[i].type = value as MenuMetaType;
                         setMeta(updatedMeta);
-                      }}
-                    />
-                  }
-                  label={
-                    <span
-                      style={{
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        lineHeight: '24px',
-                        letterSpacing: '0em',
-                        textAlign: 'left',
+                        switch (value as MenuMetaType) {
+                          case MenuMetaType.TEXT:
+                          case MenuMetaType.NUMBER:
+                          case MenuMetaType.DATE:
+                            updatedMeta[i].defaultValue = '';
+                            break;
+                          case MenuMetaType.BOOLEAN:
+                            updatedMeta[i].defaultValue = false;
+                            break;
+                        }
                       }}
                     >
-                      {t('menu.fields.meta.required')}
-                    </span>
-                  }
-                />
+                      {/* List of the possibles types */}
+                      <MenuItem value={MenuMetaType.TEXT}>
+                        {t(`menu.fields.meta.type.${MenuMetaType.TEXT}`)}
+                      </MenuItem>
+                      <MenuItem value={MenuMetaType.NUMBER}>
+                        {t(`menu.fields.meta.type.${MenuMetaType.NUMBER}`)}
+                      </MenuItem>
+                      <MenuItem value={MenuMetaType.BOOLEAN}>
+                        {t(`menu.fields.meta.type.${MenuMetaType.BOOLEAN}`)}
+                      </MenuItem>
+                      <MenuItem value={MenuMetaType.DATE}>
+                        {t(`menu.fields.meta.type.${MenuMetaType.DATE}`)}
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  {renderMetaDefaultValue(m, i)}
+                </Box>
+                {/* Checkboxes */}
+                <Box sx={{ display: 'flex' }} className="mt-2 space-x-2">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        id={`meta[${i}].required`}
+                        checked={m.required || m.type === MenuMetaType.BOOLEAN}
+                        disabled={m.type === MenuMetaType.BOOLEAN}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                          const { checked } = event.target;
+                          const updatedMeta = [...meta];
+                          if (updatedMeta[i].action !== EnumInputAction.CREATE) {
+                            updatedMeta[i].action = EnumInputAction.UPDATE;
+                          }
+                          updatedMeta[i].required = checked;
+                          setMeta(updatedMeta);
+                        }}
+                      />
+                    }
+                    label={
+                      <span
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '600',
+                          lineHeight: '24px',
+                          letterSpacing: '0em',
+                          textAlign: 'left',
+                        }}
+                      >
+                        {t('menu.fields.meta.required')}
+                      </span>
+                    }
+                  />
 
-                {/* <FormControlLabel
+                  {/* <FormControlLabel
                   control={
                     <Checkbox
                       id={`meta[${i}].enabled`}
@@ -494,39 +513,43 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   }
                   label={t('menu.fields.meta.enabled')}
                 /> */}
-              </Box>
-              <Box
-                sx={{
-                  paddingLeft: '2rem',
-                  color: '#6C7077',
-                  fontSize: '14px',
-                  fontWeight: '450',
-                  lineHeight: '18px',
-                  letterSpacing: '0.005em',
-                  textAlign: 'left',
-                  marginTop: '-12px',
-                }}
-              >
-                {t('menu.fields.meta.description_required')}
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'flex-end',
-                  justifyContent: 'flex-end',
-                  height: '1.5rem',
-                  // width: '65rem',
-                }}
-              >
-                <Button sx={{ color: '#313338', width: '3rem' }} onClick={() => handleClickOpen(m)}>
-                  <DeleteIcon sx={{ width: '24px', height: '28px' }} />
-                </Button>
+                </Box>
+                <Box
+                  sx={{
+                    paddingLeft: '2rem',
+                    color: '#6C7077',
+                    fontSize: '14px',
+                    fontWeight: '450',
+                    lineHeight: '18px',
+                    letterSpacing: '0.005em',
+                    textAlign: 'left',
+                    marginTop: '-12px',
+                  }}
+                >
+                  {t('menu.fields.meta.description_required')}
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    height: '1.5rem',
+                    // width: '65rem',
+                  }}
+                >
+                  <Button
+                    sx={{ color: '#313338', width: '3rem' }}
+                    onClick={() => handleClickOpen(m)}
+                  >
+                    <DeleteIcon sx={{ width: '24px', height: '28px' }} />
+                  </Button>
+                </Box>
               </Box>
             </Box>
-          </Box>
-        )}
-      </Draggable>
-    ));
+          )}
+        </Draggable>
+      );
+    });
 
   // Draw Attributes
   return (
@@ -701,7 +724,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           </Button>
           <Button
             variant="contained"
-            onClick={handleClose}
+            onClick={handleDeleteAttribute}
             sx={{
               backgroundColor: '#38879D',
               color: 'white',
