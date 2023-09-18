@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -111,6 +111,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
     onSubmit();
   };
+  const ref = useRef(null);
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -613,114 +614,76 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
         sx={{
           flex: '0 1 auto',
           display: 'flex',
-          marginTop: '6rem',
+          direction: 'row',
+          marginTop: '1.4rem',
           position: 'relative',
+          marginBottom: '1.7rem',
         }}
       >
+        <Box sx={{ width: '100%' }}>
+          <Button
+            variant="text"
+            onClick={() => {
+              const updatedMeta = [...meta];
+              updatedMeta.push({
+                action: EnumInputAction.CREATE,
+                id: meta.length + 1,
+                name: '',
+                type: MenuMetaType.TEXT,
+                order: meta.length + 1,
+                required: false,
+                enabled: true,
+                defaultValue: '',
+                errors: {},
+              });
+              setMeta(updatedMeta);
+              setTimeout(() => {
+                window.scrollTo({
+                  top: document.documentElement.scrollHeight,
+                  behavior: 'smooth',
+                });
+              }, 0);
+            }}
+            startIcon={
+              <AddIcon
+                sx={{
+                  backgroundColor: '#265EFD',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '20px',
+                  height: '20px',
+                }}
+              />
+            }
+            sx={{ color: '#265EFD', letterSpacing: '0.5%', lineHeight: '18px' }}
+          >
+            {t('menu.fields.meta.add')}
+          </Button>
+        </Box>
         <Box
           sx={{
-            backgroundColor: 'white',
-            borderTop: '1px solid #D6D7D9',
-            marginRight: '1rem',
-            borderColor: '#D6D7D9',
-            position: 'fixed',
-            width: '100%',
-            left: '0',
-            bottom: '0',
+            width: '90%',
+            right: '0',
             zIndex: '1000',
-            padding: '1rem',
             alignItems: 'center',
-            // justifyContent: 'flex-end',
+            justifyContent: 'flex-end',
             display: 'flex',
+            marginRight: '1.5rem',
           }}
           className="fixed-buttons"
         >
-          <Box
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={loadingSubmit}
             sx={{
-              backgroundColor: 'white',
-              // position: 'fixed',
-              width: '50%',
-              left: '0',
-              bottom: '0',
-              zIndex: '1000',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              // padding: '1rem',
-              display: 'flex',
+              marginLeft: '16px',
             }}
           >
-            {/* Button that add attributes */}
-            <Box>
-              <Button
-                variant="text"
-                onClick={() => {
-                  const updatedMeta = [...meta];
-                  updatedMeta.push({
-                    action: EnumInputAction.CREATE,
-                    id: meta.length + 1,
-                    name: '',
-                    type: MenuMetaType.TEXT,
-                    order: meta.length + 1,
-                    required: false,
-                    enabled: true,
-                    defaultValue: '',
-                    errors: {},
-                  });
-                  setMeta(updatedMeta);
-                }}
-                startIcon={
-                  <AddIcon
-                    sx={{
-                      backgroundColor: '#265EFD',
-                      color: 'white',
-                      borderRadius: '50%',
-                      width: '20px',
-                      height: '20px',
-                    }}
-                  />
-                }
-                sx={{ color: '#265EFD', letterSpacing: '0.5%', lineHeight: '18px' }}
-              >
-                {t('menu.fields.meta.add')}
-              </Button>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              backgroundColor: 'white',
-              position: 'fixed',
-              width: '50%',
-              right: '0',
-              zIndex: '1000',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              display: 'flex',
-              marginRight: '1.5rem',
-            }}
-            className="fixed-buttons"
-          >
-            {/* <Button
-              variant="contained"
-              color="tertiary"
-              disabled={loadingSubmit}
-              onClick={onBack}
-              sx={{ color: '#D51B06', background: 'F4F5F7' }}
-            >
-              {t('buttons.cancel')}
-            </Button> */}
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={loadingSubmit}
-              sx={{
-                marginLeft: '16px',
-              }}
-            >
-              {t('buttons.save_editions')}
-              {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
-            </Button>
-          </Box>
+            {t('buttons.save_editions')}
+            {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
+          </Button>
         </Box>
       </Box>
       <Dialog
