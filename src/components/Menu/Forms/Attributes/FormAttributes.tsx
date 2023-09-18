@@ -37,8 +37,6 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
-import { fontWeight, letterSpacing, lineHeight, minWidth, textAlign, width } from '@mui/system';
-import { relative } from 'path';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import { MENU_VALIDATION } from '../../../../constants';
 
@@ -327,7 +325,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                 alignItems: 'center',
                 flexDirection: 'column',
               }}
-              className={`border-gray-200 border rounded-md p-4 w-fit${
+              className={`border-gray-200 border bg-white rounded-md p-4 w-fit${
                 !m.enabled ? ' bg-gray-200/75' : ''
               }`}
             >
