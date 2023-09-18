@@ -551,10 +551,21 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
   // Draw Attributes
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <Form
+      sx={{
+        backgroundColor: '#F4F5F7',
+      }}
+      onSubmit={handleFormSubmit}
+    >
+      <Box
+        sx={{
+          backgroundColor: '#F4F5F7',
+        }}
+      />
       <Box
         sx={{
           display: 'flex',
+          backgroundColor: '#F4F5F7',
           flexDirection: 'column',
           alignItems: 'flex-start',
           flex: 1,
@@ -578,7 +589,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           </Trans>
         </Typography> */}
       </Box>
-      <Box>
+      <Box sx={{ backgroundColor: '#F4F5F7' }}>
         {meta?.length > 0 && (
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="droppable">
@@ -688,7 +699,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             }}
             className="fixed-buttons"
           >
-            <Button
+            {/* <Button
               variant="contained"
               color="tertiary"
               disabled={loadingSubmit}
@@ -696,7 +707,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               sx={{ color: '#D51B06', background: 'F4F5F7' }}
             >
               {t('buttons.cancel')}
-            </Button>
+            </Button> */}
             <Button
               variant="contained"
               color="primary"
@@ -706,7 +717,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                 marginLeft: '16px',
               }}
             >
-              {t('buttons.save')}
+              {t('buttons.save_editions')}
               {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
             </Button>
           </Box>
