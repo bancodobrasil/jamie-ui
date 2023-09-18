@@ -327,7 +327,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                 alignItems: 'center',
                 flexDirection: 'column',
               }}
-              className={`border-gray-200 border rounded-md p-4 mb-4 w-fit${
+              className={`border-gray-200 border rounded-md p-4 w-fit${
                 !m.enabled ? ' bg-gray-200/75' : ''
               }`}
             >
