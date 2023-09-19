@@ -291,48 +291,24 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
   const handleDeleteAttribute = () => {
     if (!selectedMeta.id) {
-      // Se o atributo não tem um ID (é novo e ainda não foi salvo no estado), simplesmente remova-o
       setMeta(meta.filter(m => m.id !== selectedMeta.id));
     } else {
-      const updatedMeta = meta.map(m => {
+      const deletedIndex = meta.findIndex(m => m.id === selectedMeta.id);
+
+      for (let i = 0; i < meta.length; i++) {
+        const m = meta[i];
         if (m.id === selectedMeta.id) {
-          return { ...m, action: EnumInputAction.DELETE };
+          m.action = EnumInputAction.DELETE;
+        } else if (i > deletedIndex) {
+          m.order = selectedMeta.order >= m.order ? m.order : m.order - 1;
         }
-        return m;
-      });
-      setMeta(updatedMeta);
-      // Remova o atributo excluído
-      handleFilterAttribute(updatedMeta);
+      }
+
+      setMeta([...meta]);
+      handleClose();
     }
-
-    handleClose();
   };
 
-  const handleFilterAttribute = meta => {
-    const deletedIndex = meta.findIndex(m => m.id === selectedMeta.id);
-    const updatedMeta2 = meta.map(m => {
-      m.action = !m.action ? EnumInputAction.UPDATE : m.action;
-      if (m.action !== EnumInputAction.DELETE) {
-        return {
-          ...m,
-
-          order: m.id <= deletedIndex ? m.id : m.id - 1,
-          // id: m.id !== m.order ? m.order : m.id,
-          // m.id <= deletedIndex ? m.id : m.id - 1,
-        };
-      }
-      if (m.action !== EnumInputAction.DELETE) {
-        return {
-          ...m,
-          id: m.id === m.order ? m.id : m.order,
-          // m.id <= deletedIndex ? m.id : m.id - 1,
-        };
-      }
-      return m;
-    });
-
-    return setMeta(updatedMeta2);
-  };
   // Drag and Drop icon
   const renderMeta = (
     droppableProvided: DroppableProvided,
@@ -652,13 +628,14 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           <Button
             variant="text"
             onClick={() => {
+              const highestOrder = Math.max(...meta.map(m => m.order), 0);
               const updatedMeta = [...meta];
               updatedMeta.push({
                 action: EnumInputAction.CREATE,
                 id: meta.length + 1,
                 name: '',
                 type: MenuMetaType.TEXT,
-                order: meta.length + 1,
+                order: highestOrder + 1,
                 required: false,
                 enabled: true,
                 defaultValue: '',
