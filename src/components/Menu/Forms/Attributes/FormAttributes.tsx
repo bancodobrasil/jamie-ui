@@ -111,7 +111,6 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
     onSubmit();
   };
-  const ref = useRef(null);
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -292,6 +291,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
   const handleDeleteAttribute = () => {
     if (!selectedMeta.id) {
+      // Se o atributo não tem um ID (é novo e ainda não foi salvo no estado), simplesmente remova-o
       setMeta(meta.filter(m => m.id !== selectedMeta.id));
     } else {
       const updatedMeta = meta.map(m => {
@@ -301,10 +301,38 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
         return m;
       });
       setMeta(updatedMeta);
+      // Remova o atributo excluído
+      handleFilterAttribute(updatedMeta);
     }
+
     handleClose();
   };
 
+  const handleFilterAttribute = meta => {
+    const deletedIndex = meta.findIndex(m => m.id === selectedMeta.id);
+    const updatedMeta2 = meta.map(m => {
+      m.action = !m.action ? EnumInputAction.UPDATE : m.action;
+      if (m.action !== EnumInputAction.DELETE) {
+        return {
+          ...m,
+
+          order: m.id <= deletedIndex ? m.id : m.id - 1,
+          // id: m.id !== m.order ? m.order : m.id,
+          // m.id <= deletedIndex ? m.id : m.id - 1,
+        };
+      }
+      if (m.action !== EnumInputAction.DELETE) {
+        return {
+          ...m,
+          id: m.id === m.order ? m.id : m.order,
+          // m.id <= deletedIndex ? m.id : m.id - 1,
+        };
+      }
+      return m;
+    });
+
+    return setMeta(updatedMeta2);
+  };
   // Drag and Drop icon
   const renderMeta = (
     droppableProvided: DroppableProvided,
