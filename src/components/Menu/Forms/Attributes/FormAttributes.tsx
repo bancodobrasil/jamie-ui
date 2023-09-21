@@ -709,7 +709,12 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   }}
                 />
               }
-              sx={{ color: '#265EFD', letterSpacing: '0.5%', lineHeight: '18px' }}
+              sx={{
+                color: '#265EFD',
+                letterSpacing: '0.5%',
+                lineHeight: '18px',
+                marginLeft: '-1rem',
+              }}
             >
               {t('menu.fields.meta.add')}
             </Button>
@@ -722,7 +727,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               alignItems: 'center',
               justifyContent: 'flex-end',
               display: 'flex',
-              marginRight: '1.5rem',
+              marginRight: '-1rem',
             }}
             className="fixed-buttons"
           >
