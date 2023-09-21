@@ -475,7 +475,10 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   {renderMetaDefaultValue(m, i)}
                 </Box>
                 {/* Checkboxes */}
-                <Box sx={{ display: 'flex', marginLeft: '-2rem' }} className="mt-2 space-x-2">
+                <Box
+                  sx={{ display: 'flex', marginLeft: '-2rem', marginTop: '1.5rem' }}
+                  className=" space-x-2"
+                >
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -548,14 +551,21 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                     alignItems: 'flex-end',
                     justifyContent: 'flex-end',
                     height: '1.5rem',
-                    // width: '65rem',
+                    right: '0',
                   }}
                 >
                   <Button
-                    sx={{ color: '#313338', width: '3rem' }}
+                    variant="text"
+                    sx={{
+                      color: '#313338',
+                      minWidth: '12px',
+                      padding: '8px',
+                      marginRight: '-2rem',
+                      marginBottom: '-12px',
+                    }}
                     onClick={() => handleClickOpen(m)}
                   >
-                    <DeleteIcon sx={{ width: '24px', height: '28px' }} />
+                    <DeleteIcon sx={{ width: '24px', height: '28px', right: '-3rem' }} />
                   </Button>
                 </Box>
               </Box>
