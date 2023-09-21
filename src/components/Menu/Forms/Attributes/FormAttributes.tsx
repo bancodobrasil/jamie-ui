@@ -475,7 +475,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   {renderMetaDefaultValue(m, i)}
                 </Box>
                 {/* Checkboxes */}
-                <Box sx={{ display: 'flex' }} className="mt-2 space-x-2">
+                <Box sx={{ display: 'flex', marginLeft: '-2rem' }} className="mt-2 space-x-2">
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -537,6 +537,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                     letterSpacing: '0.005em',
                     textAlign: 'left',
                     marginTop: '-12px',
+                    marginLeft: '-2rem',
                   }}
                 >
                   {t('menu.fields.meta.description_required')}
