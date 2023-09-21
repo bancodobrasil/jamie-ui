@@ -66,6 +66,7 @@
     "validation": {
       "min": "{{field}} deve ter no mínimo {{min}} caracteres.",
       "max": "{{field}} deve ter no máximo {{max}} caracteres.",
+      "must_have_name": "O atributo deve ter um nome.",
       "unique": "{{field}} precisa ser único.",
       "uniqueIndex": "{{field}} já está em uso no índice {{index}}."
     },

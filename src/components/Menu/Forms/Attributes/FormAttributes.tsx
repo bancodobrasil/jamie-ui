@@ -37,7 +37,6 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
-import { maxHeight } from '@mui/system';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import { MENU_VALIDATION } from '../../../../constants';
 
@@ -91,6 +90,10 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
         metaNameError = t('form.validation.max', {
           field: t('menu.fields.meta.of', { field: 'name' }),
           max: MENU_VALIDATION.NAME_MAX_LENGTH,
+        });
+      } else if (m.name.length === null || '') {
+        metaNameError = t('form.validation.must_have_name', {
+          field: t('menu.fields.meta.of', { field: 'name' }),
         });
       }
       meta.slice(0, i).forEach((m2, j) => {
@@ -154,12 +157,16 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
-              if (updatedMeta[index].action !== EnumInputAction.CREATE) {
-                updatedMeta[index].action = EnumInputAction.UPDATE;
+              if (value.trim() === '') {
+                updatedMeta[index].errors.defaultValue = 'Este campo não pode estar vazio.';
+              } else {
+                if (updatedMeta[index].action !== EnumInputAction.CREATE) {
+                  updatedMeta[index].action = EnumInputAction.UPDATE;
+                }
+                updatedMeta[index].defaultValue = value;
+                updatedMeta[index].errors.defaultValue = '';
+                setMeta(updatedMeta);
               }
-              updatedMeta[index].defaultValue = value;
-              updatedMeta[index].errors.defaultValue = '';
-              setMeta(updatedMeta);
             }}
             InputLabelProps={{
               shrink: true,
@@ -390,8 +397,15 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                       if (updatedMeta[i].action !== EnumInputAction.CREATE) {
                         updatedMeta[i].action = EnumInputAction.UPDATE;
                       }
-                      updatedMeta[i].name = value;
-                      updatedMeta[i].errors.name = '';
+
+                      updatedMeta[i].name = value; // Atualiza o valor primeiro
+
+                      if (value.trim() === '') {
+                        updatedMeta[i].errors.name = t('form.validation.must_have_name');
+                      } else {
+                        updatedMeta[i].errors.name = ''; // Limpa qualquer erro anterior
+                      }
+
                       setMeta(updatedMeta);
                     }}
                     inputProps={{
