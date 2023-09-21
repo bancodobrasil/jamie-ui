@@ -263,7 +263,14 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   updatedMeta[index].action = EnumInputAction.UPDATE;
                 }
                 updatedMeta[index].defaultValue = date;
-                updatedMeta[index].errors.defaultValue = '';
+
+                if (!date && m.required === true) {
+                  updatedMeta[index].errors.defaultValue = t(
+                    'form.validation.must_have_defaulValue',
+                  );
+                } else {
+                  updatedMeta[index].errors.defaultValue = '';
+                }
                 setMeta(updatedMeta);
               }}
               renderInput={params => (
