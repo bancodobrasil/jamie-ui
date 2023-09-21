@@ -234,6 +234,8 @@
         "dialog_delete_attribute_confirm": "Confirmar e Excluir",
         "enabled": "Habilitado",
         "defaultValue": "Valor Padrão",
+        "default_value_true": "Verdadeiro",
+        "default_value_false": "Falso",
         "type": {
           "title_one": "Tipo",
           "title_other": "Tipos",

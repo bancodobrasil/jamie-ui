@@ -234,6 +234,8 @@
         "dialog_delete_attribute_confirm": "Confirm and delete",
         "enabled": "Enabled",
         "defaultValue": "Default Value",
+        "default_value_true": "True",
+        "default_value_false": "False",
         "type": {
           "title_one": "Type",
           "title_other": "Types",

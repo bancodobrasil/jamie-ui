@@ -246,8 +246,8 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           >
             <InputLabel>Valor Padrão</InputLabel>
             <Select label="Valor Padrão" value={selectedOption} onChange={handleChange}>
-              <MenuItem value="verdadeiro">Verdadeiro</MenuItem>
-              <MenuItem value="falso">Falso</MenuItem>
+              <MenuItem value="verdadeiro">{t('menu.fields.meta.default_value_true')}</MenuItem>
+              <MenuItem value="falso">{t('menu.fields.meta.default_value_false')}</MenuItem>
             </Select>
           </FormControl>
         );
