@@ -320,7 +320,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
         return;
       }
       return (
-        <Draggable key={m.id.toString()} draggableId={m.id.toString()} index={i}>
+        <Draggable key={m.order.toString()} draggableId={m.order.toString()} index={i}>
           {(provided, snapshot) => (
             <Box
               ref={provided.innerRef}
