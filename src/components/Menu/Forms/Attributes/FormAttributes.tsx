@@ -37,6 +37,7 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
+import { maxHeight } from '@mui/system';
 import { EnumInputAction, FormAction, IMenuMetaWithErrors, MenuMetaType } from '../../../../types';
 import { MENU_VALIDATION } from '../../../../constants';
 
@@ -329,6 +330,9 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                 display: 'flex',
                 alignItems: 'center',
                 flexDirection: 'column',
+                width: '66.75rem',
+                minHeight: '14.25rem',
+                maxHeight: '16.25rem',
               }}
               className={`border-gray-200 border bg-white rounded-md p-4 w-fit${
                 !m.enabled ? ' bg-gray-200/75' : ''
@@ -341,7 +345,9 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   // position: 'fixed',
                   top: '50%',
                   // left: '46px',
-                  marginLeft: '-45rem',
+                  marginLeft: '-46rem',
+                  paddingTop: '4px',
+                  marginRight: '7px',
                 }}
               >
                 <div {...provided.dragHandleProps}>
@@ -365,7 +371,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
               </Box>
               <Box className="ml-8">
                 <Box
-                  sx={{ display: 'flex', paddingTop: '1.5rem', marginLeft: '-15px' }}
+                  sx={{ display: 'flex', paddingTop: '1.75rem', marginLeft: '-32px' }}
                   className="space-x-2"
                 >
                   {/* name field */}
@@ -393,14 +399,18 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                     }}
                     InputLabelProps={{
                       shrink: true,
-                      style: { color: '#022831' },
+                      style: {
+                        color: '#022831',
+                        fontSize: '14px',
+                        lineHeight: '20px',
+                        fontWeight: '500',
+                      },
                     }}
                     error={!!m.errors.name}
                     helperText={m.errors.name}
                     sx={{
                       width: '22.5rem',
                       height: '3rem',
-                      color: '#red',
                     }}
                     className="bg-white"
                     required
@@ -574,9 +584,11 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           flexDirection: 'column',
           alignItems: 'flex-start',
           flex: 1,
+          marginTop: '-18px',
+          // marginBottom:
         }}
       >
-        <Typography variant="body1" component="p">
+        <Typography variant="body1" sx={{ color: '#6C7077' }} component="p">
           {t('menu.fields.meta.description')}
         </Typography>
         {/* <Typography variant="body1" component="p" sx={{ mt: '0.5rem' }}>
@@ -600,9 +612,10 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
                 <div
-                  className="flex flex-col flex-initial mt-8 space-y-4 w-fit pr-4 overflow-y-auto"
+                  className="flex flex-col flex-initial space-y-4 w-fit pr-4 overflow-y-auto"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
+                  style={{ marginTop: '1.5rem' }}
                 >
                   {renderMeta(provided, snapshot)}
                   {provided.placeholder}
