@@ -157,16 +157,16 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target;
               const updatedMeta = [...meta];
-              if (value.trim() === '') {
-                updatedMeta[index].errors.defaultValue = 'Este campo não pode estar vazio.';
-              } else {
-                if (updatedMeta[index].action !== EnumInputAction.CREATE) {
-                  updatedMeta[index].action = EnumInputAction.UPDATE;
-                }
-                updatedMeta[index].defaultValue = value;
-                updatedMeta[index].errors.defaultValue = '';
-                setMeta(updatedMeta);
+              if (updatedMeta[index].action !== EnumInputAction.CREATE) {
+                updatedMeta[index].action = EnumInputAction.UPDATE;
               }
+              updatedMeta[index].defaultValue = value;
+              if (value.trim() === '' && m.enabled === true) {
+                updatedMeta[index].errors.defaultValue = t('form.validation.must_have_defaulValue');
+              } else {
+                updatedMeta[index].errors.defaultValue = '';
+              }
+              setMeta(updatedMeta);
             }}
             InputLabelProps={{
               shrink: true,
@@ -398,12 +398,12 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                         updatedMeta[i].action = EnumInputAction.UPDATE;
                       }
 
-                      updatedMeta[i].name = value; // Atualiza o valor primeiro
+                      updatedMeta[i].name = value; // Update the value first
 
                       if (value.trim() === '') {
                         updatedMeta[i].errors.name = t('form.validation.must_have_name');
                       } else {
-                        updatedMeta[i].errors.name = ''; // Limpa qualquer erro anterior
+                        updatedMeta[i].errors.name = ''; // Clears any previous errors
                       }
 
                       setMeta(updatedMeta);

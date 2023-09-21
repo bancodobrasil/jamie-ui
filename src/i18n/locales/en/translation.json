@@ -67,6 +67,7 @@
       "min": "{{field}} must be at least {{min}} characters long.",
       "max": "{{field}} must have a maximum of {{max}} characters.",
       "must_have_name": "The attribute must have a name.",
+      "must_have_defaulValue": "Mandatory attributes must have a default value.",
       "unique": "{{field}} must be unique.",
       "uniqueIndex": "{{field}} is already in use at index {{index}}."
     },

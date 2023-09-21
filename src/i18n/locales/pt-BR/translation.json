@@ -67,6 +67,7 @@
       "min": "{{field}} deve ter no mínimo {{min}} caracteres.",
       "max": "{{field}} deve ter no máximo {{max}} caracteres.",
       "must_have_name": "O atributo deve ter um nome.",
+      "must_have_defaulValue": "Atributos obrigatórios precisam ter um valor padrão.",
       "unique": "{{field}} precisa ser único.",
       "uniqueIndex": "{{field}} já está em uso no índice {{index}}."
     },
