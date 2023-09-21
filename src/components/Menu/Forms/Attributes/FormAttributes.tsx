@@ -671,6 +671,8 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
                   borderRadius: '50%',
                   width: '20px',
                   height: '20px',
+                  marginLeft: '-1.2rem',
+                  marginRight: '-1.2rem',
                 }}
               />
             }
