@@ -324,7 +324,8 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           m.order = selectedMetaWithoutName.order >= m.order ? m.order : m.order - 1;
         }
       }
-      setMeta([...meta]);
+
+      setMeta(meta.filter(m => m.action !== EnumInputAction.DELETE));
       handleClose();
     }
   };
