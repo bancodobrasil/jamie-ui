@@ -72,6 +72,9 @@ interface Props {
 export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack, action }: Props) {
   const [open, setOpen] = React.useState(false);
   const [selectedMeta, setSelectedMeta] = React.useState<IMenuMetaWithErrors>(null);
+  const [selectedMetaWithoutName, setSelectedMetaWithoutName] =
+    React.useState<IMenuMetaWithErrors>(null);
+
   const { t, i18n } = useTranslation();
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -300,8 +303,30 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
   };
 
   const handleClickOpen = (attribute: IMenuMetaWithErrors) => {
-    setOpen(true);
-    setSelectedMeta(attribute);
+    if (attribute.name.trim()) {
+      setOpen(true);
+      setSelectedMeta(attribute);
+    } else {
+      setSelectedMetaWithoutName(attribute);
+      handleDeleteAttributeWithoutName();
+    }
+  };
+  const handleDeleteAttributeWithoutName = () => {
+    if (!selectedMetaWithoutName.order) {
+      setMeta(meta.filter(m => m.order !== selectedMetaWithoutName.order));
+    } else {
+      const deletedIndex = meta.findIndex(m => m.order === selectedMetaWithoutName.order);
+      for (let i = 0; i < meta.length; i++) {
+        const m = meta[i];
+        if (m.order === selectedMetaWithoutName.order) {
+          m.action = EnumInputAction.DELETE;
+        } else if (i >= deletedIndex) {
+          m.order = selectedMetaWithoutName.order >= m.order ? m.order : m.order - 1;
+        }
+      }
+      setMeta([...meta]);
+      handleClose();
+    }
   };
 
   const handleClose = () => {
