@@ -325,6 +325,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
         }
       }
 
+      setMeta([...meta]);
       setMeta(meta.filter(m => m.action !== EnumInputAction.DELETE));
       handleClose();
     }
@@ -628,32 +629,36 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
   // Draw Attributes
   return (
-    <Form
-      sx={{
-        backgroundColor: '#F4F5F7',
-      }}
-      onSubmit={handleFormSubmit}
-    >
-      <Box
-        sx={{
-          backgroundColor: '#F4F5F7',
-        }}
-      />
-      <Box
-        sx={{
-          display: 'flex',
-          backgroundColor: '#F4F5F7',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          flex: 1,
-          marginTop: '-18px',
-          // marginBottom:
-        }}
-      >
-        <Typography variant="body1" sx={{ color: '#6C7077' }} component="p">
-          {t('menu.fields.meta.description')}
-        </Typography>
-        {/* <Typography variant="body1" component="p" sx={{ mt: '0.5rem' }}>
+    <Box>
+      {meta.length === 0 ? (
+        <p>Não há atributos.</p>
+      ) : (
+        <Form
+          sx={{
+            backgroundColor: '#F4F5F7',
+          }}
+          onSubmit={handleFormSubmit}
+        >
+          <Box
+            sx={{
+              backgroundColor: '#F4F5F7',
+            }}
+          />
+          <Box
+            sx={{
+              display: 'flex',
+              backgroundColor: '#F4F5F7',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              flex: 1,
+              marginTop: '-18px',
+              // marginBottom:
+            }}
+          >
+            <Typography variant="body1" sx={{ color: '#6C7077' }} component="p">
+              {t('menu.fields.meta.description')}
+            </Typography>
+            {/* <Typography variant="body1" component="p" sx={{ mt: '0.5rem' }}>
           <Trans i18nKey="menuItem.editTemplate.templateFormat.description">
             X{' '}
             <Link
@@ -667,191 +672,193 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             Z
           </Trans>
         </Typography> */}
-      </Box>
-      <Box sx={{ backgroundColor: '#F4F5F7' }}>
-        {meta?.length > 0 && (
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided, snapshot) => (
-                <div
-                  className="flex flex-col flex-initial space-y-4 w-fit pr-4 overflow-y-auto"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={{ marginTop: '1.5rem' }}
-                >
-                  {renderMeta(provided, snapshot)}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        )}
-      </Box>
-
-      {/* Fixed buttons in footer ( add attributes, cancel, save ) */}
-      <Box
-        sx={{
-          flex: '0 1 auto',
-          display: 'flex',
-          direction: 'row',
-          marginTop: '1.4rem',
-          position: 'relative',
-          marginBottom: '1.7rem',
-          padding: '2rem',
-          marginRight: '2rem',
-        }}
-      >
-        <Box
-          sx={{
-            backgroundColor: '#F4F5F7',
-            borderTop: '1px solid #D4D8DD',
-            // marginRight: '1rem',
-            borderColor: '#D6D7D9',
-            position: 'fixed',
-            width: '96.2%',
-            marginLeft: '2rem',
-            right: '0',
-
-            left: '0',
-            bottom: '0',
-            zIndex: '1000',
-            padding: '1rem',
-            alignItems: 'center',
-            // justifyContent: 'flex-end',
-            display: 'flex',
-          }}
-          className="fixed-buttons"
-        >
-          <Box sx={{ width: '100%' }}>
-            <Button
-              variant="text"
-              onClick={() => {
-                const highestOrder = Math.max(...meta.map(m => m.order), 0);
-                const updatedMeta = [...meta];
-                updatedMeta.push({
-                  action: EnumInputAction.CREATE,
-                  id: meta.length + 1,
-                  name: '',
-                  type: MenuMetaType.TEXT,
-                  order: highestOrder + 1,
-                  required: false,
-                  enabled: true,
-                  defaultValue: '',
-                  errors: {},
-                });
-                setMeta(updatedMeta);
-                setTimeout(() => {
-                  window.scrollTo({
-                    top: document.documentElement.scrollHeight,
-                    behavior: 'smooth',
-                  });
-                }, 0);
-              }}
-              startIcon={
-                <AddIcon
-                  sx={{
-                    backgroundColor: '#265EFD',
-                    color: 'white',
-                    borderRadius: '50%',
-                    width: '20px',
-                    height: '20px',
-                    marginLeft: '-1.2rem',
-                    marginRight: '-1.2rem',
-                  }}
-                />
-              }
-              sx={{
-                color: '#265EFD',
-                letterSpacing: '0.5%',
-                lineHeight: '18px',
-                marginLeft: '-1rem',
-              }}
-            >
-              {t('menu.fields.meta.add')}
-            </Button>
           </Box>
+          <Box sx={{ backgroundColor: '#F4F5F7' }}>
+            {meta?.length > 0 && (
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided, snapshot) => (
+                    <div
+                      className="flex flex-col flex-initial space-y-4 w-fit pr-4 overflow-y-auto"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ marginTop: '1.5rem' }}
+                    >
+                      {renderMeta(provided, snapshot)}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            )}
+          </Box>
+
+          {/* Fixed buttons in footer ( add attributes, cancel, save ) */}
           <Box
             sx={{
-              width: '85%',
-              right: '0',
-              zIndex: '1000',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
+              flex: '0 1 auto',
               display: 'flex',
-              marginRight: '-1rem',
+              direction: 'row',
+              marginTop: '1.4rem',
+              position: 'relative',
+              marginBottom: '1.7rem',
+              padding: '2rem',
+              marginRight: '2rem',
             }}
-            className="fixed-buttons"
           >
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={loadingSubmit}
+            <Box
               sx={{
-                marginLeft: '16px',
+                backgroundColor: '#F4F5F7',
+                borderTop: '1px solid #D4D8DD',
+                // marginRight: '1rem',
+                borderColor: '#D6D7D9',
+                position: 'fixed',
+                width: '96.2%',
+                marginLeft: '2rem',
+                right: '0',
+
+                left: '0',
+                bottom: '0',
+                zIndex: '1000',
+                padding: '1rem',
+                alignItems: 'center',
+                // justifyContent: 'flex-end',
+                display: 'flex',
               }}
+              className="fixed-buttons"
             >
-              {t('buttons.save_editions')}
-              {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
-            </Button>
+              <Box sx={{ width: '100%' }}>
+                <Button
+                  variant="text"
+                  onClick={() => {
+                    const highestOrder = Math.max(...meta.map(m => m.order), 0);
+                    const updatedMeta = [...meta];
+                    updatedMeta.push({
+                      action: EnumInputAction.CREATE,
+                      id: meta.length + 1,
+                      name: '',
+                      type: MenuMetaType.TEXT,
+                      order: highestOrder + 1,
+                      required: false,
+                      enabled: true,
+                      defaultValue: '',
+                      errors: {},
+                    });
+                    setMeta(updatedMeta);
+                    setTimeout(() => {
+                      window.scrollTo({
+                        top: document.documentElement.scrollHeight,
+                        behavior: 'smooth',
+                      });
+                    }, 0);
+                  }}
+                  startIcon={
+                    <AddIcon
+                      sx={{
+                        backgroundColor: '#265EFD',
+                        color: 'white',
+                        borderRadius: '50%',
+                        width: '20px',
+                        height: '20px',
+                        marginLeft: '-1.2rem',
+                        marginRight: '-1.2rem',
+                      }}
+                    />
+                  }
+                  sx={{
+                    color: '#265EFD',
+                    letterSpacing: '0.5%',
+                    lineHeight: '18px',
+                    marginLeft: '-1rem',
+                  }}
+                >
+                  {t('menu.fields.meta.add')}
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  width: '85%',
+                  right: '0',
+                  zIndex: '1000',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  display: 'flex',
+                  marginRight: '-1rem',
+                }}
+                className="fixed-buttons"
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={loadingSubmit}
+                  sx={{
+                    marginLeft: '16px',
+                  }}
+                >
+                  {t('buttons.save_editions')}
+                  {/* {action === FormAction.CREATE ? t('menu.create.title') : t('menu.edit.title')} */}
+                </Button>
+              </Box>
+            </Box>
           </Box>
-        </Box>
-      </Box>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        // sx={{ width: '40.5rem', height: '20rem' }}
-      >
-        <DialogTitle
-          sx={{ fontSize: '24px', color: '#38879D', letterSpacing: '0.18px' }}
-          id="alert-dialog-title"
-        >
-          {t('menu.fields.meta.dialog_delete_attribute')} {selectedMeta?.name || ''}?
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText
-            sx={{
-              fontSize: '16px',
-              letterSpacing: '0.5px',
-              lineHeight: '24px',
-              color: '#758887',
-            }}
-            id="alert-dialog-description"
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            // sx={{ width: '40.5rem', height: '20rem' }}
           >
-            {t('menu.fields.meta.dialog_delete_attribute_description')}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="text"
-            onClick={handleClose}
-            sx={{
-              color: '#38879D',
-              fontSize: '14px',
-              letterSpacing: '1.25px',
-              lineHeight: '16px',
-            }}
-          >
-            {t('menu.fields.meta.dialog_delete_attribute_quit')}
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleDeleteAttribute}
-            sx={{
-              backgroundColor: '#38879D',
-              color: 'white',
-              fontSize: '14px',
-              letterSpacing: '1.25px',
-              lineHeight: '16px',
-            }}
-            autoFocus
-          >
-            {t('menu.fields.meta.dialog_delete_attribute_confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Form>
+            <DialogTitle
+              sx={{ fontSize: '24px', color: '#38879D', letterSpacing: '0.18px' }}
+              id="alert-dialog-title"
+            >
+              {t('menu.fields.meta.dialog_delete_attribute')} {selectedMeta?.name || ''}?
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText
+                sx={{
+                  fontSize: '16px',
+                  letterSpacing: '0.5px',
+                  lineHeight: '24px',
+                  color: '#758887',
+                }}
+                id="alert-dialog-description"
+              >
+                {t('menu.fields.meta.dialog_delete_attribute_description')}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                variant="text"
+                onClick={handleClose}
+                sx={{
+                  color: '#38879D',
+                  fontSize: '14px',
+                  letterSpacing: '1.25px',
+                  lineHeight: '16px',
+                }}
+              >
+                {t('menu.fields.meta.dialog_delete_attribute_quit')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleDeleteAttribute}
+                sx={{
+                  backgroundColor: '#38879D',
+                  color: 'white',
+                  fontSize: '14px',
+                  letterSpacing: '1.25px',
+                  lineHeight: '16px',
+                }}
+                autoFocus
+              >
+                {t('menu.fields.meta.dialog_delete_attribute_confirm')}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Form>
+      )}
+    </Box>
   );
 }
