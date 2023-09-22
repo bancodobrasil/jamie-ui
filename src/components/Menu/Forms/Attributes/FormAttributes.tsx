@@ -631,7 +631,23 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
   return (
     <Box>
       {meta.length === 0 ? (
-        <p>Não há atributos.</p>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '70vh',
+            fontWeight: '500',
+            fontSize: '24px',
+            lineHeight: '27px',
+            letterSpacing: '0.5%',
+            textAlign: 'center',
+          }}
+        >
+          <Box>{t('menu.fields.meta.without_attributes')}</Box>
+          <Box>{t('menu.fields.meta.without_attributes_description')}</Box>
+        </Box>
       ) : (
         <Form
           sx={{

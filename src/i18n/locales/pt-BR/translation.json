@@ -227,6 +227,8 @@
         "add": "Adicionar Atributo",
         "name": "Nome",
         "required": "Obrigatório",
+        "without_attributes": "Você ainda não tem atributos.",
+        "without_attributes_description": "O que você adicionar aqui vai aparecer como um novo campo nos itens de menu",
         "description_required": "Esse atributo deve ser preenchido em todos os itens desse menu.",
         "dialog_delete_attribute": "Confirma que quer excluir o atributo",
         "dialog_delete_attribute_description": "Esse atributo poderá afetar os itens do menu. Após excluir, essa ação não pode ser desfeita.",

@@ -227,6 +227,8 @@
         "add": "Add Metadata",
         "name": "Name",
         "required": "Required",
+        "without_attributes": "You haven't attributes yet.",
+        "without_attributes_description": "What you add here will appear as a new field in the menu items",
         "description_required": "This attribute must be filled in for all items in this menu.",
         "dialog_delete_attribute": "Do you confirm that you want to delete the attribute",
         "dialog_delete_attribute_description": "This attribute may affect menu items. After deletion, this action cannot be undone.",
