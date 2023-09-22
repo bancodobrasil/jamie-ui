@@ -312,15 +312,15 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     }
   };
   const handleDeleteAttributeWithoutName = () => {
-    if (!selectedMetaWithoutName.order) {
-      setMeta(meta.filter(m => m.order !== selectedMetaWithoutName.order));
+    if (!selectedMetaWithoutName.id) {
+      setMeta(meta.filter(m => m.id !== selectedMetaWithoutName.id));
     } else {
-      const deletedIndex = meta.findIndex(m => m.order === selectedMetaWithoutName.order);
+      const deletedIndex = meta.findIndex(m => m.id === selectedMetaWithoutName.id);
       for (let i = 0; i < meta.length; i++) {
         const m = meta[i];
         if (m.order === selectedMetaWithoutName.order) {
           m.action = EnumInputAction.DELETE;
-        } else if (i >= deletedIndex) {
+        } else if (i > deletedIndex) {
           m.order = selectedMetaWithoutName.order >= m.order ? m.order : m.order - 1;
         }
       }
