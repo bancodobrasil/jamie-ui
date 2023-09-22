@@ -629,7 +629,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
   // Draw Attributes
   return (
-    <Box>
+    <Box sx={{ backgroundColor: '#F4F5F7', height: '100%' }}>
       {meta.length === 0 ? (
         <Box
           sx={{
@@ -637,16 +637,36 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '70vh',
-            fontWeight: '500',
-            fontSize: '24px',
-            lineHeight: '27px',
-            letterSpacing: '0.5%',
-            textAlign: 'center',
+            height: '40vh',
           }}
         >
-          <Box>{t('menu.fields.meta.without_attributes')}</Box>
-          <Box>{t('menu.fields.meta.without_attributes_description')}</Box>
+          <img src="/images/error-empty.png" alt="Descrição da imagem" width="200" height="200" />
+
+          <Typography
+            variant="h5"
+            sx={{
+              paddingTop: '1.5rem',
+              fontWeight: '500',
+              fontSize: '20px',
+              lineHeight: '27px',
+              letterSpacing: '0.5%',
+              textAlign: 'center',
+            }}
+          >
+            {t('menu.fields.meta.without_attributes')}
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: '500',
+              fontSize: '20px',
+              lineHeight: '27px',
+              letterSpacing: '0.5%',
+              textAlign: 'center',
+            }}
+          >
+            {t('menu.fields.meta.without_attributes_description')}
+          </Typography>
         </Box>
       ) : (
         <Form
