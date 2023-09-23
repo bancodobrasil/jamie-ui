@@ -638,6 +638,8 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
             justifyContent: 'center',
             alignItems: 'center',
             height: '40vh',
+            paddingTop: '10rem',
+            backgroundColor: '#F4F5F7',
           }}
         >
           <img src="/images/error-empty.png" alt="Descrição da imagem" width="200" height="200" />
@@ -667,6 +669,40 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
           >
             {t('menu.fields.meta.without_attributes_description')}
           </Typography>
+          <Box sx={{ alignContent: 'center', flex: 1, justifyContent: 'center', padding: '2rem' }}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                const highestOrder = Math.max(...meta.map(m => m.order), 0);
+                const updatedMeta = [...meta];
+                updatedMeta.push({
+                  action: EnumInputAction.CREATE,
+                  id: meta.length + 1,
+                  name: '',
+                  type: MenuMetaType.TEXT,
+                  order: highestOrder + 1,
+                  required: false,
+                  enabled: true,
+                  defaultValue: '',
+                  errors: {},
+                });
+                setMeta(updatedMeta);
+                setTimeout(() => {
+                  window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth',
+                  });
+                }, 0);
+              }}
+              sx={{
+                color: '#265EFD',
+                backgroundColor: '#F4F5F7',
+                marginBottom: '6rem',
+              }}
+            >
+              {t('menu.fields.meta.add')}
+            </Button>
+          </Box>
         </Box>
       ) : (
         <Form
