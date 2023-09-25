@@ -124,14 +124,12 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     if (!result.destination) return;
 
     const items = reorder(meta, result.source.index, result.destination.index);
+    // TODO: Check Fix reorder
+    let previousOrder = 0;
     const updatedMeta = items.map((m, i) => {
       m.action = !m.action ? EnumInputAction.UPDATE : m.action;
-      if (m.action !== EnumInputAction.DELETE) {
-        return {
-          ...m,
-          order: i + 1,
-        };
-      }
+      previousOrder++;
+      m.order = previousOrder;
       return m;
     });
     setMeta(updatedMeta);
