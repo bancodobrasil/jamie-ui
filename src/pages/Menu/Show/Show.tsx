@@ -184,9 +184,26 @@ export const ShowMenu = () => {
         </Typography> */}
       </Box>
       <Box className="flex flex-row space-x-1  my-4" sx={{ justifyContent: 'flex-start' }}>
-        <Box sx={{ marginRight: '4rem' }}>Versão publicada</Box>
-        <Box sx={{ paddingRight: '4rem' }}>UUID do Menu</Box>
-        <Box>Aprovação obrigatória</Box>
+        <Box sx={{ marginRight: '4rem', color: '#6C7077' }}>
+          Versão publicada
+          <Box>
+            <Typography variant="body1" component="p" sx={{ color: '#111214', width: '7.2rem' }}>
+              <b>{data?.menu.publishedRevision?.id || '-'}</b>
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '22.3rem' }}>
+          UUID do Menu
+          <Box sx={{ color: '#111214' }}>
+            <b>{data.menu.uuid}</b>
+          </Box>
+        </Box>
+        <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
+          {t('menu.fields.mustDeferChanges')}
+          <Box sx={{ color: '#111214' }}>
+            <b>{data?.menu.mustDeferChanges ? t('common.yes') : t('common.no')}</b>
+          </Box>
+        </Box>
       </Box>
       <Box sx={{ mb: '1rem' }} className="space-y-4">
         <Box className="space-y-1">
