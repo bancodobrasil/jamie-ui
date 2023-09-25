@@ -184,39 +184,41 @@ export const ShowMenu = () => {
       <Helmet>
         <title>{data?.menu.name}</title>
       </Helmet>
-      <AppBreadcrumbs
-        items={[
-          { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-          { label: data?.menu.name },
-        ]}
-        onBack={onBackClickHandler}
-      />
-      <Box className="flex flex-row space-x-1 items-center my-4">
-        <PageTitle onClick={onBackButtonHandler} PageTitle={data?.menu.name} />
-        {/* <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
-          {data?.menu.name}
-        </Typography> */}
-      </Box>
-      <Box className="flex flex-row space-x-1  my-4" sx={{ justifyContent: 'flex-start' }}>
-        <Box sx={{ marginRight: '4rem', color: '#6C7077' }}>
-          {t('menu.fields.publishedRevision')}
-          <Box>
-            <Typography variant="body1" component="p" sx={{ color: '#111214', width: '7.2rem' }}>
-              <b>{data?.menu.publishedRevision?.id || '-'}</b>
-            </Typography>
-          </Box>
-        </Box>
-        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23.5rem' }}>
-          <ContentCopyIcon sx={{ color: '#022831' }} onClick={handleCopyClick} />
-          {t('menu.fields.menu_uuid')}
-          <Box sx={{ color: '#111214', paddingLeft: '1.5rem' }}>
-            {isCopied ? <span>Pronto! O UUID do menu foi copiado.</span> : <b>{data.menu.uuid}</b>}
-          </Box>
-        </Box>
-        <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
-          {t('menu.fields.mustDeferChanges')}
-          <Box sx={{ color: '#111214' }}>
-            <b>{data?.menu.mustDeferChanges ? t('common.yes') : t('common.no')}</b>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
+        <AppBreadcrumbs
+          items={[
+            { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+            { label: data?.menu.name },
+          ]}
+          onBack={onBackClickHandler}
+        />
+        <Box className="flex flex-row space-x-1 items-center">
+          <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.edit.title')} />
+          <Box
+            className="space-x-4"
+            sx={{
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={onCreateRevisionClickHandler}
+              disabled={loadingDelete}
+            >
+              {t('menu.show.actions.createRevision')}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={onPublishRevisionClickHandler}
+              disabled={loadingDelete}
+            >
+              {t('menu.show.actions.publishRevision')}
+            </Button>
+            <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
+              {t('menu.show.actions.edit')}
+            </Button>
           </Box>
         </Box>
       </Box>
@@ -278,40 +280,6 @@ export const ShowMenu = () => {
           </Typography>
         </Box>
         {renderHasConditions()}
-      </Box>
-      <Divider />
-      {/* <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
-        {t('menu.fields.meta.title', { count: 2 })}
-      </Typography>
-      <Box sx={{ mb: '1rem' }} className="space-y-4">
-        {data?.menu.meta && data?.menu.meta.length > 0 ? (
-          renderMeta()
-        ) : (
-          <p className="text-gray-500">{t('common.noData')}</p>
-        )}
-      </Box>
-      <Divider /> */}
-      {/* footer */}
-      <Box className="flex flex-col space-y-4 py-4 w-fit">
-        <Box className="flex space-x-8">
-          <Button
-            variant="outlined"
-            onClick={onCreateRevisionClickHandler}
-            disabled={loadingDelete}
-          >
-            {t('menu.show.actions.createRevision')}
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={onPublishRevisionClickHandler}
-            disabled={loadingDelete}
-          >
-            {t('menu.show.actions.publishRevision')}
-          </Button>
-          <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
-            {t('menu.show.actions.edit')}
-          </Button>
-        </Box>
       </Box>
     </Box>
   );
