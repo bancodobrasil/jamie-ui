@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
@@ -32,7 +32,7 @@ export const ShowMenu = () => {
   const onBackButtonHandler = () => {
     navigate('../edit');
   };
-
+  const [isCopied, setIsCopied] = useState(false);
   const { dispatch } = React.useContext(NotificationContext);
 
   const { loading, error, data, refetch } = useQuery(MenuService.GET_MENU, {
@@ -80,6 +80,19 @@ export const ShowMenu = () => {
         },
       });
     }
+  };
+
+  const handleCopyClick = () => {
+    // Copie o conteúdo para a área de transferência
+    navigator.clipboard.writeText(data.menu.uuid);
+
+    // Defina o estado para mostrar uma mensagem de sucesso
+    setIsCopied(true);
+
+    // Defina um timeout para limpar a mensagem após alguns segundos
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 3000);
   };
 
   const onPendenciesClickHandler = () => {
@@ -194,10 +207,10 @@ export const ShowMenu = () => {
           </Box>
         </Box>
         <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23rem' }}>
-          <ContentCopyIcon sx={{ color: '#022831' }} />
+          <ContentCopyIcon sx={{ color: '#022831' }} onClick={handleCopyClick} />
           UUID do Menu
           <Box sx={{ color: '#111214', paddingLeft: '1.5rem' }}>
-            <b>{data.menu.uuid}</b>
+            {isCopied ? <span>Copiado!</span> : <b>{data.menu.uuid}</b>}
           </Box>
         </Box>
         <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
