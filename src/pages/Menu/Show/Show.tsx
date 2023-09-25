@@ -179,9 +179,14 @@ export const ShowMenu = () => {
       />
       <Box className="flex flex-row space-x-1 items-center my-4">
         <PageTitle onClick={onBackButtonHandler} PageTitle={data?.menu.name} />
-        <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
+        {/* <Typography variant="h1" component="h1" sx={{ py: '1rem' }}>
           {data?.menu.name}
-        </Typography>
+        </Typography> */}
+      </Box>
+      <Box className="flex flex-row space-x-1  my-4" sx={{ justifyContent: 'flex-start' }}>
+        <Box sx={{ marginRight: '4rem' }}>Versão publicada</Box>
+        <Box sx={{ paddingRight: '4rem' }}>UUID do Menu</Box>
+        <Box>Aprovação obrigatória</Box>
       </Box>
       <Box sx={{ mb: '1rem' }} className="space-y-4">
         <Box className="space-y-1">
