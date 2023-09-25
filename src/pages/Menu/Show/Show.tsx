@@ -296,15 +296,13 @@ export const ShowMenu = () => {
         <Box className="flex space-x-8">
           <Button
             variant="outlined"
-            color="success"
             onClick={onCreateRevisionClickHandler}
             disabled={loadingDelete}
           >
             {t('menu.show.actions.createRevision')}
           </Button>
           <Button
-            variant="contained"
-            color="success"
+            variant="outlined"
             onClick={onPublishRevisionClickHandler}
             disabled={loadingDelete}
           >
