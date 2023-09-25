@@ -210,7 +210,7 @@ export const ShowMenu = () => {
           <ContentCopyIcon sx={{ color: '#022831' }} onClick={handleCopyClick} />
           UUID do Menu
           <Box sx={{ color: '#111214', paddingLeft: '1.5rem' }}>
-            {isCopied ? <span>Copiado!</span> : <b>{data.menu.uuid}</b>}
+            {isCopied ? <span>Pronto! O UUID do menu foi copiado.</span> : <b>{data.menu.uuid}</b>}
           </Box>
         </Box>
         <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
