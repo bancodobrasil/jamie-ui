@@ -163,6 +163,11 @@ export const EditMenu = () => {
             context: 'male',
           })}!`,
         });
+        const updatedMeta = metaWithErrors.map(m => {
+          m.action = undefined;
+          return m;
+        });
+        setMetaWithErrors(updatedMeta);
         navigate(`/menus/${data.updateMenu.id}/edit`, { state: { refetch: true } });
       },
       onError: error => {

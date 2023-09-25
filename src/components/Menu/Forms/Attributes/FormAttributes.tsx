@@ -76,6 +76,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     React.useState<IMenuMetaWithErrors>(null);
 
   const { t, i18n } = useTranslation();
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
