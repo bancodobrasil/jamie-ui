@@ -200,6 +200,7 @@
     "of": "$t(menu.fields.{{field}}) do Menu",
     "fields": {
       "uuid": "UUID",
+      "menu_uuid": "UUID do menu",
       "name": "Nome",
       "belowNameField":"Esse nome só aparecerá no Jamie",
       "mustDeferChanges": "Aprovação obrigatória",

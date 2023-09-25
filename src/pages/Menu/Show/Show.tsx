@@ -199,7 +199,7 @@ export const ShowMenu = () => {
       </Box>
       <Box className="flex flex-row space-x-1  my-4" sx={{ justifyContent: 'flex-start' }}>
         <Box sx={{ marginRight: '4rem', color: '#6C7077' }}>
-          Versão publicada
+          {t('menu.fields.publishedRevision')}
           <Box>
             <Typography variant="body1" component="p" sx={{ color: '#111214', width: '7.2rem' }}>
               <b>{data?.menu.publishedRevision?.id || '-'}</b>
@@ -208,7 +208,7 @@ export const ShowMenu = () => {
         </Box>
         <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23rem' }}>
           <ContentCopyIcon sx={{ color: '#022831' }} onClick={handleCopyClick} />
-          UUID do Menu
+          {t('menu.fields.menu_uuid')}
           <Box sx={{ color: '#111214', paddingLeft: '1.5rem' }}>
             {isCopied ? <span>Pronto! O UUID do menu foi copiado.</span> : <b>{data.menu.uuid}</b>}
           </Box>

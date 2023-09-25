@@ -200,6 +200,7 @@
     "of": "Menu's $t(menu.fields.{{field}})",
     "fields": {
       "uuid": "UUID",
+      "menu_uuid": "Menu UUID",
       "name": "Name",
       "belowNameField":"This name will only appear for Jamie",
       "mustDeferChanges": "Mandatory approval",
