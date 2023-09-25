@@ -1,9 +1,8 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import WidgetsIcon from '@mui/icons-material/Widgets';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
 import Loading from '../../../components/Loading';
 import MenuService from '../../../api/services/MenuService';
@@ -17,6 +16,11 @@ import {
 } from '../../../types';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
 import { NodeTreeView, OperationScreen } from '../../../components/Menu/Items';
+import {
+  ActionTypes,
+  NotificationContext,
+  openDefaultErrorNotification,
+} from '../../../contexts/NotificationContext';
 
 const emptyEditingNode: IEditingNode = {
   id: 0,
@@ -39,7 +43,15 @@ const emptyEditingNode: IEditingNode = {
   },
 };
 
+export enum EnumInputActionScreen {
+  NONE,
+  INSERT,
+  UPDATE,
+}
+
 export const ItemsPreview = () => {
+  const { dispatch } = React.useContext(NotificationContext);
+
   const { t } = useTranslation();
 
   const { id } = useParams();
@@ -47,11 +59,16 @@ export const ItemsPreview = () => {
   const { loading, error, data } = useQuery(MenuService.GET_MENU, {
     variables: { id: Number(id) },
   });
+  const [updateMenu] = useMutation(MenuService.UPDATE_MENU);
 
   const [updatedMenu, setUpdatedMenu] = useState<IMenu>();
 
   const [expanded, setExpanded] = useState<string[]>(['0']);
   const [selected, setSelected] = useState<string>('0');
+
+  const [operationScreen, setOperationScreen] = React.useState<EnumInputActionScreen>(
+    EnumInputActionScreen.NONE,
+  );
 
   const nodes = useMemo<INode[]>(() => {
     const items: GraphQLData<IMenuItem>[] = updatedMenu?.items || data?.menu.items || [];
@@ -103,17 +120,8 @@ export const ItemsPreview = () => {
         })
         .filter(item => !item.parentId)
         .sort((a, b) => a.order - b.order) || [];
-    return [
-      {
-        id: 0,
-        label: t('menu.preview.root'),
-        order: 1,
-        enabled: true,
-        children: root,
-        meta: {},
-      },
-    ];
-  }, [updatedMenu, data?.menu, t]);
+    return root;
+  }, [updatedMenu, data?.menu]);
 
   const [editingNode, setEditingNode] = useState<IEditingNode>(emptyEditingNode);
 
@@ -129,10 +137,132 @@ export const ItemsPreview = () => {
     return undefined;
   }, []);
 
+  const handleUpdate = async (): Promise<void> => {
+    const formatNodes = (nodes: INode[]) =>
+      nodes
+        .map(node => {
+          const {
+            id,
+            children,
+            original,
+            parentId,
+            createdAt,
+            updatedAt,
+            version,
+            menuId,
+            defaultTemplate,
+            action,
+            rules,
+            ...rest
+          } = node;
+          let meta;
+          if (rest.meta) {
+            meta = Object.keys(rest.meta).reduce((acc, key) => {
+              const name = data.menu.meta.find(meta => meta.id === Number(key))?.name || key;
+              const meta = rest.meta[key];
+              const originalMetaMap = original?.meta || {};
+              const originalMeta = originalMetaMap[key] || originalMetaMap[name];
+              if (meta == null || meta === '' || meta === originalMeta) {
+                return acc;
+              }
+              return {
+                ...acc,
+                [name]: meta,
+              };
+            }, {});
+            if (Object.keys(meta).length === 0) meta = undefined;
+          }
+          let startPublication;
+          if (rest.startPublication) {
+            if (
+              (original?.startPublication !== rest.startPublication ||
+                !original?.startPublication) &&
+              rest.startPublication.isValid
+            )
+              startPublication = rest.startPublication.toISO();
+          } else {
+            startPublication = null;
+          }
+          let endPublication;
+          if (rest.endPublication) {
+            if (
+              (original?.endPublication !== rest.endPublication || !original?.endPublication) &&
+              rest.endPublication.isValid
+            )
+              endPublication = rest.endPublication.toISO();
+          } else {
+            endPublication = null;
+          }
+          let label;
+          if (action === EnumInputAction.CREATE) label = rest.label;
+          else if (rest.label && (original?.label !== rest.label || !original?.label))
+            label = rest.label;
+          let order;
+          if (action === EnumInputAction.CREATE) order = rest.order;
+          else if (rest.order && (original?.order !== rest.order || !original?.order))
+            order = rest.order;
+          let enabled = action === EnumInputAction.CREATE ? true : undefined;
+          if (rest.enabled && (original?.enabled !== rest.enabled || !original?.enabled))
+            enabled = rest.enabled;
+          return {
+            action,
+            label,
+            order,
+            enabled,
+            startPublication,
+            endPublication,
+            meta,
+            rules,
+            children: children && formatNodes(children),
+            id: id === -1 ? undefined : id,
+          };
+        })
+        .filter(node => !!node.action);
+
+    const items = formatNodes(preview(nodes, editingNode)).map(node => {
+      const id = node.id === -1 ? undefined : node.id;
+      return {
+        ...node,
+        id,
+      };
+    });
+
+    await updateMenu({
+      variables: { menu: { id: Number(id), items } },
+      onCompleted: data => {
+        dispatch({
+          type: ActionTypes.OPEN_NOTIFICATION,
+          message: `${t('notification.editSuccess', {
+            resource: t('menu.title', { count: 1 }),
+            context: 'male',
+          })}!`,
+        });
+        switch (editingNode.action) {
+          case EnumInputAction.CREATE:
+          case EnumInputAction.DELETE:
+            setEditingNode(emptyEditingNode);
+            setSelected('');
+            break;
+          case EnumInputAction.UPDATE:
+            setSelected(editingNode.id.toString());
+            break;
+        }
+        setUpdatedMenu(data.updateMenu);
+        setOperationScreen(EnumInputActionScreen.NONE);
+        setEditingNode(emptyEditingNode);
+        return Promise.resolve();
+      },
+      onError: error => {
+        openDefaultErrorNotification(error, dispatch);
+        return Promise.reject();
+      },
+    });
+    return Promise.resolve();
+  };
+
   const preview = useCallback((nodes: INode[], editingNode: IEditingNode): INode[] => {
     if (!editingNode.id) return nodes;
-    if (nodes[0].id === 0 && nodes[0].children?.length === 0)
-      return [{ ...nodes[0], children: [editingNode] }];
+    if (nodes.length === 0) return [editingNode];
     // console.log('nodes', nodes);
     // console.log('editing node', editingNode);
     const nodesPreview: INode[] = [];
@@ -144,6 +274,109 @@ export const ItemsPreview = () => {
         return { ...child, action: EnumInputAction.DELETE };
       });
     };
+    const reorder = (nodes: INode[]): INode[] => {
+      const siblings = nodes.map(sibling => {
+        if (sibling.id === editingNode.id) {
+          // sibling is editing node
+          // console.log('child is editing node', child);
+          if (sibling.order === editingNode.order) {
+            // sibling is in same position
+            // console.log('sibling is in same position');
+            if (editingNode.action === EnumInputAction.DELETE) {
+              // editing node is DELETE
+              // console.log('editing node is DELETE');
+              // set sibling as DELETE
+              return {
+                ...sibling,
+                action: EnumInputAction.DELETE,
+                children: deleteChildren(sibling),
+              };
+            }
+            // editing node is UPDATE
+            // console.log('editing node is UPDATE');
+            // set sibling as UPDATE
+            return {
+              ...sibling,
+              ...editingNode,
+              action: EnumInputAction.UPDATE,
+            };
+          }
+          // sibling is in different position
+          // console.log('sibling is in different position');
+          // set sibling as UPDATE and set order as editing node order
+          return {
+            ...sibling,
+            ...editingNode,
+            action: EnumInputAction.UPDATE,
+          };
+        }
+        // sibling is not editing node
+        if (sibling.order === editingNode.order) {
+          // sibling is in same position as editing node
+          // console.log('sibling is in same position as editing node', sibling);
+          // set order based on existing node order diff (moving up or down)
+          const diff = editingNode.order - editingNode.original.order;
+          let order = diff >= 0 ? sibling.order - 1 : sibling.order + 1;
+          if (editingNode.action === EnumInputAction.DELETE) {
+            // editing node is DELETE
+            // console.log('editing node is DELETE');
+            // decrease order
+            order = sibling.order - 1;
+          }
+          // set sibling as UPDATE and decrease order
+          return { ...sibling, action: EnumInputAction.UPDATE, order };
+        }
+        if (sibling.order > editingNode.order) {
+          // sibling is after editing node
+          // console.log('sibling is after editing node', sibling);
+          // set sibling as UPDATE
+          let action = EnumInputAction.UPDATE;
+          let { order } = sibling;
+          if (editingNode.action === EnumInputAction.UPDATE) {
+            if (sibling.order < editingNode.original.order) {
+              // sibling order is less than editing node original order
+              // increase sibling order
+              order += 1;
+            } else {
+              // sibling order is greater than editing node original order
+              // keep sibling order as is and set action as undefined
+              action = undefined;
+            }
+          } else if (editingNode.action === EnumInputAction.DELETE) {
+            order -= 1;
+          } else if (editingNode.action === EnumInputAction.CREATE) {
+            order += 1;
+          }
+          return { ...sibling, order, action };
+        }
+        // sibling is before editing node
+        // console.log('sibling is before editing node', sibling);
+        if (
+          editingNode.action === EnumInputAction.UPDATE &&
+          sibling.order > editingNode.original.order
+        ) {
+          // sibling order is greater than editing node original order
+          // decrease sibling order
+          return { ...sibling, action: EnumInputAction.UPDATE, order: sibling.order - 1 };
+        }
+        return sibling;
+      });
+      return siblings;
+    };
+    if (editingNode.parentId === 0) {
+      // editing node is root
+      // console.log('editing node is root');
+      // reordering root
+      let root = reorder(nodes);
+      if (editingNode.action === EnumInputAction.CREATE) {
+        // editing node is CREATE
+        // console.log('editing node is CREATE');
+        // add editing node to root
+        root.splice(editingNode.order - 1, 0, editingNode);
+      }
+      root = root.sort((a, b) => a.order - b.order);
+      return root;
+    }
     nodes.forEach(node => {
       // console.log('current node', node);
       if (node.id === editingNode.id) {
@@ -181,92 +414,10 @@ export const ItemsPreview = () => {
             action: EnumInputAction.UPDATE,
           });
         } else {
-          let children = node.children.map(child => {
-            if (child.id === editingNode.id) {
-              // child is editing node
-              // console.log('child is editing node', child);
-              if (child.order === editingNode.order) {
-                // child is in same position
-                // console.log('child is in same position');
-                if (editingNode.action === EnumInputAction.DELETE) {
-                  // editing node is DELETE
-                  // console.log('editing node is DELETE');
-                  // set child as DELETE
-                  return {
-                    ...child,
-                    action: EnumInputAction.DELETE,
-                    children: deleteChildren(child),
-                  };
-                }
-                // editing node is UPDATE
-                // console.log('editing node is UPDATE');
-                // set child as UPDATE
-                return {
-                  ...child,
-                  ...editingNode,
-                  action: EnumInputAction.UPDATE,
-                };
-              }
-              // child is in different position
-              // console.log('child is in different position');
-              // set child as UPDATE and set order as editing node order
-              return {
-                ...child,
-                ...editingNode,
-                action: EnumInputAction.UPDATE,
-              };
-            }
-            // child is not editing node
-            if (child.order === editingNode.order) {
-              // child is in same position as editing node
-              // console.log('child is in same position as editing node', child);
-              // set order based on existing node order diff (moving up or down)
-              const diff = editingNode.order - editingNode.original.order;
-              let order = diff >= 0 ? child.order - 1 : child.order + 1;
-              if (editingNode.action === EnumInputAction.DELETE) {
-                // editing node is DELETE
-                // console.log('editing node is DELETE');
-                // decrease order
-                order = child.order - 1;
-              }
-              // set child as UPDATE and decrease order
-              return { ...child, action: EnumInputAction.UPDATE, order };
-            }
-            if (child.order > editingNode.order) {
-              // child is after editing node
-              // console.log('child is after editing node', child);
-              // set child as UPDATE
-              let action = EnumInputAction.UPDATE;
-              let { order } = child;
-              if (editingNode.action === EnumInputAction.UPDATE) {
-                if (child.order < editingNode.original.order) {
-                  // child order is less than editing node original order
-                  // increase child order
-                  order += 1;
-                } else {
-                  // child order is greater than editing node original order
-                  // keep child order as is and set action as undefined
-                  action = undefined;
-                }
-              } else if (editingNode.action === EnumInputAction.DELETE) {
-                order -= 1;
-              } else if (editingNode.action === EnumInputAction.CREATE) {
-                order += 1;
-              }
-              return { ...child, order, action };
-            }
-            // child is before editing node
-            // console.log('child is before editing node', child);
-            if (
-              editingNode.action === EnumInputAction.UPDATE &&
-              child.order > editingNode.original.order
-            ) {
-              // child order is greater than editing node original order
-              // decrease child order
-              return { ...child, action: EnumInputAction.UPDATE, order: child.order - 1 };
-            }
-            return child;
-          });
+          // parent has children
+          // console.log('parent has children');
+          // reordering children
+          let children = reorder(node.children);
           if (editingNode.action === EnumInputAction.CREATE) {
             // editing node is CREATE
             // console.log('editing node is CREATE');
@@ -327,11 +478,11 @@ export const ItemsPreview = () => {
     );
 
   return (
-    <Box>
+    <Box sx={{ height: '100%' }}>
       <Box
         sx={{
           width: '100%',
-          height: '80vh',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -399,33 +550,38 @@ export const ItemsPreview = () => {
               selected={selected}
               setSelected={setSelected}
               preview={preview}
+              emptyEditingNode={emptyEditingNode}
+              setEditingNode={setEditingNode}
+              handleUpdate={handleUpdate}
+              data={data}
+              setOperationScreen={setOperationScreen}
             />
           </Box>
+          {operationScreen !== EnumInputActionScreen.NONE ? (
+            <>
+              <div
+                style={{
+                  width: '1px',
+                  height: '100%',
+                  border: '1px solid #eaeaec',
+                  margin: '0 50px 0 0',
+                }}
+              />
 
-          <div
-            style={{
-              width: '1px',
-              height: '100%',
-              border: '1px solid #eaeaec',
-              margin: '0 50px 0 0',
-            }}
-          />
-
-          <OperationScreen
-            id={id}
-            data={data}
-            nodes={nodes}
-            emptyEditingNode={emptyEditingNode}
-            editingNode={editingNode}
-            setEditingNode={setEditingNode}
-            expanded={expanded}
-            setExpanded={setExpanded}
-            selected={selected}
-            setSelected={setSelected}
-            findNodeById={findNodeById}
-            preview={preview}
-            setUpdatedMenu={setUpdatedMenu}
-          />
+              <OperationScreen
+                id={id}
+                data={data}
+                nodes={nodes}
+                emptyEditingNode={emptyEditingNode}
+                editingNode={editingNode}
+                setEditingNode={setEditingNode}
+                findNodeById={findNodeById}
+                operationScreen={operationScreen}
+                setOperationScreen={setOperationScreen}
+                handleUpdate={handleUpdate}
+              />
+            </>
+          ) : null}
         </Box>
       </Box>
     </Box>

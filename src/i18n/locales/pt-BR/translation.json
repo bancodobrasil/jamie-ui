@@ -272,7 +272,9 @@
         "insert": "Inserir",
         "edit": "Editar",
         "delete": "Deletar",
-        "editTemplate": "Editar Template"
+        "editTemplate": "Editar Template",
+        "insertChild": "Inserir Item Filho",
+        "insertRoot": "Novo Item de Menu"
       },
       "parent": "Item Pai",
       "newItem": "Novo Item {{order}}",
@@ -296,6 +298,12 @@
       },
       "errors": {
         "noItemSelected": "Nenhum item selecionado"
+      },
+      "alerts": {
+        "deleteItem": {
+          "title": "Deletar Item",
+          "message": "Tem certeza que deseja deletar esse item?"
+        }
       }
     },
     "list": {
