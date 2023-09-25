@@ -202,7 +202,9 @@ export const ShowMenu = () => {
               justifyContent: 'flex-end',
             }}
           >
+            {/* action buttons */}
             <Button
+              sx={{ borderColor: '#056571' }}
               variant="outlined"
               onClick={onCreateRevisionClickHandler}
               disabled={loadingDelete}
@@ -210,6 +212,7 @@ export const ShowMenu = () => {
               {t('menu.show.actions.createRevision')}
             </Button>
             <Button
+              sx={{ borderColor: '#056571' }}
               variant="outlined"
               onClick={onPublishRevisionClickHandler}
               disabled={loadingDelete}
@@ -222,6 +225,41 @@ export const ShowMenu = () => {
           </Box>
         </Box>
       </Box>
+      {/* details about menu */}
+      <Box className="flex flex-row space-x-1  my-4" sx={{ justifyContent: 'flex-start' }}>
+        <Box sx={{ marginRight: '4rem', color: '#6C7077' }}>
+          {t('menu.fields.publishedRevision')}
+          <Box>
+            <Typography variant="body1" component="p" sx={{ color: '#111214', width: '7.2rem' }}>
+              <b>{data?.menu.publishedRevision?.id || '-'}</b>
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '40rem' }}>
+          <ContentCopyIcon sx={{ color: '#022831' }} onClick={handleCopyClick} />
+          {t('menu.fields.menu_uuid')}
+          <Box
+            sx={{
+              color: '#111214',
+              // fontSize: '16px',
+              // lineHeight: '18px',
+              // letterSpacing: '0.5%',
+              fontWeight: '500',
+            }}
+          >
+            <b>{data.menu.uuid}</b>
+            {isCopied ? <span>Pronto! O UUID do menu foi copiado.</span> : <b>{data.menu.uuid}</b>}
+          </Box>
+        </Box>
+        <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
+          {t('menu.fields.mustDeferChanges')}
+          <Box sx={{ color: '#111214' }}>
+            <b>{data?.menu.mustDeferChanges ? t('common.yes') : t('common.no')}</b>
+          </Box>
+        </Box>
+      </Box>
+
+      {/*       
       <Box sx={{ mb: '1rem' }} className="space-y-4">
         <Box className="space-y-1">
           <Typography variant="h5" component="h5" className="mb-2">
@@ -280,7 +318,7 @@ export const ShowMenu = () => {
           </Typography>
         </Box>
         {renderHasConditions()}
-      </Box>
+      </Box> */}
     </Box>
   );
 };
