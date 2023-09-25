@@ -206,7 +206,7 @@ export const ShowMenu = () => {
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23rem' }}>
+        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23.5rem' }}>
           <ContentCopyIcon sx={{ color: '#022831' }} onClick={handleCopyClick} />
           {t('menu.fields.menu_uuid')}
           <Box sx={{ color: '#111214', paddingLeft: '1.5rem' }}>
