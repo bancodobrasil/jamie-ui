@@ -291,49 +291,9 @@ export const ShowMenu = () => {
         )}
       </Box>
       <Divider /> */}
+      {/* footer */}
       <Box className="flex flex-col space-y-4 py-4 w-fit">
-        <Typography variant="h2" component="h2">
-          {t('menu.show.actions.title')}:
-        </Typography>
         <Box className="flex space-x-8">
-          <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
-            {t('menu.show.actions.edit')}
-          </Button>
-          {/* <Button variant="outlined" onClick={onEditTemplateClickHandler} disabled={loadingDelete}>
-            {t('menu.show.actions.editTemplate')}
-          </Button> */}
-          {/* <Button variant="outlined" onClick={onEditItemsClickHandler} disabled={loadingDelete}>
-            {t('menu.show.actions.editItems')}
-          </Button> */}
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={onDeleteClickHandler}
-            disabled={loadingDelete}
-          >
-            {t('menu.show.actions.delete')}
-          </Button>
-          {data?.menu.mustDeferChanges && (
-            <Button
-              variant="outlined"
-              color="warning"
-              onClick={onPendenciesClickHandler}
-              disabled={loadingDelete}
-            >
-              {t('menu.show.actions.pendencies')}
-            </Button>
-          )}
-          {/* </Box>
-        <Divider />
-        <Box className="flex justify-center space-x-8"> */}
-          <Button
-            variant="outlined"
-            color="warning"
-            onClick={onRestoreRevisionClickHandler}
-            disabled={loadingDelete}
-          >
-            {t('menu.show.actions.restoreRevision')}
-          </Button>
           <Button
             variant="outlined"
             color="success"
@@ -349,6 +309,9 @@ export const ShowMenu = () => {
             disabled={loadingDelete}
           >
             {t('menu.show.actions.publishRevision')}
+          </Button>
+          <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
+            {t('menu.show.actions.edit')}
           </Button>
         </Box>
       </Box>
