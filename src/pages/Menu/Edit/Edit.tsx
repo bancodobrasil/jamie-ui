@@ -260,7 +260,7 @@ export const EditMenu = () => {
           </Box>
         </Box>
       </Box>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%' }} className="flex flex-1 flex-col">
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={onTabChange} aria-label="Menu tabs">
@@ -301,7 +301,7 @@ export const EditMenu = () => {
               action={FormAction.UPDATE}
             />
           </TabPanel>
-          <TabPanel value={TAB_ITEMS} sx={{ p: '0px' }}>
+          <TabPanel value={TAB_ITEMS} sx={{ p: '0px', height: '100%' }}>
             <ItemsPreview />
           </TabPanel>
           <TabPanel value={TAB_ATTRIBUTES} sx={{ p: '0px' }}>
