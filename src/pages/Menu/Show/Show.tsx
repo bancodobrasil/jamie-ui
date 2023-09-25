@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
@@ -192,9 +193,10 @@ export const ShowMenu = () => {
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '22.3rem' }}>
+        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23rem' }}>
+          <ContentCopyIcon sx={{ color: '#022831' }} />
           UUID do Menu
-          <Box sx={{ color: '#111214' }}>
+          <Box sx={{ color: '#111214', paddingLeft: '1.5rem' }}>
             <b>{data.menu.uuid}</b>
           </Box>
         </Box>
