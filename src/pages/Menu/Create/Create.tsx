@@ -62,21 +62,23 @@ export const CreateMenu = () => {
   };
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', paddingLeft: '2rem' }}>
-      <Helmet>
-        <title>{t('menu.create.title')}</title>
-      </Helmet>
-      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
-        <AppBreadcrumbs
-          items={[
-            { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-            { label: t('menu.create.title') },
-          ]}
-          onBack={onBackClickHandler}
-        />
-        <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.create.title')} />
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ paddingLeft: '2rem' }}>
+        <Helmet>
+          <title>{t('menu.create.title')}</title>
+        </Helmet>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
+          <AppBreadcrumbs
+            items={[
+              { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+              { label: t('menu.create.title') },
+            ]}
+            onBack={onBackClickHandler}
+          />
+          <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.create.title')} />
+        </Box>
       </Box>
-      <Box sx={{ backgroundColor: 'green' }}>
+      <Box>
         <FormBasicInfo
           name={name}
           setName={setName}
@@ -94,6 +96,7 @@ export const CreateMenu = () => {
           action={FormAction.CREATE}
         />
       </Box>
+      <Box sx={{ width: '100%', backgroundColor: '#F4F5F7', height: '100%' }} />
     </Box>
   );
 };
