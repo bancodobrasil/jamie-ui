@@ -201,6 +201,7 @@
     "fields": {
       "uuid": "UUID",
       "menu_uuid": "UUID do menu",
+      "copy_menu_uuid": "Pronto! O UUID do menu foi copiado.",
       "name": "Nome",
       "belowNameField":"Esse nome só aparecerá no Jamie",
       "mustDeferChanges": "Aprovação obrigatória",

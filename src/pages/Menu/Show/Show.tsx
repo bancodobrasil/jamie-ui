@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Alert, Box, Button, Divider, Snackbar, Typography } from '@mui/material';
+import { Alert, Box, Button, Divider, Snackbar, Tab, Tabs, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -256,7 +256,7 @@ export const ShowMenu = () => {
         </Box>
         <Snackbar open={isSnackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
           <Alert elevation={6} variant="filled" severity="success" onClose={handleSnackbarClose}>
-            Pronto! O UUID do menu foi copiado.
+            {t('menu.fields.copy_menu_uuid')}
           </Alert>
         </Snackbar>
         <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
@@ -266,8 +266,16 @@ export const ShowMenu = () => {
           </Box>
         </Box>
       </Box>
-      <Divider />
-
+      {/* Tabs  ( published version and draft menu) */}
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"> */}
+          <Tabs>
+            <Tab label={t('menu.fields.publishedRevision')} />
+            <Tab label={t('menu.fields.publishedRevision')} />
+          </Tabs>
+        </Box>
+      </Box>
       {/*       
       <Box sx={{ mb: '1rem' }} className="space-y-4">
         <Box className="space-y-1">

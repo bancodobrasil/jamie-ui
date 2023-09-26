@@ -201,6 +201,7 @@
     "fields": {
       "uuid": "UUID",
       "menu_uuid": "Menu UUID",
+      "copy_menu_uuid": "Ready! The menu UUID has been copied.",
       "name": "Name",
       "belowNameField":"This name will only appear for Jamie",
       "mustDeferChanges": "Mandatory approval",
