@@ -29,7 +29,6 @@ export const ShowMenu = () => {
     navigate('/');
   };
 
-  // const [isCopied, setIsCopied] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
   const handleCopyClick = () => {
