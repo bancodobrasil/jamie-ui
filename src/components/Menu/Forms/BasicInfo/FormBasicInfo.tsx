@@ -138,9 +138,22 @@ export const FormBasicInfo = ({
 
   // Draw the menu
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <Form
+      onSubmit={handleFormSubmit}
+      sx={{
+        flex: '0 1 auto',
+        paddingLeft: '2rem',
+      }}
+    >
       {action === FormAction.UPDATE && (
-        <Box sx={{ flex: '0 1 auto', flexDirection: 'column', mb: '1rem', height: '4rem' }}>
+        <Box
+          sx={{
+            flex: '0 1 auto',
+            flexDirection: 'column',
+            mb: '1rem',
+            height: '4rem',
+          }}
+        >
           <TextField
             id="uuid"
             label={t('menu.of', { field: 'uuid' })}
