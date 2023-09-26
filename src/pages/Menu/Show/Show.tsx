@@ -307,7 +307,7 @@ export const ShowMenu = () => {
       </Box>
       {/* Tabs  ( published version and draft menu) */}
       <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: '#B4B9C1', top: '15.25rem' }}>
+        <Box sx={{ borderBottom: 1, borderColor: '#B4B9C1', top: '15.25rem', marginTop: '1.5rem' }}>
           <Tabs
             value={value}
             onChange={handleChange}
