@@ -245,6 +245,7 @@
       },
       "currentRevision": "Current Version",
       "publishedRevision": "Published Version",
+      "drawMenu": "Draw Menu",
       "pendency": {
         "title_one": "Pendency",
         "title_other": "Pendencies",

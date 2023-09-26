@@ -268,11 +268,11 @@ export const ShowMenu = () => {
       </Box>
       {/* Tabs  ( published version and draft menu) */}
       <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, borderColor: '#B4B9C1', top: '15.25rem' }}>
           {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"> */}
           <Tabs>
             <Tab label={t('menu.fields.publishedRevision')} />
-            <Tab label={t('menu.fields.publishedRevision')} />
+            <Tab label={t('menu.fields.drawMenu')} />
           </Tabs>
         </Box>
       </Box>
