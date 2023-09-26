@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, Button, Divider, Typography } from '@mui/material';
+import { Alert, Box, Button, Divider, Snackbar, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -29,9 +29,23 @@ export const ShowMenu = () => {
     navigate('/');
   };
 
-  const onBackButtonHandler = () => {
-    navigate('../edit');
+  // const [isCopied, setIsCopied] = useState(false);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+
+  const handleCopyClick = () => {
+    setIsCopied(true);
+    setIsSnackbarOpen(true);
   };
+  const handleSnackbarClose = reason => {
+    if (reason) {
+      return;
+    }
+    setIsSnackbarOpen(false);
+  };
+
+  // const onBackButtonHandler = () => {
+  //   navigate('../edit');
+  // };
   const [isCopied, setIsCopied] = useState(false);
   const { dispatch } = React.useContext(NotificationContext);
 
@@ -51,57 +65,44 @@ export const ShowMenu = () => {
     navigate('edit');
   };
 
-  const onEditTemplateClickHandler = () => {
-    navigate('editTemplate');
-  };
+  // const onEditTemplateClickHandler = () => {
+  //   navigate('editTemplate');
+  // };
 
-  const onEditItemsClickHandler = () => {
-    navigate('items');
-  };
+  // const onEditItemsClickHandler = () => {
+  //   navigate('items');
+  // };
 
-  const onDeleteClickHandler = () => {
-    // eslint-disable-next-line no-restricted-globals, no-alert
-    const confirmed = confirm(t('menu.show.messages.confirmDelete'));
-    if (confirmed) {
-      removeMenu({
-        variables: { id: Number(id) },
-        onCompleted: data => {
-          dispatch({
-            type: ActionTypes.OPEN_NOTIFICATION,
-            message: `${t('notification.deleteSuccess', {
-              resource: t('menu.title', { count: 1 }),
-              context: 'male',
-            })}!`,
-          });
-          navigate('/');
-        },
-        onError: error => {
-          openDefaultErrorNotification(error, dispatch);
-        },
-      });
-    }
-  };
+  // const onDeleteClickHandler = () => {
+  //   // eslint-disable-next-line no-restricted-globals, no-alert
+  //   const confirmed = confirm(t('menu.show.messages.confirmDelete'));
+  //   if (confirmed) {
+  //     removeMenu({
+  //       variables: { id: Number(id) },
+  //       onCompleted: data => {
+  //         dispatch({
+  //           type: ActionTypes.OPEN_NOTIFICATION,
+  //           message: `${t('notification.deleteSuccess', {
+  //             resource: t('menu.title', { count: 1 }),
+  //             context: 'male',
+  //           })}!`,
+  //         });
+  //         navigate('/');
+  //       },
+  //       onError: error => {
+  //         openDefaultErrorNotification(error, dispatch);
+  //       },
+  //     });
+  //   }
+  // };
 
-  const handleCopyClick = () => {
-    // Copie o conteúdo para a área de transferência
-    navigator.clipboard.writeText(data.menu.uuid);
+  // const onPendenciesClickHandler = () => {
+  //   navigate('pendencies');
+  // };
 
-    // Defina o estado para mostrar uma mensagem de sucesso
-    setIsCopied(true);
-
-    // Defina um timeout para limpar a mensagem após alguns segundos
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 3000);
-  };
-
-  const onPendenciesClickHandler = () => {
-    navigate('pendencies');
-  };
-
-  const onRestoreRevisionClickHandler = () => {
-    navigate('restoreVersion');
-  };
+  // const onRestoreRevisionClickHandler = () => {
+  //   navigate('restoreVersion');
+  // };
 
   const onCreateRevisionClickHandler = () => {
     navigate('closeVersion');
@@ -227,6 +228,7 @@ export const ShowMenu = () => {
       </Box>
       {/* details about menu */}
       <Box className="flex flex-row space-x-1  my-4" sx={{ justifyContent: 'flex-start' }}>
+        {/* last version */}
         <Box sx={{ marginRight: '4rem', color: '#6C7077' }}>
           {t('menu.fields.publishedRevision')}
           <Box>
@@ -235,22 +237,25 @@ export const ShowMenu = () => {
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '40rem' }}>
+        {/* UUID */}
+        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23.3rem' }}>
           <ContentCopyIcon sx={{ color: '#022831' }} onClick={handleCopyClick} />
           {t('menu.fields.menu_uuid')}
           <Box
             sx={{
               color: '#111214',
-              // fontSize: '16px',
-              // lineHeight: '18px',
-              // letterSpacing: '0.5%',
               fontWeight: '500',
+              paddingLeft: '1.5rem',
             }}
           >
             <b>{data.menu.uuid}</b>
-            {isCopied ? <span>Pronto! O UUID do menu foi copiado.</span> : <b>{data.menu.uuid}</b>}
           </Box>
         </Box>
+        <Snackbar open={isSnackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+          <Alert elevation={6} variant="filled" severity="success" onClose={handleSnackbarClose}>
+            Pronto! O UUID do menu foi copiado.
+          </Alert>
+        </Snackbar>
         <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
           {t('menu.fields.mustDeferChanges')}
           <Box sx={{ color: '#111214' }}>
@@ -258,6 +263,7 @@ export const ShowMenu = () => {
           </Box>
         </Box>
       </Box>
+      <Divider />
 
       {/*       
       <Box sx={{ mb: '1rem' }} className="space-y-4">
