@@ -269,7 +269,7 @@ export const ShowMenu = () => {
         </Box>
       </Box>
       {/* details about menu */}
-      <Box className="flex flex-row space-x-1  my-4" sx={{ justifyContent: 'flex-start' }}>
+      <Box className="flex flex-row space-x-1" sx={{ justifyContent: 'flex-start' }}>
         {/* last version */}
         <Box sx={{ marginRight: '4rem', color: '#6C7077' }}>
           {t('menu.fields.publishedRevision')}
@@ -288,6 +288,7 @@ export const ShowMenu = () => {
               color: '#111214',
               fontWeight: '500',
               paddingLeft: '1.5rem',
+              marginTop: '-5px',
             }}
           >
             <b>{data.menu.uuid}</b>
@@ -298,6 +299,7 @@ export const ShowMenu = () => {
             {t('menu.fields.copy_menu_uuid')}
           </Alert>
         </Snackbar>
+        {/* Defer changes */}
         <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
           {t('menu.fields.mustDeferChanges')}
           <Box sx={{ color: '#111214' }}>
