@@ -290,7 +290,7 @@ export const EditMenu = () => {
               />
             </TabList>
           </Box>
-          <TabPanel value={TAB_BASIC_INFO} sx={{ p: '0px' }}>
+          <TabPanel value={TAB_BASIC_INFO} sx={{ p: '0px', backgroundColor: '#F4F5F7' }}>
             <FormBasicInfo
               uuid={uuid}
               name={name}

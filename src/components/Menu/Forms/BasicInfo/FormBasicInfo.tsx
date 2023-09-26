@@ -138,10 +138,7 @@ export const FormBasicInfo = ({
 
   // Draw the menu
   return (
-    <Form
-      onSubmit={handleFormSubmit}
-      sx={{ paddingLeft: '2rem', paddingRight: '2rem', backgroundColor: '#F4F5F7' }}
-    >
+    <Form onSubmit={handleFormSubmit} sx={{ paddingLeft: '2rem', paddingRight: '2rem' }}>
       {action === FormAction.UPDATE && (
         <Box
           sx={{

@@ -96,7 +96,6 @@ export const CreateMenu = () => {
           action={FormAction.CREATE}
         />
       </Box>
-      <Box sx={{ width: '100%', backgroundColor: '#F4F5F7', height: '100%' }} />
     </Box>
   );
 };
