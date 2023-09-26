@@ -76,22 +76,24 @@ export const CreateMenu = () => {
         />
         <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.create.title')} />
       </Box>
-      <FormBasicInfo
-        name={name}
-        setName={setName}
-        nameError={nameError}
-        setNameError={setNameError}
-        mustDeferChanges={mustDeferChanges}
-        setMustDeferChanges={setMustDeferChanges}
-        hasConditions={hasConditions}
-        setHasConditions={setHasConditions}
-        parameters={parameters}
-        setParameters={setParameters}
-        loadingSubmit={loadingSubmit}
-        onSubmit={onSubmit}
-        onBack={onBackClickHandler}
-        action={FormAction.CREATE}
-      />
+      <Box sx={{ backgroundColor: 'green' }}>
+        <FormBasicInfo
+          name={name}
+          setName={setName}
+          nameError={nameError}
+          setNameError={setNameError}
+          mustDeferChanges={mustDeferChanges}
+          setMustDeferChanges={setMustDeferChanges}
+          hasConditions={hasConditions}
+          setHasConditions={setHasConditions}
+          parameters={parameters}
+          setParameters={setParameters}
+          loadingSubmit={loadingSubmit}
+          onSubmit={onSubmit}
+          onBack={onBackClickHandler}
+          action={FormAction.CREATE}
+        />
+      </Box>
     </Box>
   );
 };

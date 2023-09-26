@@ -327,6 +327,7 @@ export const EditMenu = () => {
           </TabPanel>
         </TabContext>
       </Box>
+      <Box sx={{ backgroundColor: '#F4F5F7', height: '100%' }} />
     </Box>
   );
 };

@@ -156,7 +156,14 @@ export const FormBasicInfo = ({
             label={t('menu.of', { field: 'uuid' })}
             disabled
             value={uuid}
-            sx={{ width: '33.2rem', backgroundColor: 'white', borderColor: 'black' }}
+            sx={{
+              width: '33.2rem',
+              backgroundColor: 'white',
+              borderColor: 'black',
+              '& .MuiInputLabel-root': {
+                color: 'black',
+              },
+            }}
           />
         </Box>
       )}
