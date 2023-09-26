@@ -35,6 +35,10 @@ export const ShowMenu = () => {
   const handleCopyClick = () => {
     setIsCopied(true);
     setIsSnackbarOpen(true);
+    navigator.clipboard.writeText(data.menu.uuid);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 3000);
   };
   const handleSnackbarClose = reason => {
     if (reason) {
