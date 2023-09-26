@@ -257,7 +257,7 @@ const PublishRevision = () => {
   if (loading) return <Loading />;
 
   return (
-    <Box>
+    <Box sx={{ paddingLeft: '2rem' }}>
       <Helmet>
         <title>{t('menuRevision.publish.title')}</title>
       </Helmet>

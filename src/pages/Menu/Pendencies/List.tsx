@@ -177,7 +177,7 @@ const ListPendencies = () => {
   if (getMenuQuery.loading || listPendenciesQuery.loading) return <Loading />;
 
   return (
-    <Box>
+    <Box sx={{ paddingLeft: '2rem' }}>
       <Helmet>
         <title>{t('menu.pendencies.title')}</title>
       </Helmet>

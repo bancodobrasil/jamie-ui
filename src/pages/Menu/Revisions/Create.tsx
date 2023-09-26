@@ -216,7 +216,7 @@ const CreateRevision = () => {
   if (loading) return <Loading />;
 
   return (
-    <Box>
+    <Box sx={{ paddingLeft: '2rem' }}>
       <Helmet>
         <title>{t('menuRevision.create.title')}</title>
       </Helmet>
