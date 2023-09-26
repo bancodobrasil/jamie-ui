@@ -338,7 +338,7 @@
         "delete": "Deletar",
         "pendencies": "Pendências",
         "createRevision": "Fechar Versão",
-        "publishRevision": "Publicar Versão",
+        "publishRevision": "Publicar",
         "restoreRevision": "Restaurar Versão"
       },
       "messages": {

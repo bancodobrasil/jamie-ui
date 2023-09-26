@@ -18,12 +18,51 @@ import {
 import { JAMIE_FEATURE_CONDITIONS } from '../../../constants';
 import PageTitle from '../../../components/PageTitle';
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
 export const ShowMenu = () => {
   const { t, i18n } = useTranslation();
 
   const navigate = useNavigate();
   const { id } = useParams();
   const { state: locationState } = useLocation();
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const onBackClickHandler = () => {
     navigate('/');
@@ -269,12 +308,23 @@ export const ShowMenu = () => {
       {/* Tabs  ( published version and draft menu) */}
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: '#B4B9C1', top: '15.25rem' }}>
-          {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"> */}
-          <Tabs>
-            <Tab label={t('menu.fields.publishedRevision')} />
-            <Tab label={t('menu.fields.drawMenu')} />
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            // aria-label="basic tabs example"
+            // textColor="link"
+            // indicatorColor="link"
+          >
+            <Tab label={t('menu.fields.publishedRevision')} {...a11yProps(0)} />
+            <Tab label={t('menu.fields.drawMenu')} {...a11yProps(1)} />
           </Tabs>
         </Box>
+        <CustomTabPanel value={value} index={0}>
+          {t('menuItem.title_other')}
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          Item Two
+        </CustomTabPanel>
       </Box>
       {/*       
       <Box sx={{ mb: '1rem' }} className="space-y-4">
