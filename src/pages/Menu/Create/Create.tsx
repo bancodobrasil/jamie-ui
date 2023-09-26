@@ -62,7 +62,7 @@ export const CreateMenu = () => {
   };
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', paddingLeft: '2rem' }}>
       <Helmet>
         <title>{t('menu.create.title')}</title>
       </Helmet>
