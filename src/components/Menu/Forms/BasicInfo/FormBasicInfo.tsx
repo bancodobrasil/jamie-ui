@@ -153,16 +153,13 @@ export const FormBasicInfo = ({
         >
           <TextField
             id="uuid"
-            label={t('menu.of', { field: 'uuid' })}
+            label={<span style={{ color: 'black' }}>{t('menu.of', { field: 'uuid' })}</span>}
             disabled
             value={uuid}
             sx={{
               width: '33.2rem',
               backgroundColor: 'white',
               borderColor: 'black',
-              '& .MuiInputLabel-root': {
-                color: 'black',
-              },
             }}
           />
         </Box>
