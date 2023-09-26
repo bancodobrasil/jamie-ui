@@ -138,7 +138,10 @@ export const FormBasicInfo = ({
 
   // Draw the menu
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <Form
+      onSubmit={handleFormSubmit}
+      sx={{ paddingLeft: '2rem', paddingRight: '2rem', backgroundColor: '#F4F5F7' }}
+    >
       {action === FormAction.UPDATE && (
         <Box
           sx={{
@@ -153,7 +156,7 @@ export const FormBasicInfo = ({
             label={t('menu.of', { field: 'uuid' })}
             disabled
             value={uuid}
-            sx={{ width: '33.2rem' }}
+            sx={{ width: '33.2rem', backgroundColor: 'white', borderColor: 'black' }}
           />
         </Box>
       )}
@@ -181,7 +184,7 @@ export const FormBasicInfo = ({
           }}
           error={!!nameError}
           helperText={nameErrorOrLabel()}
-          sx={{ width: '33.2rem', height: '3rem' }}
+          sx={{ width: '33.2rem', height: '3rem', backgroundColor: 'white' }}
         />
         <Box sx={{ mt: '2.5rem', width: '28.25rem', height: '2.63rem' }}>
           {renderHasConditionCheckbox()}
