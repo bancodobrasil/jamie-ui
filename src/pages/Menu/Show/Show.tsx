@@ -17,6 +17,7 @@ import {
 } from '../../../contexts/NotificationContext';
 import { JAMIE_FEATURE_CONDITIONS } from '../../../constants';
 import PageTitle from '../../../components/PageTitle';
+import MenuIndex from '../../../components/MenuIndex';
 
 interface TabPanelProps {
   children?: React.ReactNode;
