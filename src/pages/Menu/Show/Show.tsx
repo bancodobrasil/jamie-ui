@@ -1,10 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, Button, Divider, Typography } from '@mui/material';
+import { Alert, Box, Button, Divider, Snackbar, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import MenuService from '../../../api/services/MenuService';
 import { AppBreadcrumbs } from '../../../components/AppBreadcrumbs';
 import DefaultErrorPage from '../../../components/DefaultErrorPage';
@@ -16,6 +17,7 @@ import {
 } from '../../../contexts/NotificationContext';
 import { JAMIE_FEATURE_CONDITIONS } from '../../../constants';
 import PageTitle from '../../../components/PageTitle';
+import MenuIndex from '../../../components/MenuIndex';
 
 export const ShowMenu = () => {
   const { t, i18n } = useTranslation();
@@ -241,6 +243,51 @@ export const ShowMenu = () => {
           </Typography>
         </Box>
         {renderHasConditions()}
+      </Box>
+      {/* details about menu */}
+      <MenuIndex
+        MenuData={data}
+        textVersion={t('menu.fields.publishedRevision')}
+        textUUID={t('menu.fields.menu_uuid')}
+        textMustDeferChanges={t('menu.fields.mustDeferChanges')}
+      />
+      <Box className="flex flex-row space-x-1" sx={{ justifyContent: 'flex-start' }}>
+        {/* last version */}
+        <Box sx={{ marginRight: '4rem', color: '#6C7077' }}>
+          {t('menu.fields.publishedRevision')}
+          <Box>
+            <Typography variant="body1" component="p" sx={{ color: '#111214', width: '7.2rem' }}>
+              <b>{data?.menu.publishedRevision?.id || '-'}</b>
+            </Typography>
+          </Box>
+        </Box>
+        {/* UUID */}
+        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23.3rem' }}>
+          <ContentCopyIcon sx={{ color: '#022831' }} />
+          {t('menu.fields.menu_uuid')}
+          <Box
+            sx={{
+              color: '#111214',
+              fontWeight: '500',
+              paddingLeft: '1.5rem',
+              marginTop: '-5px',
+            }}
+          >
+            <b>{data.menu.uuid}</b>
+          </Box>
+        </Box>
+        <Snackbar open={isSnackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+          <Alert elevation={6} variant="filled" severity="success" onClose={handleSnackbarClose}>
+            {t('menu.fields.copy_menu_uuid')}
+          </Alert>
+        </Snackbar>
+        {/* Defer changes */}
+        <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
+          {t('menu.fields.mustDeferChanges')}
+          <Box sx={{ color: '#111214' }}>
+            <b>{data?.menu.mustDeferChanges ? t('common.yes') : t('common.no')}</b>
+          </Box>
+        </Box>
       </Box>
       <Divider />
       {/* <Typography variant="h3" component="h3" sx={{ py: '1rem' }}>
