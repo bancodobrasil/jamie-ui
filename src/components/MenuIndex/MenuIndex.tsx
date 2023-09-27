@@ -2,7 +2,7 @@ import { Alert, Box, Snackbar, Typography } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import React from 'react';
 
-const MenuIndex = ({ MenuData, textVersion, textUUID, textMustDeferChanges }) => (
+const MenuIndex = ({ MenuData, textVersion, textUUID, textMustDeferChanges, MustDeferChanges }) => (
   <Box
     className="flex flex-row space-x-1 items-center"
     sx={{ minWidth: '10rem', height: '1.5rem', marginTop: '2.1rem', marginBottom: '1.4rem' }}
@@ -33,11 +33,16 @@ const MenuIndex = ({ MenuData, textVersion, textUUID, textMustDeferChanges }) =>
           <b>{MenuData.menu.uuid}</b>
         </Box>
       </Box>
-      <Snackbar open={isSnackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+      {/* <Snackbar open={isSnackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
         <Alert elevation={6} variant="filled" severity="success" onClose={handleSnackbarClose}>
-          tete
+          {t('menu.fields.copy_menu_uuid')}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
+      {/* Defer changes */}
+      <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
+        {textMustDeferChanges}
+        <Box sx={{ color: '#111214' }}>{MustDeferChanges}</Box>
+      </Box>
     </Box>
   </Box>
 );
