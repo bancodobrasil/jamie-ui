@@ -269,45 +269,16 @@ export const ShowMenu = () => {
           </Box>
         </Box>
       </Box>
-      {/* details about menu */}
-      <Box className="flex flex-row space-x-1" sx={{ justifyContent: 'flex-start' }}>
-        {/* last version */}
-        <Box sx={{ marginRight: '4rem', color: '#6C7077' }}>
-          {t('menu.fields.publishedRevision')}
-          <Box>
-            <Typography variant="body1" component="p" sx={{ color: '#111214', width: '7.2rem' }}>
-              <b>{data?.menu.publishedRevision?.id || '-'}</b>
-            </Typography>
-          </Box>
-        </Box>
-        {/* UUID */}
-        <Box sx={{ paddingRight: '4rem', color: '#6C7077', height: '2.4rem', width: '23.3rem' }}>
-          <ContentCopyIcon sx={{ color: '#022831' }} onClick={handleCopyClick} />
-          {t('menu.fields.menu_uuid')}
-          <Box
-            sx={{
-              color: '#111214',
-              fontWeight: '500',
-              paddingLeft: '1.5rem',
-              marginTop: '-5px',
-            }}
-          >
-            <b>{data.menu.uuid}</b>
-          </Box>
-        </Box>
-        <Snackbar open={isSnackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
-          <Alert elevation={6} variant="filled" severity="success" onClose={handleSnackbarClose}>
-            {t('menu.fields.copy_menu_uuid')}
-          </Alert>
-        </Snackbar>
-        {/* Defer changes */}
-        <Box sx={{ color: '#6C7077', height: '2.4rem', width: '9.5rem' }}>
-          {t('menu.fields.mustDeferChanges')}
-          <Box sx={{ color: '#111214' }}>
-            <b>{data?.menu.mustDeferChanges ? t('common.yes') : t('common.no')}</b>
-          </Box>
-        </Box>
-      </Box>
+      {/* Info Menu (published version, uuid, Mandatory approval ) */}
+      <MenuIndex
+        MenuData={data}
+        textVersion={t('menu.fields.publishedRevision')}
+        infoVersion={<b>{data?.menu.publishedRevision?.id || '-'}</b>}
+        textUUID={t('menu.fields.menu_uuid')}
+        textMustDeferChanges={t('menu.fields.mustDeferChanges')}
+        MustDeferChanges={<b>{data?.menu.mustDeferChanges ? t('common.yes') : t('common.no')}</b>}
+        textAlert={t('menu.fields.copy_menu_uuid')}
+      />
       {/* Tabs  ( published version and draft menu) */}
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: '#B4B9C1', top: '15.25rem', marginTop: '1.5rem' }}>

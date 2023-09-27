@@ -9,6 +9,7 @@ const MenuIndex = ({
   textMustDeferChanges,
   MustDeferChanges,
   textAlert,
+  infoVersion,
 }) => {
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -41,7 +42,7 @@ const MenuIndex = ({
           <Box>
             {textVersion}
             <Typography variant="body1" component="p" sx={{ color: '#111214', width: '7.2rem' }}>
-              <b>{MenuData?.menu.publishedRevision?.id || '-'}</b>
+              {infoVersion}
             </Typography>
           </Box>
         </Box>
