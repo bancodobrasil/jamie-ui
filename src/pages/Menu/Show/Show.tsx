@@ -237,6 +237,7 @@ export const ShowMenu = () => {
           onBack={onBackClickHandler}
         />
         <Box className="flex flex-row space-x-1 items-center">
+          {/* Page title */}
           <PageTitle onClick={onBackClickHandler} PageTitle={data?.menu.name} />
           <Box
             className="space-x-4"
@@ -306,8 +307,8 @@ export const ShowMenu = () => {
             // textColor="link"
             // indicatorColor="link"
           >
-            <Tab label={t('menu.fields.publishedRevision')} {...a11yProps(0)} />
-            <Tab label={t('menu.fields.drawMenu')} {...a11yProps(1)} />
+            <Tab label={t('menu.fields.drawMenu')} {...a11yProps(0)} />
+            <Tab label={t('menu.fields.publishedRevision')} {...a11yProps(1)} />
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
