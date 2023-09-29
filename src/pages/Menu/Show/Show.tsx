@@ -253,7 +253,7 @@ export const ShowMenu = () => {
               onClick={onCreateRevisionClickHandler}
               disabled={loadingDelete}
             >
-              {t('menu.show.actions.createRevision')}
+              <b>{data?.menu.mustDeferChanges ? 'teste' : t('menu.show.actions.createRevision')}</b>
             </Button>
             <Button
               sx={{ borderColor: '#056571' }}
@@ -261,7 +261,9 @@ export const ShowMenu = () => {
               onClick={onPublishRevisionClickHandler}
               disabled={loadingDelete}
             >
-              {t('menu.show.actions.publishRevision')}
+              <b>
+                {data?.menu.mustDeferChanges ? 'teste' : t('menu.show.actions.publishRevision')}
+              </b>
             </Button>
             <Button variant="contained" onClick={onEditClickHandler} disabled={loadingDelete}>
               {t('menu.show.actions.edit')}
