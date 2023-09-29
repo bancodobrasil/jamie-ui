@@ -63,35 +63,39 @@ export const CreateMenu = () => {
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Helmet>
-        <title>{t('menu.create.title')}</title>
-      </Helmet>
-      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
-        <AppBreadcrumbs
-          items={[
-            { label: t('menu.title', { count: 2 }), navigateTo: '/' },
-            { label: t('menu.create.title') },
-          ]}
-          onBack={onBackClickHandler}
-        />
-        <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.create.title')} />
+      <Box sx={{ paddingLeft: '2rem' }}>
+        <Helmet>
+          <title>{t('menu.create.title')}</title>
+        </Helmet>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
+          <AppBreadcrumbs
+            items={[
+              { label: t('menu.title', { count: 2 }), navigateTo: '/' },
+              { label: t('menu.create.title') },
+            ]}
+            onBack={onBackClickHandler}
+          />
+          <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.create.title')} />
+        </Box>
       </Box>
-      <FormBasicInfo
-        name={name}
-        setName={setName}
-        nameError={nameError}
-        setNameError={setNameError}
-        mustDeferChanges={mustDeferChanges}
-        setMustDeferChanges={setMustDeferChanges}
-        hasConditions={hasConditions}
-        setHasConditions={setHasConditions}
-        parameters={parameters}
-        setParameters={setParameters}
-        loadingSubmit={loadingSubmit}
-        onSubmit={onSubmit}
-        onBack={onBackClickHandler}
-        action={FormAction.CREATE}
-      />
+      <Box>
+        <FormBasicInfo
+          name={name}
+          setName={setName}
+          nameError={nameError}
+          setNameError={setNameError}
+          mustDeferChanges={mustDeferChanges}
+          setMustDeferChanges={setMustDeferChanges}
+          hasConditions={hasConditions}
+          setHasConditions={setHasConditions}
+          parameters={parameters}
+          setParameters={setParameters}
+          loadingSubmit={loadingSubmit}
+          onSubmit={onSubmit}
+          onBack={onBackClickHandler}
+          action={FormAction.CREATE}
+        />
+      </Box>
     </Box>
   );
 };

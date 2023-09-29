@@ -243,7 +243,7 @@ const RestoreRevision = () => {
   if (loading) return <Loading />;
 
   return (
-    <Box>
+    <Box sx={{ px: '2rem' }}>
       <Helmet>
         <title>{t('menuRevision.restore.title')}</title>
       </Helmet>

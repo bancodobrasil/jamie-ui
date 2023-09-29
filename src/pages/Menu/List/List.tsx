@@ -182,7 +182,7 @@ export const ListMenu = () => {
     );
 
   return (
-    <>
+    <Box sx={{ paddingLeft: '2rem', paddingRight: '2rem' }}>
       <Helmet>
         <title>{t('menu.list.title')}</title>
       </Helmet>
@@ -245,6 +245,6 @@ export const ListMenu = () => {
           />
         </Paper>
       </Box>
-    </>
+    </Box>
   );
 };

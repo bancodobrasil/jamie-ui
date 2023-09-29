@@ -32,8 +32,6 @@ const Layout = ({ children }: Props) => {
             width: '100%',
             flex: 1,
             boxSizing: 'border-box',
-            paddingLeft: '32px',
-            paddingRight: '32px',
           }}
         >
           {children}

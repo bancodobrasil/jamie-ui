@@ -166,7 +166,7 @@ export const ShowMenu = () => {
     );
 
   return (
-    <Box>
+    <Box sx={{ paddingLeft: '2rem' }}>
       <Helmet>
         <title>{data?.menu.name}</title>
       </Helmet>

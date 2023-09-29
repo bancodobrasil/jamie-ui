@@ -390,7 +390,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
     ));
 
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <Form sx={{ paddingLeft: '2rem' }} onSubmit={handleFormSubmit}>
       <Box
         sx={{
           display: 'flex',

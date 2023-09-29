@@ -275,7 +275,7 @@ export const EditTemplateMenu = () => {
     );
 
   return (
-    <Box>
+    <Box sx={{ paddingLeft: '2rem', paddingRight: '2rem' }}>
       <Box
         sx={{
           width: '100%',
