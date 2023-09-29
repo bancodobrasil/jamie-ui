@@ -237,7 +237,7 @@ export const ShowMenu = () => {
           onBack={onBackClickHandler}
         />
         <Box className="flex flex-row space-x-1 items-center">
-          <PageTitle onClick={onBackClickHandler} PageTitle={t('menu.edit.title')} />
+          <PageTitle onClick={onBackClickHandler} PageTitle={data?.menu.name} />
           <Box
             className="space-x-4"
             sx={{
