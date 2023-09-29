@@ -338,7 +338,9 @@
         "delete": "Deletar",
         "pendencies": "Pendências",
         "createRevision": "Fechar Versão",
+        "createRevisionMandatoryApproval": "Solicitar Fechamento de Versão",
         "publishRevision": "Publicar",
+        "publishRevisionMandatoryApproval": "Solicitar Publicação de Versão",
         "restoreRevision": "Restaurar Versão"
       },
       "messages": {

@@ -337,7 +337,9 @@
         "delete": "Delete",
         "pendencies": "Pendencies",
         "createRevision": "Close Version",
+        "createRevisionMandatoryApproval": "Request version closure",
         "publishRevision": "Publish",
+        "publishRevisionMandatoryApproval": "Request Version Publishing",
         "restoreRevision": "Restore Version"
       },
       "messages": {
