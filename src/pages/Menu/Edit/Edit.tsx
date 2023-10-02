@@ -131,10 +131,13 @@ export const EditMenu = () => {
 
   const onSubmit = () => {
     setLoadingSubmit(true);
+    // TODO: check fix order
+    let previousOrder = 0;
     const meta = metaWithErrors
       .filter(m => !!m.action)
+      .sort(m => m.order)
       .map(m => {
-        const { errors, ...rest } = m;
+        const { errors, order, ...rest } = m;
         if (rest.defaultValue === '') {
           rest.defaultValue = null;
         }
@@ -147,7 +150,8 @@ export const EditMenu = () => {
             }
           });
         }
-        return rest;
+        previousOrder++;
+        return { ...rest, order: previousOrder };
       });
     const updatedName = name !== data.menu.name ? name : undefined;
     updateMenu({
@@ -163,6 +167,11 @@ export const EditMenu = () => {
             context: 'male',
           })}!`,
         });
+        const updatedMeta = metaWithErrors.map(m => {
+          m.action = undefined;
+          return m;
+        });
+        setMetaWithErrors(updatedMeta);
         navigate(`/menus/${data.updateMenu.id}/edit`, { state: { refetch: true } });
       },
       onError: error => {

@@ -58,6 +58,7 @@
     "edit": "Edit",
     "delete": "Delete",
     "save": "Save",
+    "save_editions": "Save Edits",
     "discard": "Discard"
   },
   "form": {
@@ -65,6 +66,8 @@
     "validation": {
       "min": "{{field}} must be at least {{min}} characters long.",
       "max": "{{field}} must have a maximum of {{max}} characters.",
+      "must_have_name": "The attribute must have a name.",
+      "must_have_defaulValue": "Mandatory attributes must have a default value.",
       "unique": "{{field}} must be unique.",
       "uniqueIndex": "{{field}} is already in use at index {{index}}."
     },
@@ -219,12 +222,22 @@
       "meta": {
         "title_one": "Metadata",
         "title_other": "Metadata",
+        "description": "The attributes will appear as form fields in the menu items tab and will not be visible to the end user.",
         "of": "Metadata's $t(menu.fields.meta.{{field}})",
         "add": "Add Metadata",
         "name": "Name",
         "required": "Required",
+        "without_attributes": "You haven't attributes yet.",
+        "without_attributes_description": "What you add here will appear as a new field in the menu items",
+        "description_required": "This attribute must be filled in for all items in this menu.",
+        "dialog_delete_attribute": "Do you confirm that you want to delete the attribute",
+        "dialog_delete_attribute_description": "This attribute may affect menu items. After deletion, this action cannot be undone.",
+        "dialog_delete_attribute_quit": "Cancel",
+        "dialog_delete_attribute_confirm": "Confirm and delete",
         "enabled": "Enabled",
         "defaultValue": "Default Value",
+        "default_value_true": "True",
+        "default_value_false": "False",
         "type": {
           "title_one": "Type",
           "title_other": "Types",

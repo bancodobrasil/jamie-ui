@@ -58,6 +58,7 @@
     "edit": "Editar",
     "delete": "Deletar",
     "save": "Salvar",
+    "save_editions": "Salvar Edições",
     "discard": "Descartar"
   },
   "form": {
@@ -65,6 +66,8 @@
     "validation": {
       "min": "{{field}} deve ter no mínimo {{min}} caracteres.",
       "max": "{{field}} deve ter no máximo {{max}} caracteres.",
+      "must_have_name": "O atributo deve ter um nome.",
+      "must_have_defaulValue": "Atributos obrigatórios precisam ter um valor padrão.",
       "unique": "{{field}} precisa ser único.",
       "uniqueIndex": "{{field}} já está em uso no índice {{index}}."
     },
@@ -224,8 +227,17 @@
         "add": "Adicionar Atributo",
         "name": "Nome",
         "required": "Obrigatório",
+        "without_attributes": "Você ainda não tem atributos.",
+        "without_attributes_description": "O que você adicionar aqui vai aparecer como um novo campo nos itens de menu",
+        "description_required": "Esse atributo deve ser preenchido em todos os itens desse menu.",
+        "dialog_delete_attribute": "Confirma que quer excluir o atributo",
+        "dialog_delete_attribute_description": "Esse atributo poderá afetar os itens do menu. Após excluir, essa ação não pode ser desfeita.",
+        "dialog_delete_attribute_quit": "Desistir",
+        "dialog_delete_attribute_confirm": "Confirmar e Excluir",
         "enabled": "Habilitado",
         "defaultValue": "Valor Padrão",
+        "default_value_true": "Verdadeiro",
+        "default_value_false": "Falso",
         "type": {
           "title_one": "Tipo",
           "title_other": "Tipos",
