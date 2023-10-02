@@ -138,15 +138,26 @@ export const FormBasicInfo = ({
 
   // Draw the menu
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <Form onSubmit={handleFormSubmit} sx={{ paddingLeft: '2rem', paddingRight: '2rem' }}>
       {action === FormAction.UPDATE && (
-        <Box sx={{ flex: '0 1 auto', flexDirection: 'column', mb: '1rem', height: '4rem' }}>
+        <Box
+          sx={{
+            flex: '0 1 auto',
+            flexDirection: 'column',
+            mb: '1rem',
+            height: '4rem',
+          }}
+        >
           <TextField
             id="uuid"
-            label={t('menu.of', { field: 'uuid' })}
+            label={<span style={{ color: 'black' }}>{t('menu.of', { field: 'uuid' })}</span>}
             disabled
             value={uuid}
-            sx={{ width: '33.2rem' }}
+            sx={{
+              width: '33.2rem',
+              backgroundColor: 'white',
+              borderColor: 'black',
+            }}
           />
         </Box>
       )}
@@ -174,7 +185,7 @@ export const FormBasicInfo = ({
           }}
           error={!!nameError}
           helperText={nameErrorOrLabel()}
-          sx={{ width: '33.2rem', height: '3rem' }}
+          sx={{ width: '33.2rem', height: '3rem', backgroundColor: 'white' }}
         />
         <Box sx={{ mt: '2.5rem', width: '28.25rem', height: '2.63rem' }}>
           {renderHasConditionCheckbox()}

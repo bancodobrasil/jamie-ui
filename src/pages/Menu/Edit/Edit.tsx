@@ -206,7 +206,15 @@ export const EditMenu = () => {
       <Helmet>
         <title>{t('menu.edit.title')}</title>
       </Helmet>
-      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          flex: '0 1 auto',
+          paddingLeft: '2rem',
+          paddingRight: '2rem',
+        }}
+      >
         <AppBreadcrumbs
           items={[
             { label: t('menu.title', { count: 2 }), navigateTo: '/' },
@@ -271,7 +279,7 @@ export const EditMenu = () => {
       </Box>
       <Box sx={{ width: '100%' }} className="flex flex-1 flex-col">
         <TabContext value={tab}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', paddingLeft: '2rem' }}>
             <TabList onChange={onTabChange} aria-label="Menu tabs">
               <Tab
                 data-testid="tab-basic-info"
@@ -291,7 +299,7 @@ export const EditMenu = () => {
               />
             </TabList>
           </Box>
-          <TabPanel value={TAB_BASIC_INFO} sx={{ p: '0px' }}>
+          <TabPanel value={TAB_BASIC_INFO} sx={{ p: '0px', backgroundColor: '#F4F5F7' }}>
             <FormBasicInfo
               uuid={uuid}
               name={name}
@@ -328,6 +336,7 @@ export const EditMenu = () => {
           </TabPanel>
         </TabContext>
       </Box>
+      <Box sx={{ backgroundColor: '#F4F5F7', height: '100%' }} />
     </Box>
   );
 };
