@@ -628,7 +628,7 @@ export function FormAttributes({ meta, setMeta, loadingSubmit, onSubmit, onBack,
 
   // Draw Attributes
   return (
-    <Box sx={{ backgroundColor: '#F4F5F7', height: '100%' }}>
+    <Box sx={{ backgroundColor: '#F4F5F7', height: '100%', px: '2rem' }}>
       {meta.length === 0 ? (
         <Box
           sx={{
