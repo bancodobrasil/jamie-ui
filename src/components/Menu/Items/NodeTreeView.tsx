@@ -172,12 +172,14 @@ const CustomTreeItem = ({
 
   return (
     <Box
-      sx={{
-        borderBottom: '3px solid green',
-        marginBottom: '10px',
-        borderLeft: '3px solid orange',
-        marginLeft: '10px',
-      }}
+      sx={
+        {
+          // borderBottom: '3px solid green',
+          // marginBottom: '10px',
+          // borderLeft: '3px solid orange',
+          // marginLeft: '10px',
+        }
+      }
     >
       <TreeItem
         ref={id === -1 ? insertingNodeRef : null}
@@ -185,6 +187,13 @@ const CustomTreeItem = ({
         onClick={onNodeClick}
         label={
           <Box className="flex items-center">
+            <Box sx={{ marginTop: '-6rem', position: 'column' }}>
+              {node.id === editingNode.id && (
+                <Box>
+                  <Button variant="contained">teste</Button>
+                </Box>
+              )}
+            </Box>
             <Box className="flex-1" sx={{ color, fontWeight }}>
               {label}
             </Box>
@@ -222,7 +231,13 @@ const CustomTreeItem = ({
                 <MenuItem onClick={handleDelete}>{t('buttons.delete')}</MenuItem>
               </MenuList>
             </Menu>
-            {node.id === editingNode.id && <Box> teste </Box>}
+            {/* <Box sx={{ marginTop: '-6rem', position: 'column' }}>
+              {node.id === editingNode.id && (
+                <Box>
+                  <Button>teste</Button>
+                </Box>
+              )}
+            </Box> */}
           </Box>
         }
         /* card border style */
@@ -243,6 +258,7 @@ const CustomTreeItem = ({
           },
           '& > .Mui-selected': {
             border: '2px solid #3354FD',
+            my: '3rem',
             backgroundColor: '#fff',
             '&:hover': {
               backgroundColor: 'rgba(0, 0, 0, 0.04)',
