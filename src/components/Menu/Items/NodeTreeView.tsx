@@ -273,30 +273,40 @@ const CustomTreeItem = ({
               </Box>
               <Box>
                 {node.id === editingNode.id && (
-                  <Box
-                    className="flex-1"
-                    sx={{ color, fontWeight, margin: 0, marginLeft: '-23.5rem' }}
-                  >
-                    {label}
-                  </Box>
-                )}
-              </Box>
-              <Box>
-                {node.id !== editingNode.id && (
-                  <Box>
-                    <Box className="flex-1" sx={{ color, fontWeight, margin: 0 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box
+                      className="flex-1"
+                      sx={{ color, fontWeight, margin: 0, marginLeft: '-23rem' }}
+                    >
                       {label}
                     </Box>
-                    {/* <IconButton
-                      sx={{ float: 'right', mr: 1, position: 'sticky' }}
+                    <IconButton
+                      sx={{ float: 'right', mr: 1, position: 'sticky', marginRight: '-8rem' }}
                       size="small"
                       onClick={handleClickContextMenu}
                     >
                       <MoreVertIcon />
-                    </IconButton> */}
+                    </IconButton>
                   </Box>
                 )}
               </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {node.id !== editingNode.id && (
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box className="flex-1" sx={{ color, fontWeight, margin: 0 }}>
+                      {label}
+                    </Box>
+                    <IconButton
+                      sx={{ float: 'right', mr: 1, position: 'sticky', marginRight: '-29rem' }}
+                      size="small"
+                      onClick={handleClickContextMenu}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </Box>
+                )}
+              </Box>
+
               {/* <Box className="flex-1" sx={{ color, fontWeight, margin: 0 }}>
                 {label}
               </Box>
