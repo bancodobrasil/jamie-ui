@@ -188,6 +188,7 @@ const CustomTreeItem = ({
           onClick={onNodeClick}
           label={
             <Box className="flex items-center">
+              {/* Top Button */}
               <Box sx={{ position: 'column', py: '1rem' }}>
                 {node.id === editingNode.id && (
                   <Box
@@ -270,38 +271,33 @@ const CustomTreeItem = ({
                   </Box>
                 )}
               </Box>
-              {/* <Box sx={{ marginBottom: '-6rem', position: 'column', py: '1rem' }}>
+              <Box>
                 {node.id === editingNode.id && (
-                  <Box>
-                    <Box
-                      className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border"
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                          cursor: 'pointer',
-                        },
-                        maxWidth: '540px',
-                        marginTop: '-1.5rem',
-                      }}
-                      onClick={handleInsert}
-                    >
-                      <IconPlus fill="#265EFD" className="mx-4" />
-                      <Typography
-                        sx={{
-                          flex: 1,
-                          position: 'relative',
-                          top: '-2px',
-                          color: '#265EFD',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {t('menu.preview.actions.insertRoot')}
-                      </Typography>
-                    </Box>
+                  <Box
+                    className="flex-1"
+                    sx={{ color, fontWeight, margin: 0, marginLeft: '-23.5rem' }}
+                  >
+                    {label}
                   </Box>
                 )}
-              </Box> */}
-              <Box className="flex-1" sx={{ color, fontWeight }}>
+              </Box>
+              <Box>
+                {node.id !== editingNode.id && (
+                  <Box>
+                    <Box className="flex-1" sx={{ color, fontWeight, margin: 0 }}>
+                      {label}
+                    </Box>
+                    {/* <IconButton
+                      sx={{ float: 'right', mr: 1, position: 'sticky' }}
+                      size="small"
+                      onClick={handleClickContextMenu}
+                    >
+                      <MoreVertIcon />
+                    </IconButton> */}
+                  </Box>
+                )}
+              </Box>
+              {/* <Box className="flex-1" sx={{ color, fontWeight, margin: 0 }}>
                 {label}
               </Box>
               <IconButton
@@ -310,7 +306,7 @@ const CustomTreeItem = ({
                 onClick={handleClickContextMenu}
               >
                 <MoreVertIcon />
-              </IconButton>
+              </IconButton> */}
               {/* More vert icon menu with options (add item, edit template, delete) */}
               <Menu
                 id="simple-menu"
