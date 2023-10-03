@@ -190,7 +190,15 @@ const CustomTreeItem = ({
             <Box className="flex items-center">
               <Box sx={{ marginTop: '-6rem', position: 'column', py: '1rem' }}>
                 {node.id === editingNode.id && (
-                  <Box sx={{ marginLeft: '-3rem' }}>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      marginLeft: '-3rem',
+                      marginTop: '-2rem',
+                      // maxWidth: '34rem',
+                      marginRight: '-8rem',
+                    }}
+                  >
                     <Box
                       className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border"
                       sx={{
@@ -198,9 +206,8 @@ const CustomTreeItem = ({
                           backgroundColor: 'rgba(0, 0, 0, 0.04)',
                           cursor: 'pointer',
                         },
-                        maxWidth: '34rem',
-                        marginTop: '-1.5rem',
-                        marginRight: '-33rem',
+                        width: '33.5rem',
+                        margin: '0 auto',
                       }}
                       onClick={handleInsert}
                     >
