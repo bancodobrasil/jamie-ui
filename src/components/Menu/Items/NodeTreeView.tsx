@@ -188,20 +188,69 @@ const CustomTreeItem = ({
           onClick={onNodeClick}
           label={
             <Box className="flex items-center">
-              <Box sx={{ marginTop: '-6rem', position: 'column' }}>
+              <Box sx={{ marginTop: '-6rem', position: 'column', py: '1rem' }}>
                 {node.id === editingNode.id && (
-                  <Box sx={{ my: '-1.5rem' }}>
-                    <Button variant="contained">teste cima</Button>
+                  <Box sx={{ marginLeft: '-3rem' }}>
+                    <Box
+                      className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                          cursor: 'pointer',
+                        },
+                        maxWidth: '34rem',
+                        marginTop: '-1.5rem',
+                        marginRight: '-33rem',
+                      }}
+                      onClick={handleInsert}
+                    >
+                      <IconPlus fill="#265EFD" className="mx-4" />
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          position: 'relative',
+                          top: '-2px',
+                          color: '#265EFD',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {t('menu.preview.actions.insertRoot')}
+                      </Typography>
+                    </Box>
                   </Box>
                 )}
               </Box>
-              <Box sx={{ marginBottom: '-8rem', position: 'column' }}>
+              {/* <Box sx={{ marginBottom: '-6rem', position: 'column', py: '1rem' }}>
                 {node.id === editingNode.id && (
-                  <Box sx={{ my: '-1.5rem' }}>
-                    <Button variant="contained">teste baixo</Button>
+                  <Box>
+                    <Box
+                      className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                          cursor: 'pointer',
+                        },
+                        maxWidth: '540px',
+                        marginTop: '-1.5rem',
+                      }}
+                      onClick={handleInsert}
+                    >
+                      <IconPlus fill="#265EFD" className="mx-4" />
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          position: 'relative',
+                          top: '-2px',
+                          color: '#265EFD',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {t('menu.preview.actions.insertRoot')}
+                      </Typography>
+                    </Box>
                   </Box>
                 )}
-              </Box>
+              </Box> */}
               <Box className="flex-1" sx={{ color, fontWeight }}>
                 {label}
               </Box>
@@ -239,13 +288,13 @@ const CustomTreeItem = ({
                   <MenuItem onClick={handleDelete}>{t('buttons.delete')}</MenuItem>
                 </MenuList>
               </Menu>
-              {/* <Box sx={{ marginTop: '-6rem', position: 'column' }}>
-              {node.id === editingNode.id && (
-                <Box>
-                  <Button>teste</Button>
-                </Box>
-              )}
-            </Box> */}
+              {/* <Box sx={{ marginBottom: '-6rem', position: 'column' }}>
+                {node.id === editingNode.id && (
+                  <Box>
+                    <Button>teste</Button>
+                  </Box>
+                )}
+              </Box> */}
             </Box>
           }
           /* card border style */
@@ -266,8 +315,9 @@ const CustomTreeItem = ({
             },
             '& > .Mui-selected': {
               border: '2px solid #3354FD',
-              my: '3rem',
+              my: '4rem',
               backgroundColor: '#fff',
+              maxWidth: '540px',
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
