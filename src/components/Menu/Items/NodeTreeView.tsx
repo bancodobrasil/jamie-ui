@@ -223,7 +223,7 @@ const CustomTreeItem = ({
                           fontWeight: 'bold',
                         }}
                       >
-                        {t('menu.preview.actions.insertRoot')}
+                        {t('menu.preview.actions.insertRootAbove')}
                       </Typography>
                     </Box>
                   </Box>
@@ -265,7 +265,7 @@ const CustomTreeItem = ({
                           fontWeight: 'bold',
                         }}
                       >
-                        teste Baixo
+                        {t('menu.preview.actions.insertRootBelow')}
                       </Typography>
                     </Box>
                   </Box>

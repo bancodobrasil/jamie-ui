@@ -262,7 +262,9 @@
         "delete": "Deletar",
         "editTemplate": "Editar Template",
         "insertChild": "Inserir Item Filho",
-        "insertRoot": "Novo Item de Menu"
+        "insertRoot": "Novo Item de Menu",
+        "insertRootAbove": "Novo Item de Menu Acima",
+        "insertRootBelow": "Novo Item de Menu Abaixo"
       },
       "parent": "Item Pai",
       "newItem": "Novo Item {{order}}",
