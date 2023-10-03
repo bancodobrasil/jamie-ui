@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
+  Button,
   Divider,
   IconButton,
   ListItemText,
@@ -170,75 +171,95 @@ const CustomTreeItem = ({
   };
 
   return (
-    <TreeItem
-      ref={id === -1 ? insertingNodeRef : null}
-      nodeId={id.toString()}
-      onClick={onNodeClick}
-      label={
-        <Box className="flex items-center">
-          <Box className="flex-1" sx={{ color, fontWeight }}>
-            {label}
-          </Box>
-          <IconButton sx={{ float: 'right', mr: 1 }} size="small" onClick={handleClickContextMenu}>
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={contextMenuRef}
-            open={Boolean(contextMenuRef)}
-            onClose={handleCloseContextMenu}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <MenuList>
-              <MenuItem onClick={handleInsert}>
-                <ListItemText>{t('menu.preview.actions.insertChild')}</ListItemText>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleEditTemplate}>
-                <ListItemText>{t('menu.preview.actions.editTemplate')}</ListItemText>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleDelete}>{t('buttons.delete')}</MenuItem>
-            </MenuList>
-          </Menu>
-        </Box>
-      }
+    <Box
       sx={{
-        '& > .MuiTreeItem-content': {
-          color,
-          fontWeight,
-          border: '1px solid #eaeaec',
-          margin: '3px 0px',
-          backgroundColor: '#fff',
-          borderRadius: '4px',
-          padding: '12px 0px 13px 25px',
-          my: '0.5rem',
-        },
-        '& > .Mui-selected': {
-          border: '2px solid #3354FD',
-          backgroundColor: '#fff',
-          '&:hover': {
-            backgroundColor: 'rgba(0, 0, 0, 0.04)',
-          },
-        },
-        '& > .Mui-selected.Mui-focused': {
-          backgroundColor: '#fff',
-          '&:hover': {
-            backgroundColor: 'rgba(0, 0, 0, 0.04)',
-          },
-        },
-        maxWidth: '540px',
+        borderBottom: '3px solid green',
+        marginBottom: '10px',
+        borderLeft: '3px solid orange',
+        marginLeft: '10px',
       }}
     >
-      {children?.length > 0 && renderNodes(children)}
-    </TreeItem>
+      <TreeItem
+        ref={id === -1 ? insertingNodeRef : null}
+        nodeId={id.toString()}
+        onClick={onNodeClick}
+        label={
+          <Box className="flex items-center">
+            <Box className="flex-1" sx={{ color, fontWeight }}>
+              {label}
+            </Box>
+            <IconButton
+              sx={{ float: 'right', mr: 1 }}
+              size="small"
+              onClick={handleClickContextMenu}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            {/* More vert icon menu with options (add item, edit template, delete) */}
+            <Menu
+              id="simple-menu"
+              anchorEl={contextMenuRef}
+              open={Boolean(contextMenuRef)}
+              onClose={handleCloseContextMenu}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <MenuList>
+                <MenuItem onClick={handleInsert}>
+                  <ListItemText>{t('menu.preview.actions.insertChild')}</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleEditTemplate}>
+                  <ListItemText>{t('menu.preview.actions.editTemplate')}</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleDelete}>{t('buttons.delete')}</MenuItem>
+              </MenuList>
+            </Menu>
+            {node.id === editingNode.id && <Box> teste </Box>}
+          </Box>
+        }
+        /* card border style */
+        sx={{
+          '& > .MuiTreeItem-content': {
+            color,
+            fontWeight,
+            border: '1px solid #eaeaec',
+            margin: '3px 0px',
+            backgroundColor: '#fff',
+            borderRadius: '4px',
+            padding: '12px 0px 13px 25px',
+            my: '0.5rem',
+            // borderBottom: '3px solid green',
+            // marginBottom: '10px',
+            // borderLeft: '3px solid orange',
+            // marginLeft: '10px',
+          },
+          '& > .Mui-selected': {
+            border: '2px solid #3354FD',
+            backgroundColor: '#fff',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            },
+          },
+          '& > .Mui-selected.Mui-focused': {
+            backgroundColor: '#fff',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            },
+          },
+          maxWidth: '540px',
+        }}
+      >
+        {children?.length > 0 && renderNodes(children)}
+      </TreeItem>
+    </Box>
   );
 };
 
