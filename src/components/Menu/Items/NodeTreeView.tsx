@@ -188,7 +188,7 @@ const CustomTreeItem = ({
           onClick={onNodeClick}
           label={
             <Box className="flex items-center">
-              <Box sx={{ marginTop: '-6rem', position: 'column', py: '1rem' }}>
+              <Box sx={{ position: 'column', py: '1rem' }}>
                 {node.id === editingNode.id && (
                   <Box
                     sx={{
@@ -208,6 +208,7 @@ const CustomTreeItem = ({
                         },
                         width: '33.5rem',
                         margin: '0 auto',
+                        marginTop: '-5rem',
                       }}
                       onClick={handleInsert}
                     >
@@ -222,6 +223,48 @@ const CustomTreeItem = ({
                         }}
                       >
                         {t('menu.preview.actions.insertRoot')}
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+              {/* Bottom Button */}
+              <Box sx={{ py: '1rem' }}>
+                {node.id === editingNode.id && (
+                  <Box
+                    sx={{
+                      marginTop: '3rem',
+                      flex: 1,
+                      marginBottom: '-10rem',
+                      marginLeft: '-25.6rem',
+                      // maxWidth: '34rem',
+                      marginRight: '-8rem',
+                    }}
+                  >
+                    <Box
+                      className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                          cursor: 'pointer',
+                        },
+                        width: '33.5rem',
+                        marginTop: '3rem',
+                        margin: '0 auto',
+                      }}
+                      onClick={handleInsert}
+                    >
+                      <IconPlus fill="#265EFD" className="mx-4" />
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          position: 'relative',
+                          top: '-2px',
+                          color: '#265EFD',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        teste Baixo
                       </Typography>
                     </Box>
                   </Box>
