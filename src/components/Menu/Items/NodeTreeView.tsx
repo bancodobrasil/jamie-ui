@@ -128,9 +128,9 @@ const CustomTreeItem = ({
     const itemNode = {
       id: -1,
       label: t('menu.preview.newItem', {
-        order: node.children?.length ? node.children.length + 1 : 1,
+        order: node.order ? node.order : 1,
       }),
-      order: node.order ? node.order - 1 : 1,
+      order: node.order ? node.order : 1,
       parentId: node.parentId,
       meta: itemMeta,
       enabled: true,
@@ -138,7 +138,19 @@ const CustomTreeItem = ({
       startPublication: null,
       endPublication: null,
     };
+    const reorderNode = {
+      label: t('menu.preview.newItem', {
+        order: node.order ? node.order + 1 : 1,
+      }),
+      order: node.order ? node.order + 1 : 1,
+    };
     setEditingNode({ ...itemNode, action: EnumInputAction.CREATE, original: itemNode });
+    // setEditingNode({
+    //   ...reorderNode,
+    //   meta: reorderNode,
+    //   action: EnumInputAction.UPDATE,
+    //   original: node,
+    // });
     setSelected('-1');
     setOperationScreen(EnumInputActionScreen.INSERT);
   };
@@ -456,7 +468,7 @@ const CustomTreeItem = ({
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
             },
-            maxWidth: '540px',
+            width: '540px',
           }}
         >
           {children?.length > 0 && renderNodes(children)}
