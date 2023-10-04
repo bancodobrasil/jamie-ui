@@ -69,7 +69,45 @@ const CustomTreeItem = ({
     setContextMenuRef(null);
   };
 
+  // Insert child item
   const handleInsert = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setContextMenuRef(null);
+    const itemMeta = { ...meta };
+    data?.menu.meta?.forEach(m => {
+      const defaultValue = (meta || {})[m.id] || m.defaultValue;
+      switch (m.type) {
+        case MenuMetaType.TEXT:
+        case MenuMetaType.NUMBER:
+        case MenuMetaType.DATE:
+          itemMeta[m.name] = defaultValue || '';
+          break;
+        case MenuMetaType.BOOLEAN:
+          itemMeta[m.name] = defaultValue || false;
+          break;
+      }
+    });
+    const itemNode = {
+      id: -1,
+      label: t('menu.preview.newItem', {
+        order: children?.length ? children.length + 1 : 1,
+      }),
+      order: children?.length ? children.length + 1 : 1,
+      parentId: id,
+      meta: itemMeta,
+      enabled: true,
+      children: [],
+      startPublication: null,
+      endPublication: null,
+    };
+    setEditingNode({ ...itemNode, action: EnumInputAction.CREATE, original: itemNode });
+    setSelected('-1');
+    setOperationScreen(EnumInputActionScreen.INSERT);
+  };
+
+  // Insert item above
+  const handleInsertAbove = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
     setContextMenuRef(null);
@@ -211,7 +249,7 @@ const CustomTreeItem = ({
                         margin: '0 auto',
                         marginTop: '-5rem',
                       }}
-                      onClick={handleInsert}
+                      onClick={handleInsertAbove}
                     >
                       <IconPlus fill="#265EFD" className="mx-4" />
                       <Typography
@@ -306,7 +344,48 @@ const CustomTreeItem = ({
                   </Box>
                 )}
               </Box>
-
+              {/* Bottom Button to add New Subitem */}
+              {/* <Box sx={{ py: '1rem' }}>
+                {node.id === editingNode.id && (
+                  <Box
+                    sx={{
+                      marginTop: '6rem',
+                      flex: 1,
+                      marginBottom: '-25rem',
+                      marginLeft: '-25.6rem',
+                      // maxWidth: '34rem',
+                      marginRight: '-8rem',
+                    }}
+                  >
+                    <Box
+                      className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                          cursor: 'pointer',
+                        },
+                        width: '33.5rem',
+                        marginTop: '3rem',
+                        margin: '0 auto',
+                      }}
+                      onClick={handleInsert} // add a child item
+                    >
+                      <IconPlus fill="#265EFD" className="mx-4" />
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          position: 'relative',
+                          top: '-2px',
+                          color: '#265EFD',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        teste
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+              </Box> */}
               {/* <Box className="flex-1" sx={{ color, fontWeight, margin: 0 }}>
                 {label}
               </Box>
@@ -344,13 +423,6 @@ const CustomTreeItem = ({
                   <MenuItem onClick={handleDelete}>{t('buttons.delete')}</MenuItem>
                 </MenuList>
               </Menu>
-              {/* <Box sx={{ marginBottom: '-6rem', position: 'column' }}>
-                {node.id === editingNode.id && (
-                  <Box>
-                    <Button>teste</Button>
-                  </Box>
-                )}
-              </Box> */}
             </Box>
           }
           /* card border style */
@@ -487,6 +559,7 @@ export const NodeTreeView = ({
     ],
   );
 
+  // Insert item in root menu
   const handleInsertRoot = (event: React.SyntheticEvent) => {
     const meta = {};
     data?.menu.meta?.forEach(m => {
