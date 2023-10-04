@@ -130,7 +130,7 @@ const CustomTreeItem = ({
       label: t('menu.preview.newItem', {
         order: node.children?.length ? node.children.length + 1 : 1,
       }),
-      order: node.children?.length ? node.children.length + 1 : 1,
+      order: node.order ? node.order - 1 : 1,
       parentId: node.parentId,
       meta: itemMeta,
       enabled: true,
