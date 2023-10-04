@@ -107,6 +107,48 @@ const CustomTreeItem = ({
   };
 
   // Insert item in the same level (insert a sibling below)
+  const handleInsertBelow = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setContextMenuRef(null);
+    const itemMeta = { ...meta };
+    data?.menu.meta?.forEach(m => {
+      const defaultValue = (meta || {})[m.id] || m.defaultValue;
+      switch (m.type) {
+        case MenuMetaType.TEXT:
+        case MenuMetaType.NUMBER:
+        case MenuMetaType.DATE:
+          itemMeta[m.name] = defaultValue || '';
+          break;
+        case MenuMetaType.BOOLEAN:
+          itemMeta[m.name] = defaultValue || false;
+          break;
+      }
+    });
+    const itemNode = {
+      id: -1,
+      label: t('menu.preview.newItem', {
+        order: node.order ? node.order + 1 : 1,
+      }),
+      order: node.order ? node.order + 1 : 1,
+      parentId: node.parentId,
+      meta: itemMeta,
+      enabled: true,
+      children: [],
+      startPublication: null,
+      endPublication: null,
+    };
+    setEditingNode({ ...itemNode, action: EnumInputAction.CREATE, original: itemNode });
+    // setEditingNode({
+    //   ...reorderNode,
+    //   meta: reorderNode,
+    //   action: EnumInputAction.UPDATE,
+    //   original: node,
+    // });
+    setSelected('-1');
+    setOperationScreen(EnumInputActionScreen.INSERT);
+  };
+
   const handleInsertAbove = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
@@ -138,12 +180,6 @@ const CustomTreeItem = ({
       startPublication: null,
       endPublication: null,
     };
-    const reorderNode = {
-      label: t('menu.preview.newItem', {
-        order: node.order ? node.order + 1 : 1,
-      }),
-      order: node.order ? node.order + 1 : 1,
-    };
     setEditingNode({ ...itemNode, action: EnumInputAction.CREATE, original: itemNode });
     // setEditingNode({
     //   ...reorderNode,
@@ -154,7 +190,6 @@ const CustomTreeItem = ({
     setSelected('-1');
     setOperationScreen(EnumInputActionScreen.INSERT);
   };
-
   const handleDelete = async (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
@@ -303,7 +338,7 @@ const CustomTreeItem = ({
                         marginTop: '3rem',
                         margin: '0 auto',
                       }}
-                      onClick={handleInsert}
+                      onClick={handleInsertBelow}
                     >
                       <IconPlus fill="#265EFD" className="mx-4" />
                       <Typography
@@ -448,6 +483,7 @@ const CustomTreeItem = ({
               borderRadius: '4px',
               padding: '12px 0px 13px 25px',
               my: '0.5rem',
+              zIndex: '100',
               // borderBottom: '3px solid green',
               // marginBottom: '10px',
               // borderLeft: '3px solid orange',
@@ -458,14 +494,58 @@ const CustomTreeItem = ({
               my: '4rem',
               backgroundColor: '#fff',
               maxWidth: '540px',
+              position: 'relative',
+              zIndex: '1000',
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+              '& > .MuiCollapse-wrapperInner': {
+                color,
+                fontWeight,
+                marginLeft: '3.5rem',
+                zIndex: '10000',
+              },
+            },
+            '& > .Mui-expanded': {
+              // '&::before': {
+              //   content: '" "',
+              //   marginTop: '12rem',
+              //   position: 'absolute',
+              //   width: '1px',
+              //   height: '12rem',
+              //   border: '1px solid transparent',
+              //   borderColor: 'red',
+              //   zIndex: '0',
+              // },
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+              '& > .MuiCollapse-wrapperInner': {
+                color,
+                fontWeight,
+                backgroundColor: 'pink',
+                // margin: '3px 0px',
+                // padding: '12px 0px 13px 25px', // cima/esq/baixo/direita
+                marginLeft: '3.5rem',
+                zIndex: '10000',
+                // borderBottom: '3px solid green',
+                // marginBottom: '10px',
+                // borderLeft: '3px solid orange',
+                // marginLeft: '10px',
               },
             },
             '& > .Mui-selected.Mui-focused': {
               backgroundColor: '#fff',
+              zIndex: '100',
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+              '& > .MuiCollapse-wrapperInner': {
+                color,
+                fontWeight,
+                marginLeft: '3.5rem',
+                zIndex: '10000',
+                backgroundColor: 'blue',
               },
             },
             width: '540px',
