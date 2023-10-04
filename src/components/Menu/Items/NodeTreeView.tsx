@@ -106,8 +106,8 @@ const CustomTreeItem = ({
     setOperationScreen(EnumInputActionScreen.INSERT);
   };
 
-  // Insert item in the same level (insert a sibling)
-  const handleInsertAbove = (event: React.SyntheticEvent) => {
+  // Insert item in the same level (insert a sibling below)
+  const handleInsertBelow = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
     setContextMenuRef(null);
@@ -128,10 +128,10 @@ const CustomTreeItem = ({
     const itemNode = {
       id: -1,
       label: t('menu.preview.newItem', {
-        order: children?.length ? children.length + 1 : 1,
+        order: node.children?.length ? node.children.length + 1 : 1,
       }),
-      order: children?.length ? children.length + 1 : 1,
-      parentId: id,
+      order: node.children?.length ? node.children.length + 1 : 1,
+      parentId: node.parentId,
       meta: itemMeta,
       enabled: true,
       children: [],
@@ -249,7 +249,7 @@ const CustomTreeItem = ({
                         margin: '0 auto',
                         marginTop: '-5rem',
                       }}
-                      onClick={handleInsertAbove}
+                      onClick={handleInsert}
                     >
                       <IconPlus fill="#265EFD" className="mx-4" />
                       <Typography
@@ -291,7 +291,7 @@ const CustomTreeItem = ({
                         marginTop: '3rem',
                         margin: '0 auto',
                       }}
-                      onClick={handleInsert}
+                      onClick={handleInsertBelow}
                     >
                       <IconPlus fill="#265EFD" className="mx-4" />
                       <Typography
