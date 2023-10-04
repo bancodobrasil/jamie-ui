@@ -106,7 +106,7 @@ const CustomTreeItem = ({
     setOperationScreen(EnumInputActionScreen.INSERT);
   };
 
-  // Insert item above
+  // Insert item in the same level (insert a sibling)
   const handleInsertAbove = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
