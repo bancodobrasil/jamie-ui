@@ -107,7 +107,7 @@ const CustomTreeItem = ({
   };
 
   // Insert item in the same level (insert a sibling below)
-  const handleInsertBelow = (event: React.SyntheticEvent) => {
+  const handleInsertAbove = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     event.preventDefault();
     setContextMenuRef(null);
@@ -249,7 +249,7 @@ const CustomTreeItem = ({
                         margin: '0 auto',
                         marginTop: '-5rem',
                       }}
-                      onClick={handleInsert}
+                      onClick={handleInsertAbove}
                     >
                       <IconPlus fill="#265EFD" className="mx-4" />
                       <Typography
@@ -291,7 +291,7 @@ const CustomTreeItem = ({
                         marginTop: '3rem',
                         margin: '0 auto',
                       }}
-                      onClick={handleInsertBelow}
+                      onClick={handleInsert}
                     >
                       <IconPlus fill="#265EFD" className="mx-4" />
                       <Typography
