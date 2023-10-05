@@ -491,13 +491,14 @@ const CustomTreeItem = ({
               },
             },
             '& > .Mui-expanded': {
+              // draw the line
               '&::before': {
                 content: '" "',
                 marginTop: '12rem',
                 position: 'absolute',
                 width: '1px',
                 height: '12rem',
-                border: '1px solid transparent',
+                border: '0.5px solid transparent',
                 borderColor: 'red',
               },
               '&:hover': {
@@ -512,14 +513,16 @@ const CustomTreeItem = ({
             },
             '& > .MuiTreeItem-group': {
               paddingLeft: '3.5rem',
-              '&::before': {
+              // draw the circle
+              '&::after': {
                 content: '" "',
-                marginTop: '3.5rem',
+                marginTop: '-3.5rem',
+                marginBottom: '-1zrem',
                 marginLeft: '-2.9rem',
                 float: 'left',
-                width: '40px',
-                height: '40px',
-                border: '10px solid transparent',
+                width: '50px',
+                height: '50px',
+                border: '1px solid transparent',
                 borderColor: 'red',
                 borderBottomLeftRadius: '100px',
                 borderWidth: '0 0 2px 2px',
