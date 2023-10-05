@@ -489,54 +489,33 @@ const CustomTreeItem = ({
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
-              '& > .MuiCollapse-wrapperInner': {
-                color,
-                fontWeight,
-                marginLeft: '3.5rem',
-                zIndex: '10000',
-              },
             },
             '& > .Mui-expanded': {
-              // '&::before': {
-              //   content: '" "',
-              //   marginTop: '12rem',
-              //   position: 'absolute',
-              //   width: '1px',
-              //   height: '12rem',
-              //   border: '1px solid transparent',
-              //   borderColor: 'red',
-              //   zIndex: '0',
-              // },
+              '&::before': {
+                content: '" "',
+                marginTop: '12rem',
+                position: 'absolute',
+                width: '1px',
+                height: '12rem',
+                border: '1px solid transparent',
+                borderColor: 'red',
+              },
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              },
-              '& > .MuiCollapse-wrapperInner': {
-                color,
-                fontWeight,
-                backgroundColor: 'pink',
-                // margin: '3px 0px',
-                // padding: '12px 0px 13px 25px', // cima/esq/baixo/direita
-                marginLeft: '3.5rem',
-                zIndex: '10000',
-                // borderBottom: '3px solid green',
-                // marginBottom: '10px',
-                // borderLeft: '3px solid orange',
-                // marginLeft: '10px',
               },
             },
             '& > .Mui-selected.Mui-focused': {
               backgroundColor: '#fff',
-              zIndex: '100',
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
-              '& > .MuiCollapse-wrapperInner': {
-                color,
-                fontWeight,
-                marginLeft: '3.5rem',
-                zIndex: '10000',
-                backgroundColor: 'blue',
-              },
+            },
+            '& > .MuiTreeItem-group': {
+              paddingLeft: '3.5rem',
+              width: '100px',
+              height: '100px',
+              backgroundColor: '#3498db',
+              borderRadius: '100px 100px 0 0',
             },
             width: '540px',
           }}
