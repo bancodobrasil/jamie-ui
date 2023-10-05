@@ -351,7 +351,7 @@ const CustomTreeItem = ({
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box
                       className="flex-1"
-                      sx={{ color, fontWeight, margin: 0, marginLeft: '-23rem' }}
+                      sx={{ color, fontWeight, margin: 0, marginLeft: '-22.5rem' }}
                     >
                       {label}
                     </Box>
