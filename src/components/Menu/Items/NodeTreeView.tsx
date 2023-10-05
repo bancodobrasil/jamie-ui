@@ -512,10 +512,19 @@ const CustomTreeItem = ({
             },
             '& > .MuiTreeItem-group': {
               paddingLeft: '3.5rem',
-              width: '100px',
-              height: '100px',
-              backgroundColor: '#3498db',
-              borderRadius: '100px 100px 0 0',
+              '&::before': {
+                content: '" "',
+                marginTop: '3.5rem',
+                marginLeft: '-2.9rem',
+                float: 'left',
+                width: '40px',
+                height: '40px',
+                border: '2px solid red',
+                borderRadius: '50%',
+                // shapeOutside: 'circle(60% at 10%)',
+                // clipPath: 'circle(75% at 25%)',
+                borderBottomLeftRadius: '100px',
+              },
             },
             width: '540px',
           }}
