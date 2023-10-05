@@ -356,7 +356,7 @@ const CustomTreeItem = ({
                       {label}
                     </Box>
                     <IconButton
-                      sx={{ float: 'right', mr: 1, position: 'sticky', marginRight: '-8rem' }}
+                      sx={{ float: 'right', mr: 1, position: 'sticky', marginRight: '-7.7rem' }}
                       size="small"
                       onClick={handleClickContextMenu}
                     >
@@ -372,7 +372,7 @@ const CustomTreeItem = ({
                       {label}
                     </Box>
                     <IconButton
-                      sx={{ float: 'right', mr: 1, position: 'sticky', marginRight: '-29rem' }}
+                      sx={{ float: 'right', mr: 1, position: 'sticky', marginRight: '-30.5rem' }}
                       size="small"
                       onClick={handleClickContextMenu}
                     >
@@ -494,12 +494,13 @@ const CustomTreeItem = ({
               // draw the line
               '&::before': {
                 content: '" "',
-                marginTop: '12rem',
+                marginTop: '11.8rem',
                 position: 'absolute',
-                width: '1px',
-                height: '12rem',
+                width: '0.1px',
+                height: '7.8rem',
                 border: '0.5px solid transparent',
-                borderColor: 'red',
+                borderColor: '#B3B3B3',
+                marginLeft: '0.5rem',
               },
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
@@ -516,17 +517,28 @@ const CustomTreeItem = ({
               // draw the circle
               '&::after': {
                 content: '" "',
-                marginTop: '-3.5rem',
-                marginBottom: '-1zrem',
-                marginLeft: '-2.9rem',
+                marginTop: '-5.5rem',
+                marginLeft: '-2.35rem',
                 float: 'left',
-                width: '50px',
-                height: '50px',
+                width: '48px',
+                height: '48px',
                 border: '1px solid transparent',
-                borderColor: 'red',
+                borderColor: '#B3B3B3',
                 borderBottomLeftRadius: '100px',
-                borderWidth: '0 0 2px 2px',
+                borderWidth: '0 0 1px 1px',
               },
+              // '&::before': {
+              //   content: '" "',
+              //   marginTop: '5.5rem',
+              //   marginLeft: '-2.4rem',
+              //   float: 'left',
+              //   width: '48px',
+              //   height: '48px',
+              //   border: '1px solid transparent',
+              //   borderColor: '#B3B3B3',
+              //   borderBottomLeftRadius: '100px',
+              //   borderWidth: '0 0 3px 3px',
+              // },
             },
             width: '540px',
           }}
