@@ -128,9 +128,9 @@ const CustomTreeItem = ({
     const itemNode = {
       id: -1,
       label: t('menu.preview.newItem', {
-        order: node.order ? node.order + 1 : 1,
+        order: node.order ? node.order - 1 : 1,
       }),
-      order: node.order ? node.order + 1 : 1,
+      order: node.order ? node.order - 1 : 1,
       parentId: node.parentId,
       meta: itemMeta,
       enabled: true,
@@ -139,16 +139,8 @@ const CustomTreeItem = ({
       endPublication: null,
     };
     setEditingNode({ ...itemNode, action: EnumInputAction.CREATE, original: itemNode });
-    // setEditingNode({
-    //   ...reorderNode,
-    //   meta: reorderNode,
-    //   action: EnumInputAction.UPDATE,
-    //   original: node,
-    // });
     setSelected('-1');
     setOperationScreen(EnumInputActionScreen.INSERT);
-
-    // reorderChildren(node.parentId, itemNode);
   };
 
   // Insert item in the same level (insert a sibling above)
@@ -184,37 +176,9 @@ const CustomTreeItem = ({
       endPublication: null,
     };
     setEditingNode({ ...itemNode, action: EnumInputAction.CREATE, original: itemNode });
-    // setEditingNode({
-    //   ...reorderNode,
-    //   meta: reorderNode,
-    //   action: EnumInputAction.UPDATE,
-    //   original: node,
-    // });
     setSelected('-1');
     setOperationScreen(EnumInputActionScreen.INSERT);
   };
-
-  function reorderChildren(parentNode, newChild) {
-    // Get the list of existing children.
-    const children = parentNode.childNodes;
-
-    // Find the index of the new child.
-    const newChildIndex = children.indexOf(newChild);
-
-    for (let i = newChildIndex; i < children.length; i++) {
-      children[i].order++;
-    }
-
-    // Insert the new child at the end of the list.
-    parentNode.appendChild(newChild);
-
-    // Reorder the remaining children.
-    for (let i = newChildIndex - 1; i < children.length; i++) {
-      parentNode.insertBefore(children[i], children[i - 1]);
-    }
-
-    setOperationScreen(EnumInputActionScreen.UPDATE);
-  }
 
   const handleDelete = async (event: React.SyntheticEvent) => {
     event.stopPropagation();
