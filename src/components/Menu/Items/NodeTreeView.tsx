@@ -486,24 +486,36 @@ const CustomTreeItem = ({
               maxWidth: '540px',
               position: 'relative',
               zIndex: '1000',
+              '&::before': {
+                content: '" "',
+                position: 'absolute',
+                top: '50%',
+                left: 0,
+                width: '10px',
+                height: '2px',
+                backgroundColor: '#3354FD',
+              },
+              '&::after': {
+                content: '" "',
+                position: 'absolute',
+                top: 0,
+                left: '50%',
+                width: '2px',
+                height: '100%',
+                backgroundColor: '#3354FD',
+                transform: 'translateX(-50%)',
+              },
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
             },
             '& > .Mui-expanded': {
               // draw the line
-              '&::before': {
-                content: '" "',
-                marginTop: '11.8rem',
-                position: 'absolute',
-                width: '0.1px',
-                height: '7.8rem',
-                border: '0.5px solid transparent',
-                borderColor: '#B3B3B3',
-                marginLeft: '0.5rem',
-              },
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+              '& > .teste': {
+                padding: '2rem',
               },
             },
             '& > .Mui-selected.Mui-focused': {
