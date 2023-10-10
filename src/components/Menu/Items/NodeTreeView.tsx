@@ -14,6 +14,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import Search from '../../Search';
 import { EnumInputAction, IEditingNode, INode, MenuMetaType } from '../../../types';
 import { EnumInputActionScreen } from '../../../pages/Menu/Items';
 import { IconPlus } from '../../Icons/IconPlus';
@@ -377,6 +378,7 @@ export const NodeTreeView = ({
         overflowY: 'auto',
       }}
     >
+      <Search />
       <Box
         className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border my-2"
         sx={{
