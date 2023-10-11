@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Divider,
@@ -368,6 +368,46 @@ export const NodeTreeView = ({
     setOperationScreen(EnumInputActionScreen.INSERT);
   };
 
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = searchTerm => {
+    // const originalNodes = [...nodes];
+    // console.log(originalNodes);
+    // // Se o termo de pesquisa estiver vazio, redefina os resultados da pesquisa para os nós originais.
+    // if (!searchTerm) {
+    //   setSearchResults(originalNodes);
+    // } else {
+    //   // Ordene os nós em ordem alfabética.
+    //   const sortedNodes = originalNodes.sort((a, b) => a.label.localeCompare(b.label));
+    //   console.log(sortedNodes);
+    //   // Defina os índices inicial e final para a pesquisa binária.
+    //   let startIndex = 0;
+    //   let endIndex = sortedNodes.length - 1;
+    //   // Inicialize a lista de resultados da pesquisa.
+    //   const searchResults = [];
+    //   // Realize a pesquisa binária.
+    //   while (startIndex <= endIndex) {
+    //     // Calcule o índice médio.
+    //     const middleIndex = Math.floor((startIndex + endIndex) / 2);
+    //     // Compare o termo de pesquisa com o label do nodo no índice médio.
+    //     const comparisonResult = searchTerm.localeCompare(sortedNodes[middleIndex].label);
+    //     if (comparisonResult === 0) {
+    //       // Se o termo de pesquisa for igual ao label do nodo no índice médio, adicione o nodo à lista de resultados da pesquisa e pare a pesquisa binária.
+    //       searchResults.push(sortedNodes[middleIndex]);
+    //       break;
+    //     } else if (comparisonResult < 0) {
+    //       // Se o termo de pesquisa for menor que o label do nodo no índice médio, atualize o índice final para o índice médio - 1.
+    //       endIndex = middleIndex - 1;
+    //     } else {
+    //       // Se o termo de pesquisa for maior que o label do nodo no índice médio, atualize o índice inicial para o índice médio + 1.
+    //       startIndex = middleIndex + 1;
+    //     }
+    //   }
+    //   // Atualize a lista de resultados da pesquisa.
+    //   setSearchResults(searchResults);
+    // }
+  };
+
   return (
     <Box
       sx={{
@@ -378,7 +418,7 @@ export const NodeTreeView = ({
         overflowY: 'auto',
       }}
     >
-      <Search />
+      <Search onSearch={handleSearch} />
       <Box
         className="flex items-center bg-white py-2 border-dashed border-[#B4B9C1] border my-2"
         sx={{
@@ -392,7 +432,13 @@ export const NodeTreeView = ({
       >
         <IconPlus fill="#265EFD" className="mx-4" />
         <Typography
-          sx={{ flex: 1, position: 'relative', top: '-2px', color: '#265EFD', fontWeight: 'bold' }}
+          sx={{
+            flex: 1,
+            position: 'relative',
+            top: '-2px',
+            color: '#265EFD',
+            fontWeight: 'bold',
+          }}
         >
           {t('menu.preview.actions.insertRoot')}
         </Typography>
