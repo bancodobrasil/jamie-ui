@@ -292,6 +292,7 @@ export const OperationScreen = ({
             sx={{
               mt: '2rem',
               width: '100%',
+              height: '3rem',
             }}
           />
           <Box className="flex items-center space-x-4">
@@ -576,6 +577,8 @@ export const OperationScreen = ({
             sx={{
               mt: '2rem',
               width: '100%',
+              borderColor: '#758887',
+              color: '#022831',
             }}
           />
           <Box className="flex items-center space-x-4">
@@ -583,13 +586,17 @@ export const OperationScreen = ({
               type="text"
               label={t('menu.preview.inputs.name.rootItem')}
               InputLabelProps={{ shrink: true }}
-              value={editingNode.parent ? editingNode.parent.label : ''}
+              value={
+                editingNode.parentId
+                  ? findNodeById(nodes, editingNode.parentId)?.label || ''
+                  : 'Não há pai'
+              }
               sx={{
                 mt: '2rem',
-                width: '6rem',
+                width: '21rem',
+                height: '3rem',
               }}
             />
-
             <TextField
               type="number"
               label={t('menu.preview.inputs.order.label')}
@@ -612,7 +619,8 @@ export const OperationScreen = ({
               }}
               sx={{
                 mt: '2rem',
-                width: '6rem',
+                width: '21rem',
+                height: '3rem',
               }}
             />
             <FormControlLabel
