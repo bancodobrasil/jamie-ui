@@ -544,17 +544,18 @@ export const OperationScreen = ({
         <Form onSubmit={handleUpdateSubmit}>
           <Typography
             variant="h3"
+            component="h3"
             sx={{
-              fontWeight: 700,
-              fontSize: '2rem',
-              lineHeight: '2rem',
+              fontWeight: 500,
+              fontSize: '24px',
+              lineHeight: '28.8px',
               letterSpacing: '0.18px',
-              textAlign: 'center',
-              width: '100%',
+              textAlign: 'flex-start',
+              width: '164px',
               mt: '1rem',
             }}
           >
-            {t('menu.preview.actions.edit')}
+            {editingNode.label}
           </Typography>
           <TextField
             type="text"

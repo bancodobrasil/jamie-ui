@@ -128,7 +128,8 @@ const CustomTreeItem = ({
     const itemNode = {
       id: -1,
       label: t('menu.preview.newItem', {
-        order: node.order ? node.order - 1 : 1,
+        order: node.order === 1 ? node.order : node.order - 1,
+        // order: node.order ? node.order - 1 : 1,
       }),
       order: node.order ? node.order - 1 : 1,
       parentId: node.parentId,
@@ -167,7 +168,7 @@ const CustomTreeItem = ({
       label: t('menu.preview.newItem', {
         order: node.order ? node.order : 1,
       }),
-      order: node.order ? node.order : 1,
+      order: node.order ? node.order + 2 : 1,
       parentId: node.parentId,
       meta: itemMeta,
       enabled: true,
@@ -175,6 +176,14 @@ const CustomTreeItem = ({
       startPublication: null,
       endPublication: null,
     };
+
+    let i;
+    const test = itemNode.order;
+    for (i === itemNode.order; i; i++) {
+      itemMeta.order = (itemMeta.order as number) + 1;
+    }
+    itemNode.order = test + 1;
+
     setEditingNode({ ...itemNode, action: EnumInputAction.CREATE, original: itemNode });
     setSelected('-1');
     setOperationScreen(EnumInputActionScreen.INSERT);
@@ -353,7 +362,7 @@ const CustomTreeItem = ({
                       className="flex-1"
                       sx={{ color, fontWeight, margin: 0, marginLeft: '-22.5rem' }}
                     >
-                      {label}
+                      {label} {node.order}
                     </Box>
                     <IconButton
                       sx={{ float: 'right', mr: 1, position: 'sticky', marginRight: '-7.7rem' }}
@@ -369,7 +378,7 @@ const CustomTreeItem = ({
                 {node.id !== editingNode.id && (
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box className="flex-1" sx={{ color, fontWeight, margin: 0 }}>
-                      {label}
+                      {label} {node.order}
                     </Box>
                     <IconButton
                       sx={{ float: 'right', mr: 1, position: 'sticky', marginRight: '-30.5rem' }}
@@ -514,8 +523,9 @@ const CustomTreeItem = ({
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
-              '& > .teste': {
+              '&:child': {
                 padding: '2rem',
+                backgroundColor: 'pink',
               },
             },
             '& > .Mui-selected.Mui-focused': {
@@ -538,6 +548,10 @@ const CustomTreeItem = ({
                 borderColor: '#B3B3B3',
                 borderBottomLeftRadius: '100px',
                 borderWidth: '0 0 1px 1px',
+              },
+              '&:child': {
+                padding: '2rem',
+                backgroundColor: 'pink',
               },
               // '&::before': {
               //   content: '" "',
