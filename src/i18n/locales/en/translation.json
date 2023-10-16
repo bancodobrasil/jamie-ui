@@ -270,6 +270,8 @@
       "inputs": {
         "name": {
           "label": "Name",
+          "labelItem": "Item's name",
+          "rootItem": "Parent Item",
           "placeholder": "Enter the menu item's name..."
         },
         "order": {

@@ -559,7 +559,7 @@ export const OperationScreen = ({
           </Typography>
           <TextField
             type="text"
-            label={t('menu.preview.inputs.name.label')}
+            label={t('menu.preview.inputs.name.labelItem')}
             InputLabelProps={{ shrink: true }}
             value={editingNode.label}
             onChange={e => {
@@ -579,6 +579,17 @@ export const OperationScreen = ({
             }}
           />
           <Box className="flex items-center space-x-4">
+            <TextField
+              type="text"
+              label={t('menu.preview.inputs.name.rootItem')}
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.parent ? editingNode.parent.label : ''}
+              sx={{
+                mt: '2rem',
+                width: '6rem',
+              }}
+            />
+
             <TextField
               type="number"
               label={t('menu.preview.inputs.order.label')}
