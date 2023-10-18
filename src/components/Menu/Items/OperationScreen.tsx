@@ -597,7 +597,11 @@ export const OperationScreen = ({
               type="text"
               label={t('menu.preview.inputs.name.rootItem')}
               InputLabelProps={{ shrink: true }}
-              value={editingNode.parentId ? editingNode.meta.parent || '' : 'Não há pai'}
+              value={
+                editingNode.parentId
+                  ? findNodeById(nodes, editingNode.parentId)?.label || ''
+                  : 'Não há pai'
+              }
               sx={{
                 mt: '2rem',
                 width: '50%',
