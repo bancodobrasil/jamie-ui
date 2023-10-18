@@ -626,6 +626,8 @@ export const OperationScreen = ({
                 height: '3rem',
               }}
             />
+            {/* Enable */}
+            {/* TODO: delete Enable, não deletei pq não tinha certeza para o que era */}
             <FormControlLabel
               control={
                 <Checkbox
