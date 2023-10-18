@@ -543,6 +543,7 @@ export const OperationScreen = ({
     case EnumInputActionScreen.UPDATE:
       return (
         <Form onSubmit={handleUpdateSubmit}>
+          {/* item's name */}
           <Typography
             variant="h3"
             component="h3"
@@ -582,6 +583,7 @@ export const OperationScreen = ({
             }}
           />
           <Box className="flex items-center space-x-4">
+            {/* parent item */}
             <TextField
               type="text"
               label={t('menu.preview.inputs.name.rootItem')}
@@ -593,10 +595,11 @@ export const OperationScreen = ({
               }
               sx={{
                 mt: '2rem',
-                width: '21rem',
+                width: '50%',
                 height: '3rem',
               }}
             />
+            {/* position */}
             <TextField
               type="number"
               label={t('menu.preview.inputs.order.label')}
@@ -619,7 +622,7 @@ export const OperationScreen = ({
               }}
               sx={{
                 mt: '2rem',
-                width: '21rem',
+                width: '50%',
                 height: '3rem',
               }}
             />
