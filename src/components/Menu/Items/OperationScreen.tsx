@@ -8,6 +8,10 @@ import {
   Typography,
   Button,
   Divider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -83,6 +87,10 @@ export const OperationScreen = ({
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleFindParents = editingNode => {
+    //
   };
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
@@ -589,11 +597,7 @@ export const OperationScreen = ({
               type="text"
               label={t('menu.preview.inputs.name.rootItem')}
               InputLabelProps={{ shrink: true }}
-              value={
-                editingNode.parentId
-                  ? findNodeById(nodes, editingNode.parentId)?.label || ''
-                  : 'Não há pai'
-              }
+              value={editingNode.parentId ? editingNode.meta.parent || '' : 'Não há pai'}
               sx={{
                 mt: '2rem',
                 width: '50%',
@@ -644,6 +648,73 @@ export const OperationScreen = ({
               }
               label={t('menuItem.fields.enabled')}
               sx={{ mt: '2rem' }}
+            />
+          </Box>
+          {/* Select */}
+          <Box className="flex items-center space-x-4">
+            {/* parent item */}
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="parent-item">{t('menu.preview.inputs.name.rootItem')}</InputLabel>
+              <Select
+                required
+                labelId="parent-item"
+                id="demo-simple-select-helper"
+                // value={age}
+                label={t('menu.preview.inputs.name.rootItem')}
+                // onOpen={handleFindParents(editingNode)}
+                // onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              required
+              type="text"
+              label={t('menu.preview.inputs.name.rootItem')}
+              InputLabelProps={{ shrink: true }}
+              value={
+                editingNode.parentId
+                  ? findNodeById(nodes, editingNode.parentId)?.label || ''
+                  : 'Não há pai'
+              }
+              sx={{
+                mt: '2rem',
+                width: '50%',
+                height: '3rem',
+              }}
+            />
+            {/* position */}
+            <TextField
+              required
+              type="number"
+              label={t('menu.preview.inputs.order.label')}
+              InputLabelProps={{ shrink: true }}
+              value={editingNode.order}
+              onChange={e => {
+                const parent = findNodeById(nodes, editingNode.parentId);
+                let maxOrder = 1;
+                if (parent?.children?.length) {
+                  maxOrder = parent.children.length;
+                } else if (nodes.length) {
+                  maxOrder = nodes.length;
+                }
+                const order = Math.min(Math.max(Number(e.target.value), 1), maxOrder);
+                if (order === editingNode.order) return;
+                setEditingNode({
+                  ...editingNode,
+                  order,
+                });
+              }}
+              sx={{
+                mt: '2rem',
+                width: '50%',
+                height: '3rem',
+              }}
             />
           </Box>
           <Box className="flex items-center space-x-4">
