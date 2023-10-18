@@ -585,6 +585,7 @@ export const OperationScreen = ({
           <Box className="flex items-center space-x-4">
             {/* parent item */}
             <TextField
+              required
               type="text"
               label={t('menu.preview.inputs.name.rootItem')}
               InputLabelProps={{ shrink: true }}
@@ -601,6 +602,7 @@ export const OperationScreen = ({
             />
             {/* position */}
             <TextField
+              required
               type="number"
               label={t('menu.preview.inputs.order.label')}
               InputLabelProps={{ shrink: true }}
@@ -646,6 +648,7 @@ export const OperationScreen = ({
           </Box>
           <Box className="flex items-center space-x-4">
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              {/* Start Publication Date */}
               <DateTimePicker
                 disablePast
                 label={t('menuItem.fields.startPublication')}
@@ -730,6 +733,7 @@ export const OperationScreen = ({
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
+              {/* End Publication Date */}
               <DateTimePicker
                 disablePast
                 label={t('menuItem.fields.endPublication')}
