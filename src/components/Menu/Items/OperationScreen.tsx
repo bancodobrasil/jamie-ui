@@ -762,7 +762,7 @@ export const OperationScreen = ({
                         .setLocale(i18n.language)
                         .toLocaleString()}`,
                     }}
-                    sx={{ mt: '1.25rem' }}
+                    sx={{ mt: '1rem', width: '18.25rem', marginRight: '-0.5rem' }}
                   />
                 )}
                 componentsProps={{
@@ -848,7 +848,7 @@ export const OperationScreen = ({
                         .setLocale(i18n.language)
                         .toLocaleString()}`,
                     }}
-                    sx={{ mt: '1.25rem' }}
+                    sx={{ mt: '1rem', width: '18.25rem' }}
                   />
                 )}
                 componentsProps={{
@@ -875,8 +875,19 @@ export const OperationScreen = ({
                   }}
                 />
               }
-              label={t('menuItem.fields.withoutEndPublication')}
-              sx={{ mt: '2rem' }}
+              label={
+                <p
+                  style={{
+                    fontWeight: '600',
+                    fontSize: '16px',
+                    lineHeight: '24px',
+                    width: '7.5rem',
+                    height: '1.5rem',
+                  }}
+                >
+                  {t('menuItem.fields.withoutEndPublication')}
+                </p>
+              }
             />
           </Box>
           <Divider sx={{ mt: '2rem' }} />
