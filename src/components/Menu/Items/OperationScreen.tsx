@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FormControlLabel,
   styled,
@@ -124,6 +124,8 @@ export const OperationScreen = ({
     setEditingNode(emptyEditingNode);
     setOperationScreen(EnumInputActionScreen.NONE);
   };
+
+  const [isDatePickerDisabled, setIsDatePickerDisabled] = useState(false);
 
   const renderMeta = () => {
     const renderInput = (meta: IMenuMeta) => {
@@ -329,7 +331,7 @@ export const OperationScreen = ({
                 width: '6rem',
               }}
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={
                 <Checkbox
                   checked={editingNode.enabled}
@@ -343,7 +345,7 @@ export const OperationScreen = ({
               }
               label={t('menuItem.fields.enabled')}
               sx={{ mt: '2rem' }}
-            />
+            /> */}
           </Box>
           <Box className="flex items-center space-x-4">
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
@@ -638,7 +640,7 @@ export const OperationScreen = ({
             />
             {/* Enable */}
             {/* TODO: delete Enable, não deletei pq não tinha certeza para o que era */}
-            <FormControlLabel
+            {/* <FormControlLabel
               control={
                 <Checkbox
                   checked={editingNode.enabled}
@@ -653,10 +655,11 @@ export const OperationScreen = ({
               label={t('menuItem.fields.enabled')}
               sx={{ mt: '2rem' }}
             />
+          */}
           </Box>
           {/* Select */}
-          <Box className="flex items-center space-x-4">
-            {/* parent item */}
+          {/* <Box className="flex items-center space-x-4">
+            {/* parent item 
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel id="parent-item">{t('menu.preview.inputs.name.rootItem')}</InputLabel>
               <Select
@@ -680,8 +683,8 @@ export const OperationScreen = ({
                   // return <em>defaultValue</em>;
                 }}
               />
-            </FormControl>
-          </Box>
+            </FormControl> 
+          </Box> */}
           {/* Datas */}
           <Box className="flex items-center space-x-4">
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
@@ -697,6 +700,7 @@ export const OperationScreen = ({
                   });
                 }}
                 maxDateTime={editingNode.endPublication}
+                disabled={isDatePickerDisabled}
                 onError={(reason, value) => {
                   switch (reason) {
                     case 'invalidDate':
@@ -855,20 +859,23 @@ export const OperationScreen = ({
               />
             </LocalizationProvider>
           </Box>
+          {/* Checkbox end publication  */}
           <Box>
             <FormControlLabel
               control={
                 <Checkbox
+                  defaultChecked
                   checked={editingNode.enabled}
                   onChange={e => {
                     setEditingNode({
                       ...editingNode,
                       enabled: e.target.checked,
                     });
+                    setIsDatePickerDisabled(e.target.checked);
                   }}
                 />
               }
-              label="Sem data de fim"
+              label={t('menuItem.fields.withoutEndPublication')}
               sx={{ mt: '2rem' }}
             />
           </Box>
