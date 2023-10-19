@@ -379,6 +379,7 @@
       "enabled": "Enabled",
       "startPublication": "Start Publication Date",
       "endPublication": "End Publication Date",
+      "withoutEndPublication": "Without End Publication Date",
       "rules": "Conditions"
     },
     "editTemplate": {
