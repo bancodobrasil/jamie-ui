@@ -605,7 +605,8 @@ export const OperationScreen = ({
                   : 'Não há pai'
               }
               sx={{
-                mt: '2rem',
+                mt: '1rem',
+                marginRight: '-0.5rem',
                 width: '50%',
                 height: '3rem',
               }}
@@ -633,7 +634,7 @@ export const OperationScreen = ({
                 });
               }}
               sx={{
-                mt: '2rem',
+                mt: '1rem',
                 width: '50%',
                 height: '3rem',
               }}
@@ -848,7 +849,7 @@ export const OperationScreen = ({
                         .setLocale(i18n.language)
                         .toLocaleString()}`,
                     }}
-                    sx={{ mt: '1rem', width: '18.25rem' }}
+                    sx={{ mt: '1.5rem', width: '18.25rem' }}
                   />
                 )}
                 componentsProps={{
