@@ -667,60 +667,22 @@ export const OperationScreen = ({
                 label={t('menu.preview.inputs.name.rootItem')}
                 // onOpen={handleFindParents(editingNode)}
                 // onChange={handleChange}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
+                renderValue={selected => {
+                  if (!selected) {
+                    const defaultValue = editingNode.parentId
+                      ? findNodeById(nodes, editingNode.parentId)?.label
+                      : 'Não há pai';
+                    return <em>{defaultValue}</em>;
+                  }
+                  // const defaultValue = editingNode.parentId
+                  //   ? findNodeById(nodes, editingNode.parentId)?.label
+                  //   : 'Não há pai';
+                  // return <em>defaultValue</em>;
+                }}
+              />
             </FormControl>
-            <TextField
-              required
-              type="text"
-              label={t('menu.preview.inputs.name.rootItem')}
-              InputLabelProps={{ shrink: true }}
-              value={
-                editingNode.parentId
-                  ? findNodeById(nodes, editingNode.parentId)?.label || ''
-                  : 'Não há pai'
-              }
-              sx={{
-                mt: '2rem',
-                width: '50%',
-                height: '3rem',
-              }}
-            />
-            {/* position */}
-            <TextField
-              required
-              type="number"
-              label={t('menu.preview.inputs.order.label')}
-              InputLabelProps={{ shrink: true }}
-              value={editingNode.order}
-              onChange={e => {
-                const parent = findNodeById(nodes, editingNode.parentId);
-                let maxOrder = 1;
-                if (parent?.children?.length) {
-                  maxOrder = parent.children.length;
-                } else if (nodes.length) {
-                  maxOrder = nodes.length;
-                }
-                const order = Math.min(Math.max(Number(e.target.value), 1), maxOrder);
-                if (order === editingNode.order) return;
-                setEditingNode({
-                  ...editingNode,
-                  order,
-                });
-              }}
-              sx={{
-                mt: '2rem',
-                width: '50%',
-                height: '3rem',
-              }}
-            />
           </Box>
+          {/* Datas */}
           <Box className="flex items-center space-x-4">
             <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={i18n.language}>
               {/* Start Publication Date */}
@@ -892,6 +854,23 @@ export const OperationScreen = ({
                 }}
               />
             </LocalizationProvider>
+          </Box>
+          <Box>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editingNode.enabled}
+                  onChange={e => {
+                    setEditingNode({
+                      ...editingNode,
+                      enabled: e.target.checked,
+                    });
+                  }}
+                />
+              }
+              label="Sem data de fim"
+              sx={{ mt: '2rem' }}
+            />
           </Box>
           <Divider sx={{ mt: '2rem' }} />
           {data?.menu.meta?.length > 0 && (
