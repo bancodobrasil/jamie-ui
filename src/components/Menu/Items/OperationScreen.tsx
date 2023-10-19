@@ -700,7 +700,6 @@ export const OperationScreen = ({
                   });
                 }}
                 maxDateTime={editingNode.endPublication}
-                disabled={isDatePickerDisabled}
                 onError={(reason, value) => {
                   switch (reason) {
                     case 'invalidDate':
@@ -786,6 +785,7 @@ export const OperationScreen = ({
                   });
                 }}
                 minDateTime={editingNode.startPublication}
+                disabled={isDatePickerDisabled}
                 onError={(reason, value) => {
                   switch (reason) {
                     case 'invalidDate':
