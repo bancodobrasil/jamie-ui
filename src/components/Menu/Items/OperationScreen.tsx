@@ -785,7 +785,7 @@ export const OperationScreen = ({
                   });
                 }}
                 minDateTime={editingNode.startPublication}
-                disabled={isDatePickerDisabled}
+                disabled={isDatePickerDisabled || editingNode.enabled === true}
                 onError={(reason, value) => {
                   switch (reason) {
                     case 'invalidDate':
