@@ -889,6 +889,7 @@ export const OperationScreen = ({
                   {t('menuItem.fields.withoutEndPublication')}
                 </p>
               }
+              sx={{ mt: '0.5rem' }}
             />
           </Box>
           <Divider sx={{ mt: '2rem' }} />
