@@ -605,7 +605,7 @@ export const OperationScreen = ({
                   : 'Não há pai'
               }
               sx={{
-                mt: '1rem',
+                mt: '2rem',
                 marginRight: '-0.5rem',
                 width: '50%',
                 height: '3rem',
@@ -634,7 +634,7 @@ export const OperationScreen = ({
                 });
               }}
               sx={{
-                mt: '1rem',
+                mt: '2rem',
                 width: '50%',
                 height: '3rem',
               }}
@@ -763,7 +763,7 @@ export const OperationScreen = ({
                         .setLocale(i18n.language)
                         .toLocaleString()}`,
                     }}
-                    sx={{ mt: '1rem', width: '18.25rem', marginRight: '-0.5rem' }}
+                    sx={{ mt: '2rem', width: '18.25rem', marginRight: '-0.5rem' }}
                   />
                 )}
                 componentsProps={{
@@ -849,7 +849,7 @@ export const OperationScreen = ({
                         .setLocale(i18n.language)
                         .toLocaleString()}`,
                     }}
-                    sx={{ mt: '1.5rem', width: '18.25rem' }}
+                    sx={{ mt: '2rem', width: '18.25rem' }}
                   />
                 )}
                 componentsProps={{
