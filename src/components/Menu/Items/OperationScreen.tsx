@@ -563,7 +563,6 @@ export const OperationScreen = ({
               lineHeight: '28.8px',
               letterSpacing: '0.18px',
               textAlign: 'flex-start',
-              width: '164px',
               mt: '1rem',
             }}
           >
@@ -882,7 +881,6 @@ export const OperationScreen = ({
                     fontWeight: '600',
                     fontSize: '16px',
                     lineHeight: '24px',
-                    width: '7.5rem',
                     height: '1.5rem',
                   }}
                 >
@@ -895,7 +893,7 @@ export const OperationScreen = ({
               <Box sx={{ mt: '1rem', width: '355px' }}>
                 <Button sx={{ m: '-1.5rem' }}>
                   <Typography variant="h5" sx={{ color: '#3354FD', textTransform: 'none' }}>
-                    Deseja um novo campo no formulário?
+                    {t('menuItem.newFormField')}
                   </Typography>
                 </Button>
               </Box>

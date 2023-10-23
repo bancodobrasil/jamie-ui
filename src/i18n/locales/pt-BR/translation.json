@@ -364,6 +364,7 @@
     "title_one": "Item de Menu",
     "title_other": "Itens de Menu",
     "of": "$t(menu.fields.{{field}}) do Item de Menu",
+    "newFormField": "Deseja um novo campo no formulário?",
     "fields": {
       "label": "Nome",
       "order": "Ordem",

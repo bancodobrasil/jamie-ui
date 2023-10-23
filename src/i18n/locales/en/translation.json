@@ -363,6 +363,7 @@
     "title_one": "Menu Item",
     "title_other": "Menu Items",
     "of": "Menu Item's $t(menu.fields.{{field}})",
+    "newFormField": "Do you want a new field on the form?",
     "fields": {
       "label": "Label",
       "order": "Order",
