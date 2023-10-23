@@ -58,7 +58,8 @@
     "edit": "Editar",
     "delete": "Deletar",
     "save": "Salvar",
-    "discard": "Descartar"
+    "discard": "Descartar",
+    "saveEdits": "Salvar Edições"
   },
   "form": {
     "optional": "{{field}} (opcional)",

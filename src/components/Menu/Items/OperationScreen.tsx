@@ -918,16 +918,19 @@ export const OperationScreen = ({
             }}
           >
             <Button
+              variant="text"
+              sx={{ mt: '2rem', mr: '1rem', color: '#D51B06' }}
+              onClick={handleDiscard}
+            >
+              {t('buttons.cancel')}
+            </Button>
+            <Button
               variant="contained"
-              color="success"
-              sx={{ mt: '2rem', mr: '1rem' }}
+              sx={{ mt: '2rem', mr: '1rem', backgroundColor: '#000000', color: 'white' }}
               type="submit"
               disabled={!!labelError || !!startPublicationError || !!endPublicationError}
             >
-              {t('buttons.save')}
-            </Button>
-            <Button variant="contained" color="error" sx={{ mt: '2rem' }} onClick={handleDiscard}>
-              {t('buttons.discard')}
+              {t('buttons.saveEdits')}
             </Button>
           </Box>
         </Form>
