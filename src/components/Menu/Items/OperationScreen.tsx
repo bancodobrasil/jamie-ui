@@ -891,6 +891,11 @@ export const OperationScreen = ({
               }
               sx={{ mt: '0.5rem' }}
             />
+            {!data?.menu.meta?.length && (
+              <Box sx={{ mt: '1.5rem' }}>
+                <Typography variant="h3">TESTE</Typography>
+              </Box>
+            )}
           </Box>
           <Divider sx={{ mt: '2rem' }} />
           {data?.menu.meta?.length > 0 && (
