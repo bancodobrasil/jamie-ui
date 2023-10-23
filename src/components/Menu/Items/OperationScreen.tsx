@@ -892,12 +892,16 @@ export const OperationScreen = ({
               sx={{ mt: '0.5rem' }}
             />
             {!data?.menu.meta?.length && (
-              <Box sx={{ mt: '1.5rem' }}>
-                <Typography variant="h3">TESTE</Typography>
+              <Box sx={{ mt: '1rem', width: '355px' }}>
+                <Button sx={{ m: '-1.5rem' }}>
+                  <Typography variant="h5" sx={{ color: '#3354FD', textTransform: 'none' }}>
+                    Deseja um novo campo no formulário?
+                  </Typography>
+                </Button>
               </Box>
             )}
           </Box>
-          <Divider sx={{ mt: '2rem' }} />
+          <Divider sx={{ mt: '1.5rem' }} />
           {data?.menu.meta?.length > 0 && (
             <Box sx={{ mt: '1.5rem' }}>
               <Typography variant="h3">
