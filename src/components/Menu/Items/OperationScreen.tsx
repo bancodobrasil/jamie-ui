@@ -17,6 +17,7 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { IEditingNode, IMenu, IMenuMeta, INode, MenuMetaType } from '../../../types';
 import { MENU_ITEM_VALIDATION } from '../../../constants';
 import { EnumInputActionScreen } from '../../../pages/Menu/Items';
@@ -92,6 +93,8 @@ export const OperationScreen = ({
   const handleFindParents = editingNode => {
     //
   };
+
+  const navigate = useNavigate();
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -891,7 +894,12 @@ export const OperationScreen = ({
             />
             {!data?.menu.meta?.length && (
               <Box sx={{ mt: '1rem', width: '355px' }}>
-                <Button sx={{ m: '-1.5rem' }}>
+                <Button
+                  sx={{ m: '-1.5rem' }}
+                  onClick={() => {
+                    navigate('../');
+                  }}
+                >
                   <Typography variant="h5" sx={{ color: '#3354FD', textTransform: 'none' }}>
                     {t('menuItem.newFormField')}
                   </Typography>
