@@ -765,7 +765,7 @@ export const OperationScreen = ({
                         .setLocale(i18n.language)
                         .toLocaleString()}`,
                     }}
-                    sx={{ mt: '2rem', width: '18.25rem', marginRight: '-0.5rem' }}
+                    sx={{ mt: '2rem', width: '50%', marginRight: '-0.5rem' }}
                   />
                 )}
                 componentsProps={{
@@ -851,7 +851,7 @@ export const OperationScreen = ({
                         .setLocale(i18n.language)
                         .toLocaleString()}`,
                     }}
-                    sx={{ mt: '2rem', width: '18.25rem' }}
+                    sx={{ mt: '2rem', width: '50%' }}
                   />
                 )}
                 componentsProps={{
