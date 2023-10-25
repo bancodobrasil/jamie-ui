@@ -265,7 +265,30 @@ const CustomTreeItem = ({
             <Box className="flex items-center">
               {/* Top Button */}
               <Box sx={{ position: 'column', py: '1rem' }}>
-                {node.id === editingNode.id && (
+                {editingNode.order === 1 && (
+                  <Box sx={{ marginTop: '-3rem' }}>
+                    <Box
+                      sx={{
+                        flex: 1,
+                        marginLeft: '-3rem',
+                        marginTop: '-2rem',
+                        // maxWidth: '34rem',
+                        marginRight: '-8rem',
+                      }}
+                    >
+                      <Box
+                        className="flex items-center"
+                        sx={{
+                          width: '33.5rem',
+                          margin: '0 auto',
+                          // marginTop: '-5rem',
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                )}
+
+                {node.id === editingNode.id && editingNode.order !== 1 && (
                   <Box
                     sx={{
                       flex: 1,
@@ -481,7 +504,7 @@ const CustomTreeItem = ({
             },
             '& > .Mui-selected': {
               border: '2px solid #3354FD',
-              my: '4rem',
+              // my: '4rem',
               backgroundColor: '#fff',
               maxWidth: '540px',
               position: 'relative',
