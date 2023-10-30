@@ -172,12 +172,14 @@ const CustomTreeItem = ({
 
   return (
     <Box
-      sx={{
-        borderBottom: '3px solid green',
-        marginBottom: '10px',
-        borderLeft: '3px solid orange',
-        marginLeft: '10px',
-      }}
+      sx={
+        {
+          // borderBottom: '3px solid green',
+          // marginBottom: '10px',
+          // borderLeft: '3px solid orange',
+          // marginLeft: '10px',
+        }
+      }
     >
       <TreeItem
         ref={id === -1 ? insertingNodeRef : null}
@@ -222,7 +224,6 @@ const CustomTreeItem = ({
                 <MenuItem onClick={handleDelete}>{t('buttons.delete')}</MenuItem>
               </MenuList>
             </Menu>
-            {node.id === editingNode.id && <Box> teste </Box>}
           </Box>
         }
         /* card border style */
